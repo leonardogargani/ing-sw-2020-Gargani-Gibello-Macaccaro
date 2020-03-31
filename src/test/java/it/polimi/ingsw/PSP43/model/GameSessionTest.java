@@ -1,11 +1,9 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.PSP43.model;
 
 import java.util.ArrayList;
 import static org.junit.Assert.*;
 
-import it.polimi.ingsw.ClientListener;
-import it.polimi.ingsw.model.GameSession;
-import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.PSP43.ClientListener;
 import org.junit.Before;
 import org.junit.Test;
 

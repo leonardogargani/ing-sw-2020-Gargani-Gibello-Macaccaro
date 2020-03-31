@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.PSP43.model;
 
 /**
  * Worker description arriving from the net and traslated into a message for a specified GameSession

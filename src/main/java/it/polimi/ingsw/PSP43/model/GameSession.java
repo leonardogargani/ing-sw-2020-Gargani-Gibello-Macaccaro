@@ -1,10 +1,11 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.PSP43.model;
 
-import it.polimi.ingsw.*;
-import it.polimi.ingsw.modelHandlers.CardsHandler;
-import it.polimi.ingsw.modelHandlers.CellsHandler;
-import it.polimi.ingsw.modelHandlers.PlayersHandler;
-import it.polimi.ingsw.modelHandlers.WorkersHandler;
+import it.polimi.ingsw.PSP43.ClientListener;
+import it.polimi.ingsw.PSP43.TurnState;
+import it.polimi.ingsw.PSP43.modelHandlers.CardsHandler;
+import it.polimi.ingsw.PSP43.modelHandlers.CellsHandler;
+import it.polimi.ingsw.PSP43.modelHandlers.PlayersHandler;
+import it.polimi.ingsw.PSP43.modelHandlers.WorkersHandler;
 
 import java.util.ArrayList;
 

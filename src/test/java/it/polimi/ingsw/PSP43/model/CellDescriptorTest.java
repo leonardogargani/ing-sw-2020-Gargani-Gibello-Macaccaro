@@ -1,6 +1,5 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.PSP43.model;
 
-import it.polimi.ingsw.model.GameSession;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,7 +1,5 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.PSP43.model;
 
-
-import it.polimi.ingsw.model.GameSession;
 
 /**
  * a generic description arriving from the net that is to be sent to the model
