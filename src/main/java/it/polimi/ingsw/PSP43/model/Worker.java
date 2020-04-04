@@ -8,6 +8,7 @@ package it.polimi.ingsw.PSP43.model;
  */
 public class Worker {
 
+    private int id;
     private Cell currentPosition;
     private Cell previousPosition;
     private String color;
@@ -17,7 +18,8 @@ public class Worker {
      * Non-default constructor, it initializes a worker with its color, chosen by the owner.
      * @param color color of the worker
      */
-    public Worker(String color) {
+    public Worker(int id, String color) {
+        this.id = id;
         this.currentPosition = null;
         this.previousPosition = null;
         this.color = color;
@@ -30,14 +32,14 @@ public class Worker {
      */
     public Cell getCurrentPosition() {
         return currentPosition;
-    }  // DEVO RITORNARE UNA COPIA DI CELL
+    }
 
 
     /**
      * This method sets the position the worker is in at this moment.
      * @param currentPosition the position the worker is in at this moment
      */
-    public void setCurrentPosition(Cell currentPosition) {  // DEVO PASSARE UNA COPIA DI CELL
+    public void setCurrentPosition(Cell currentPosition) {
         this.previousPosition = this.currentPosition;
         this.currentPosition = currentPosition;
     }
@@ -49,7 +51,7 @@ public class Worker {
      */
     public Cell getPreviousPosition() {
         return previousPosition;
-    }  // DEVO RITORNARE UNA COPIA DI CELL
+    }
 
 
     /**
@@ -58,6 +60,15 @@ public class Worker {
      */
     public String getColor() {
         return color;
+    }
+
+
+    /**
+     * This method returns the unique id of the worker.
+     * @return unique id of the worker
+     */
+    public int getId() {
+        return id;
     }
 
 

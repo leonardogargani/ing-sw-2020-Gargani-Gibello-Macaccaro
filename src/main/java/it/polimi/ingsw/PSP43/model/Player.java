@@ -8,7 +8,7 @@ package it.polimi.ingsw.PSP43.model;
 public class Player {
 
     private String nickname;
-    private Worker[] workersArray = new Worker[2];
+    private int[] workersIdsArray;
     private Card card;
 
 
@@ -18,7 +18,7 @@ public class Player {
      */
     public Player(String nickname) {
         this.nickname = nickname;
-        this.workersArray = null;
+        this.workersIdsArray = null;
         this.card = null;
     }
 
@@ -36,20 +36,19 @@ public class Player {
      * This method returns both the workers in an array of two elements.
      * @return copy of the array with the two workers of the player
      */
-    public Worker[] getWorkersArray() {
-        Worker[] copy = new Worker[this.workersArray.length];
-        System.arraycopy(this.workersArray, 0, copy, 0, copy.length);
-        return copy;
+    public int[] getWorkersIdsArray() {
+        return workersIdsArray;
     }
 
 
     /**
-     * This method assigns a couple of workers, represented by an array, to its owner.
-     * @param workersArray array containing two workers owned by the same player
+     * This method assigns a couple of workers, represented by their ids, to their owner.
+     * @param id1 id of the first worker owned by the same player
+     * @param id2 id of the second worker owned by the same player
      */
-    public void setWorkersArray(Worker[] workersArray) {
-        this.workersArray = workersArray;
-    }  // DEVO PASSARE UNA COPIA DI WORKERSARRAY
+    public void setWorkersIdsArray(int id1, int id2) {
+        this.workersIdsArray = new int[]{id1, id2};
+    }
 
 
         /**
@@ -58,7 +57,7 @@ public class Player {
          */
     public Card getCard() {
         return card;
-    }  // DEVO RITORNARE UNA COPIA DI CARD
+    }
 
 
     /**
@@ -67,7 +66,7 @@ public class Player {
      */
     public void setCard(Card card) {
         this.card = card;
-    }  // DEVO PASSARE UNA COPIA DI CARD
+    }
 
 
 }

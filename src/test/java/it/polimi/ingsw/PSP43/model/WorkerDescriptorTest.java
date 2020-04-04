@@ -16,7 +16,7 @@ public class WorkerDescriptorTest {
     @Before
     public void setUp() {
         actualGame = new GameSession(9);
-        actualWorker = new Worker("blue");
+        actualWorker = new Worker(5, "blue");
         actualPosition = new Cell();
         actualColor = "blue";
         test = new WorkerDescriptor(actualGame, actualWorker, actualPosition, actualColor);

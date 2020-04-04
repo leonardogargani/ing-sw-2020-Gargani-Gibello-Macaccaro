@@ -11,19 +11,12 @@ public class WorkerTest {
 
     @Before
     public void setUp() {
-        test = new Worker("blue");
+        test = new Worker(5, "blue");
     }
 
-    // Tests of the setter and of the getter are the same
+    // getter and setter tested both at the same time
     @Test
-    public void testGetCurrentPosition() {
-        Cell cell1 = new Cell();
-        test.setCurrentPosition(cell1);
-        assertEquals(cell1, test.getCurrentPosition());
-    }
-
-    @Test
-    public void testSetCurrentPosition() {
+    public void testGetSetCurrentPosition() {
         Cell cell1 = new Cell();
         test.setCurrentPosition(cell1);
         assertEquals(cell1, test.getCurrentPosition());
@@ -41,6 +34,11 @@ public class WorkerTest {
     @Test
     public void testGetColor() {
         assertEquals("blue", test.getColor());
+    }
+
+    @Test
+    public void testGetId() {
+        assertEquals(5, test.getId());
     }
 
 }

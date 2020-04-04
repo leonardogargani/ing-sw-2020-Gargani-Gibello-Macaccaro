@@ -14,47 +14,25 @@ public class CellTest {
         test = new Cell();
     }
 
-    // Tests of the setter and of the getter are the same
+    // getter and setter tested both at the same time
     @Test
-    public void testGetHeight() {
+    public void testGetSetHeight() {
         test.setHeight(2);
         assertEquals(2, test.getHeight());
     }
 
+    // getter and setter tested both at the same time
     @Test
-    public void testSetHeight() {
-        test.setHeight(2);
-        assertEquals(2, test.getHeight());
-    }
-
-    // Tests of the setter and of the getter are the same
-    @Test
-    public void testGetOccupiedByWorker() {
+    public void testGetSetOccupiedByWorker() {
         test.setOccupiedByWorker(true);
         assertTrue(test.getOccupiedByWorker());
         test.setOccupiedByWorker(false);
         assertFalse(test.getOccupiedByWorker());
     }
 
+    // getter and setter tested both at the same time
     @Test
-    public void testSetOccupiedByWorker() {
-        test.setOccupiedByWorker(true);
-        assertTrue(test.getOccupiedByWorker());
-        test.setOccupiedByWorker(false);
-        assertFalse(test.getOccupiedByWorker());
-    }
-
-    // Tests of the setter and of the getter are the same
-    @Test
-    public void testGetOccupiedByDome() {
-        test.setOccupiedByDome(true);
-        assertTrue(test.getOccupiedByDome());
-        test.setOccupiedByDome(false);
-        assertFalse(test.getOccupiedByDome());
-    }
-
-    @Test
-    public void testSetOccupiedByDome() {
+    public void testGetSetOccupiedByDome() {
         test.setOccupiedByDome(true);
         assertTrue(test.getOccupiedByDome());
         test.setOccupiedByDome(false);

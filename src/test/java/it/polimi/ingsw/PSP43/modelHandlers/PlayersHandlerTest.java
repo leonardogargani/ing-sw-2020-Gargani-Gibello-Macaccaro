@@ -23,7 +23,7 @@ public class PlayersHandlerTest {
     @Before
     public void setUp() throws Exception {
         handlerTest = new PlayersHandler();
-        File f = new File(".\\initFiles\\Players.txt");
+        File f = new File("./initFiles/Players.txt");
         BufferedReader in = new BufferedReader(new FileReader(f));
         String line;
         while((line = in.readLine()) != null) {
