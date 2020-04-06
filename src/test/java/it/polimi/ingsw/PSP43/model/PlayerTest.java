@@ -19,7 +19,7 @@ public class PlayerTest {
         assertEquals("Leo", test.getNickname());
     }
 
-    // getter and setter tested both at the same time
+    // getter and setter are tested both at the same time
     @Test
     public void testGetSetWorkersIdsArray() {
         int[] workersIdsArray = new int[]{3, 4};
