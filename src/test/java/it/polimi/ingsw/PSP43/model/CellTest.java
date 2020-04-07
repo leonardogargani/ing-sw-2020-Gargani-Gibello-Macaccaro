@@ -14,14 +14,14 @@ public class CellTest {
         test = new Cell();
     }
 
-    // getter and setter tested both at the same time
+    // getter and setter are tested both at the same time
     @Test
     public void testGetSetHeight() {
         test.setHeight(2);
         assertEquals(2, test.getHeight());
     }
 
-    // getter and setter tested both at the same time
+    // getter and setter are tested both at the same time
     @Test
     public void testGetSetOccupiedByWorker() {
         test.setOccupiedByWorker(true);
@@ -30,7 +30,7 @@ public class CellTest {
         assertFalse(test.getOccupiedByWorker());
     }
 
-    // getter and setter tested both at the same time
+    // getter and setter are tested both at the same time
     @Test
     public void testGetSetOccupiedByDome() {
         test.setOccupiedByDome(true);

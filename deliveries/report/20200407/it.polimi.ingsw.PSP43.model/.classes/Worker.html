@@ -1,0 +1,158 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Worker</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Worker (it.polimi.ingsw.PSP43.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Worker</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (13/ 13)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;
+<i>4</i>&nbsp;/**
+<i>5</i>&nbsp; * Worker is the class that represents a worker, which is the piece players can control.
+<i>6</i>&nbsp; * Every player has two workers, both of the same color and able to move their position
+<i>7</i>&nbsp; * during the game.
+<i>8</i>&nbsp; */
+<i>9</i>&nbsp;public class Worker {
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;    private int id;
+<i>12</i>&nbsp;    private Coord currentPosition;
+<i>13</i>&nbsp;    private Coord previousPosition;
+<i>14</i>&nbsp;    private String color;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    /**
+<i>18</i>&nbsp;     * Non-default constructor, it initializes a worker with its color, chosen by the owner.
+<i>19</i>&nbsp;     * @param color color of the worker
+<i>20</i>&nbsp;     */
+<b class="fc"><i>21</i>&nbsp;    public Worker(int id, String color) {</b>
+<b class="fc"><i>22</i>&nbsp;        this.id = id;</b>
+<b class="fc"><i>23</i>&nbsp;        this.currentPosition = null;</b>
+<b class="fc"><i>24</i>&nbsp;        this.previousPosition = null;</b>
+<b class="fc"><i>25</i>&nbsp;        this.color = color;</b>
+<b class="fc"><i>26</i>&nbsp;    }</b>
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    /**
+<i>30</i>&nbsp;     * This method returns the position the worker is in at this moment.
+<i>31</i>&nbsp;     * @return the position the worker is in at this moment
+<i>32</i>&nbsp;     */
+<i>33</i>&nbsp;    public Coord getCurrentPosition() {
+<b class="fc"><i>34</i>&nbsp;        return currentPosition;</b>
+<i>35</i>&nbsp;    }
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    /**
+<i>39</i>&nbsp;     * This method sets the position the worker is in at this moment.
+<i>40</i>&nbsp;     * @param currentPosition the position the worker is in at this moment
+<i>41</i>&nbsp;     */
+<i>42</i>&nbsp;    public void setCurrentPosition(Coord currentPosition) {
+<b class="fc"><i>43</i>&nbsp;        this.previousPosition = this.currentPosition;</b>
+<b class="fc"><i>44</i>&nbsp;        this.currentPosition = currentPosition;</b>
+<b class="fc"><i>45</i>&nbsp;    }</b>
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    /**
+<i>49</i>&nbsp;     * This method returns the position the worker was before its last move.
+<i>50</i>&nbsp;     * @return position the worker was before its last move
+<i>51</i>&nbsp;     */
+<i>52</i>&nbsp;    public Coord getPreviousPosition() {
+<b class="fc"><i>53</i>&nbsp;        return previousPosition;</b>
+<i>54</i>&nbsp;    }
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    /**
+<i>58</i>&nbsp;     * This method returns the color of the worker.
+<i>59</i>&nbsp;     * @return color of the worker
+<i>60</i>&nbsp;     */
+<i>61</i>&nbsp;    public String getColor() {
+<b class="fc"><i>62</i>&nbsp;        return color;</b>
+<i>63</i>&nbsp;    }
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;    /**
+<i>67</i>&nbsp;     * This method returns the unique id of the worker.
+<i>68</i>&nbsp;     * @return unique id of the worker
+<i>69</i>&nbsp;     */
+<i>70</i>&nbsp;    public int getId() {
+<b class="fc"><i>71</i>&nbsp;        return id;</b>
+<i>72</i>&nbsp;    }
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-07 10:14</div>
+</div>
+</body>
+</html>

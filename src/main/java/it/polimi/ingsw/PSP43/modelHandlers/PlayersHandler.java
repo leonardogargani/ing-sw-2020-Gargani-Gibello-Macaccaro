@@ -12,10 +12,6 @@ import java.util.ArrayList;
 public class PlayersHandler {
     private ArrayList<Player> gamePlayers;
 
-    public PlayersHandler() {
-        this.gamePlayers = new ArrayList<>();
-    }
-
     /**
      * This method adds, if possible, a player's data (nickname) in the list of game players' data
      * @param nick The identification of a player during the game

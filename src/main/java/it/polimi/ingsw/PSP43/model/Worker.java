@@ -9,8 +9,8 @@ package it.polimi.ingsw.PSP43.model;
 public class Worker {
 
     private int id;
-    private Cell currentPosition;
-    private Cell previousPosition;
+    private Coord currentPosition;
+    private Coord previousPosition;
     private String color;
 
 
@@ -30,7 +30,7 @@ public class Worker {
      * This method returns the position the worker is in at this moment.
      * @return the position the worker is in at this moment
      */
-    public Cell getCurrentPosition() {
+    public Coord getCurrentPosition() {
         return currentPosition;
     }
 
@@ -39,7 +39,7 @@ public class Worker {
      * This method sets the position the worker is in at this moment.
      * @param currentPosition the position the worker is in at this moment
      */
-    public void setCurrentPosition(Cell currentPosition) {
+    public void setCurrentPosition(Coord currentPosition) {
         this.previousPosition = this.currentPosition;
         this.currentPosition = currentPosition;
     }
@@ -49,7 +49,7 @@ public class Worker {
      * This method returns the position the worker was before its last move.
      * @return position the worker was before its last move
      */
-    public Cell getPreviousPosition() {
+    public Coord getPreviousPosition() {
         return previousPosition;
     }
 

@@ -14,21 +14,21 @@ public class WorkerTest {
         test = new Worker(5, "blue");
     }
 
-    // getter and setter tested both at the same time
+    // getter and setter are tested both at the same time
     @Test
     public void testGetSetCurrentPosition() {
-        Cell cell1 = new Cell();
-        test.setCurrentPosition(cell1);
-        assertEquals(cell1, test.getCurrentPosition());
+        Coord coord1 = new Coord(1, 2);
+        test.setCurrentPosition(coord1);
+        assertEquals(coord1, test.getCurrentPosition());
     }
 
     @Test
     public void testGetPreviousPosition() {
-        Cell cell1 = new Cell();
-        Cell cell2 = new Cell();
-        test.setCurrentPosition(cell1);
-        test.setCurrentPosition(cell2);
-        assertEquals(cell1, test.getPreviousPosition());
+        Coord coord1 = new Coord(1, 2);
+        Coord coord2 = new Coord(2, 2);
+        test.setCurrentPosition(coord1);
+        test.setCurrentPosition(coord2);
+        assertEquals(coord1, test.getPreviousPosition());
     }
 
     @Test
