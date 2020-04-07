@@ -1,13 +1,13 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
 import it.polimi.ingsw.PSP43.server.ClientListener;
-import it.polimi.ingsw.PSP43.server.clientMessages.GenericMessage;
-import it.polimi.ingsw.PSP43.server.clientMessages.NoticeMessage;
-import it.polimi.ingsw.PSP43.server.clientMessages.RegistrationMessage;
-import it.polimi.ingsw.PSP43.server.clientMessages.ErrorMessage;
 import it.polimi.ingsw.PSP43.server.model.GameSession;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.NicknameAlreadyInUseException;
+import it.polimi.ingsw.PSP43.server.networkMessages.ErrorMessage;
+import it.polimi.ingsw.PSP43.server.networkMessages.GenericMessage;
+import it.polimi.ingsw.PSP43.server.networkMessages.NoticeMessage;
+import it.polimi.ingsw.PSP43.server.networkMessages.RegistrationMessage;
 
 import java.util.HashMap;
 

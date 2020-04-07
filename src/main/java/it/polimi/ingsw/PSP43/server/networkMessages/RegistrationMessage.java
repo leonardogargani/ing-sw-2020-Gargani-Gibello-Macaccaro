@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP43.server.clientMessages;
+package it.polimi.ingsw.PSP43.server.networkMessages;
 
 public class RegistrationMessage extends GenericMessage {
     String nickPlayerId;

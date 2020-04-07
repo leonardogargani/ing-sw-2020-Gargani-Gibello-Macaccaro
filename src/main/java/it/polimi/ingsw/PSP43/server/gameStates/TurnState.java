@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
-import it.polimi.ingsw.PSP43.server.clientMessages.GenericMessage;
+import it.polimi.ingsw.PSP43.server.networkMessages.GenericMessage;
 import it.polimi.ingsw.PSP43.server.model.*;
 
 public abstract class TurnState {
