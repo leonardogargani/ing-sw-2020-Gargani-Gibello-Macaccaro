@@ -30,7 +30,7 @@ public class GameSession {
         idGame=idgame;
         this.cellsHandler = new CellsHandler();
         this.playerHandler = new PlayersHandler();
-        this.workersHandler = new WorkersHandler();
+        this.workersHandler = new WorkersHandler(this);
         this.cardsHandler = new CardsHandler();
         this.gamers = new ArrayList<ClientListener>(2);
     }

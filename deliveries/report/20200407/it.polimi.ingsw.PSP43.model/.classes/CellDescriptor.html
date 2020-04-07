@@ -1,0 +1,142 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CellDescriptor</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CellDescriptor (it.polimi.ingsw.PSP43.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CellDescriptor</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/ 10)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;/**
+<i>4</i>&nbsp; * Cell description arriving from the net and traslated into a message for a specified GameSession
+<i>5</i>&nbsp; */
+<i>6</i>&nbsp;public class CellDescriptor extends GenericDescriptor {
+<i>7</i>&nbsp;    private Cell cellReference;
+<i>8</i>&nbsp;    private int topLevel;
+<i>9</i>&nbsp;    private boolean worker;
+<i>10</i>&nbsp;    private boolean dome;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;    /**
+<i>13</i>&nbsp;     *
+<i>14</i>&nbsp;     * @param gameIdentifier Identification of the object GameSession to which the message is to be sent and handled
+<i>15</i>&nbsp;     * @param cellRef Reference to the data of cell to modify
+<i>16</i>&nbsp;     * @param topLevel Height of a cell (0 is base floor, 1 is first floor (1 block) ecc...)
+<i>17</i>&nbsp;     * @param worker Flag that specifies the presence of a worker into the cell
+<i>18</i>&nbsp;     * @param dome Flag that specifies the presence of a dome into the cell
+<i>19</i>&nbsp;     */
+<i>20</i>&nbsp;    public CellDescriptor(GameSession gameIdentifier, Cell cellRef, int topLevel, boolean worker, boolean dome) {
+<b class="fc"><i>21</i>&nbsp;        super(gameIdentifier);</b>
+<b class="fc"><i>22</i>&nbsp;        this.cellReference = cellRef;</b>
+<b class="fc"><i>23</i>&nbsp;        this.topLevel = topLevel;</b>
+<b class="fc"><i>24</i>&nbsp;        this.worker = worker;</b>
+<b class="fc"><i>25</i>&nbsp;        this.dome = dome;</b>
+<b class="fc"><i>26</i>&nbsp;    }</b>
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    /**
+<i>29</i>&nbsp;     * @return The reference to the cell to modify
+<i>30</i>&nbsp;     */
+<i>31</i>&nbsp;    public Cell getCellReference() {
+<b class="fc"><i>32</i>&nbsp;        return cellReference;</b>
+<i>33</i>&nbsp;    }
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;    /**
+<i>37</i>&nbsp;     *
+<i>38</i>&nbsp;     * @return The top level of a cell, that represent how many blocks are placed (0 if zero blocks, 1 if one block...)
+<i>39</i>&nbsp;     */
+<i>40</i>&nbsp;    public int getTopLevel() {
+<b class="fc"><i>41</i>&nbsp;        return topLevel;</b>
+<i>42</i>&nbsp;    }
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    /**
+<i>45</i>&nbsp;     *
+<i>46</i>&nbsp;     * @return The flag that indicates the presence of a worker
+<i>47</i>&nbsp;     */
+<i>48</i>&nbsp;    public boolean getWorker() {
+<b class="fc"><i>49</i>&nbsp;        return worker;</b>
+<i>50</i>&nbsp;    }
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;    /**
+<i>53</i>&nbsp;     *
+<i>54</i>&nbsp;     * @return The flag that indicates the presence of a dome
+<i>55</i>&nbsp;     */
+<i>56</i>&nbsp;    public boolean getDome() {
+<b class="fc"><i>57</i>&nbsp;        return dome;</b>
+<i>58</i>&nbsp;    }
+<i>59</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-07 10:14</div>
+</div>
+</body>
+</html>

@@ -37,7 +37,7 @@ public class Player {
      * @return copy of the array with the two workers of the player
      */
     public int[] getWorkersIdsArray() {
-        return workersIdsArray;
+        return workersIdsArray.clone();
     }
 
 
@@ -47,6 +47,8 @@ public class Player {
      * @param id2 id of the second worker owned by the same player
      */
     public void setWorkersIdsArray(int id1, int id2) {
+        // I don't need to use a copy of the array since the parameters
+        // are two int values and not a single int[]
         this.workersIdsArray = new int[]{id1, id2};
     }
 
