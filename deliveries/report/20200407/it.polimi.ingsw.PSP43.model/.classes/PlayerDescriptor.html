@@ -1,0 +1,140 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: PlayerDescriptor</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: PlayerDescriptor (it.polimi.ingsw.PSP43.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PlayerDescriptor</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/ 10)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;/**
+<i>4</i>&nbsp; * Player description arriving from the net and traslated into a message for a specified GameSession
+<i>5</i>&nbsp; */
+<i>6</i>&nbsp;public class PlayerDescriptor extends GenericDescriptor {
+<i>7</i>&nbsp;    private Player playerReference;
+<i>8</i>&nbsp;    private boolean quitPlayerAccess;
+<i>9</i>&nbsp;    private String nick;
+<i>10</i>&nbsp;    private Card godCard;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;    /**
+<i>13</i>&nbsp;     *
+<i>14</i>&nbsp;     * @param gameIdentifier Identification of the object GameSession to which the message is to be sent and handled
+<i>15</i>&nbsp;     * @param playerReference Reference to the player data to modify
+<i>16</i>&nbsp;     * @param nick Nickname that identifies a player during the game
+<i>17</i>&nbsp;     * @param godCard Card chosen by the player during the game
+<i>18</i>&nbsp;     */
+<i>19</i>&nbsp;    public PlayerDescriptor(GameSession gameIdentifier, Player playerReference, boolean quit , String nick, Card godCard) {
+<b class="fc"><i>20</i>&nbsp;        super(gameIdentifier);</b>
+<b class="fc"><i>21</i>&nbsp;        this.playerReference = playerReference;</b>
+<b class="fc"><i>22</i>&nbsp;        this.quitPlayerAccess = quit;</b>
+<b class="fc"><i>23</i>&nbsp;        this.nick = nick;</b>
+<b class="fc"><i>24</i>&nbsp;        this.godCard = godCard;</b>
+<b class="fc"><i>25</i>&nbsp;    }</b>
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    /**
+<i>28</i>&nbsp;     *
+<i>29</i>&nbsp;     * @return The reference to the data of a player of the game
+<i>30</i>&nbsp;     */
+<i>31</i>&nbsp;    public Player getPlayerReference() {
+<b class="fc"><i>32</i>&nbsp;        return playerReference;</b>
+<i>33</i>&nbsp;    }
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    /**
+<i>36</i>&nbsp;     * @return True if the player who sent the message wants or is forced to quit the game, False otherway
+<i>37</i>&nbsp;     */
+<i>38</i>&nbsp;    public boolean isQuitting() {
+<b class="fc"><i>39</i>&nbsp;        return quitPlayerAccess;</b>
+<i>40</i>&nbsp;    }
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    /**
+<i>43</i>&nbsp;     *
+<i>44</i>&nbsp;     * @return The nickname that identifies a player during the game
+<i>45</i>&nbsp;     */
+<i>46</i>&nbsp;    public String getNick() {
+<b class="fc"><i>47</i>&nbsp;        return nick;</b>
+<i>48</i>&nbsp;    }
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    /**
+<i>51</i>&nbsp;     *
+<i>52</i>&nbsp;     * @return The card that is used by a player during the game
+<i>53</i>&nbsp;     */
+<i>54</i>&nbsp;    public Card getCard() {
+<b class="fc"><i>55</i>&nbsp;        return godCard;</b>
+<i>56</i>&nbsp;    }
+<i>57</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-07 10:14</div>
+</div>
+</body>
+</html>
