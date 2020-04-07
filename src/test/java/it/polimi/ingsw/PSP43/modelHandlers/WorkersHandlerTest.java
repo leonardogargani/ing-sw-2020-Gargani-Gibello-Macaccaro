@@ -1,7 +1,10 @@
 package it.polimi.ingsw.PSP43.modelHandlers;
 
+import it.polimi.ingsw.PSP43.model.Cell;
+import it.polimi.ingsw.PSP43.model.Coord;
 import it.polimi.ingsw.PSP43.model.GameSession;
 import it.polimi.ingsw.PSP43.model.Worker;
+import it.polimi.ingsw.PSP43.modelHandlersException.CellAlreadyOccupiedExeption;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,8 +38,19 @@ public class WorkersHandlerTest {
     }
 
     @Test
-    public void testChangePosition() {
-        // TODO implement this whole test
+    public void testChangePosition() throws CellAlreadyOccupiedExeption {
+        Worker worker = new Worker(1, "yellow");
+        Coord coord1 = new Coord(1, 2);
+        Coord coord2 = new Coord(2, 2);
+        worker.setCurrentPosition(coord1);
+        test.changePosition(worker, coord2);
+
+        Cell oldCell = gameSession.getCellsHandler().getCell(coord1);
+        Cell newCell = gameSession.getCellsHandler().getCell(coord2);
+        assertFalse(oldCell.getOccupiedByDome());
+        assertFalse(oldCell.getOccupiedByWorker());
+        assertFalse(newCell.getOccupiedByDome());
+        assertTrue(newCell.getOccupiedByWorker());
     }
 
     // this test is the same as the one for addNewWorker()

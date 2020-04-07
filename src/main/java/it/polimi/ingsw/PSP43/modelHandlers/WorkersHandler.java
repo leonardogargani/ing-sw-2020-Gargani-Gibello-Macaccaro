@@ -4,6 +4,8 @@ import it.polimi.ingsw.PSP43.model.Cell;
 import it.polimi.ingsw.PSP43.model.Coord;
 import it.polimi.ingsw.PSP43.model.GameSession;
 import it.polimi.ingsw.PSP43.model.Worker;
+import it.polimi.ingsw.PSP43.modelHandlersException.CellAlreadyOccupiedExeption;
+
 import java.util.ArrayList;
 
 
@@ -43,14 +45,23 @@ public class WorkersHandler {
 
     /**
      * This method changes the position of a worker, checking if the move is possible and
-     * throwing an exception if not possible
+     * throwing an exception if not possible.
+     * It also sets the occupation boolean flags of the two involved cells.
      * @param worker worker whose position is wanted to be changed
      * @param position position the player wants to move the worker to
      */
-    public void changePosition(Worker worker, Coord position) {
-        Cell cellToMove = gameSession.getCellsHandler().getCell(position);
-        // TODO implement control if change is possible (cell already occupied -> exception)
+    public void changePosition(Worker worker, Coord position) throws CellAlreadyOccupiedExeption {
+        Coord coordBeforeMove = worker.getCurrentPosition();
+        Cell cellBeforeMove = gameSession.getCellsHandler().getCell(coordBeforeMove);
+        Cell cellAfterMove = gameSession.getCellsHandler().getCell(position);
+
+        // check if change is possible (cell already occupied -> throw exception)
+        if (cellAfterMove.getOccupiedByDome() || cellAfterMove.getOccupiedByWorker()) { throw new CellAlreadyOccupiedExeption(); }
+
+        // if the move is possible, set the worker new position and set the cell occupation
         worker.setCurrentPosition(position);
+        cellBeforeMove.setOccupiedByWorker(false);
+        cellAfterMove.setOccupiedByWorker(true);
     }
 
 

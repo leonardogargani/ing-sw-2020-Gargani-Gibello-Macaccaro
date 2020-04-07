@@ -42,7 +42,6 @@ public class Worker {
     public void setCurrentPosition(Coord currentPosition) {
         this.previousPosition = this.currentPosition;
         this.currentPosition = currentPosition;
-        // TODO set occupiedByWorker of old position to false and of new one to true
     }
 
 
