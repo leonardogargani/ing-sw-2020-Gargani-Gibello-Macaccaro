@@ -40,9 +40,7 @@ public class GameSession {
      * Getter method for gamers arraylist
      * @return gamers ,that is the gamers list
      */
-    public ArrayList<ClientListener> getGamers() {
-        return gamers;
-    }
+    public ArrayList<ClientListener> getGamers() { return gamers; }
 
     /**
      * Method to add players in the game
@@ -109,7 +107,7 @@ public class GameSession {
     }
 
     /**
-     * Method that initializes the class who is going to handle cells in this game session
+     * Method that returns the class who is going to handle cells in this game session
      * @return cellHandler is the class that handles cells in the game
      */
     public CellsHandler getCellsHandler() {
@@ -117,7 +115,7 @@ public class GameSession {
     }
 
     /**
-     * Method that initializes the class who is going to handle players in this game session
+     * Method that returns the class who is going to handle players in this game session
      * @return playerHandler is the class that handles players in the game
      */
     public PlayersHandler getPlayerHandler() {
@@ -125,7 +123,7 @@ public class GameSession {
     }
 
     /**
-     * Method that initializes the class who is going to handle workers in this game session
+     * Method that returns the class who is going to handle workers in this game session
      * @return workersHandler is the class that handles workers in the game
      */
     public WorkersHandler getWorkersHandler() {
@@ -133,7 +131,7 @@ public class GameSession {
     }
 
     /**
-     * Method that initializes the class who is going to handle cards in this game session
+     * Method that returns the class who is going to handle cards in this game session
      * @return cardsHandler is the class that handles cards in the game
      */
     public CardsHandler getCardsHandler() {
