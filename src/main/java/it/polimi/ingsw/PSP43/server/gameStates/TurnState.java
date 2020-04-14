@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
+import it.polimi.ingsw.PSP43.server.modelHandlersException.FullGameSessionException;
 import it.polimi.ingsw.PSP43.server.networkMessages.GenericMessage;
 import it.polimi.ingsw.PSP43.server.model.*;
 
@@ -14,5 +15,6 @@ public abstract class TurnState {
         return gameSession;
     }
 
-    public void handleCommand(GenericMessage message) {}
+    public void handleCommand(GenericMessage message) {
+    }
 }

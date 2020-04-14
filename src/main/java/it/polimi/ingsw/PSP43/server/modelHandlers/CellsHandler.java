@@ -5,6 +5,8 @@ import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.CellAlreadyOccupiedExeption;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.CellHeightException;
 
+import java.util.Iterator;
+
 
 public class CellsHandler {
     private static final int DIM = 5;
@@ -26,11 +28,12 @@ public class CellsHandler {
      * @return the searched cell
      */
     public Cell getCell(Coord c) {
-        return board[c.getX()][c.getY()];
-
-        /*Cell c1;
-        c1 = new Cell(board[c.getX()][c.getY()].getHeight(),board[c.getX()][c.getY()].getOccupiedByWorker(),board[c.getX()][c.getY()].getOccupiedByDome());
-        return c1;*/
+        Cell cellToBeCopied = board[c.getX()][c.getY()];
+        Cell cellClone = new Cell();
+        cellClone.setHeight(cellToBeCopied.getHeight());
+        cellClone.setOccupiedByDome(cellToBeCopied.getOccupiedByDome());
+        cellClone.setOccupiedByWorker(cellToBeCopied.getOccupiedByWorker());
+        return cellToBeCopied;
     }
 
 
@@ -41,12 +44,85 @@ public class CellsHandler {
      * @param c includes the coordinates of the cell that are going to be modified
      */
     public void changeStateOfCell (Cell newDescriptionCell, Coord c) throws CellAlreadyOccupiedExeption, CellHeightException {
-        if (newDescriptionCell.getHeight()>3) throw new CellHeightException("You can't set an height that is more than three!!!");
-        getCell(c).setHeight(newDescriptionCell.getHeight());
+        Cell cellToChange = board[c.getX()][c.getY()];
+        cellToChange.setOccupiedByDome(newDescriptionCell.getOccupiedByDome());
+        cellToChange.setOccupiedByWorker(newDescriptionCell.getOccupiedByWorker());
+        cellToChange.setHeight(newDescriptionCell.getHeight());
+    }
 
-        if(newDescriptionCell.getOccupiedByWorker()&newDescriptionCell.getOccupiedByDome()) throw new CellAlreadyOccupiedExeption("A worker and a dome cannot be in the same cell!!!");
-        getCell(c).setOccupiedByWorker(newDescriptionCell.getOccupiedByWorker());
-        getCell(c).setOccupiedByDome(newDescriptionCell.getOccupiedByDome());
+    public AbstractIterator iterator(Coord initialPosition, Coord finalPosition) {
+        int xIncrement = initialPosition.getX() - finalPosition.getX();
+        int yIncrement = initialPosition.getY() - finalPosition.getY();
+        if (xIncrement != 0 && yIncrement != 0)
+            return new DiagonalIterator(initialPosition, xIncrement, yIncrement);
+        else return new LinearIterator(initialPosition, xIncrement, yIncrement);
+    }
 
+    public interface AbstractIterator {
+        public Cell next();
+    }
+
+    private class DiagonalIterator implements AbstractIterator {
+        Coord initialPosition;
+        Coord currentPosition;
+        int xIncrement;
+        int yIncrement;
+
+        public DiagonalIterator(Coord initialPosition, int xIncrement, int yIncrement) {
+            this.initialPosition = initialPosition;
+            this.currentPosition = initialPosition;
+            this.xIncrement = xIncrement;
+            this.yIncrement = yIncrement;
+        }
+
+        public boolean hasNext() {
+            if (((currentPosition.getX() + xIncrement) == DIM || (currentPosition.getX() + xIncrement) == 0)) {
+                return false;
+            }
+            else if (((currentPosition.getY() + yIncrement) == DIM || (currentPosition.getY() + yIncrement) == 0)) {
+                return false;
+            }
+            else return true;
+        }
+
+        public Cell next() {
+            if (this.hasNext()) {
+                currentPosition = new Coord(currentPosition.getX() + xIncrement, currentPosition.getY() + yIncrement);
+                return getCell(currentPosition);
+            }
+            else return null;
+        }
+    }
+
+    private class LinearIterator implements AbstractIterator {
+        Coord initialPosition;
+        Coord currentPosition;
+        int xIncrement;
+        int yIncrement;
+
+        public LinearIterator(Coord initialPosition, int xIncrement, int yIncrement) {
+            this.initialPosition = initialPosition;
+            this.currentPosition = initialPosition;
+            this.xIncrement = xIncrement;
+            this.yIncrement = yIncrement;
+        }
+
+        public boolean hasNext() {
+            if ((currentPosition.getX() + xIncrement == DIM || currentPosition.getX() + xIncrement == DIM) && xIncrement != 0) {
+                return false;
+            }
+            else if ((currentPosition.getY() + yIncrement == DIM || currentPosition.getY() + yIncrement == 0) && yIncrement != 0) {
+                return false;
+            }
+            else return true;
+        }
+
+        public Cell next() {
+            if (this.hasNext()) {
+                currentPosition = new Coord(currentPosition.getX() + xIncrement, currentPosition.getY() + yIncrement);
+                return getCell(currentPosition);
+            }
+            else return null;
+        }
     }
 }

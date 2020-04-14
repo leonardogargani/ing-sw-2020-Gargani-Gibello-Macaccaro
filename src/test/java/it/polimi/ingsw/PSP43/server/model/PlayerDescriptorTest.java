@@ -1,5 +1,7 @@
 package it.polimi.ingsw.PSP43.server.model;
 
+import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.model.card.BasicGodCard;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,7 +13,7 @@ public class PlayerDescriptorTest {
     private Player actualPlayer;
     private boolean actualQuit;
     private String actualNick;
-    private Card actualCard;
+    private AbstractGodCard actualAbstractGodCard;
     private PlayerDescriptor test;
 
     @Before
@@ -19,8 +21,8 @@ public class PlayerDescriptorTest {
         actualGame = new GameSession(9);
         actualPlayer = new Player("Gibi");
         actualQuit = false;
-        actualCard = new Card("Hermes", "foo description");
-        test = new PlayerDescriptor(actualGame, actualPlayer, actualQuit, actualNick, actualCard);
+        actualAbstractGodCard = new BasicGodCard("Hermes", "foo description", null);
+        test = new PlayerDescriptor(actualGame, actualPlayer, actualQuit, actualNick, actualAbstractGodCard);
     }
 
     @Test
@@ -45,6 +47,6 @@ public class PlayerDescriptorTest {
 
     @Test
     public void getCard() {
-        assertEquals(actualCard, test.getCard());
+        assertEquals(actualAbstractGodCard, test.getCard());
     }
 }

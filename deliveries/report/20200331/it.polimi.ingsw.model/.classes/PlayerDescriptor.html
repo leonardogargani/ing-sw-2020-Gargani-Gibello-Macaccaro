@@ -81,21 +81,21 @@
 <i>7</i>&nbsp;    private Player playerReference;
 <i>8</i>&nbsp;    private boolean quitPlayerAccess;
 <i>9</i>&nbsp;    private String nick;
-<i>10</i>&nbsp;    private Card godCard;
+<i>10</i>&nbsp;    private Card godAbstractGodCard;
 <i>11</i>&nbsp;
 <i>12</i>&nbsp;    /**
 <i>13</i>&nbsp;     *
 <i>14</i>&nbsp;     * @param gameIdentifier Identification of the object GameSession to which the message is to be sent and handled
 <i>15</i>&nbsp;     * @param playerReference Reference to the player data to modify
 <i>16</i>&nbsp;     * @param nick Nickname that identifies a player during the game
-<i>17</i>&nbsp;     * @param godCard Card chosen by the player during the game
+<i>17</i>&nbsp;     * @param godAbstractGodCard Card chosen by the player during the game
 <i>18</i>&nbsp;     */
-<i>19</i>&nbsp;    public PlayerDescriptor(GameSession gameIdentifier, Player playerReference, boolean quit , String nick, Card godCard) {
+<i>19</i>&nbsp;    public PlayerDescriptor(GameSession gameIdentifier, Player playerReference, boolean quit , String nick, Card godAbstractGodCard) {
 <b class="fc"><i>20</i>&nbsp;        super(gameIdentifier);</b>
 <b class="fc"><i>21</i>&nbsp;        this.playerReference = playerReference;</b>
 <b class="fc"><i>22</i>&nbsp;        this.quitPlayerAccess = quit;</b>
 <b class="fc"><i>23</i>&nbsp;        this.nick = nick;</b>
-<b class="fc"><i>24</i>&nbsp;        this.godCard = godCard;</b>
+<b class="fc"><i>24</i>&nbsp;        this.godAbstractGodCard = godAbstractGodCard;</b>
 <b class="fc"><i>25</i>&nbsp;    }</b>
 <i>26</i>&nbsp;
 <i>27</i>&nbsp;    /**
@@ -123,10 +123,10 @@
 <i>49</i>&nbsp;
 <i>50</i>&nbsp;    /**
 <i>51</i>&nbsp;     *
-<i>52</i>&nbsp;     * @return The card that is used by a player during the game
+<i>52</i>&nbsp;     * @return The abstractGodCard that is used by a player during the game
 <i>53</i>&nbsp;     */
 <i>54</i>&nbsp;    public Card getCard() {
-<b class="fc"><i>55</i>&nbsp;        return godCard;</b>
+<b class="fc"><i>55</i>&nbsp;        return godAbstractGodCard;</b>
 <i>56</i>&nbsp;    }
 <i>57</i>&nbsp;}
 </div>

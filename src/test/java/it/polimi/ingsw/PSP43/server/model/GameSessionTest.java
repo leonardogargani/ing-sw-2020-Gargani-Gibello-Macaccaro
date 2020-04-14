@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import static org.junit.Assert.*;
 
 import it.polimi.ingsw.PSP43.server.ClientListener;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.FullGameSessionException;
+import it.polimi.ingsw.PSP43.server.networkMessages.RegistrationMessage;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,10 +17,11 @@ public class GameSessionTest {
     private ClientListener a;
     private Player p1;
     @Before
-    public void setUp(){
+    public void setUp() throws FullGameSessionException {
         actualGame = new GameSession(id);
         a = new ClientListener();
-        boolean add1= actualGame.addGamer(a);
+        RegistrationMessage message = new RegistrationMessage(9, "Rick", false);
+        actualGame.addGamer(a, message);
         p1= new Player("Roberto");
     }
 
@@ -28,17 +31,19 @@ public class GameSessionTest {
     }*/
 
     @Test
-    public void getGamers(){
+    public void getGamers() throws FullGameSessionException {
         ClientListener b= new ClientListener();
-        actualGame.addGamer(b);
-        assertEquals(2,actualGame.getGamers().size());
+        RegistrationMessage message = new RegistrationMessage(9, "Rick", false);
+        actualGame.addGamer(b, message);
+        assertEquals(2,actualGame.getListenersHashMap().size());
     }
 
     @Test
-    public void addGamer(){
+    public void addGamer() throws FullGameSessionException {
         ClientListener c = new ClientListener();
-        boolean add2= actualGame.addGamer(c);
-        assertEquals(2,actualGame.getGamers().size());
+        RegistrationMessage message = new RegistrationMessage(9, "Mark", false);
+        actualGame.addGamer(c, message);
+        assertEquals(2,actualGame.getListenersHashMap().size());
         /*
         oppure
         assertTrue(actualGame.addGamer(a))
@@ -49,8 +54,9 @@ public class GameSessionTest {
 
     @Test
     public void removeGamer(){
-        actualGame.removeGamer(a);
-        assertEquals(0,actualGame.getGamers().size());
+        RegistrationMessage message = new RegistrationMessage(9, "Rick", true);
+        actualGame.removeGamer(message);
+        assertEquals(0,actualGame.getListenersHashMap().size());
         /*
         oppure
         assertTrue(actualGame.removeGamers
@@ -87,7 +93,7 @@ public class GameSessionTest {
 
     @Test
     public void getPlayerHandler() {
-        assertFalse(actualGame.getPlayerHandler()==null);
+        assertFalse(actualGame.getPlayersHandler()==null);
     }
 
     @Test

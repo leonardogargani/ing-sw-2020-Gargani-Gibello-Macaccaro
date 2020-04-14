@@ -1,5 +1,7 @@
 package it.polimi.ingsw.PSP43.server.model;
 
+import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.model.card.BasicGodCard;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -29,9 +31,9 @@ public class PlayerTest {
 
     @Test
     public void testGetSetCard() {
-        Card card = new Card("Zeus", "This is the description of Zeus.");
-        test.setCard(card);
-        assertEquals(card, test.getCard());
+        AbstractGodCard abstractGodCard = new BasicGodCard("Zeus", "This is the description of Zeus.", null);
+        test.setAbstractGodCard(abstractGodCard);
+        assertEquals(abstractGodCard, test.getAbstractGodCard());
     }
 
 }

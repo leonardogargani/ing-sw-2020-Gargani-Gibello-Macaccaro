@@ -73,6 +73,14 @@ public class WorkersHandler {
         return workers;
     }
 
+    public Worker getWorker(Coord c) {
+        Coord position;
+        for (Worker w : workers) {
+            position = w.getCurrentPosition();
+            if (position.getX() == c.getX() && position.getY() == c.getY()) return w;
+        }
+        return null;
+    }
 
     // TODO add getGameSession() (or maybe not because it is not needed from outside the class...)
 

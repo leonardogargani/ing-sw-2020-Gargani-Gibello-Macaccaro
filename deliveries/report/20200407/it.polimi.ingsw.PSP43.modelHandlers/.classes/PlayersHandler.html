@@ -124,13 +124,13 @@
 <i>50</i>&nbsp;    /**
 <i>51</i>&nbsp;     *
 <i>52</i>&nbsp;     * @param player The data stored about a player into the list of players
-<i>53</i>&nbsp;     * @param cardChosen The data of the card chosen by a player during the game
+<i>53</i>&nbsp;     * @param abstractGodCardChosen The data of the abstractGodCard chosen by a player during the game
 <i>54</i>&nbsp;     * @throws CardAlreadyInUseException
 <i>55</i>&nbsp;     */
-<i>56</i>&nbsp;    public void setCardToPlayer(Player player, Card cardChosen) throws CardAlreadyInUseException {
+<i>56</i>&nbsp;    public void setCardToPlayer(Player player, Card abstractGodCardChosen) throws CardAlreadyInUseException {
 <b class="fc"><i>57</i>&nbsp;        for (Player p : gamePlayers)</b>
-<b class="fc"><i>58</i>&nbsp;            if (p.getCard()!=null &amp;&amp; p.getCard().getGodName().equals(cardChosen.getGodName())) throw new CardAlreadyInUseException(&quot;We are sorry, but the card &quot; + cardChosen.getGodName() + &quot; is already in use.&quot;);</b>
-<b class="fc"><i>59</i>&nbsp;        player.setCard(cardChosen);</b>
+<b class="fc"><i>58</i>&nbsp;            if (p.getCard()!=null &amp;&amp; p.getCard().getGodName().equals(abstractGodCardChosen.getGodName())) throw new CardAlreadyInUseException(&quot;We are sorry, but the abstractGodCard &quot; + abstractGodCardChosen.getGodName() + &quot; is already in use.&quot;);</b>
+<b class="fc"><i>59</i>&nbsp;        player.setCard(abstractGodCardChosen);</b>
 <b class="fc"><i>60</i>&nbsp;    }</b>
 <i>61</i>&nbsp;
 <i>62</i>&nbsp;

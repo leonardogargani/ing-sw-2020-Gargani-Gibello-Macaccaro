@@ -18,13 +18,14 @@ public class CellsHandlerTest {
     private int cY=3;
 
     @Before
-    public void setUp(){
+    public void setUp() throws CellHeightException, CellAlreadyOccupiedExeption {
         game = new GameSession(4);
         c=new Coord(cX,cY);
         c1=new Cell();
-        game.getCellsHandler().getCell(c).setOccupiedByDome(true);
-        game.getCellsHandler().getCell(c).setOccupiedByWorker(false);
-        game.getCellsHandler().getCell(c).setHeight(2);
+        c1.setHeight(2);
+        c1.setOccupiedByWorker(false);
+        c1.setOccupiedByDome(true);
+        game.getCellsHandler().changeStateOfCell(c1, c);
     }
 
     @Test

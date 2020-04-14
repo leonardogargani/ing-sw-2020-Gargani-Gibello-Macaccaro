@@ -77,13 +77,13 @@
 <i>3</i>&nbsp;
 <i>4</i>&nbsp;/**
 <i>5</i>&nbsp; * Player is the class that represents the actual person who is playing the game.
-<i>6</i>&nbsp; * He has a nickname previously chosen, two workers he can move and a card of a god.
+<i>6</i>&nbsp; * He has a nickname previously chosen, two workers he can move and a abstractGodCard of a god.
 <i>7</i>&nbsp; */
 <i>8</i>&nbsp;public class Player {
 <i>9</i>&nbsp;
 <i>10</i>&nbsp;    private String nickname;
 <b class="fc"><i>11</i>&nbsp;    private Worker[] workersArray = new Worker[2];</b>
-<i>12</i>&nbsp;    private Card card;
+<i>12</i>&nbsp;    private Card abstractGodCard;
 <i>13</i>&nbsp;
 <i>14</i>&nbsp;
 <i>15</i>&nbsp;    /**
@@ -93,7 +93,7 @@
 <b class="fc"><i>19</i>&nbsp;    public Player(String nickname) {</b>
 <b class="fc"><i>20</i>&nbsp;        this.nickname = nickname;</b>
 <b class="fc"><i>21</i>&nbsp;        this.workersArray = null;</b>
-<b class="fc"><i>22</i>&nbsp;        this.card = null;</b>
+<b class="fc"><i>22</i>&nbsp;        this.abstractGodCard = null;</b>
 <b class="fc"><i>23</i>&nbsp;    }</b>
 <i>24</i>&nbsp;
 <i>25</i>&nbsp;
@@ -127,20 +127,20 @@
 <i>53</i>&nbsp;
 <i>54</i>&nbsp;
 <i>55</i>&nbsp;        /**
-<i>56</i>&nbsp;         * This method returns the God Power card owned by the player.
-<i>57</i>&nbsp;         * @return card owned by the player
+<i>56</i>&nbsp;         * This method returns the God Power abstractGodCard owned by the player.
+<i>57</i>&nbsp;         * @return abstractGodCard owned by the player
 <i>58</i>&nbsp;         */
 <i>59</i>&nbsp;    public Card getCard() {
-<b class="fc"><i>60</i>&nbsp;        return card;</b>
+<b class="fc"><i>60</i>&nbsp;        return abstractGodCard;</b>
 <i>61</i>&nbsp;    }  // DEVO RITORNARE UNA COPIA DI CARD
 <i>62</i>&nbsp;
 <i>63</i>&nbsp;
 <i>64</i>&nbsp;    /**
-<i>65</i>&nbsp;     * This method assigns a God Power card to a player who&#39;ll become its owner.
-<i>66</i>&nbsp;     * @param card card of a God Power
+<i>65</i>&nbsp;     * This method assigns a God Power abstractGodCard to a player who&#39;ll become its owner.
+<i>66</i>&nbsp;     * @param abstractGodCard abstractGodCard of a God Power
 <i>67</i>&nbsp;     */
-<i>68</i>&nbsp;    public void setCard(Card card) {
-<b class="fc"><i>69</i>&nbsp;        this.card = card;</b>
+<i>68</i>&nbsp;    public void setCard(Card abstractGodCard) {
+<b class="fc"><i>69</i>&nbsp;        this.abstractGodCard = abstractGodCard;</b>
 <b class="fc"><i>70</i>&nbsp;    }  // DEVO PASSARE UNA COPIA DI CARD</b>
 <i>71</i>&nbsp;
 <i>72</i>&nbsp;

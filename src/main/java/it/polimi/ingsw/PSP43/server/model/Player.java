@@ -1,15 +1,17 @@
 package it.polimi.ingsw.PSP43.server.model;
 
 
+import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+
 /**
  * Player is the class that represents the actual person who is playing the game.
- * He has a nickname previously chosen, two workers he can move and a card of a god.
+ * He has a nickname previously chosen, two workers he can move and a abstractGodCard of a god.
  */
 public class Player {
 
     private String nickname;
     private int[] workersIdsArray;
-    private Card card;
+    private AbstractGodCard abstractGodCard;
 
 
     /**
@@ -19,7 +21,7 @@ public class Player {
     public Player(String nickname) {
         this.nickname = nickname;
         this.workersIdsArray = null;
-        this.card = null;
+        this.abstractGodCard = null;
     }
 
 
@@ -54,20 +56,20 @@ public class Player {
 
 
         /**
-         * This method returns the God Power card owned by the player.
-         * @return card owned by the player
+         * This method returns the God Power abstractGodCard owned by the player.
+         * @return abstractGodCard owned by the player
          */
-    public Card getCard() {
-        return card;
+    public AbstractGodCard getAbstractGodCard() {
+        return abstractGodCard;
     }
 
 
     /**
-     * This method assigns a God Power card to a player who'll become its owner.
-     * @param card card of a God Power
+     * This method assigns a God Power abstractGodCard to a player who'll become its owner.
+     * @param abstractGodCard abstractGodCard of a God Power
      */
-    public void setCard(Card card) {
-        this.card = card;
+    public void setAbstractGodCard(AbstractGodCard abstractGodCard) {
+        this.abstractGodCard = abstractGodCard;
     }
 
 

@@ -66,5 +66,4 @@ public class Cell {
         this.occupiedByDome = occupiedByDome;
     }
 
-
 }
