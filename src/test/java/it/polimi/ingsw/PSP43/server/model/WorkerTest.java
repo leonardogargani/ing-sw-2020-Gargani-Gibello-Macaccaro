@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP43.server.model;
 
+import it.polimi.ingsw.PSP43.Color;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -11,7 +12,7 @@ public class WorkerTest {
 
     @Before
     public void setUp() {
-        test = new Worker(5, "blue");
+        test = new Worker(5, Color.ANSI_BLUE);
     }
 
     // getter and setter are tested both at the same time

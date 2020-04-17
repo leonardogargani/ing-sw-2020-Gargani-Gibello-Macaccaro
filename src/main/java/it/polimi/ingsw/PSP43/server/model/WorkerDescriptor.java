@@ -1,12 +1,14 @@
 package it.polimi.ingsw.PSP43.server.model;
 
+import it.polimi.ingsw.PSP43.Color;
+
 /**
  * Worker description arriving from the net and traslated into a message for a specified GameSession
  */
 public class WorkerDescriptor extends GenericDescriptor {
     private Worker workerReference;
     private Cell nextPosition;
-    private String color;
+    private Color color;
 
     /**
      *
@@ -15,7 +17,7 @@ public class WorkerDescriptor extends GenericDescriptor {
      * @param nextPosition Position in which the player wants to place his worker
      * @param color Color of the worker
      */
-    public WorkerDescriptor(GameSession gameIdentifier, Worker workerRef, Cell nextPosition, String color) {
+    public WorkerDescriptor(GameSession gameIdentifier, Worker workerRef, Cell nextPosition, Color color) {
         super(gameIdentifier);
         this.workerReference = workerRef;
         this.nextPosition = nextPosition;
@@ -42,7 +44,7 @@ public class WorkerDescriptor extends GenericDescriptor {
      *
      * @return The color of the worker of the description
      */
-    public String getColor() {
+    public Color getColor() {
         return color;
     }
 }

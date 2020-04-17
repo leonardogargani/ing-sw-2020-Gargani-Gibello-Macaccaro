@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP43.server.modelHandlers;
 
+import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.GameSession;
@@ -36,7 +37,7 @@ public class WorkersHandler {
      * an incremental id based on the number of already existing workers.
      * @param color color of the worker
      */
-    public void addNewWorker(String color) {
+    public void addNewWorker(Color color) {
         int workerId = workers.size();
         Worker newWorker = new Worker(workerId, color);
         workers.add(newWorker);

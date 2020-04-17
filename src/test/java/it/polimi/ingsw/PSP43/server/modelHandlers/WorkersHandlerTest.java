@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP43.server.modelHandlers;
 
+import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.GameSession;
@@ -28,18 +29,18 @@ public class WorkersHandlerTest {
     // this test is the same as the one for addNewWorker()
     @Test
     public void testAddNewWorker() {
-        Worker worker1 = new Worker(0, "blue");
-        Worker worker2 = new Worker(1, "red");
+        Worker worker1 = new Worker(0, Color.ANSI_BLUE);
+        Worker worker2 = new Worker(1, Color.ANSI_RED);
         ArrayList<Worker> correctArrayList = new ArrayList<>(Arrays.asList(worker1, worker2));
-        test.addNewWorker("blue");
-        test.addNewWorker("red");
+        test.addNewWorker(Color.ANSI_BLUE);
+        test.addNewWorker(Color.ANSI_RED);
         // TODO find a way to compare elements of two ArrayList
         assertEquals(correctArrayList.size(), test.getWorkers().size());
     }
 
     @Test
     public void testChangePosition() throws CellAlreadyOccupiedExeption {
-        Worker worker = new Worker(1, "yellow");
+        Worker worker = new Worker(1, Color.ANSI_YELLOW);
         Coord coord1 = new Coord(1, 2);
         Coord coord2 = new Coord(2, 2);
         worker.setCurrentPosition(coord1);
@@ -56,11 +57,11 @@ public class WorkersHandlerTest {
     // this test is the same as the one for addNewWorker()
     @Test
     public void testGetWorkers()  {
-        Worker worker1 = new Worker(0, "blue");
-        Worker worker2 = new Worker(1, "red");
+        Worker worker1 = new Worker(0, Color.ANSI_BLUE);
+        Worker worker2 = new Worker(1, Color.ANSI_RED);
         ArrayList<Worker> correctArrayList = new ArrayList<>(Arrays.asList(worker1, worker2));
-        test.addNewWorker("blue");
-        test.addNewWorker("red");
+        test.addNewWorker(Color.ANSI_BLUE);
+        test.addNewWorker(Color.ANSI_RED);
         // TODO find a way to compare elements of two ArrayList
         assertEquals(correctArrayList.size(), test.getWorkers().size());
     }
