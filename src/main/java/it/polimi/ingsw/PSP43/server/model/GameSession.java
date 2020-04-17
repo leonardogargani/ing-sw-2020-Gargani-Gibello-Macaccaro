@@ -1,14 +1,15 @@
 package it.polimi.ingsw.PSP43.server.model;
 
+
 import it.polimi.ingsw.PSP43.server.ClientListener;
-import it.polimi.ingsw.PSP43.server.gameStates.PlayerRegistrationState;
-import it.polimi.ingsw.PSP43.server.gameStates.TurnState;
+import it.polimi.ingsw.PSP43.server.gameStates.*;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.FullGameSessionException;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.CellAlreadyOccupiedExeption;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.CellHeightException;
 import it.polimi.ingsw.PSP43.server.networkMessages.GenericMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.RegistrationMessage;
 
@@ -19,9 +20,12 @@ public class GameSession {
     private int idGame;
     private boolean isFull;
     private HashMap<String, ClientListener> listenersHashMap;
+
     private TurnState currentState;
-    private HashMap<String, ArrayList<TurnState>> turnMap;
+    private ArrayList<TurnState> turnMap;
+
     private Player currentPlayer;
+
     private CellsHandler cellsHandler;
     private PlayersHandler playersHandler;
     private WorkersHandler workersHandler;
@@ -36,7 +40,14 @@ public class GameSession {
         this.listenersHashMap = new HashMap<>(2);
         this.idGame = idgame;
         this.isFull = false;
-        this.turnMap = new HashMap<>(2);
+        this.turnMap = new ArrayList<>();
+        this.turnMap.add(0, new PlayerRegistrationState(this));
+        this.currentState = turnMap.get(0);
+        this.turnMap.add(1, new ChooseCardState(this));
+        this.turnMap.add(2, new ChooseWorkerState(this));
+        this.turnMap.add(3, new MoveState(this));
+        this.turnMap.add(4, new BuildState(this));
+        this.turnMap.add(5, new WinState(this));
         this.cellsHandler = new CellsHandler();
         this.playersHandler = new PlayersHandler();
         this.workersHandler = new WorkersHandler(this);
@@ -47,11 +58,41 @@ public class GameSession {
      * This method handles messages arriving from the clients in different ways depending on the current state of the game
      * @param message The message containing the command to handle (i.e. Registration data, move data)
      */
-    public void handleCommand(GenericMessage message) {
+    public void handleGameCommand(GenericMessage message) {
         currentState.handleCommand(message);
     }
 
-    public void setFull(boolean full) {
+    protected void initNextState() {
+        currentState.initState();
+    }
+
+    public synchronized boolean registerToTheGame(RegistrationMessage message, ClientListener player) {
+        if (!this.isFull()) {
+            listenersHashMap.put(message.getNickPlayerId(), player);
+            currentState.handleCommand(message);
+            return true;
+        }
+        else return false;
+    }
+
+    public synchronized boolean unregisterFromGame(RegistrationMessage message, ClientListener player) {
+        // TODO :   send a message to all the other players telling them that the game is finished due to unregistration
+        //          of a player or connection problems
+        return true;
+    }
+
+    public void eliminatePlayer(Player playerEliminated) throws CellHeightException, CellAlreadyOccupiedExeption {
+        cardsHandler.removeCardToPlayer(playerEliminated.getNickname());
+        Player playerToRemove = playersHandler.getPlayer(playerEliminated.getNickname());
+
+        int[] workersToRemove = playerToRemove.getWorkersIdsArray();
+        workersHandler.removeWorkers(workersToRemove);
+
+        // TODO : send a message to the player eliminated
+        listenersHashMap.remove(playerEliminated.getNickname());
+    }
+
+    public synchronized void setFull(boolean full) {
         isFull = full;
     }
 
@@ -64,30 +105,6 @@ public class GameSession {
      * @return gamers ,that is the gamers list
      */
     public HashMap<String, ClientListener> getListenersHashMap() { return listenersHashMap; }
-
-    /**
-     * Method to add players in the game
-     * @param player ,is a ClientListner, who is connected in the game
-     * @throws FullGameSessionException if the game is already full of players
-     */
-    public void addGamer(ClientListener player, RegistrationMessage message) throws FullGameSessionException {
-        if (listenersHashMap.size()!=0 && !(currentState instanceof PlayerRegistrationState)) throw new FullGameSessionException();
-        ArrayList<TurnState> actual = new ArrayList<>();
-        actual.add(new PlayerRegistrationState(this));
-        this.currentState = actual.get(0);
-        turnMap.put(message.getNickPlayerId(), actual);
-        listenersHashMap.put(message.getNickPlayerId(), player);
-    }
-
-    /**
-     * method to remove a player from the game
-     * @param message The message that contains all the information about the player to remove
-     */
-    public void removeGamer(RegistrationMessage message){
-        if (message.isUnregistration()) {
-            listenersHashMap.remove(message.getNickPlayerId());
-        }
-    }
 
     /**
      * Method to get the game id
@@ -117,11 +134,9 @@ public class GameSession {
      * This method returns the HashMap representing the correspondence between players and the related game turns
      * @return The HashMap representing the correspondence between players and the related game turns
      */
-    public HashMap<String, ArrayList<TurnState>> getTurnMap() {
-        return (HashMap<String, ArrayList<TurnState>>) turnMap.clone();
+    public ArrayList<TurnState> getTurnMap() {
+        return turnMap;
     }
-
-    public void setTurnMap(String nickName, AbstractGodCard abstractGodCardChosen) {};
 
     /**
      * Methods to get the current player of that turn
@@ -170,4 +185,6 @@ public class GameSession {
     public CardsHandler getCardsHandler() {
         return cardsHandler;
     }
+
+    // TODO : setters/getters that are not listed above if we want to use xml
 }

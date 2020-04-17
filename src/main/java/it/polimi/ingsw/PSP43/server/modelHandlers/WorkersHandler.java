@@ -5,6 +5,7 @@ import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.CellAlreadyOccupiedExeption;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.CellHeightException;
 
 import java.util.ArrayList;
 
@@ -29,6 +30,26 @@ public class WorkersHandler {
         this.gameSession = gameSession;
     }
 
+
+    public void removeWorkers(int[] workersIds) throws CellHeightException, CellAlreadyOccupiedExeption {
+        CellsHandler cellsHandler = gameSession.getCellsHandler();
+        Worker workerToRemove;
+        Cell cellOccupiedByWorker;
+        Coord workerPosition;
+
+        for (int i : workersIds) {
+            for (Worker w : workers) {
+                if (w.getId() == i) {
+                    workerToRemove = w;
+                    workerPosition = workerToRemove.getCurrentPosition();
+                    cellOccupiedByWorker = cellsHandler.getCell(workerPosition);
+                    cellOccupiedByWorker.setOccupiedByWorker(false);
+                    cellsHandler.changeStateOfCell(cellOccupiedByWorker, workerPosition);
+                    workers.remove(w);
+                }
+            }
+        }
+    }
 
     /**
      * This method adds a new worker to the existing ones.

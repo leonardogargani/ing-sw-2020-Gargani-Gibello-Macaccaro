@@ -34,7 +34,8 @@ public class ChooseWorkerState extends TurnState {
         int position = playersHandler.getNumOfPlayers()-1;
         String latestPlayer = playersHandler.getPlayer(position).getNickname();
         if (latestPlayer.equals(newOwner.getNickname())) {
-
+            // TODO : put as next state the move state and as current player
         }
+
     }
 }

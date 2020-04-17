@@ -22,12 +22,20 @@ public class CardsHandler {
         // TODO : CODICE CHE ACCEDE AL FILE XML E INIZIALIZZA TUTTE LE CARTE DEL DECK
     }
 
-    public ArrayList<AbstractGodCard> getDeckOfAbstractGodCards() {
+    private ArrayList<AbstractGodCard> getDeckOfAbstractGodCards() {
         return deckOfAbstractGodCards;
     }
 
-    public void setDeckOfAbstractGodCards(ArrayList<AbstractGodCard> deckOfAbstractGodCards) {
+    private void setDeckOfAbstractGodCards(ArrayList<AbstractGodCard> deckOfAbstractGodCards) {
         this.deckOfAbstractGodCards = deckOfAbstractGodCards;
+    }
+
+    private void setMapOwnerCard(HashMap<String, AbstractGodCard> mapOwnerCard) {
+        this.mapOwnerCard = mapOwnerCard;
+    }
+
+    private HashMap<String, AbstractGodCard> getCardsInUse() {
+        return mapOwnerCard;
     }
 
     /**
@@ -51,12 +59,14 @@ public class CardsHandler {
         mapOwnerCard.put(nickOwner, abstractGodCardToSet);
     }
 
-    public AbstractGodCard getCard(String name) {
-        return mapOwnerCard.get(name);
+    public void removeCardToPlayer(String nickOwner) {
+        for (String key : mapOwnerCard.keySet()) {
+            if (nickOwner.equals(key)) mapOwnerCard.remove(nickOwner);
+        }
     }
 
-    public HashMap<String, AbstractGodCard> getCardsInUse() {
-        return mapOwnerCard;
+    public AbstractGodCard getCardOwned(String name) {
+        return mapOwnerCard.get(name);
     }
 
     public void print() {

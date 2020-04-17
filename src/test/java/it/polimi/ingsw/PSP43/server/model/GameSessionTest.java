@@ -50,8 +50,6 @@ public class GameSessionTest {
          */
     }
 
-
-
     @Test
     public void removeGamer(){
         RegistrationMessage message = new RegistrationMessage(9, "Rick", true);
