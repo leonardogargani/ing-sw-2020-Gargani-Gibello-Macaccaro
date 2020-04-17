@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP43.server.model;
 
+import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import org.junit.Before;
 import org.junit.Test;
 

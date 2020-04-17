@@ -1,8 +1,9 @@
-package it.polimi.ingsw.PSP43.server.model;
+package it.polimi.ingsw.PSP43.server.gameStates;
 
 
 import it.polimi.ingsw.PSP43.server.ClientListener;
 import it.polimi.ingsw.PSP43.server.gameStates.*;
+import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
@@ -54,22 +55,18 @@ public class GameSession {
         this.cardsHandler = new CardsHandler();
     }
 
-    /**
-     * This method handles messages arriving from the clients in different ways depending on the current state of the game
-     * @param message The message containing the command to handle (i.e. Registration data, move data)
-     */
-    public void handleGameCommand(GenericMessage message) {
-        currentState.handleCommand(message);
-    }
-
     protected void initNextState() {
         currentState.initState();
+    }
+
+    protected void initNextState(GenericMessage message) {
+        currentState.initState(message);
     }
 
     public synchronized boolean registerToTheGame(RegistrationMessage message, ClientListener player) {
         if (!this.isFull()) {
             listenersHashMap.put(message.getNickPlayerId(), player);
-            currentState.handleCommand(message);
+            currentState.initState(message);
             return true;
         }
         else return false;

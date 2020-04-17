@@ -3,7 +3,7 @@ package it.polimi.ingsw.PSP43.server.modelHandlers;
 import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
-import it.polimi.ingsw.PSP43.server.model.GameSession;
+import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.CellAlreadyOccupiedExeption;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.CellHeightException;
@@ -58,10 +58,11 @@ public class WorkersHandler {
      * an incremental id based on the number of already existing workers.
      * @param color color of the worker
      */
-    public void addNewWorker(Color color) {
+    public int addNewWorker(Color color) {
         int workerId = workers.size();
         Worker newWorker = new Worker(workerId, color);
         workers.add(newWorker);
+        return workerId;
     }
 
 
@@ -100,6 +101,15 @@ public class WorkersHandler {
         for (Worker w : workers) {
             position = w.getCurrentPosition();
             if (position.getX() == c.getX() && position.getY() == c.getY()) return w;
+        }
+        return null;
+    }
+
+    public Worker getWorker(int id) {
+        int currentId;
+        for (Worker w : workers) {
+            currentId = w.getId();
+            if (id == currentId) return w;
         }
         return null;
     }

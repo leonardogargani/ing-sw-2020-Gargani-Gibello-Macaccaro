@@ -1,6 +1,8 @@
 package it.polimi.ingsw.PSP43.server.model;
 
 
+import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
+
 /**
  * a generic description arriving from the net that is to be sent to the model
  */

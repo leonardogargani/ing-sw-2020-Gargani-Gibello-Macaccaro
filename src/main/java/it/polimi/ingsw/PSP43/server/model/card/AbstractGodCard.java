@@ -2,7 +2,7 @@ package it.polimi.ingsw.PSP43.server.model.card;
 
 
 import it.polimi.ingsw.PSP43.server.model.Coord;
-import it.polimi.ingsw.PSP43.server.model.GameSession;
+import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.CellAlreadyOccupiedExeption;

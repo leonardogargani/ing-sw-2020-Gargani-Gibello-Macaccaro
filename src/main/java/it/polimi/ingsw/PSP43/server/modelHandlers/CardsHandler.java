@@ -22,7 +22,7 @@ public class CardsHandler {
         // TODO : CODICE CHE ACCEDE AL FILE XML E INIZIALIZZA TUTTE LE CARTE DEL DECK
     }
 
-    private ArrayList<AbstractGodCard> getDeckOfAbstractGodCards() {
+    public ArrayList<AbstractGodCard> getDeckOfAbstractGodCards() {
         return deckOfAbstractGodCards;
     }
 
@@ -44,12 +44,7 @@ public class CardsHandler {
      * @param godName The data of the card chosen by a player during the game
      * @throws CardAlreadyInUseException
      */
-    public void setCardToPlayer(String nickOwner, String godName) throws CardAlreadyInUseException {
-        for (String key : mapOwnerCard.keySet()) {
-            if (godName.equals(mapOwnerCard.get(key))) throw new CardAlreadyInUseException("We are sorry but the " + godName + "has been" +
-                    "already chosen. Select another card to continue.");
-        }
-
+    public void setCardToPlayer(String nickOwner, String godName) {
         AbstractGodCard abstractGodCardToSet = null;
         for (AbstractGodCard c : deckOfAbstractGodCards) {
             if (c.getGodName().equals(godName)) {
@@ -77,4 +72,5 @@ public class CardsHandler {
             c.print();
         }
     }
+
 }

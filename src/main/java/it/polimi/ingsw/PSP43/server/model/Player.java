@@ -20,7 +20,7 @@ public class Player {
      */
     public Player(String nickname) {
         this.nickname = nickname;
-        this.workersIdsArray = null;
+        this.workersIdsArray = new int[]{0, 1};
         this.abstractGodCard = null;
     }
 
@@ -53,7 +53,6 @@ public class Player {
         // are two int values and not a single int[]
         this.workersIdsArray = new int[]{id1, id2};
     }
-
 
         /**
          * This method returns the God Power abstractGodCard owned by the player.

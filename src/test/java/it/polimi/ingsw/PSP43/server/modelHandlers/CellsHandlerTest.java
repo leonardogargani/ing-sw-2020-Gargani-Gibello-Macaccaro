@@ -2,7 +2,7 @@ package it.polimi.ingsw.PSP43.server.modelHandlers;
 
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
-import it.polimi.ingsw.PSP43.server.model.GameSession;
+import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.CellAlreadyOccupiedExeption;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.CellHeightException;
 import org.junit.Before;

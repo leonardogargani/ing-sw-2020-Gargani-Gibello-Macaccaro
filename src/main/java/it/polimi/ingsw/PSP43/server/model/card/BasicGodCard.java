@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP43.server.model.card;
 
 
+import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.*;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.CellAlreadyOccupiedExeption;

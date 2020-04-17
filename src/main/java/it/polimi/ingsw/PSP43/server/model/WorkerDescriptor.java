@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP43.server.model;
 
 import it.polimi.ingsw.PSP43.Color;
+import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 
 /**
  * Worker description arriving from the net and traslated into a message for a specified GameSession
