@@ -58,9 +58,4 @@ public class CellsHandlerTest {
         }
 
 
-    @Test
-    public void testGetGameSession() {
-        // TODO implement this very simple test
-    }
-
 }

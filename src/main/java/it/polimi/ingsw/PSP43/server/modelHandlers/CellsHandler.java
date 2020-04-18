@@ -12,14 +12,12 @@ import java.util.ArrayList;
 public class CellsHandler {
     private static final int DIM = 5;
     private Cell[][] board;
-    private GameSession gameSession;
 
 
     /**
      * Not default constructor for initialize the game board
      */
-    public CellsHandler(GameSession gameSession) {
-        this.gameSession = gameSession;
+    public CellsHandler() {
         board = new Cell[DIM][DIM];
         for(int i = 0;i < DIM;i++)
             for (int j = 0;j < DIM;j++) {
@@ -106,11 +104,6 @@ public class CellsHandler {
                 return getCell(currentPosition);
             }
             else return null;
-        }
-
-
-        public GameSession getGameSession() {
-            return gameSession;
         }
 
     }
