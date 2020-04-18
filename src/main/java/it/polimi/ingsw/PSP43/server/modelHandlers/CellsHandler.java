@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP43.server.modelHandlers;
 
+import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.CellAlreadyOccupiedExeption;
@@ -11,11 +12,14 @@ import java.util.ArrayList;
 public class CellsHandler {
     private static final int DIM = 5;
     private Cell[][] board;
+    private GameSession gameSession;
+
 
     /**
      * Not default constructor for initialize the game board
      */
-    public CellsHandler(){
+    public CellsHandler(GameSession gameSession) {
+        this.gameSession = gameSession;
         board = new Cell[DIM][DIM];
         for(int i = 0;i < DIM;i++)
             for (int j = 0;j < DIM;j++) {
@@ -103,5 +107,11 @@ public class CellsHandler {
             }
             else return null;
         }
+
+
+        public GameSession getGameSession() {
+            return gameSession;
+        }
+
     }
 }

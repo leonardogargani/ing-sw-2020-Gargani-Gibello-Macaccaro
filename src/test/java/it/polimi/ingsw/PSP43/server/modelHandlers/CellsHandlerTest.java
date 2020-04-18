@@ -56,4 +56,11 @@ public class CellsHandlerTest {
         /*assertTrue(game.getCellsHandler().getCell(c).getOccupiedByDome());
         assertFalse(game.getCellsHandler().getCell(c).getOccupiedByWorker());*/
         }
+
+
+    @Test
+    public void testGetGameSession() {
+        // TODO implement this very simple test
+    }
+
 }
