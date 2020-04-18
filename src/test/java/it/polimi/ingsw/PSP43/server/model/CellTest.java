@@ -39,4 +39,12 @@ public class CellTest {
         assertFalse(test.getOccupiedByDome());
     }
 
+    // getter and setter are tested both at the same time
+    @Test
+    public void testGetSetCoord() {
+        Coord coord = new Coord(1, 2);
+        test.setCoord(coord);
+        assertEquals(coord, test.getCoord());
+    }
+
 }

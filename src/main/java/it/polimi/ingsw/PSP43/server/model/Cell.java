@@ -11,7 +11,7 @@ public class Cell {
     private int height;
     private boolean occupiedByWorker;
     private boolean occupiedByDome;
-
+    private Coord coord;
 
     /**
      * This method returns the height (number of blocks) of the tower built on the cell.
@@ -41,7 +41,7 @@ public class Cell {
 
 
     /**
-     * This method sets if the cell is occupied by a worker or not
+     * This method sets if the cell is occupied by a worker or not.
      * @param occupiedByWorker boolean representing if the cell is occupied by a worker or not
      */
     public void setOccupiedByWorker(boolean occupiedByWorker) {
@@ -50,7 +50,7 @@ public class Cell {
 
 
     /**
-     * This method returns true if the cell is occupied by a dome, false otherwise
+     * This method returns true if the cell is occupied by a dome, false otherwise.
      * @return boolean representing if the cell is occupied by a dome or not
      */
     public boolean getOccupiedByDome() {
@@ -59,11 +59,29 @@ public class Cell {
 
 
     /**
-     * This method sets if the cell is occupied by a dome or not
+     * This method sets if the cell is occupied by a dome or not.
      * @param occupiedByDome boolean representing if the cell is occupied by a dome or not
      */
     public void setOccupiedByDome(boolean occupiedByDome) {
         this.occupiedByDome = occupiedByDome;
+    }
+
+
+    /**
+     * This method returns the coordinate of the cell.
+     * @return coordinate of the cell
+     */
+    public Coord getCoord() {
+        return coord;
+    }
+
+
+    /**
+     * This method sets the coordinate of the cell.
+     * @param coord coordinate of the cell
+     */
+    public void setCoord(Coord coord) {
+        this.coord = coord;
     }
 
 }

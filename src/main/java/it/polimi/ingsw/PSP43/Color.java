@@ -9,7 +9,7 @@ public enum Color {
     ANSI_YELLOW("\u001B[33m"),
     ANSI_BLUE("\u001B[34m");
 
-    static final String RESET = "\u001B[0m";
+    public static final String RESET = "\u001B[0m";
 
     private final String escape;
 
@@ -36,5 +36,3 @@ public enum Color {
     }
 
 }
-
-// TODO test, if necessary
