@@ -8,7 +8,6 @@ import it.polimi.ingsw.PSP43.server.networkMessages.NoticeMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.RegistrationMessage;
 
 import java.util.HashMap;
-import java.util.Random;
 
 public class PlayerRegistrationState extends TurnState{
     int maxNumPlayers;
@@ -18,7 +17,7 @@ public class PlayerRegistrationState extends TurnState{
         maxNumPlayers = 1;
     }
 
-    public void initState(RegistrationMessage message) throws NicknameAlreadyInUseException {
+    public void executeState(RegistrationMessage message) {
         GameSession game = super.getGameSession();
         HashMap<String, ClientListener> gamers = game.getListenersHashMap();
         ClientListener actualClient = (ClientListener) gamers.get(message.getNickPlayerId());
@@ -32,10 +31,11 @@ public class PlayerRegistrationState extends TurnState{
             // TODO : send message to the player
             if (maxNumPlayers == gamers.size()) {
                 game.setFull(true);
-                game.setCurrentState(game.getTurnMap().get(1));
-                Random random = new Random();
-                game.setCurrentPlayer(playersHandler.getPlayer(random.nextInt(playersHandler.getNumOfPlayers())));
-                game.initNextState();
+                //game.setCurrentState(game.getTurnMap().get(1));
+                //ChooseCardState nextState = (ChooseCardState) game.getCurrentState();
+                //nextState.chooseCardsToUse();
+                //game.getCurrentState().initState();
+                findNextState();
             }
             else {
                 clientMessage = new NoticeMessage(game.getIdGame(), "We are connecting you with other players!");
@@ -46,5 +46,14 @@ public class PlayerRegistrationState extends TurnState{
                     "is already in use.");
             // TODO : invoke a method on ClientListener to send the message through the net.
         }
+    }
+
+    public void findNextState() {
+        GameSession game = super.getGameSession();
+        int indexCurrentState;
+        indexCurrentState = game.getTurnMap().indexOf(game.getCurrentState());
+        game.setNextState(game.getTurnMap().get(indexCurrentState + 1 ));
+
+        game.transitToNextState();
     }
 }

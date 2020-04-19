@@ -2,8 +2,6 @@ package it.polimi.ingsw.PSP43.server.model.card;
 
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.*;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.CellAlreadyOccupiedExeption;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.CellHeightException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
 public class DoubleMoveDecorator implements MoveBehavior {
@@ -25,7 +23,7 @@ public class DoubleMoveDecorator implements MoveBehavior {
     }
 
     @Override
-    public void handleMove(GameSession gameSession, Player player, Worker workerToMove, Coord newPosition) throws CellHeightException, CellAlreadyOccupiedExeption, WinnerCaughtException {
+    public void handleMove(GameSession gameSession, Player player, Worker workerToMove, Coord newPosition) throws WinnerCaughtException {
         godComponent.move(gameSession, player, workerToMove, newPosition);
         // TODO : send a message to the client if he wants to do another move
         Coord forbiddenCell = workerToMove.getPreviousPosition();

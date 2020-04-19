@@ -4,11 +4,11 @@ package it.polimi.ingsw.PSP43.server.model.card;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.*;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.CellAlreadyOccupiedExeption;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.CellHeightException;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * AbstractGodCard is the class that represents the cards with God Powers, thus it is associated to a God and the
@@ -73,10 +73,8 @@ public class BasicGodCard extends AbstractGodCard {
      * @param player The player who did the move
      * @param workerToMove The worker that is moving
      * @param newPosition The position in which the player is going to place his worker
-     * @throws CellHeightException
-     * @throws CellAlreadyOccupiedExeption if it is not possible to place a worker in newPosition because the cell is already occupied by another worker or dome
-     */
-    public void move(GameSession gameSession, Player player, Worker workerToMove, Coord newPosition) throws CellAlreadyOccupiedExeption, CellHeightException {
+     * */
+    public void move(GameSession gameSession, Player player, Worker workerToMove, Coord newPosition) {
         //Coord oldPosition = workerToMove.getCurrentPosition();
         //handler.movePlayer(newPosition, oldPosition);
         //workerToMove.setCurrentPosition(newPosition);
@@ -99,10 +97,8 @@ public class BasicGodCard extends AbstractGodCard {
      * @param player The player who did the build
      * @param worker The worker that is going to build a block
      * @param position The position in which the player's worker is going to build the block
-     * @throws CellHeightException if it is not possible to build anymore on the cell because level three is already reached
-     * @throws CellAlreadyOccupiedExeption if it is not possible to build in newPosition because the cell is already occupied by another worker or dome
      */
-    public void buildBlock(GameSession gameSession, Player player, Worker worker, Coord position) throws CellHeightException, CellAlreadyOccupiedExeption {
+    public void buildBlock(GameSession gameSession, Player player, Worker worker, Coord position) {
         CellsHandler handler = gameSession.getCellsHandler();
         Cell newCell = handler.getCell(position);
         newCell.setHeight(newCell.getHeight()+1);
@@ -116,14 +112,55 @@ public class BasicGodCard extends AbstractGodCard {
      * @param player The player who did the build
      * @param worker The worker that is going to build a dome
      * @param position The position in which the player's worker is going to build the dome
-     * @throws CellHeightException
-     * @throws CellAlreadyOccupiedExeption if it is not possible to build in newPosition because the cell is already occupied by another worker or dome
      */
-    public void buildDome(GameSession gameSession, Player player, Worker worker, Coord position) throws CellHeightException, CellAlreadyOccupiedExeption {
+    public void buildDome(GameSession gameSession, Player player, Worker worker, Coord position) {
         CellsHandler handler = gameSession.getCellsHandler();
         Cell newCell = handler.getCell(position);
         newCell.setOccupiedByDome(true);
         handler.changeStateOfCell(newCell, position);
+    }
+
+    public HashMap<Coord, ArrayList<Integer>> findAvailablePositionsToMove(CellsHandler handler, Worker[] workers) {
+        HashMap<Coord, ArrayList<Integer>> neighbouringCoords = handler.findNeighbouringCells(workers);
+        Cell actualCell;
+        int actualHeight;
+        int newHeight;
+        Worker actualWorker = null;
+        for (Coord c : neighbouringCoords.keySet()) {
+            if (!handler.getCell(c).getOccupiedByWorker() && !handler.getCell(c).getOccupiedByDome()) {
+                for (int wId : neighbouringCoords.get(c)) {
+                    for (Worker w : workers) {
+                        if (w.getId() == wId) actualWorker = w;
+                    }
+                    actualCell = handler.getCell(actualWorker.getCurrentPosition());
+                    actualHeight = actualCell.getHeight();
+                    newHeight = handler.getCell(c).getHeight();
+                    if (newHeight - actualHeight > 1) neighbouringCoords.get(c).remove(wId);
+                }
+            }
+            else neighbouringCoords.remove(c);
+        }
+        return neighbouringCoords;
+    }
+
+    public HashMap<Coord, ArrayList<Integer>> findAvailablePositionsToBuildBlock(CellsHandler handler, Worker[] workers) {
+        HashMap<Coord, ArrayList<Integer>> neighbouringCoords = handler.findNeighbouringCells(workers);
+        for (Coord c : neighbouringCoords.keySet()) {
+            if (handler.getCell(c).getOccupiedByWorker() || handler.getCell(c).getOccupiedByDome()) {
+                neighbouringCoords.remove(c);
+            }
+        }
+        return neighbouringCoords;
+    }
+
+    public HashMap<Coord, ArrayList<Integer>> findAvailablePositionsToBuildDome(CellsHandler handler, Worker[] workers) {
+        HashMap<Coord, ArrayList<Integer>> neighbouringCoords = handler.findNeighbouringCells(workers);
+        for (Coord c : neighbouringCoords.keySet()) {
+            if (handler.getCell(c).getOccupiedByWorker() || handler.getCell(c).getOccupiedByDome() || handler.getCell(c).getHeight() != 3) {
+                neighbouringCoords.remove(c);
+            }
+        }
+        return neighbouringCoords;
     }
 
     public void print() {

@@ -3,8 +3,6 @@ package it.polimi.ingsw.PSP43.server.modelHandlers;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.CellAlreadyOccupiedExeption;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.CellHeightException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +16,7 @@ public class CellsHandlerTest {
     private int cY=3;
 
     @Before
-    public void setUp() throws CellHeightException, CellAlreadyOccupiedExeption {
+    public void setUp() {
         game = new GameSession(4);
         c=new Coord(cX,cY);
         c1=new Cell();
@@ -37,7 +35,7 @@ public class CellsHandlerTest {
 
 
     @Test
-    public void changeStateOfCell() throws CellAlreadyOccupiedExeption, CellHeightException {
+    public void changeStateOfCell() {
 
         Cell cell=new Cell();
         cell.setHeight(2);

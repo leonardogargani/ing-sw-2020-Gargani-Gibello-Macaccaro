@@ -1,12 +1,11 @@
 package it.polimi.ingsw.PSP43.server.modelHandlers;
 
-import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.CellAlreadyOccupiedExeption;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.CellHeightException;
+import it.polimi.ingsw.PSP43.server.model.Worker;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class CellsHandler {
@@ -47,7 +46,7 @@ public class CellsHandler {
      * @param newDescriptionCell is a cell received from a client that specifies the new state of a cell, identified by c
      * @param c includes the coordinates of the cell that are going to be modified
      */
-    public void changeStateOfCell (Cell newDescriptionCell, Coord c) throws CellAlreadyOccupiedExeption, CellHeightException {
+    public void changeStateOfCell (Cell newDescriptionCell, Coord c) {
         Cell cellToChange = board[c.getX()][c.getY()];
         cellToChange.setOccupiedByDome(newDescriptionCell.getOccupiedByDome());
         cellToChange.setOccupiedByWorker(newDescriptionCell.getOccupiedByWorker());
@@ -65,11 +64,41 @@ public class CellsHandler {
         return (Coord[]) freeCells.toArray();
     }
 
-    public AbstractIterator iterator(Coord initialPosition, Coord finalPosition) {
+    public HashMap<Coord, ArrayList<Integer>> findNeighbouringCells(Worker[] workers) {
+        HashMap<Coord, ArrayList<Integer>> availablePositions = new HashMap<>();
+
+        for (Worker w : workers) {
+            Coord currentCoord = w.getCurrentPosition();
+            for (int i=-1; i<2 ; i++) {
+                for (int j=-1; j<2; j++) {
+                    if (currentCoord.getX() + i > -1 && currentCoord.getX() + i < DIM) {
+                        if (currentCoord.getY() + j > -1 && currentCoord.getY() + j < DIM) {
+                            if (i!=0 && j!=0) {
+                                ArrayList<Integer> positions = availablePositions.get(currentCoord);
+                                if (positions == null) {
+                                    positions = new ArrayList<>();
+                                    positions.add(w.getId());
+                                    availablePositions.put(board[i][j].getCoord(), positions);
+                                }
+                                else {
+                                    positions.add(w.getId());
+                                    availablePositions.put(board[i][j].getCoord(), positions);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return availablePositions;
+    }
+
+    public AbstractIterator directionIterator(Coord initialPosition, Coord finalPosition) {
         int xIncrement = initialPosition.getX() - finalPosition.getX();
         int yIncrement = initialPosition.getY() - finalPosition.getY();
         return new GenericDirectionIterator(initialPosition, xIncrement, yIncrement);
     }
+
 
     public interface AbstractIterator {
         Cell next();

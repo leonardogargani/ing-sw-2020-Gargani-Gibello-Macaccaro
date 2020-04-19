@@ -23,6 +23,7 @@ public class GameSession {
     private HashMap<String, ClientListener> listenersHashMap;
 
     private TurnState currentState;
+    private TurnState nextState;
     private ArrayList<TurnState> turnMap;
 
     private Player currentPlayer;
@@ -49,24 +50,23 @@ public class GameSession {
         this.turnMap.add(3, new MoveState(this));
         this.turnMap.add(4, new BuildState(this));
         this.turnMap.add(5, new WinState(this));
+        this.nextState = null;
         this.cellsHandler = new CellsHandler();
         this.playersHandler = new PlayersHandler();
         this.workersHandler = new WorkersHandler(this);
         this.cardsHandler = new CardsHandler();
     }
 
-    protected void initNextState() {
+    protected void transitToNextState() {
+        int indexNextState = turnMap.indexOf(nextState);
+        currentState = turnMap.get(indexNextState);
         currentState.initState();
-    }
-
-    protected void initNextState(GenericMessage message) {
-        currentState.initState(message);
     }
 
     public synchronized boolean registerToTheGame(RegistrationMessage message, ClientListener player) {
         if (!this.isFull()) {
             listenersHashMap.put(message.getNickPlayerId(), player);
-            currentState.initState(message);
+            currentState.executeState(message);
             return true;
         }
         else return false;
@@ -78,7 +78,7 @@ public class GameSession {
         return true;
     }
 
-    public void eliminatePlayer(Player playerEliminated) throws CellHeightException, CellAlreadyOccupiedExeption {
+    public void eliminatePlayer(Player playerEliminated) {
         cardsHandler.removeCardToPlayer(playerEliminated.getNickname());
         Player playerToRemove = playersHandler.getPlayer(playerEliminated.getNickname());
 
@@ -125,6 +125,14 @@ public class GameSession {
      */
     public void setCurrentState(TurnState currentState) {
         this.currentState = currentState;
+    }
+
+    public TurnState getNextState() {
+        return nextState;
+    }
+
+    public void setNextState(TurnState nextState) {
+        this.nextState = nextState;
     }
 
     /**

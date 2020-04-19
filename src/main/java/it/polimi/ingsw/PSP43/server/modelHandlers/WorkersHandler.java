@@ -32,7 +32,7 @@ public class WorkersHandler {
     }
 
 
-    public void removeWorkers(int[] workersIds) throws CellHeightException, CellAlreadyOccupiedExeption {
+    public void removeWorkers(int[] workersIds) {
         CellsHandler cellsHandler = gameSession.getCellsHandler();
         Worker workerToRemove;
         Cell cellOccupiedByWorker;
@@ -73,15 +73,12 @@ public class WorkersHandler {
      * @param worker worker whose position is wanted to be changed
      * @param position position the player wants to move the worker to
      */
-    public void changePosition(Worker worker, Coord position) throws CellAlreadyOccupiedExeption {
+    public void changePosition(Worker worker, Coord position) {
         Coord coordBeforeMove = worker.getCurrentPosition();
         Cell cellBeforeMove = gameSession.getCellsHandler().getCell(coordBeforeMove);
         Cell cellAfterMove = gameSession.getCellsHandler().getCell(position);
 
-        // check if change is possible (cell already occupied -> throw exception)
-        if (cellAfterMove.getOccupiedByDome() || cellAfterMove.getOccupiedByWorker()) { throw new CellAlreadyOccupiedExeption(); }
 
-        // if the move is possible, set the worker new position and set the cell occupation
         worker.setCurrentPosition(position);
         cellBeforeMove.setOccupiedByWorker(false);
         cellAfterMove.setOccupiedByWorker(true);

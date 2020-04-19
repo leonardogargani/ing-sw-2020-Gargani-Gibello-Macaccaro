@@ -5,7 +5,6 @@ import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Worker;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.CellAlreadyOccupiedExeption;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,7 +38,7 @@ public class WorkersHandlerTest {
     }
 
     @Test
-    public void testChangePosition() throws CellAlreadyOccupiedExeption {
+    public void testChangePosition() {
         Worker worker = new Worker(1, Color.ANSI_YELLOW);
         Coord coord1 = new Coord(1, 2);
         Coord coord2 = new Coord(2, 2);
