@@ -13,18 +13,30 @@ public class CliCell {
             "\u274E"    // 4: Dome
     };
 
+    private String background;
     private Color color;
     private String symbol;
 
 
     /**
-     * Non default constructor that sets both the ansi code of the color
-     * and the ansi code of the symbol of a single cell in the cli.
+     * Non default constructor that sets the ansi code of the background, the ansi
+     * code of the color and the ansi code of the symbol of a single cell in the cli.
      */
     // color will be chosen based on the worker
     public CliCell() {
+        this.background = Color.RESET;
         this.color = Color.ANSI_WHITE;
         this.symbol = CliCell.SYMBOLS[0];
+    }
+
+
+    /**
+     * This method sets the color of the background, which can be either yellow
+     * (if the cell is marked as free for a worker to move into) or default
+     * @param isFree
+     */
+    public void markAsFree(boolean isFree) {
+        this.background = isFree ? Color.ANSI_YELLOW_BACKGROUND : Color.RESET;
     }
 
 
@@ -52,11 +64,13 @@ public class CliCell {
     /**
      * This method overrides the default toString() in order to return the ansi code of the
      * color, the ansi code of the symbol and the ansi code of the default style of the text
-     * @return ansi code of: color, symbol, default style
+     * @return ansi code of: background, color, symbol, default style
      */
     @Override
     public String toString() {
-        return this.color + this.symbol + Color.RESET;
+        // the order of the elements is important since the default value for background is Color.RESET,
+        // while the one for color is Color.WHITE (in this way default background cannot reset color)
+        return this.background + this.color + this.symbol + Color.RESET;
     }
 
 }

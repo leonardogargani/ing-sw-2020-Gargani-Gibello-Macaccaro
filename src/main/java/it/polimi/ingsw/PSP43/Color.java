@@ -3,12 +3,12 @@ package it.polimi.ingsw.PSP43;
 
 public enum Color {
 
-    ANSI_GREEN("\u001B[32m"),
     ANSI_WHITE("\u001B[37m"),
+    ANSI_GREEN("\u001B[32m"),
     ANSI_RED("\u001B[31m"),
-    ANSI_YELLOW("\u001B[33m"),
     ANSI_BLUE("\u001B[34m");
 
+    public static final String ANSI_YELLOW_BACKGROUND = "\u001B[43m";
     public static final String RESET = "\u001B[0m";
 
     private final String escape;

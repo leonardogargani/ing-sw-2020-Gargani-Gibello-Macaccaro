@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP43.client;
+package it.polimi.ingsw.PSP43.client.cli;
 
 import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.client.cli.CliCell;
@@ -40,5 +40,6 @@ public class CliCellTest {
         test.setSymbol(CliCell.SYMBOLS[0]);
         assertEquals(test.toString(), Color.ANSI_RED.toString() + CliCell.SYMBOLS[0] + Color.RESET);
     }
+
 
 }

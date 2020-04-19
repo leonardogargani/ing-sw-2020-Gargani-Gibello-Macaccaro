@@ -4,7 +4,7 @@ import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 
 
-public interface BoardHandler {
+public interface GraphicHandler {
 
 
     /**

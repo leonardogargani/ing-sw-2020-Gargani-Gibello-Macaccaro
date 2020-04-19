@@ -39,7 +39,7 @@ public class WorkersHandlerTest {
 
     @Test
     public void testChangePosition() {
-        Worker worker = new Worker(1, Color.ANSI_YELLOW);
+        Worker worker = new Worker(1, Color.ANSI_GREEN);
         Coord coord1 = new Coord(1, 2);
         Coord coord2 = new Coord(2, 2);
         worker.setCurrentPosition(coord1);

@@ -1,12 +1,12 @@
 package it.polimi.ingsw.PSP43.client.cli;
 
 import it.polimi.ingsw.PSP43.Color;
-import it.polimi.ingsw.PSP43.client.BoardHandler;
+import it.polimi.ingsw.PSP43.client.GraphicHandler;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 
 
-public class CliBoardHandler implements BoardHandler {
+public class CliGraphicHandler implements GraphicHandler {
 
     private CliBoard board = new CliBoard();
 
@@ -50,5 +50,6 @@ public class CliBoardHandler implements BoardHandler {
         CliCell cell = board.getCell(serverCell.getCoord());
         cell.setSymbol(CliCell.SYMBOLS[serverCell.getHeight()]);
     }
+
 
 }

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP43.client.cli;
 
-import it.polimi.ingsw.PSP43.server.model.Coord;
 
+import it.polimi.ingsw.PSP43.server.model.Coord;
 
 public class CliBoard {
 
@@ -47,5 +47,6 @@ public class CliBoard {
     public CliCell getCell(Coord coord) {
         return cells[coord.getX()][coord.getY()];
     }
+
 
 }

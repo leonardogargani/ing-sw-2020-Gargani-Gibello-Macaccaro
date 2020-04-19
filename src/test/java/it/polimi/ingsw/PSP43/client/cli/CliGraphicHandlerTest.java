@@ -1,7 +1,7 @@
-package it.polimi.ingsw.PSP43.client;
+package it.polimi.ingsw.PSP43.client.cli;
 
 import it.polimi.ingsw.PSP43.Color;
-import it.polimi.ingsw.PSP43.client.cli.CliBoardHandler;
+import it.polimi.ingsw.PSP43.client.cli.CliGraphicHandler;
 import it.polimi.ingsw.PSP43.client.cli.CliCell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Worker;
@@ -11,14 +11,14 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 
-public class CliBoardHandlerTest {
+public class CliGraphicHandlerTest {
 
-    CliBoardHandler test;
+    CliGraphicHandler test;
 
 
     @Before
     public void setUp() {
-        test = new CliBoardHandler();
+        test = new CliGraphicHandler();
     }
 
 

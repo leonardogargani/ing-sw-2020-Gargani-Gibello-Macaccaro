@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP43.client;
+package it.polimi.ingsw.PSP43.client.cli;
 
 import it.polimi.ingsw.PSP43.client.cli.CliBoard;
 import it.polimi.ingsw.PSP43.client.cli.CliCell;
