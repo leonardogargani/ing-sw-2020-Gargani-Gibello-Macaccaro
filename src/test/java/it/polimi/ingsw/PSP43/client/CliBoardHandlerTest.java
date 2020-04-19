@@ -1,6 +1,8 @@
 package it.polimi.ingsw.PSP43.client;
 
 import it.polimi.ingsw.PSP43.Color;
+import it.polimi.ingsw.PSP43.client.cli.CliBoardHandler;
+import it.polimi.ingsw.PSP43.client.cli.CliCell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import org.hamcrest.CoreMatchers;

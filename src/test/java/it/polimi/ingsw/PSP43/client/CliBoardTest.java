@@ -1,5 +1,7 @@
 package it.polimi.ingsw.PSP43.client;
 
+import it.polimi.ingsw.PSP43.client.cli.CliBoard;
+import it.polimi.ingsw.PSP43.client.cli.CliCell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import org.junit.Before;
 import org.junit.Test;

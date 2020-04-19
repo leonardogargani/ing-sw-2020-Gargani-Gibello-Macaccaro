@@ -1,6 +1,7 @@
-package it.polimi.ingsw.PSP43.client;
+package it.polimi.ingsw.PSP43.client.cli;
 
 import it.polimi.ingsw.PSP43.Color;
+import it.polimi.ingsw.PSP43.client.BoardHandler;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 

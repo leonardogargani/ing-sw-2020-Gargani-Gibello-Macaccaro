@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP43.client;
 
 import it.polimi.ingsw.PSP43.Color;
+import it.polimi.ingsw.PSP43.client.cli.CliCell;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
