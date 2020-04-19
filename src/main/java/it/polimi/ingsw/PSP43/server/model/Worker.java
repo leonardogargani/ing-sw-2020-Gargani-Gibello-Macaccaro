@@ -1,14 +1,15 @@
 package it.polimi.ingsw.PSP43.server.model;
 
-
 import it.polimi.ingsw.PSP43.Color;
+import it.polimi.ingsw.PSP43.server.Observable;
+
 
 /**
  * Worker is the class that represents a worker, which is the piece players can control.
  * Every player has two workers, both of the same color and able to move their position
  * during the game.
  */
-public class Worker {
+public class Worker extends Observable {
 
     private int id;
     private Coord currentPosition;

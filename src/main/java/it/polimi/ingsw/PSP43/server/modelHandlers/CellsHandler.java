@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP43.server.modelHandlers;
 
+import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Worker;
@@ -11,17 +12,18 @@ import java.util.HashMap;
 public class CellsHandler {
     private static final int DIM = 5;
     private Cell[][] board;
+    private GameSession gameSession;
 
 
     /**
      * Not default constructor for initialize the game board
      */
-    public CellsHandler() {
+    public CellsHandler(GameSession gameSession) {
+        this.gameSession = gameSession;
         board = new Cell[DIM][DIM];
         for(int i = 0;i < DIM;i++)
             for (int j = 0;j < DIM;j++) {
-                board[i][j] = new Cell();
-                board[i][j].setCoord(new Coord(i, j));
+                board[i][j] = new Cell(new Coord(i, j), gameSession.getGraphicObserver());
             }
 
     }
@@ -31,12 +33,7 @@ public class CellsHandler {
      * @return the searched cell
      */
     public Cell getCell(Coord c) {
-        Cell cellToBeCopied = board[c.getX()][c.getY()];
-        Cell cellClone = new Cell();
-        cellClone.setHeight(cellToBeCopied.getHeight());
-        cellClone.setOccupiedByDome(cellToBeCopied.getOccupiedByDome());
-        cellClone.setOccupiedByWorker(cellToBeCopied.getOccupiedByWorker());
-        return cellToBeCopied;
+            return board[c.getX()][c.getY()];
     }
 
 
@@ -102,6 +99,14 @@ public class CellsHandler {
 
     public interface AbstractIterator {
         Cell next();
+    }
+
+    public GameSession getGameSession() {
+        return gameSession;
+    }
+
+    public void setGameSession(GameSession gameSession) {
+        this.gameSession = gameSession;
     }
 
     private class GenericDirectionIterator implements AbstractIterator {

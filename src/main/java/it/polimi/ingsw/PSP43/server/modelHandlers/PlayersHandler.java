@@ -1,5 +1,8 @@
 package it.polimi.ingsw.PSP43.server.modelHandlers;
 
+import it.polimi.ingsw.PSP43.server.GraphicObserver;
+import it.polimi.ingsw.PSP43.server.Observable;
+import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.*;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.*;
@@ -10,10 +13,12 @@ import java.util.ArrayList;
  * This is a class intended to handle all the requests to store informations about players in game
  * (such as nickname) and the cards they own during the game;
  */
-public class PlayersHandler {
+public class PlayersHandler extends Observable {
     private ArrayList<Player> gamePlayers;
+    private GraphicObserver graphicObserver;
 
-    public PlayersHandler() {
+    public PlayersHandler(GameSession gameSession) {
+        this.graphicObserver = gameSession.getGraphicObserver();
         this.gamePlayers = new ArrayList<Player>();
     }
 
@@ -26,6 +31,7 @@ public class PlayersHandler {
         for (Player p : gamePlayers)
             if (p.getNickname().equals(nick)) throw new NicknameAlreadyInUseException("We are sorry, " + nick + " is already in use.");
         gamePlayers.add(new Player(nick));
+        // TODO call here notifyMenuChange() once it is implemented
     }
 
     /**
@@ -75,6 +81,7 @@ public class PlayersHandler {
      */
     public void deletePlayer(String nick) {
         gamePlayers.removeIf(p -> p.getNickname().equals(nick));
+        // TODO call here notifyMenuChange() once it is implemented
     }
 
     /**

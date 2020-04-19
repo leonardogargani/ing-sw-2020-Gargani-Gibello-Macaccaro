@@ -1,17 +1,27 @@
 package it.polimi.ingsw.PSP43.server.model;
 
+import it.polimi.ingsw.PSP43.server.GraphicObserver;
+import it.polimi.ingsw.PSP43.server.Observable;
+
 
 /**
  * Cell is the class that represents a single board square. It can be occupied either by a worker or a dome.
  * Workers can move into a cell or build a tower on it if unoccupied.
  * A cell is characterized by the height its tower has reached, up to three blocks and a dome at the top.
  */
-public class Cell {
+public class Cell extends Observable {
 
     private int height;
     private boolean occupiedByWorker;
     private boolean occupiedByDome;
     private Coord coord;
+    private GraphicObserver graphicObserver;
+
+
+    public Cell(Coord coord, GraphicObserver observer) {
+        this.coord = coord;
+        this.graphicObserver = observer;
+    }
 
     /**
      * This method returns the height (number of blocks) of the tower built on the cell.
@@ -28,6 +38,7 @@ public class Cell {
      */
     public void setHeight(int height) {
         this.height = height;
+        graphicObserver.notifyBoardChange(this);
     }
 
 
@@ -63,6 +74,7 @@ public class Cell {
      * @param occupiedByDome boolean representing if the cell is occupied by a dome or not
      */
     public void setOccupiedByDome(boolean occupiedByDome) {
+        graphicObserver.notifyBoardChange(this);
         this.occupiedByDome = occupiedByDome;
     }
 

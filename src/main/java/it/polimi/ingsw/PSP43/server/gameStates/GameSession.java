@@ -2,6 +2,7 @@ package it.polimi.ingsw.PSP43.server.gameStates;
 
 
 import it.polimi.ingsw.PSP43.server.ClientListener;
+import it.polimi.ingsw.PSP43.server.GraphicObserver;
 import it.polimi.ingsw.PSP43.server.gameStates.*;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
@@ -33,6 +34,7 @@ public class GameSession {
     private WorkersHandler workersHandler;
     private CardsHandler cardsHandler;
 
+    private GraphicObserver graphicObserver;
 
     /**
      * Not default constructor to inizialize a GameSession
@@ -51,10 +53,11 @@ public class GameSession {
         this.turnMap.add(4, new BuildState(this));
         this.turnMap.add(5, new WinState(this));
         this.nextState = null;
-        this.cellsHandler = new CellsHandler();
-        this.playersHandler = new PlayersHandler();
+        this.cellsHandler = new CellsHandler(this);
+        this.playersHandler = new PlayersHandler(this);
         this.workersHandler = new WorkersHandler(this);
         this.cardsHandler = new CardsHandler();
+        this.graphicObserver = new GraphicObserver();
     }
 
     protected void transitToNextState() {
@@ -189,6 +192,15 @@ public class GameSession {
      */
     public CardsHandler getCardsHandler() {
         return cardsHandler;
+    }
+
+    /**
+     * This method returns the observer of the graphical part of the game, so that every
+     * change to a cell or a worker is notified to the client.
+     * @return observer of the graphical part of the game
+     */
+    public GraphicObserver getGraphicObserver() {
+        return graphicObserver;
     }
 
     // TODO : setters/getters that are not listed above if we want to use xml
