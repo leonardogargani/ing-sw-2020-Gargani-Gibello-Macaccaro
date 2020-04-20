@@ -2,7 +2,7 @@ package it.polimi.ingsw.PSP43.server;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.*;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
-import it.polimi.ingsw.PSP43.server.networkMessages.ResMessage;
+import it.polimi.ingsw.PSP43.server.networkMessages.ServerMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -28,6 +28,7 @@ public class ClientListener implements Runnable{
     public void run(){
         try{
             while (true){
+
                 receiver();
             }}catch (IOException |ClassNotFoundException e){
             System.out.println("Invalid message received");}
@@ -35,58 +36,76 @@ public class ClientListener implements Runnable{
     }
 
 
-    public synchronized void receiver() throws IOException,ClassNotFoundException{
-        input = new ObjectInputStream(clientSocket.getInputStream());
+    public synchronized ClientMessage receiver(Object message) throws IOException,ClassNotFoundException{
+        ClientMessage clientMessage = null;
         try {
-            Object message = input.readObject();
 
             if(message instanceof RegistrationMessage)
-                handleMessage((RegistrationMessage) message);
-            else if(message instanceof NumberPlayer)
-                gameSessions.get(idGame).handleGameCommand((NumberPlayer)message);
+                clientMessage = (RegistrationMessage)message;
+                //handleMessage((RegistrationMessage) message);
+            else if(message instanceof NumberPlayerResponse)
+                clientMessage = (NumberPlayerResponse)message;
             else if(message instanceof ChoseCardMessage)
-                gameSessions.get(idGame).handleGameCommand((ChoseCardMessage)message);
-            else if(message instanceof ChoseWorkerColor)
-                gameSessions.get(idGame).handleGameCommand((ChoseWorkerColor)message);
-            else if(message instanceof ActionRequest)
-                gameSessions.get(idGame).handleGameCommand((ActionRequest)message);
+                clientMessage = (ChoseCardMessage)message;
+            else if(message instanceof WorkerColorResponse)
+                clientMessage = (WorkerColorResponse)message;
+            else if(message instanceof ActionResponse)
+                clientMessage = (ActionResponse)message;
             else if(message instanceof LeaveGameMessage)
-                handleMessage((LeaveGameMessage)message);
-            //else if(message instanceof PingMessage)
-            //  handleMessage((PingMessage)message);
+                clientMessage = (LeaveGameMessage)message;
+                //handleMessage((LeaveGameMessage)message);
 
-        }catch (ClassNotFoundException|ClassCastException e){};
+
+        }catch (ClassCastException e){};
+
+        return clientMessage;
     }
 
 
     public synchronized void handleMessage(RegistrationMessage message){
-        int counter = 0;
-        while(idGame==-1||gameSessions.size()>counter){
-            //gibi deve modificare il metodo facendo ritornare l id
-            idGame=gameSessions.get(counter).registerToTheGame(message);
-            counter++;
-        }
-        if(idGame==-1){
-            boolean a=gameSessions.add(new GameSession(gameSessions.size()+1));
-            idGame=gameSessions.get(gameSessions.size()).registerToTheGame(message);
-        }
-        gameSessions.get(idGame).handleGameCommand(message);
+
+
+            int counter = 0;
+            while(idGame==-1||gameSessions.size()>counter){
+                    //gibi deve modificare il metodo facendo ritornare l id
+                    idGame = gameSessions.get(counter).registerToTheGame(message,this);
+                    counter++;
+                }
+                if(idGame==-1){
+                    boolean a = gameSessions.add(new GameSession(gameSessions.size()+1));
+                    idGame = gameSessions.get(gameSessions.size()).registerToTheGame(message,this);
+                }
+
+
     }
 
     public synchronized void handleMessage(LeaveGameMessage message){
-        gameSessions.get(idGame).eliminatePlayer(message.getNick());
+            gameSessions.get(idGame).unregisterFromGame(message,this);
+        }
+
+
+
+
+    public void sendMessage(EndGame message)throws IOException{
+
     }
 
 
-    public synchronized void handleMessage(PingMessage message){
-        ;
-    }
-
-
-    //TODO metodo per la gestione dei ping e dei controlli di caduta di rete
-
-    public synchronized void sendMessage(ResMessage message)throws IOException{
+    //send message senza attesa di ritorni
+    public void sendMessage(ServerMessage message)throws IOException{
         output= new ObjectOutputStream(clientSocket.getOutputStream());
+        output.writeObject(message);}
+    }
+
+
+    //send request generale con ritorno di messaggio
+    public synchronized ClientMessage sendRequest(ServerMessage message)throws IOException,ClassNotFoundException{
+        output = new ObjectOutputStream(clientSocket.getOutputStream());
         output.writeObject(message);
+        input = new ObjectInputStream(clientSocket.getInputStream());
+        while (input.readObject()==null)
+            input.readObject();
+
+        return receiver(input.readObject());
     }
 }

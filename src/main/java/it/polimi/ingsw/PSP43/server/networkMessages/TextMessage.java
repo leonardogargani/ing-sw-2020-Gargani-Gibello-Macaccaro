@@ -1,16 +1,11 @@
 package it.polimi.ingsw.PSP43.server.networkMessages;
 
-public class TextMessage extends ResMessage {
+public class TextMessage extends ServerMessage {
     private static final long SerialVersionUID=111234567890123456L;
     private String message;
 
-    public TextMessage(int idGame, String message){
-        super(idGame);
+    public TextMessage( String message){
         this.message = message;
-    }
-
-    public static long getSerialVersionUID() {
-        return SerialVersionUID;
     }
 
     public String getMessage() {

@@ -8,7 +8,6 @@ import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
-import it.polimi.ingsw.PSP43.server.networkMessages.RegistrationMessage;
 
 import java.util.ArrayList;
 import java.util.HashMap;

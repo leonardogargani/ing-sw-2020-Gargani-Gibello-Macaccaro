@@ -1,14 +1,14 @@
 package it.polimi.ingsw.PSP43.client.networkMessages;
 
-public class RegistrationMessage extends ReqMessage {
+public class RegistrationMessage extends ClientMessage {
     private static final long SerialVersionUID=999888999111222333L;
+    private String nick;
 
     public RegistrationMessage(String nick) {
-        super(nick);
+        this.nick = nick;
     }
 
-    @Override
     public String getNick() {
-        return super.getNick();
+        return nick;
     }
 }

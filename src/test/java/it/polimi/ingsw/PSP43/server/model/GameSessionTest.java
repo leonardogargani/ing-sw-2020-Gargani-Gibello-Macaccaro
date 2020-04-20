@@ -6,7 +6,6 @@ import static org.junit.Assert.*;
 import it.polimi.ingsw.PSP43.server.ClientListener;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.FullGameSessionException;
-import it.polimi.ingsw.PSP43.server.networkMessages.RegistrationMessage;
 import org.junit.Before;
 import org.junit.Test;
 

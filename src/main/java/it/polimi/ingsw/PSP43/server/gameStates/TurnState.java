@@ -1,7 +1,6 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
-import it.polimi.ingsw.PSP43.server.networkMessages.GenericMessage;
 
 
 public abstract class TurnState {
