@@ -6,7 +6,7 @@ import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 
 
-public class CliGraphicHandler implements GraphicHandler {
+public class CliGraphicHandler extends GraphicHandler {
 
     private CliBoard board = new CliBoard();
 
@@ -21,7 +21,7 @@ public class CliGraphicHandler implements GraphicHandler {
 
 
     /**
-     * This method updates the cli board changing the color of a cell, based
+     * This method updates the cli changing the color of a cell, based
      * on the color of the worker that has been moved.
      * @param worker worker that has been moved
      */
@@ -49,6 +49,15 @@ public class CliGraphicHandler implements GraphicHandler {
     public void updateBoardChange(Cell serverCell) {
         CliCell cell = board.getCell(serverCell.getCoord());
         cell.setSymbol(CliCell.SYMBOLS[serverCell.getHeight()]);
+    }
+
+
+    /**
+     * This method renders all the graphic aspects of the cli.
+     */
+    @Override
+    public void render() {
+        board.show();
     }
 
 

@@ -32,8 +32,9 @@ public class CliCell {
 
     /**
      * This method sets the color of the background, which can be either yellow
-     * (if the cell is marked as free for a worker to move into) or default
-     * @param isFree
+     * (if the cell is marked as free for a worker to move into) or default.
+     * @param isFree true if I want to set the cell as free to move into for a
+     *               worker, false otherwise
      */
     public void markAsFree(boolean isFree) {
         this.background = isFree ? Color.ANSI_YELLOW_BACKGROUND : Color.RESET;
