@@ -19,6 +19,15 @@ public class Client {
 
 
     /**
+     * Method that returns the object that handles the graphic side of the client.
+     * @return object that handles the graphic side of the client
+     */
+    public GraphicHandler getGraphics() {
+        return graphics;
+    }
+
+
+    /**
      * This method takes the client to the welcome page. right before the nickname request.
      */
     public void start() {

@@ -9,7 +9,9 @@ import it.polimi.ingsw.PSP43.server.model.Worker;
 public class CliGraphicHandler extends GraphicHandler {
 
     private CliBoard board = new CliBoard();
-
+    private CliTopMenu topMenu = new CliTopMenu();
+    private CliMiddleMenu middleMenu = new CliMiddleMenu();
+    private CliBottomMenu bottomMenu = new CliBottomMenu();
 
     /**
      * This method returns the whole board of the cli.

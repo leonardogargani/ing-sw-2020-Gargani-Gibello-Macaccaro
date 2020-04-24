@@ -15,6 +15,34 @@ public enum Screens {
                     "*                                                       *\n" +
                     "* * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n" +
                     Color.RESET
+    ),
+
+    LOSER(
+            Color.ANSI_RED +
+                    "* * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n" +
+                    "*                                                       *\n" +
+                    "*          Y o u   l o s t   t h e   g a m e !          *\n" +
+                    "*                                                       *\n" +
+                    "* * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n" +
+                    Color.RESET
+    ),
+
+    WINNER(
+            Color.ANSI_GREEN +
+                    "* * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n" +
+                    "*                                                       *\n" +
+                    "*           Y o u   w o n   t h e   g a m e !           *\n" +
+                    "*                                                       *\n" +
+                    "* * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n" +
+                    Color.RESET
+    ),
+
+    YOUR_TURN(
+            Color.ANSI_WHITE +
+                    "          -------------------------------------          \n" +
+                    "          |           It's you turn           |          \n" +
+                    "          -------------------------------------          \n" +
+                    Color.RESET
     );
 
     private final String message;
