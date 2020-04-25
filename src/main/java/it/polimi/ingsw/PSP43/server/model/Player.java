@@ -70,6 +70,4 @@ public class Player {
     public void setAbstractGodCard(AbstractGodCard abstractGodCard) {
         this.abstractGodCard = abstractGodCard;
     }
-
-
 }

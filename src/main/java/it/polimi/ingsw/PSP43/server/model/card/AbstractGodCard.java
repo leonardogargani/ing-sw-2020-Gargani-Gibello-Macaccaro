@@ -1,14 +1,16 @@
 package it.polimi.ingsw.PSP43.server.model.card;
 
-import it.polimi.ingsw.PSP43.server.model.Coord;
+import it.polimi.ingsw.PSP43.server.DataToAction;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
-import it.polimi.ingsw.PSP43.server.model.Player;
+import it.polimi.ingsw.PSP43.server.model.Cell;
+import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -74,48 +76,90 @@ public abstract class AbstractGodCard {
         return power;
     }
 
-    /**
-     *
-     *
-     * @param gameSession The session of the game, from which it is possible to retrieve the ClientListener
-     * @param player The player who did the move
-     * @param workerToMove The worker that is moving
-     * @param newPosition The position in which the player is going to place his worker
-     * @throws WinnerCaughtException if one of the conditions are reached to win
-     */
-    public void move(GameSession gameSession, Player player, Worker workerToMove, Coord newPosition) throws WinnerCaughtException {}
+    public void move(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException {
+        GameSession gameSession = dataToAction.getGameSession();
+        Coord newPosition = dataToAction.getNewPosition();
+        Worker workerToMove = dataToAction.getWorker();
 
-    /**
-     *
-     *
-     * @param gameSession The session of the game, from which it is possible to retrieve the ClientListener
-     * @param player The player who did the build
-     * @param worker The worker that is going to build a block
-     * @param position The position in which the player's worker is going to build the block
-     */
-    public void buildBlock(GameSession gameSession, Player player, Worker worker, Coord position) {}
-
-    /**
-     *
-     *
-     * @param gameSession The session of the game, from which it is possible to retrieve the ClientListener
-     * @param player The player who did the build
-     * @param worker The worker that is going to build a dome
-     * @param position The position in which the player's worker is going to build the dome
-     */
-    public void buildDome(GameSession gameSession, Player player, Worker worker, Coord position) {}
-
-    public HashMap<Coord, ArrayList<Integer>> findAvailablePositionsToMove(CellsHandler handler, Worker[] workers) {
-        return null;
+        CellsHandler handler = gameSession.getCellsHandler();
+        Cell newCell = handler.getCell(newPosition);
+        Coord oldPosition = workerToMove.getCurrentPosition();
+        Cell oldCell = handler.getCell(oldPosition);
+        newCell.setOccupiedByWorker(true);
+        oldCell.setOccupiedByWorker(false);
+        handler.changeStateOfCell(newCell, newPosition);
+        handler.changeStateOfCell(oldCell, oldPosition);
+        workerToMove.setCurrentPosition(newPosition);
     }
 
-    public HashMap<Coord, ArrayList<Integer>> findAvailablePositionsToBuildBlock(CellsHandler handler, Worker[] workers) {
-        return null;
+    public void buildBlock(DataToAction dataToAction) {
+        CellsHandler handler = dataToAction.getGameSession().getCellsHandler();
+        Cell newCell = handler.getCell(dataToAction.getNewPosition());
+        newCell.setHeight(newCell.getHeight()+1);
+        handler.changeStateOfCell(newCell, dataToAction.getNewPosition());
     }
 
-    public HashMap<Coord, ArrayList<Integer>> findAvailablePositionsToBuildDome(CellsHandler handler, Worker[] workers) {
+    public void buildDome(DataToAction dataToAction) {
+        CellsHandler handler = dataToAction.getGameSession().getCellsHandler();
+        Cell newCell = handler.getCell(dataToAction.getNewPosition());
+        newCell.setOccupiedByDome(true);
+        handler.changeStateOfCell(newCell, dataToAction.getNewPosition());
+    }
+
+    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(CellsHandler handler, Worker[] workers) {
+        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = handler.findNeighbouringCoords(workers);
+        Cell actualCell;
+        int actualHeight;
+        int newHeight;
+        Worker actualWorker = null;
+        for (Coord c : neighbouringCoords.keySet()) {
+            for (Coord c1 : neighbouringCoords.get(c)) {
+                if (!handler.getCell(c1).getOccupiedByWorker() && !handler.getCell(c1).getOccupiedByDome()) {
+                    actualCell = handler.getCell(c);
+                    actualHeight = actualCell.getHeight();
+                    newHeight = handler.getCell(c1).getHeight();
+                    if (newHeight - actualHeight > 1) neighbouringCoords.get(c).remove(c1);
+                }
+                else neighbouringCoords.remove(c);
+            }
+        }
+        return neighbouringCoords;
+    }
+
+    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildBlock(CellsHandler handler, Worker[] workers) {
+        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = handler.findNeighbouringCoords(workers);
+        for (Coord c : neighbouringCoords.keySet()) {
+            neighbouringCoords.get(c).removeIf(c1 -> handler.getCell(c1).getOccupiedByWorker() || handler.getCell(c1).getOccupiedByDome() || handler.getCell(c1).getHeight() == 3);
+        }
+        return neighbouringCoords;
+    }
+
+    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildDome(CellsHandler handler, Worker[] workers) {
+        Worker[] newWorker = findWorkersToBuild(workers);
+
+        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = handler.findNeighbouringCoords(workers);
+        for (Coord c : neighbouringCoords.keySet()) {
+            if (handler.getCell(c).getOccupiedByWorker() || handler.getCell(c).getOccupiedByDome() || handler.getCell(c).getHeight() < 4) {
+                neighbouringCoords.remove(c);
+            }
+        }
+        return neighbouringCoords;
+    }
+
+    public Worker[] findWorkersToBuild(Worker[] workers) {
+        Worker workerToBuild = null;
+        for (Worker w : workers) {
+            if (w.isLatestMoved()) workerToBuild = w;
+        }
+
+        Worker[] newWorker = new Worker[1];
+        newWorker[0] = workerToBuild;
+        return newWorker;
+    }
+
+    public AbstractGodCard cleanFromEffects(String nameOfEffect) throws ClassNotFoundException {
         return null;
-    };
+    }
 
     public void print() {
         System.out.println("    Godname : " + godName);

@@ -1,12 +1,16 @@
 package it.polimi.ingsw.PSP43.server.model.card;
 
 
-import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
+import it.polimi.ingsw.PSP43.server.DataToAction;
 import it.polimi.ingsw.PSP43.server.model.*;
+import it.polimi.ingsw.PSP43.server.model.card.behaviours.BuildBlockBehaviour;
+import it.polimi.ingsw.PSP43.server.model.card.behaviours.MoveBehavior;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -17,6 +21,8 @@ import java.util.HashMap;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class BasicGodCard extends AbstractGodCard {
+    private MoveBehavior moveBehavior;
+    private BuildBlockBehaviour buildBlockBehaviour;
 
     public BasicGodCard() {
     }
@@ -26,8 +32,10 @@ public class BasicGodCard extends AbstractGodCard {
      * @param godName name of the god whose power has been chosen by the player
      * @param description description of the ability of the god
      */
-    public BasicGodCard(String godName, String description, String power) {
+    public BasicGodCard(String godName, String description, String power, MoveBehavior moveBehaviour, BuildBlockBehaviour buildBlockBehaviour) {
         super(godName, description, power);
+        this.moveBehavior = moveBehaviour;
+        this.buildBlockBehaviour = buildBlockBehaviour;
     }
 
     public void setGodName(String godName) {
@@ -66,101 +74,69 @@ public class BasicGodCard extends AbstractGodCard {
         return super.getPower();
     }
 
-    /**
-     *
-     *
-     * @param gameSession The session of the game, from which it is possible to retrieve the ClientListener
-     * @param player The player who did the move
-     * @param workerToMove The worker that is moving
-     * @param newPosition The position in which the player is going to place his worker
-     * */
-    public void move(GameSession gameSession, Player player, Worker workerToMove, Coord newPosition) {
-        //Coord oldPosition = workerToMove.getCurrentPosition();
-        //handler.movePlayer(newPosition, oldPosition);
-        //workerToMove.setCurrentPosition(newPosition);
+    public MoveBehavior getMoveBehavior() {
+        return moveBehavior;
+    }
 
-        CellsHandler handler = gameSession.getCellsHandler();
-        Cell newCell = handler.getCell(newPosition);
-        Coord oldPosition = workerToMove.getCurrentPosition();
-        Cell oldCell = handler.getCell(oldPosition);
-        newCell.setOccupiedByWorker(true);
-        oldCell.setOccupiedByWorker(false);
-        handler.changeStateOfCell(newCell, newPosition);
-        handler.changeStateOfCell(oldCell, oldPosition);
-        workerToMove.setCurrentPosition(newPosition);
+    public void setMoveBehavior(MoveBehavior moveBehavior) {
+        this.moveBehavior = moveBehavior;
+    }
+
+    public BuildBlockBehaviour getBuildBlockBehaviour() {
+        return buildBlockBehaviour;
+    }
+
+    public void setBuildBlockBehaviour(BuildBlockBehaviour buildBlockBehaviour) {
+        this.buildBlockBehaviour = buildBlockBehaviour;
     }
 
     /**
      *
      *
-     * @param gameSession The session of the game, from which it is possible to retrieve the ClientListener
-     * @param player The player who did the build
-     * @param worker The worker that is going to build a block
-     * @param position The position in which the player's worker is going to build the block
+     * @param dataToAction*/
+    public void move(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException {
+        if (moveBehavior == null) {
+            super.move(dataToAction);
+        }
+        else moveBehavior.handleMove(dataToAction);
+    }
+
+    /**
+     *
+     *
+     * @param dataToAction
      */
-    public void buildBlock(GameSession gameSession, Player player, Worker worker, Coord position) {
-        CellsHandler handler = gameSession.getCellsHandler();
-        Cell newCell = handler.getCell(position);
-        newCell.setHeight(newCell.getHeight()+1);
-        handler.changeStateOfCell(newCell, position);
+    public void buildBlock(DataToAction dataToAction) {
+        if (buildBlockBehaviour == null) {
+            super.buildBlock(dataToAction);
+        }
+        else buildBlockBehaviour.handleBuildBlock(dataToAction);
     }
 
     /**
      *
      *
-     * @param gameSession The session of the game, from which it is possible to retrieve the ClientListener
-     * @param player The player who did the build
-     * @param worker The worker that is going to build a dome
-     * @param position The position in which the player's worker is going to build the dome
+     * @param dataToAction
      */
-    public void buildDome(GameSession gameSession, Player player, Worker worker, Coord position) {
-        CellsHandler handler = gameSession.getCellsHandler();
-        Cell newCell = handler.getCell(position);
-        newCell.setOccupiedByDome(true);
-        handler.changeStateOfCell(newCell, position);
+    public void buildDome(DataToAction dataToAction) {
+        super.buildDome(dataToAction);
     }
 
-    public HashMap<Coord, ArrayList<Integer>> findAvailablePositionsToMove(CellsHandler handler, Worker[] workers) {
-        HashMap<Coord, ArrayList<Integer>> neighbouringCoords = handler.findNeighbouringCells(workers);
-        Cell actualCell;
-        int actualHeight;
-        int newHeight;
-        Worker actualWorker = null;
-        for (Coord c : neighbouringCoords.keySet()) {
-            if (!handler.getCell(c).getOccupiedByWorker() && !handler.getCell(c).getOccupiedByDome()) {
-                for (int wId : neighbouringCoords.get(c)) {
-                    for (Worker w : workers) {
-                        if (w.getId() == wId) actualWorker = w;
-                    }
-                    actualCell = handler.getCell(actualWorker.getCurrentPosition());
-                    actualHeight = actualCell.getHeight();
-                    newHeight = handler.getCell(c).getHeight();
-                    if (newHeight - actualHeight > 1) neighbouringCoords.get(c).remove(wId);
-                }
-            }
-            else neighbouringCoords.remove(c);
-        }
-        return neighbouringCoords;
+    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(CellsHandler handler, Worker[] workers) {
+        return super.findAvailablePositionsToMove(handler, workers);
     }
 
-    public HashMap<Coord, ArrayList<Integer>> findAvailablePositionsToBuildBlock(CellsHandler handler, Worker[] workers) {
-        HashMap<Coord, ArrayList<Integer>> neighbouringCoords = handler.findNeighbouringCells(workers);
-        for (Coord c : neighbouringCoords.keySet()) {
-            if (handler.getCell(c).getOccupiedByWorker() || handler.getCell(c).getOccupiedByDome()) {
-                neighbouringCoords.remove(c);
-            }
-        }
-        return neighbouringCoords;
+    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildBlock(CellsHandler handler, Worker[] workers) {
+        return super.findAvailablePositionsToBuildBlock(handler, workers);
     }
 
-    public HashMap<Coord, ArrayList<Integer>> findAvailablePositionsToBuildDome(CellsHandler handler, Worker[] workers) {
-        HashMap<Coord, ArrayList<Integer>> neighbouringCoords = handler.findNeighbouringCells(workers);
-        for (Coord c : neighbouringCoords.keySet()) {
-            if (handler.getCell(c).getOccupiedByWorker() || handler.getCell(c).getOccupiedByDome() || handler.getCell(c).getHeight() != 3) {
-                neighbouringCoords.remove(c);
-            }
-        }
-        return neighbouringCoords;
+    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildDome(CellsHandler handler, Worker[] workers) {
+        return super.findAvailablePositionsToBuildDome(handler, workers);
+    }
+
+    public AbstractGodCard cleanFromEffects(String nameOfEffect) throws ClassNotFoundException {
+        AbstractGodCard newCard;
+        return newCard = new BasicGodCard(super.getGodName(), super.getDescription(), super.getPower(), moveBehavior, buildBlockBehaviour);
     }
 
     public void print() {

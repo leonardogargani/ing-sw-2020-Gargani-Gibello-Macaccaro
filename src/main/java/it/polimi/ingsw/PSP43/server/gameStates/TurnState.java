@@ -1,6 +1,9 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
+import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
+
+import java.io.IOException;
 
 
 public abstract class TurnState {
@@ -14,23 +17,23 @@ public abstract class TurnState {
         return gameSession;
     }
 
-    public void initState() {
+    public void initState() throws IOException, ClassNotFoundException {
         try {
             executeState();
-        } catch (WinnerCaughtException e) {
+        } catch (WinnerCaughtException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public void executeState() throws WinnerCaughtException {
+    public void executeState(ClientMessage message) throws IOException, ClassNotFoundException {
         findNextState();
     }
 
-    public void executeState(GenericMessage message) {
+    public void executeState() throws WinnerCaughtException, IOException, ClassNotFoundException {
         findNextState();
     }
 
-    public void findNextState() {
+    public void findNextState() throws IOException, ClassNotFoundException {
         gameSession.transitToNextState();
     }
 }

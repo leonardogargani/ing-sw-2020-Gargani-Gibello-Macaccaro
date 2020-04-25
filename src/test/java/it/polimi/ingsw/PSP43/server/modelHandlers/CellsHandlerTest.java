@@ -50,10 +50,5 @@ public class CellsHandlerTest {
         cell.setOccupiedByWorker(false);
         cell.setOccupiedByDome(true);
         game.getCellsHandler().changeStateOfCell(cell,c);
-
-        /*assertTrue(game.getCellsHandler().getCell(c).getOccupiedByDome());
-        assertFalse(game.getCellsHandler().getCell(c).getOccupiedByWorker());*/
         }
-
-
 }

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
-
-import it.polimi.ingsw.PSP43.server.ClientListener;
+import com.sun.security.ntlm.Client;
+import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
 import it.polimi.ingsw.PSP43.server.GraphicObserver;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
@@ -9,19 +9,15 @@ import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-public class GameSession {
-    private int idGame;
-    private boolean isFull;
-    private HashMap<String, ClientListener> listenersHashMap;
+public class GameSession extends GameSessionObservable {
+    private Player currentPlayer;
 
     private TurnState currentState;
     private TurnState nextState;
     private ArrayList<TurnState> turnMap;
-
-    private Player currentPlayer;
 
     private CellsHandler cellsHandler;
     private PlayersHandler playersHandler;
@@ -35,18 +31,20 @@ public class GameSession {
      * @param idgame refers to the id of the game
      */
     public GameSession(int idgame){
-        this.listenersHashMap = new HashMap<>(2);
-        this.idGame = idgame;
-        this.isFull = false;
+        super(idgame);
+        this.maxNumPlayers = 1;
+
         this.turnMap = new ArrayList<>();
         this.turnMap.add(0, new PlayerRegistrationState(this));
         this.currentState = turnMap.get(0);
+        super.currentState = turnMap.get(0);
         this.turnMap.add(1, new ChooseCardState(this));
         this.turnMap.add(2, new ChooseWorkerState(this));
         this.turnMap.add(3, new MoveState(this));
         this.turnMap.add(4, new BuildState(this));
         this.turnMap.add(5, new WinState(this));
         this.nextState = null;
+
         this.cellsHandler = new CellsHandler(this);
         this.playersHandler = new PlayersHandler(this);
         this.workersHandler = new WorkersHandler(this);
@@ -54,25 +52,18 @@ public class GameSession {
         this.graphicObserver = new GraphicObserver();
     }
 
-    protected void transitToNextState() {
-        int indexNextState = turnMap.indexOf(nextState);
-        currentState = turnMap.get(indexNextState);
-        currentState.initState();
-    }
-
-    public synchronized boolean registerToTheGame(RegistrationMessage message, ClientListener player) {
-        if (!this.isFull()) {
-            listenersHashMap.put(message.getNickPlayerId(), player);
-            currentState.executeState(message);
+    public boolean validateMessage(ClientMessage messageArrived, ClientMessage typeMessageRequested) {
+        if (messageArrived.getClass().isInstance(typeMessageRequested)) {
             return true;
         }
         else return false;
     }
 
-    public synchronized boolean unregisterFromGame(RegistrationMessage message, ClientListener player) {
-        // TODO :   send a message to all the other players telling them that the game is finished due to unregistration
-        //          of a player or connection problems
-        return true;
+    protected void transitToNextState() throws IOException, ClassNotFoundException {
+        int indexNextState = turnMap.indexOf(nextState);
+        currentState = turnMap.get(indexNextState);
+        super.currentState = turnMap.get(indexNextState);
+        currentState.initState();
     }
 
     public void eliminatePlayer(Player playerEliminated) {
@@ -82,31 +73,10 @@ public class GameSession {
         int[] workersToRemove = playerToRemove.getWorkersIdsArray();
         workersHandler.removeWorkers(workersToRemove);
 
-        // TODO : send a message to the player eliminated
-        listenersHashMap.remove(playerEliminated.getNickname());
+        super.eliminatePlayer(playerEliminated);
     }
 
-    public synchronized void setFull(boolean full) {
-        isFull = full;
-    }
-
-    public boolean isFull() {
-        return isFull;
-    }
-
-    /**
-     * Getter method for gamers arraylist
-     * @return gamers ,that is the gamers list
-     */
-    public HashMap<String, ClientListener> getListenersHashMap() { return listenersHashMap; }
-
-    /**
-     * Method to get the game id
-     * @return idGame is the id of that gamesession
-     */
-    public int getIdGame(){
-        return idGame;
-    }
+    // FROM HERE ARE ALL SETTERS AND GETTERS \\
 
     /**
      * Method to know the kind of turn state the current player is in
@@ -138,6 +108,10 @@ public class GameSession {
      */
     public ArrayList<TurnState> getTurnMap() {
         return turnMap;
+    }
+
+    public void setTurnMap(ArrayList<TurnState> turnMap) {
+        this.turnMap = turnMap;
     }
 
     /**

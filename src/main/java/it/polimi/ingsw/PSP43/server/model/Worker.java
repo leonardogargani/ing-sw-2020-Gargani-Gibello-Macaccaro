@@ -15,6 +15,7 @@ public class Worker extends Observable {
     private Coord currentPosition;
     private Coord previousPosition;
     private Color color;
+    private boolean latestMoved;
 
 
     /**
@@ -26,6 +27,7 @@ public class Worker extends Observable {
         this.currentPosition = null;
         this.previousPosition = null;
         this.color = color;
+        this.latestMoved = false;
     }
 
 
@@ -74,5 +76,11 @@ public class Worker extends Observable {
         return id;
     }
 
+    public boolean isLatestMoved() {
+        return latestMoved;
+    }
 
+    public void setLatestMoved(boolean latestMoved) {
+        this.latestMoved = latestMoved;
+    }
 }

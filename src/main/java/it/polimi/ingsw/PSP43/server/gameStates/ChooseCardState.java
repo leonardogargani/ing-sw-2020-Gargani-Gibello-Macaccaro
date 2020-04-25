@@ -1,11 +1,15 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
+import it.polimi.ingsw.PSP43.client.networkMessages.ChoseCardMessage;
 import it.polimi.ingsw.PSP43.server.ClientListener;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
+import it.polimi.ingsw.PSP43.server.networkMessages.CardsMessage;
+import it.polimi.ingsw.PSP43.server.networkMessages.TextMessage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ChooseCardState extends TurnState {
@@ -16,28 +20,32 @@ public class ChooseCardState extends TurnState {
         super(gameSession);
     }
 
-    public void initState() {
+    public void initState() throws IOException, ClassNotFoundException {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
 
         game.setCurrentPlayer(playersHandler.getPlayer(FIRSTPOSITION));
         Player current = game.getCurrentPlayer();
 
-        AbstractGodCard[] deckOfCards = (AbstractGodCard[]) game.getCardsHandler().getDeckOfAbstractGodCards().toArray();
-        NoticeMessage message = new NoticeMessage(game.getIdGame(), "Choose " + playersHandler.getNumOfPlayers() + " cards. You " +
-                "will receive the latest not chosen by other players.");
-        ClientListener receiver = game.getListenersHashMap().get(current.getNickname());
-        // TODO : SEND TO THE PLAYER THE LIST OF CARDS TO CHOOSE AND PUT THEM INTO THE FIELD AVAILABLECARDS
+        TextMessage openingMessage = new TextMessage("You are going to choose a God Card to use during the game!");
+        ArrayList<String> nicksExcluded = new ArrayList<>();
+        nicksExcluded.add(current.getNickname());
+        game.sendBroadCast(openingMessage, nicksExcluded);
+
+        ArrayList<AbstractGodCard> available = game.getCardsHandler().getDeckOfAbstractGodCards();
+        CardsMessage cardsRequest = new CardsMessage("Choose " + playersHandler.getNumOfPlayers() + " cards. You " +
+                "will receive the latest not chosen by other players.", available);
+        // TODO : I do not have a type response for this yet
+        cardsAvailable = available;
         this.executeState();
     }
 
-    public void executeState() {
-        // TODO : SEND TO ALL THE PLAYERS THAT WE ARE BEGINNING TO CHOOSE THE CARDS
+    public void executeState() throws IOException, ClassNotFoundException {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
         CardsHandler cardsHandler = game.getCardsHandler();
 
-        int latestPosition = playersHandler.getNumOfPlayers()-1;
+        //int latestPosition = playersHandler.getNumOfPlayers()-1;
         game.setCurrentPlayer(playersHandler.getPlayer(FIRSTPOSITION + 1));
 
         String nicknameGodLikePlayer = playersHandler.getPlayer(FIRSTPOSITION).getNickname();
@@ -51,10 +59,10 @@ public class ChooseCardState extends TurnState {
             ArrayList<AbstractGodCard> deckOfAvailableCards = cardsAvailable;
             ClientListener receiver = game.getListenersHashMap().get(current.getNickname());
             // TODO : SEND TO THE CLIENT
-            ChosenCardMessage receivedMessage = null;
+            ChoseCardMessage receivedMessage = null;
             // TODO : RECEIVE FROM THE CLIENT
 
-            cardsHandler.setCardToPlayer(nicknameCurrentPlayer, receivedMessage.getNameCardChosen());
+            cardsHandler.setCardToPlayer(nicknameCurrentPlayer, receivedMessage.getCardName());
             cardsAvailable.remove(cardsHandler.getCardOwned(nicknameCurrentPlayer));
 
             game.setCurrentPlayer(playersHandler.getNextPlayer(nicknameCurrentPlayer));
@@ -63,7 +71,7 @@ public class ChooseCardState extends TurnState {
         findNextState();
     }
 
-    public void findNextState() {
+    public void findNextState() throws IOException, ClassNotFoundException {
         GameSession game = super.getGameSession();
         int indexCurrentState;
         indexCurrentState = game.getTurnMap().indexOf(game.getCurrentState());

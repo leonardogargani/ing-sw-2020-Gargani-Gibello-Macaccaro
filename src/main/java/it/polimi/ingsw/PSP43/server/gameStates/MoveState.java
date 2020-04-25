@@ -1,5 +1,10 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
+import it.polimi.ingsw.PSP43.client.Client;
+import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
+import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
+import it.polimi.ingsw.PSP43.server.ClientListener;
+import it.polimi.ingsw.PSP43.server.DataToAction;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
@@ -7,8 +12,13 @@ import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
+import it.polimi.ingsw.PSP43.server.networkMessages.PossibleMovesMessage;
+import it.polimi.ingsw.PSP43.server.networkMessages.TextMessage;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class MoveState extends TurnState {
@@ -19,9 +29,10 @@ public class MoveState extends TurnState {
         super(gameSession);
     }
 
-    public void initState() {
+    public void initState() throws IOException, ClassNotFoundException {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
+        WorkersHandler handler = game.getWorkersHandler();
         Player currentPlayer;
         Player nextPlayer;
 
@@ -36,10 +47,18 @@ public class MoveState extends TurnState {
         }
 
         currentPlayer = game.getCurrentPlayer();
+        TextMessage broadcastMessage = new TextMessage(currentPlayer.getNickname() + " is making his move.");
+        ArrayList<String> nicksExcluded = new ArrayList<>();
+        nicksExcluded.add(currentPlayer.getNickname());
+        game.sendBroadCast(broadcastMessage, nicksExcluded);
+
+        for (Worker w : handler.getWorkers()) {
+            w.setLatestMoved(false);
+        }
 
         try {
             executeState();
-        } catch (WinnerCaughtException e) {
+        } catch (WinnerCaughtException | IOException | ClassNotFoundException e) {
             int winnerStateIndex = game.getTurnMap().size() - 1;
             WinState nextState = (WinState) game.getTurnMap().get(winnerStateIndex);
             nextState.setWinner(currentPlayer.getNickname());
@@ -48,34 +67,42 @@ public class MoveState extends TurnState {
         }
     }
 
-    public void executeState() throws WinnerCaughtException {
+    public void executeState() throws WinnerCaughtException, IOException, ClassNotFoundException {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
         WorkersHandler workersHandler = game.getWorkersHandler();
         Player currentPlayer = game.getCurrentPlayer();
         AbstractGodCard playerCard = currentPlayer.getAbstractGodCard();
         String nicknameCurrentPlayer = currentPlayer.getNickname();
+        ClientListener currentListener = game.getListenersHashMap().get(nicknameCurrentPlayer);
 
-        HashMap<Coord, ArrayList<Integer>> availablePositions;
+        HashMap<Coord, ArrayList<Coord>> availablePositions;
 
-        String message = "Choose a position where to place your worker next.";
         int[] workerIds = currentPlayer.getWorkersIdsArray();
         ArrayList<Worker> workers = new ArrayList<>();
         for (int id : workerIds) {
             workers.add(workersHandler.getWorker(id));
         }
         availablePositions = playerCard.findAvailablePositionsToMove(game.getCellsHandler(), (Worker[]) workers.toArray());
-        // TODO : send a message to the player requestinq him where he wants to move his player
-        Coord nextPositionChosen = null;
-        Integer idWorkerMoved = -1;
-        // TODO : receive the Coord chosen by the player
-        Worker workerMoved = workersHandler.getWorker(idWorkerMoved);
+        // TODO : type positions in the message are wrong
+        PossibleMovesMessage message = new PossibleMovesMessage("Choose a position where to place your worker next.", null);
+        ActionResponse response = null;
+        ClientMessage messageArrived = null;
+        do {
+            messageArrived = game.sendRequest(message, nicknameCurrentPlayer);
+        } while (!game.validateMessage(messageArrived, response));
+        response = (ActionResponse) messageArrived;
+        Coord nextPositionChosen = response.getPosition();
+        Coord oldPosition = response.getWorkerPosition();
+        Worker workerMoved = workersHandler.getWorker(oldPosition);
+        workerMoved.setLatestMoved(true);
 
-        playerCard.move(game, currentPlayer, workerMoved, nextPositionChosen);
+        playerCard.move(new DataToAction(game, currentPlayer, workerMoved, nextPositionChosen));
+
         findNextState();
     }
 
-    public void findNextState() {
+    public void findNextState() throws IOException, ClassNotFoundException {
         GameSession game = super.getGameSession();
         TurnState currentState = game.getCurrentState();
         int indexCurrentState = game.getTurnMap().indexOf(currentState);

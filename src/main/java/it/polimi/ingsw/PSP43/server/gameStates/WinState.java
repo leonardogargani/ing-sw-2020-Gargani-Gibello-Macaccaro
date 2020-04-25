@@ -1,6 +1,10 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
-import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
+import it.polimi.ingsw.PSP43.server.ClientListener;
+import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
+
+import java.io.IOException;
+import java.util.HashMap;
 
 public class WinState extends TurnState {
     String winner;
@@ -13,7 +17,12 @@ public class WinState extends TurnState {
         this.winner = winner;
     }
 
-    public void executeState() {
-        // TODO : send a message that a player won and give the order to the clientlisteners to close the sockets
+    public void executeState() throws IOException {
+        EndGameMessage message = new EndGameMessage(winner + " win the play!");
+        HashMap<String, ClientListener> map = getGameSession().getListenersHashMap();
+        for (String s : map.keySet()) {
+            map.get(s).sendMessage(message);
+        }
+        //map.get(winner).removeGameSession(getGameSession());
     }
 }

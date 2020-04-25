@@ -26,7 +26,8 @@ public class CardsHandler {
         return deckOfAbstractGodCards;
     }
 
-    private void setDeckOfAbstractGodCards(ArrayList<AbstractGodCard> deckOfAbstractGodCards) {
+    // TODO : REMEMBER TO CHANGE INTO PRIVATE!!!!
+    public void setDeckOfAbstractGodCards(ArrayList<AbstractGodCard> deckOfAbstractGodCards) {
         this.deckOfAbstractGodCards = deckOfAbstractGodCards;
     }
 
@@ -34,7 +35,7 @@ public class CardsHandler {
         this.mapOwnerCard = mapOwnerCard;
     }
 
-    private HashMap<String, AbstractGodCard> getCardsInUse() {
+    public HashMap<String, AbstractGodCard> getMapOwnerCard() {
         return mapOwnerCard;
     }
 

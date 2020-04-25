@@ -1,55 +1,76 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
+import it.polimi.ingsw.PSP43.Color;
+import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
+import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
+import it.polimi.ingsw.PSP43.client.networkMessages.WorkerColorResponse;
 import it.polimi.ingsw.PSP43.server.ClientListener;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
-import it.polimi.ingsw.PSP43.server.networkMessages.ChosenColorMessage;
+import it.polimi.ingsw.PSP43.server.networkMessages.PossibleMovesMessage;
+import it.polimi.ingsw.PSP43.server.networkMessages.TextMessage;
+import it.polimi.ingsw.PSP43.server.networkMessages.WorkerColorRequest;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class ChooseWorkerState extends TurnState {
     private static final int FIRSTPOSITION = 0;
+    private ArrayList<Color> availableColors;
 
     public ChooseWorkerState(GameSession gameSession) {
         super(gameSession);
+        availableColors = new ArrayList<>();
+        // TODO : why is the color constructor private?
     }
 
-    public void initState() {
+    public void initState() throws IOException, ClassNotFoundException {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
         game.setCurrentPlayer(playersHandler.getPlayer(FIRSTPOSITION));
+
+        TextMessage openingMessage = new TextMessage("You are going to choose the color and the initial position for your workers!");
+        game.sendBroadCast(openingMessage);
+
         executeState();
     }
 
-    public void executeState() {
+    public void executeState() throws IOException, ClassNotFoundException {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
         WorkersHandler workersHandler = game.getWorkersHandler();
         Worker[] workersArray = (Worker[]) workersHandler.getWorkers().toArray();
 
-        Player currentPlayer;
-        String nicknameCurrentPlayer;
+        Player currentPlayer = game.getCurrentPlayer();
+        String nicknameCurrentPlayer = currentPlayer.getNickname();
         int latestPosition;
         String latestPlayer;
-        ClientListener receiver;
         String message = "Choose a color of the worker you will own.";
-        ChosenColorMessage colorMessageReceived;
+        WorkerColorRequest colorRequest = new WorkerColorRequest("Choose a color of the worker you will own.", availableColors);
+        WorkerColorResponse colorResponse = null;
+        boolean delivered;
+        do {
+            delivered = game.sendRequest(colorRequest, nicknameCurrentPlayer, colorResponse);
+        } while (!delivered);
+
         int[] workersIds = new int[2];
-        Coord[] freeCells;
-        Coord coordChosen;
 
         do {
-            currentPlayer = game.getCurrentPlayer();
-            nicknameCurrentPlayer = currentPlayer.getNickname();
-            receiver = game.getListenersHashMap().get(nicknameCurrentPlayer);
-            // TODO : SEND TO THE CLIENT THE MESSAGE REQUESTING THE COLOR OF HIS WORKER
-
+            message = "Choose where to place your workers.";
+            ArrayList<Coord> availablePositions = game.getCellsHandler().findAllCellsFree();
+            PossibleMovesMessage placementRequest = new PossibleMovesMessage("Choose a color of the worker you will own.");
+            ActionResponse response = null;
+            do {
+                delivered = game.sendRequest(placementRequest, nicknameCurrentPlayer, response);
+            } while (!delivered);
             // TODO : receive the answer message
-            colorMessageReceived = null;
+            Color colorMessageReceived = null;
 
             for (int i=0; i<2; i++) {
-                workersIds[i] = workersHandler.addNewWorker(colorMessageReceived.getColorChosen());
+                workersIds[i] = workersHandler.addNewWorker(colorMessageReceived);
             }
             currentPlayer.setWorkersIdsArray(workersIds[0], workersIds[1]);
 
@@ -69,7 +90,7 @@ public class ChooseWorkerState extends TurnState {
         findNextState();
     }
 
-    public void findNextState() {
+    public void findNextState() throws IOException, ClassNotFoundException {
         GameSession game = super.getGameSession();
         int indexCurrentState;
         indexCurrentState = game.getTurnMap().indexOf(game.getCurrentState());

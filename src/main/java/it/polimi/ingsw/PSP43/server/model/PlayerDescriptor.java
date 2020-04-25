@@ -2,6 +2,7 @@ package it.polimi.ingsw.PSP43.server.model;
 
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.model.card.decorators.WinConditionDecorator;
 
 /**
  * Player description arriving from the net and traslated into a message for a specified GameSession

@@ -28,6 +28,14 @@ public class CellsHandler {
 
     }
 
+    public GameSession getGameSession() {
+        return gameSession;
+    }
+
+    public void setGameSession(GameSession gameSession) {
+        this.gameSession = gameSession;
+    }
+
     /**
      * Method to get the game board useful to other method of that class
      * @return the searched cell
@@ -35,8 +43,6 @@ public class CellsHandler {
     public Cell getCell(Coord c) {
             return board[c.getX()][c.getY()];
     }
-
-
 
     /**
      * Method tu update cell's attributes
@@ -50,7 +56,7 @@ public class CellsHandler {
         cellToChange.setHeight(newDescriptionCell.getHeight());
     }
 
-    public Coord[] findAllCellsFree() {
+    public ArrayList<Coord> findAllCellsFree() {
         ArrayList<Coord> freeCells = new ArrayList();
         for (int i=0; i<board.length; i++) {
             for (int j=0; i<board.length; j++) {
@@ -58,34 +64,28 @@ public class CellsHandler {
                     freeCells.add(new Coord(i,j));
             }
         }
-        return (Coord[]) freeCells.toArray();
+        return freeCells;
     }
 
-    public HashMap<Coord, ArrayList<Integer>> findNeighbouringCells(Worker[] workers) {
-        HashMap<Coord, ArrayList<Integer>> availablePositions = new HashMap<>();
+    public HashMap<Coord, ArrayList<Coord>> findNeighbouringCoords(Worker[] workers) {
+        HashMap<Coord, ArrayList<Coord>> availablePositions = new HashMap<>();
+        ArrayList<Coord> positions;
 
         for (Worker w : workers) {
             Coord currentCoord = w.getCurrentPosition();
+            positions = new ArrayList<>();
             for (int i=-1; i<2 ; i++) {
                 for (int j=-1; j<2; j++) {
                     if (currentCoord.getX() + i > -1 && currentCoord.getX() + i < DIM) {
                         if (currentCoord.getY() + j > -1 && currentCoord.getY() + j < DIM) {
                             if (i!=0 && j!=0) {
-                                ArrayList<Integer> positions = availablePositions.get(currentCoord);
-                                if (positions == null) {
-                                    positions = new ArrayList<>();
-                                    positions.add(w.getId());
-                                    availablePositions.put(board[i][j].getCoord(), positions);
-                                }
-                                else {
-                                    positions.add(w.getId());
-                                    availablePositions.put(board[i][j].getCoord(), positions);
-                                }
+                                positions.add(new Coord(currentCoord.getX() + i, currentCoord.getY() + j));
                             }
                         }
                     }
                 }
             }
+            availablePositions.put(currentCoord, positions);
         }
         return availablePositions;
     }
@@ -99,14 +99,6 @@ public class CellsHandler {
 
     public interface AbstractIterator {
         Cell next();
-    }
-
-    public GameSession getGameSession() {
-        return gameSession;
-    }
-
-    public void setGameSession(GameSession gameSession) {
-        this.gameSession = gameSession;
     }
 
     private class GenericDirectionIterator implements AbstractIterator {
