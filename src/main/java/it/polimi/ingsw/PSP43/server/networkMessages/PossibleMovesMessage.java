@@ -8,4 +8,14 @@ public class PossibleMovesMessage extends PossibleActionMessage {
     private static final long SerialVersionUID=665665665665665665L;
 
     public PossibleMovesMessage(String message, ArrayList<Coord> cellsAvailable){super(message,cellsAvailable);}
+
+    @Override
+    public String getMessage() {
+        return super.getMessage();
+    }
+
+    @Override
+    public ArrayList<Coord> getCellsAvailable() {
+        return super.getCellsAvailable();
+    }
 }

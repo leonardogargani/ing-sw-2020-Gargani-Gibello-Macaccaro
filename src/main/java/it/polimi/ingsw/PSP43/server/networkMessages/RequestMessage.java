@@ -4,4 +4,9 @@ public class RequestMessage extends TextMessage {
     private static final long SerialVersionUID=899899899899899899L;
 
     public RequestMessage(String message){super(message);}
+
+    @Override
+    public String getMessage() {
+        return super.getMessage();
+    }
 }

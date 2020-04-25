@@ -1,14 +1,16 @@
 package it.polimi.ingsw.PSP43.client.networkMessages;
 
+import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+
 public class ChoseCardMessage extends ClientMessage {
     private static final long SerialVersionUID=321098765432109876L;
-    private String cardName;
+    private AbstractGodCard card;
 
-    public ChoseCardMessage(String cardName){
-        this.cardName = cardName;
+    public ChoseCardMessage(AbstractGodCard card){
+        this.card = card;
     }
 
-    public String getCardName() {
-        return cardName;
+    public AbstractGodCard getCardName() {
+        return card;
     }
 }
