@@ -5,7 +5,7 @@ import it.polimi.ingsw.PSP43.server.model.Coord;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PossibleActionMessage extends TextMessage {
+public abstract class PossibleActionMessage extends TextMessage {
     private static final long SerialVersionUID = 111123456789012345L;
     private HashMap <Coord,ArrayList<Coord>> cellsAvailable;
 

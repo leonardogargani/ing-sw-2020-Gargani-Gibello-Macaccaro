@@ -6,10 +6,10 @@ import java.util.ArrayList;
 
 public class WorkerColorRequest extends TextMessage {
     private static final long SerialVersionUID=112345678901234567L;
-    private ArrayList<Color> colors;
-    public WorkerColorRequest(String message, ArrayList<Color> colors){
+    private ArrayList<Color> colorsAvailable;
+    public WorkerColorRequest(String message, ArrayList<Color> colorsAvailable){
         super(message);
-        this.colors = colors;
+        this.colorsAvailable = colorsAvailable;
     }
 
     @Override
@@ -17,7 +17,7 @@ public class WorkerColorRequest extends TextMessage {
         return super.getMessage();
     }
 
-    public ArrayList<Color> getColors() {
-        return colors;
+    public ArrayList<Color> getColorsAvailable() {
+        return colorsAvailable;
     }
 }
