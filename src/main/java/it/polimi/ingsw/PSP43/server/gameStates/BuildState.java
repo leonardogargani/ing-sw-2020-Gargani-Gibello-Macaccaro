@@ -1,9 +1,7 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
-import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.ResponseMessage;
-import it.polimi.ingsw.PSP43.server.ClientListener;
 import it.polimi.ingsw.PSP43.server.DataToAction;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
@@ -11,6 +9,7 @@ import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.PossibleBuildsMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.TextMessage;
@@ -26,7 +25,7 @@ public class BuildState extends TurnState {
         super(gameSession);
     }
 
-    public void initState() throws IOException, ClassNotFoundException {
+    public void initState() throws IOException, ClassNotFoundException, WinnerCaughtException {
         super.initState();
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
@@ -40,26 +39,24 @@ public class BuildState extends TurnState {
         executeState();
     }
 
-    public void executeState() throws IOException, ClassNotFoundException {
+    public void executeState() throws IOException, ClassNotFoundException, WinnerCaughtException {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
         WorkersHandler workersHandler = game.getWorkersHandler();
         Player currentPlayer = game.getCurrentPlayer();
         AbstractGodCard playerCard = currentPlayer.getAbstractGodCard();
         String nicknameCurrentPlayer = currentPlayer.getNickname();
-        ClientListener currentClientListener = game.getListenersHashMap().get(nicknameCurrentPlayer);
 
         HashMap<Coord, ArrayList<Coord>> availablePositions;
 
         RequestMessage request = new RequestMessage("Do you want to build a dome or a block?");
-        ResponseMessage response = new ResponseMessage();
-        ClientMessage messageArrived = null;
+        ResponseMessage response = null;
+        boolean delivered;
         do {
-            messageArrived = game.sendRequest(request, nicknameCurrentPlayer);
-        } while (!game.validateMessage(messageArrived, response));
-        response = (ResponseMessage) messageArrived;
+            delivered = game.sendRequest(request, nicknameCurrentPlayer, response);
+        } while (!delivered);
 
-        boolean buildBlock = response.isResponse(); // initialised only not to have an error
+        boolean buildBlock = response.isResponse();
 
         int[] workerIds = currentPlayer.getWorkersIdsArray();
         ArrayList<Worker> workersOfPlayer = new ArrayList<>();
@@ -69,21 +66,21 @@ public class BuildState extends TurnState {
         if (buildBlock) availablePositions = playerCard.findAvailablePositionsToBuildBlock(game.getCellsHandler(), (Worker[]) workersOfPlayer.toArray());
         else availablePositions = playerCard.findAvailablePositionsToBuildDome(game.getCellsHandler(), (Worker[]) workersOfPlayer.toArray());
 
-        PossibleBuildsMessage message = new PossibleBuildsMessage("Choose where to build.", null);
-        ActionResponse actionResponse = new ActionResponse();
+        PossibleBuildsMessage message = new PossibleBuildsMessage("Choose where to build.", availablePositions);
+        ActionResponse actionResponse = null;
         do {
-            messageArrived = game.sendRequest(request, nicknameCurrentPlayer);
-        } while (!game.validateMessage(messageArrived, actionResponse));
-        actionResponse = (ActionResponse) messageArrived;
+            delivered = game.sendRequest(request, nicknameCurrentPlayer, actionResponse);
+        } while (!delivered);
 
         Coord coordToBuild = actionResponse.getPosition();
+        Worker workerToBuild = workersHandler.getWorker(actionResponse.getWorkerPosition());
         // TODO : Is the worker necessary in the buildBlock method???
-        if (buildBlock) playerCard.buildBlock(new DataToAction(game, currentPlayer, null, coordToBuild));
-        else playerCard.buildDome(new DataToAction(game, currentPlayer, null, coordToBuild));
+        if (buildBlock) playerCard.buildBlock(new DataToAction(game, currentPlayer, workerToBuild, coordToBuild));
+        else playerCard.buildDome(new DataToAction(game, currentPlayer, workerToBuild, coordToBuild));
         findNextState();
     }
 
-    public void findNextState() throws IOException, ClassNotFoundException {
+    public void findNextState() throws IOException, ClassNotFoundException, WinnerCaughtException {
         GameSession game = super.getGameSession();
         Player currentPlayer = game.getCurrentPlayer();
         PlayersHandler handler = game.getPlayersHandler();

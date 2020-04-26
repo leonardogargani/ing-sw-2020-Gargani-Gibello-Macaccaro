@@ -1,25 +1,24 @@
 package it.polimi.ingsw.PSP43.server.modelHandlers;
 
+import it.polimi.ingsw.PSP43.server.DOMCardsParser;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.CardAlreadyInUseException;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.xml.bind.annotation.*;
-
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
 public class CardsHandler {
-    @XmlElementWrapper
-    @XmlElement (name = "card")
     private ArrayList<AbstractGodCard> deckOfAbstractGodCards;
     private HashMap<String, AbstractGodCard> mapOwnerCard;
 
-    public CardsHandler() {
+    public CardsHandler() throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException {
         this.mapOwnerCard = new HashMap<>();
         this.deckOfAbstractGodCards = new ArrayList<>();
-        // TODO : CODICE CHE ACCEDE AL FILE XML E INIZIALIZZA TUTTE LE CARTE DEL DECK
+        DOMCardsParser parser = new DOMCardsParser();
+        deckOfAbstractGodCards = DOMCardsParser.buildDeck();
     }
 
     public ArrayList<AbstractGodCard> getDeckOfAbstractGodCards() {

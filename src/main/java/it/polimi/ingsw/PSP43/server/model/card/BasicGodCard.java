@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP43.server.model.card;
 
-
 import it.polimi.ingsw.PSP43.server.DataToAction;
 import it.polimi.ingsw.PSP43.server.model.*;
 import it.polimi.ingsw.PSP43.server.model.card.behaviours.BuildBlockBehaviour;
@@ -8,8 +7,6 @@ import it.polimi.ingsw.PSP43.server.model.card.behaviours.MoveBehavior;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +16,6 @@ import java.util.HashMap;
  * corresponding description of its power.
  * Each player owns a single card for the entire duration of the game.
  */
-@XmlAccessorType(XmlAccessType.FIELD)
 public class BasicGodCard extends AbstractGodCard {
     private MoveBehavior moveBehavior;
     private BuildBlockBehaviour buildBlockBehaviour;
@@ -137,11 +133,5 @@ public class BasicGodCard extends AbstractGodCard {
     public AbstractGodCard cleanFromEffects(String nameOfEffect) throws ClassNotFoundException {
         AbstractGodCard newCard;
         return newCard = new BasicGodCard(super.getGodName(), super.getDescription(), super.getPower(), moveBehavior, buildBlockBehaviour);
-    }
-
-    public void print() {
-        System.out.println("    Godname : " + super.getGodName());
-        System.out.println("    Description : " + super.getDescription());
-        System.out.println("    Power : " + super.getPower());
     }
 }

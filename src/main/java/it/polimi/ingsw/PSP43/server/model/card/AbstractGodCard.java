@@ -8,8 +8,6 @@ import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +17,6 @@ import java.util.HashMap;
  * corresponding description of its power.
  * Each player owns a single card for the entire duration of the game.
  */
-@XmlAccessorType(XmlAccessType.FIELD)
 public abstract class AbstractGodCard {
 
     private String godName;
@@ -111,7 +108,6 @@ public abstract class AbstractGodCard {
         Cell actualCell;
         int actualHeight;
         int newHeight;
-        Worker actualWorker = null;
         for (Coord c : neighbouringCoords.keySet()) {
             for (Coord c1 : neighbouringCoords.get(c)) {
                 if (!handler.getCell(c1).getOccupiedByWorker() && !handler.getCell(c1).getOccupiedByDome()) {
@@ -135,8 +131,6 @@ public abstract class AbstractGodCard {
     }
 
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildDome(CellsHandler handler, Worker[] workers) {
-        Worker[] newWorker = findWorkersToBuild(workers);
-
         HashMap<Coord, ArrayList<Coord>> neighbouringCoords = handler.findNeighbouringCoords(workers);
         for (Coord c : neighbouringCoords.keySet()) {
             if (handler.getCell(c).getOccupiedByWorker() || handler.getCell(c).getOccupiedByDome() || handler.getCell(c).getHeight() < 4) {

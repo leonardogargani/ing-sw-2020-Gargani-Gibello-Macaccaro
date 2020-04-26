@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
-import com.sun.security.ntlm.Client;
 import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
 import it.polimi.ingsw.PSP43.server.GraphicObserver;
 import it.polimi.ingsw.PSP43.server.model.Player;
@@ -8,7 +7,10 @@ import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -30,7 +32,7 @@ public class GameSession extends GameSessionObservable {
      * Not default constructor to inizialize a GameSession
      * @param idgame refers to the id of the game
      */
-    public GameSession(int idgame){
+    public GameSession(int idgame) throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException {
         super(idgame);
         this.maxNumPlayers = 1;
 
@@ -59,7 +61,7 @@ public class GameSession extends GameSessionObservable {
         else return false;
     }
 
-    protected void transitToNextState() throws IOException, ClassNotFoundException {
+    protected void transitToNextState() throws IOException, ClassNotFoundException, WinnerCaughtException {
         int indexNextState = turnMap.indexOf(nextState);
         currentState = turnMap.get(indexNextState);
         super.currentState = turnMap.get(indexNextState);

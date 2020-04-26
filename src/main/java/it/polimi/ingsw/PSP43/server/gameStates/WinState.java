@@ -1,10 +1,9 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
-import it.polimi.ingsw.PSP43.server.ClientListener;
 import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class WinState extends TurnState {
     String winner;
@@ -19,10 +18,8 @@ public class WinState extends TurnState {
 
     public void executeState() throws IOException {
         EndGameMessage message = new EndGameMessage(winner + " win the play!");
-        HashMap<String, ClientListener> map = getGameSession().getListenersHashMap();
-        for (String s : map.keySet()) {
-            map.get(s).sendMessage(message);
-        }
-        //map.get(winner).removeGameSession(getGameSession());
+        ArrayList<String> nicksExcluded = new ArrayList<>();
+        nicksExcluded.add(winner);
+        super.getGameSession().sendEndingMessage(message, nicksExcluded);
     }
 }

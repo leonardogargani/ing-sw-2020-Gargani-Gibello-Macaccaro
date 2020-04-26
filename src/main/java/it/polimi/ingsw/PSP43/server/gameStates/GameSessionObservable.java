@@ -6,6 +6,7 @@ import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.ClientListener;
 import it.polimi.ingsw.PSP43.server.model.Player;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.ServerMessage;
 
@@ -26,7 +27,7 @@ public class GameSessionObservable {
         this.listenersHashMap = new HashMap<>();
     }
 
-    public synchronized int registerToTheGame(RegistrationMessage message, ClientListener player) throws IOException, ClassNotFoundException {
+    public synchronized int registerToTheGame(RegistrationMessage message, ClientListener player) throws IOException, ClassNotFoundException, WinnerCaughtException {
         if (getListenersHashMap().size() != maxNumPlayers) {
             listenersHashMap.put(message.getNick(), player);
             currentState.executeState(message);
@@ -44,12 +45,20 @@ public class GameSessionObservable {
         ArrayList<String> listExcluded = new ArrayList<>();
         listExcluded.add(nicknameLeft);
         sendBroadCast(endGameMessage, listExcluded);
+        listenersHashMap.get(nicknameLeft).removeGameSession(this.idGame);
         return true;
     }
 
     public void eliminatePlayer(Player playerEliminated) {
         // TODO : send a message to the player eliminated
         listenersHashMap.remove(playerEliminated.getNickname());
+    }
+
+    public void sendMessage(ServerMessage genericMessage, String addressee) throws IOException {
+        for (String s : getListenersHashMap().keySet()) {
+            if (addressee.equals(s))
+                getListenersHashMap().get(s).sendMessage(genericMessage);
+        }
     }
 
     public void sendBroadCast(ServerMessage message) throws IOException {
@@ -73,6 +82,17 @@ public class GameSessionObservable {
             return true;
         }
         else return false;
+    }
+
+    public void sendEndingMessage(EndGameMessage message, ArrayList<String> nicksExcluded) throws IOException {
+        EndGameMessage messageForTheWinner = new EndGameMessage("Congratulations! You have won the game!");
+        for (String s : listenersHashMap.keySet()) {
+            if (!nicksExcluded.contains(s)) {
+                listenersHashMap.get(s).sendMessage(message);
+            }
+        }
+        listenersHashMap.get(nicksExcluded.get(0)).sendMessage(messageForTheWinner);
+        listenersHashMap.get(nicksExcluded.get(0)).removeGameSession(this.idGame);
     }
 
     /**

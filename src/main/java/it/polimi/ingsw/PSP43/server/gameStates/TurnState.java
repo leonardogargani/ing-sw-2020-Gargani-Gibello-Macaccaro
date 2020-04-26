@@ -17,7 +17,7 @@ public abstract class TurnState {
         return gameSession;
     }
 
-    public void initState() throws IOException, ClassNotFoundException {
+    public void initState() throws IOException, ClassNotFoundException, WinnerCaughtException {
         try {
             executeState();
         } catch (WinnerCaughtException | IOException | ClassNotFoundException e) {
@@ -25,7 +25,7 @@ public abstract class TurnState {
         }
     }
 
-    public void executeState(ClientMessage message) throws IOException, ClassNotFoundException {
+    public void executeState(ClientMessage message) throws IOException, ClassNotFoundException, WinnerCaughtException {
         findNextState();
     }
 
@@ -33,7 +33,7 @@ public abstract class TurnState {
         findNextState();
     }
 
-    public void findNextState() throws IOException, ClassNotFoundException {
+    public void findNextState() throws IOException, ClassNotFoundException, WinnerCaughtException {
         gameSession.transitToNextState();
     }
 }

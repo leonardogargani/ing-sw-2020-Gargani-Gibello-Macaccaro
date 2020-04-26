@@ -6,14 +6,11 @@ import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.IOException;
 
 /**
  * This decorator is used to give to the player the opportunity to win if his worker moves down two or more levels in a move
  */
-@XmlAccessorType(XmlAccessType.FIELD)
 public class WinConditionDecorator extends PowerGodDecorator {
 
     public WinConditionDecorator() {
