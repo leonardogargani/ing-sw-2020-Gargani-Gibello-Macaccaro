@@ -4,6 +4,8 @@ import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.client.GraphicHandler;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Worker;
+import it.polimi.ingsw.PSP43.server.networkMessages.CellMessage;
+import it.polimi.ingsw.PSP43.server.networkMessages.WorkerMessage;
 
 
 public class CliGraphicHandler extends GraphicHandler {
@@ -23,12 +25,13 @@ public class CliGraphicHandler extends GraphicHandler {
 
 
     /**
-     * This method updates the cli changing the color of a cell, based
+     * This method updates the cli or the gui changing the color of a cell, based
      * on the color of the worker that has been moved.
-     * @param worker worker that has been moved
+     * @param workerMessage message containing the worker that has been moved
      */
     @Override
-    public void updateBoardChange(Worker worker) {
+    public void updateBoardChange(WorkerMessage workerMessage) {
+        Worker worker = workerMessage.getWorker();
         CliCell newCell = board.getCell(worker.getCurrentPosition());
 
         // I need to "free" the previous position only if the worker was already on the board:
@@ -45,10 +48,11 @@ public class CliGraphicHandler extends GraphicHandler {
     /**
      * This method updates the cli board changing the symbol of a cell, based
      * on the fact that a worker can build on a cell.
-     * @param serverCell cell that has changed (a worker has built on it)
+     * @param cellMessage message containing the cell that has changed (a worker has built on it)
      */
     @Override
-    public void updateBoardChange(Cell serverCell) {
+    public void updateBoardChange(CellMessage cellMessage) {
+        Cell serverCell = cellMessage.getCell();
         CliCell cell = board.getCell(serverCell.getCoord());
         cell.setSymbol(CliCell.SYMBOLS[serverCell.getHeight()]);
     }
@@ -59,7 +63,10 @@ public class CliGraphicHandler extends GraphicHandler {
      */
     @Override
     public void render() {
+        topMenu.show();
+        middleMenu.show();
         board.show();
+        bottomMenu.show();
     }
 
 

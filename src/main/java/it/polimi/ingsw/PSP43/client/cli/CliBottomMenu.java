@@ -3,6 +3,15 @@ package it.polimi.ingsw.PSP43.client.cli;
 
 public class CliBottomMenu {
 
-    // TODO implementation
+    private String content;
+
+
+    /**
+     * Method that prints the content attribute to the cli.
+     */
+    public void show() {
+        System.out.println(content);
+    }
+
 
 }
