@@ -1,10 +1,13 @@
 package it.polimi.ingsw.PSP43.server.model.card.behaviours;
 
+import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
+import it.polimi.ingsw.PSP43.client.networkMessages.ResponseMessage;
 import it.polimi.ingsw.PSP43.server.DataToAction;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
+import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
 
 import java.io.IOException;
@@ -14,10 +17,16 @@ import java.util.HashMap;
 public class DoubleMoveBehaviour extends AbstractGodCard implements MoveBehavior {
     public void handleMove(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException {
         super.move(dataToAction);
-        RequestMessage message = new RequestMessage("Do you want to move another time?");
-        //ResponseMessage response = dataToAction.getGameSession().sen
-        // TODO : ask for the response of the client
-        boolean response  = true;
+        RequestMessage requestMessage = new RequestMessage("Do you want to move another time?");
+        ResponseMessage responseMessage = null;
+        boolean delivered;
+        do {
+            delivered = dataToAction.getGameSession().sendRequest(  requestMessage,
+                                                                    dataToAction.getPlayer().getNickname(),
+                                                                    responseMessage);
+        } while (!delivered);
+
+        boolean response  = responseMessage.isResponse();
         if (response) {
             Worker [] workersToMove = new Worker[1];
             workersToMove[0] = dataToAction.getWorker();
@@ -26,8 +35,13 @@ public class DoubleMoveBehaviour extends AbstractGodCard implements MoveBehavior
                 availablePositions.get(c).removeIf(c1
                         -> c1.getY() == dataToAction.getNewPosition().getY() && c1.getX() == dataToAction.getNewPosition().getX());
             }
-            // TODO : receive the coord from client
-            Coord coordChosen = null;
+            ActionRequest request = new ActionRequest("Choose a cell where to move.", availablePositions);
+            ActionResponse actionResponse = null;
+            do {
+                delivered = dataToAction.getGameSession().sendRequest(request, dataToAction.getPlayer().getNickname(), actionResponse);
+            } while (!delivered);
+
+            Coord coordChosen = actionResponse.getPosition();
             super.move(new DataToAction(dataToAction.getGameSession(), dataToAction.getPlayer(), dataToAction.getWorker(), coordChosen));
         }
     }

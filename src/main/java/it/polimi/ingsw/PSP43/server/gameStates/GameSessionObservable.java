@@ -49,8 +49,9 @@ public class GameSessionObservable {
         return true;
     }
 
-    public void eliminatePlayer(Player playerEliminated) {
-        // TODO : send a message to the player eliminated
+    public void eliminatePlayer(Player playerEliminated) throws IOException {
+        EndGameMessage message = new EndGameMessage("We are sorry but you have lost the game.");
+        listenersHashMap.get(playerEliminated.getNickname()).sendMessage(message);
         listenersHashMap.remove(playerEliminated.getNickname());
     }
 

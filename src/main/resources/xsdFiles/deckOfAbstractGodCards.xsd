@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema targetNamespace="../xsdFiles/deckOfAbstractGodCards.xsd"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="deckOfAbstractGodCards">
+    <xs:complexType>
+        <xs:sequence>
+            <xs:choice>
+                <xs:element name="basicGodCard" type="basicGodCard" minOccurs="0"/>
+                <xs:element name="blockRiseDecorator" type="blockRiseDecorator" minOccurs="0"/>
+                <xs:element name="swapIfPossibleDecorator" type="swapIfPossibleDecorator" minOccurs="0"/>
+                <xs:element name="swapMoveDecorator" type="swapMoveDecorator" minOccurs="0"/>
+                <xs:element name="unconditionedBuildDomeDecorator" type="unconditionedBuildDomeDecorator" minOccurs="0"/>
+                <xs:element name="winConditionDecorator" type="winConditionDecorator" minOccurs="0"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="basicGodCard">
+        <xs:sequence>
+            <xs:element name="godName" type="xs:string"/>
+            <xs:element name="godDescription" type="xs:string"/>
+            <xs:element name="godPower" type="xs:string"/>
+            <xs:element name="moveBehaviour" type="MoveBehaviour" minOccurs="0"/>
+            <xs:element name="buildBlockBehaviour" type="BuildBlockBehaviour" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:complexType name="MoveBehaviour">
+        <xs:choice>
+            <xs:element name="blockOpponentRiseBehaviour"/>
+            <xs:element name="buildBeforeMoveBehaviour"/>
+            <xs:element name="doubleMoveBehaviour"/>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="BuildBlockBehaviour">
+        <xs:choice>
+            <xs:element name="doubleDifferentSpaceBehaviour"/>
+            <xs:element name="doubleSameSpaceBehaviour"/>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="blockRiseDecorator">
+        <xs:choice>
+            <xs:element name="basicGodCard" type="basicGodCard"/>
+            <xs:element name="blockRiseDecorator" type="blockRiseDecorator"/>
+            <xs:element name="swapIfPossibleDecorator" type="swapIfPossibleDecorator"/>
+            <xs:element name="swapMoveDecorator" type="swapMoveDecorator"/>
+            <xs:element name="unconditionedBuildDomeDecorator" type="unconditionedBuildDomeDecorator"/>
+            <xs:element name="winConditionDecorator" type="winConditionDecorator"/>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="swapIfPossibleDecorator">
+        <xs:choice>
+            <xs:element name="basicGodCard" type="basicGodCard"/>
+            <xs:element name="blockRiseDecorator" type="blockRiseDecorator"/>
+            <xs:element name="swapIfPossibleDecorator" type="swapIfPossibleDecorator"/>
+            <xs:element name="swapMoveDecorator" type="swapMoveDecorator"/>
+            <xs:element name="unconditionedBuildDomeDecorator" type="unconditionedBuildDomeDecorator"/>
+            <xs:element name="winConditionDecorator" type="winConditionDecorator"/>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="swapMoveDecorator">
+        <xs:choice>
+            <xs:element name="basicGodCard" type="basicGodCard"/>
+            <xs:element name="blockRiseDecorator" type="blockRiseDecorator"/>
+            <xs:element name="swapIfPossibleDecorator" type="swapIfPossibleDecorator"/>
+            <xs:element name="swapMoveDecorator" type="swapMoveDecorator"/>
+            <xs:element name="unconditionedBuildDomeDecorator" type="unconditionedBuildDomeDecorator"/>
+            <xs:element name="winConditionDecorator" type="winConditionDecorator"/>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="unconditionedBuildDomeDecorator">
+        <xs:choice>
+            <xs:element name="basicGodCard" type="basicGodCard"/>
+            <xs:element name="blockRiseDecorator" type="blockRiseDecorator"/>
+            <xs:element name="swapIfPossibleDecorator" type="swapIfPossibleDecorator"/>
+            <xs:element name="swapMoveDecorator" type="swapMoveDecorator"/>
+            <xs:element name="unconditionedBuildDomeDecorator" type="unconditionedBuildDomeDecorator"/>
+            <xs:element name="winConditionDecorator" type="winConditionDecorator"/>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="winConditionDecorator">
+        <xs:choice>
+            <xs:element name="basicGodCard" type="basicGodCard"/>
+            <xs:element name="blockRiseDecorator" type="blockRiseDecorator"/>
+            <xs:element name="swapIfPossibleDecorator" type="swapIfPossibleDecorator"/>
+            <xs:element name="swapMoveDecorator" type="swapMoveDecorator"/>
+            <xs:element name="unconditionedBuildDomeDecorator" type="unconditionedBuildDomeDecorator"/>
+            <xs:element name="winConditionDecorator" type="winConditionDecorator"/>
+        </xs:choice>
+    </xs:complexType>
+</xs:schema>

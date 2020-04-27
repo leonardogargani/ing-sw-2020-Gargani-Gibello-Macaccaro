@@ -68,7 +68,7 @@ public class GameSession extends GameSessionObservable {
         currentState.initState();
     }
 
-    public void eliminatePlayer(Player playerEliminated) {
+    public void eliminatePlayer(Player playerEliminated) throws IOException {
         cardsHandler.removeCardToPlayer(playerEliminated.getNickname());
         Player playerToRemove = playersHandler.getPlayer(playerEliminated.getNickname());
 
