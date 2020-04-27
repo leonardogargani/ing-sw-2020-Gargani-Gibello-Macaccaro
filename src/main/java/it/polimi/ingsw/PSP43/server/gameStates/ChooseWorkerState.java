@@ -10,6 +10,7 @@ import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
+import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.TextMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.WorkerColorRequest;
 
@@ -33,9 +34,7 @@ public class ChooseWorkerState extends TurnState {
         game.setCurrentPlayer(playersHandler.getPlayer(FIRSTPOSITION));
 
         TextMessage openingMessage = new TextMessage("You are going to choose the color and the initial position for your workers!");
-        ArrayList<String> nickExcluded = new ArrayList<>();
-        nickExcluded.add(game.getCurrentPlayer().getNickname());
-        game.sendBroadCast(openingMessage, nickExcluded);
+        game.sendBroadCast(openingMessage);
 
         executeState();
     }
@@ -92,7 +91,7 @@ public class ChooseWorkerState extends TurnState {
         int indexCurrentState;
         indexCurrentState = game.getTurnMap().indexOf(game.getCurrentState());
         game.setNextState(game.getTurnMap().get(indexCurrentState + 1));
-
+        // TODO : insert PLayersListMessage
         game.transitToNextState();
     }
 }

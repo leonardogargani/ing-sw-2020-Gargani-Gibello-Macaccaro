@@ -41,7 +41,7 @@ public class MoveState extends TurnState {
         }
 
         currentPlayer = game.getCurrentPlayer();
-        TextMessage broadcastMessage = new TextMessage(currentPlayer.getNickname() + " is making his move.");
+        TextMessage broadcastMessage = new TextMessage("It's " + currentPlayer.getNickname() + "'s turn.");
         ArrayList<String> nicksExcluded = new ArrayList<>();
         nicksExcluded.add(currentPlayer.getNickname());
         game.sendBroadCast(broadcastMessage, nicksExcluded);
@@ -76,7 +76,7 @@ public class MoveState extends TurnState {
             workers.add(workersHandler.getWorker(id));
         }
         availablePositions = playerCard.findAvailablePositionsToMove(game.getCellsHandler(), (Worker[]) workers.toArray());
-        PossibleMovesMessage message = new PossibleMovesMessage("Choose a position where to place your worker next.", availablePositions);
+        Acti message = new PossibleMovesMessage("Choose a position where to place your worker next.", availablePositions);
         ActionResponse response = null;
         boolean delivered;
         do {

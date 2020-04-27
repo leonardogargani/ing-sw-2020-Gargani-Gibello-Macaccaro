@@ -9,6 +9,7 @@ import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
+import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.TextMessage;
 
 import java.io.IOException;
@@ -23,7 +24,7 @@ public class BuildBeforeMoveBehaviour extends AbstractGodCard implements MoveBeh
         Cell oldCell = gameSession.getCellsHandler().getCell(worker.getCurrentPosition());
         Cell newCell = gameSession.getCellsHandler().getCell(dataToAction.getNewPosition());
         if (newCell.getHeight() - oldCell.getHeight() == 0) {
-            TextMessage message = new TextMessage("Do you want to build before moving?");
+            RequestMessage message = new RequestMessage("Do you want to build before moving?");
             ClientListener receiver = gameSession.getListenersHashMap().get(player.getNickname());
             // TODO : how do I send the message????
             boolean response = true; // set only not to have an error because I cannot receive for now from the net;

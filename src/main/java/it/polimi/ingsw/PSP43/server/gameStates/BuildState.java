@@ -10,8 +10,8 @@ import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
+import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
-import it.polimi.ingsw.PSP43.server.networkMessages.TextMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,11 +29,6 @@ public class BuildState extends TurnState {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
         game.setCurrentPlayer(playersHandler.getPlayer(FIRSTPOSITION));
-
-        TextMessage broadcastMessage = new TextMessage(game.getCurrentPlayer().getNickname() + " is making his build.");
-        ArrayList<String> nicksExcluded = new ArrayList<>();
-        nicksExcluded.add(game.getCurrentPlayer().getNickname());
-        game.sendBroadCast(broadcastMessage, nicksExcluded);
 
         executeState();
     }
@@ -65,7 +60,7 @@ public class BuildState extends TurnState {
         if (buildBlock) availablePositions = playerCard.findAvailablePositionsToBuildBlock(game.getCellsHandler(), (Worker[]) workersOfPlayer.toArray());
         else availablePositions = playerCard.findAvailablePositionsToBuildDome(game.getCellsHandler(), (Worker[]) workersOfPlayer.toArray());
 
-        PossibleBuildsMessage message = new PossibleBuildsMessage("Choose where to build.", availablePositions);
+        ActionRequest message = new ActionRequest("Choose where to build.", availablePositions);
         ActionResponse actionResponse = null;
         do {
             delivered = game.sendRequest(request, nicknameCurrentPlayer, actionResponse);
