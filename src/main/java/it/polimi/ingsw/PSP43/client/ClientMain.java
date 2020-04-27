@@ -29,13 +29,17 @@ public class ClientMain {
             switch(chosenMode) {
                 case "1":
                     System.out.println("CLI chosen. Starting the game...");
-                    client = new Client(new CliGraphicHandler());
+                    CliGraphicHandler cliGraphicHandler = new CliGraphicHandler();
+                    client = new Client(cliGraphicHandler);
+                    cliGraphicHandler.setClientBG(client.getClientBG());
                     Thread clientThread1 = new Thread(client);
                     clientThread1.start();
                     break;
                 case "2":
                     System.out.println("GUI chosen. Starting the game...");
-                    client = new Client(new GuiGraphicHandler());
+                    GuiGraphicHandler guiGraphicHandler = new GuiGraphicHandler();
+                    client = new Client(guiGraphicHandler);
+                    guiGraphicHandler.setClientBG(client.getClientBG());
                     Thread clientThread2 = new Thread(client);
                     clientThread2.start();
                     break;
@@ -47,7 +51,7 @@ public class ClientMain {
 
 
         // start effectively the client and display welcome message
-        client.start();
+        client.execute();
 
 
     }

@@ -80,8 +80,8 @@ public class ClientBG implements Runnable {
             client.getGraphics().updateMenuChange((ActionRequest)message);
         else if(message instanceof RequestMessage)
             client.getGraphics().updateMenuChange((RequestMessage)message);
-        else if(message instanceof WorkerColorRequest)
-            client.getGraphics().updateMenuChange((WorkerColorRequest)message);
+        else if(message instanceof WorkersColorRequest)
+            client.getGraphics().updateMenuChange((WorkersColorRequest)message);
         else if(message != null)
             client.getGraphics().updateMenuChange(message);
     }

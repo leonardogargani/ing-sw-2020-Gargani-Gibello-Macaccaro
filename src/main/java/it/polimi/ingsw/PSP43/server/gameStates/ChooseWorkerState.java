@@ -2,7 +2,7 @@ package it.polimi.ingsw.PSP43.server.gameStates;
 
 import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
-import it.polimi.ingsw.PSP43.client.networkMessages.WorkerColorResponse;
+import it.polimi.ingsw.PSP43.client.networkMessages.WorkersColorResponse;
 import it.polimi.ingsw.PSP43.server.DataToAction;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
@@ -12,7 +12,7 @@ import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.TextMessage;
-import it.polimi.ingsw.PSP43.server.networkMessages.WorkerColorRequest;
+import it.polimi.ingsw.PSP43.server.networkMessages.WorkersColorRequest;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,8 +51,8 @@ public class ChooseWorkerState extends TurnState {
             currentPlayer = game.getCurrentPlayer();
             String nicknameCurrentPlayer = currentPlayer.getNickname();
             int latestPosition;
-            WorkerColorRequest colorRequest = new WorkerColorRequest("Choose a color of the worker you will own.", availableColors);
-            WorkerColorResponse colorResponse = null;
+            WorkersColorRequest colorRequest = new WorkersColorRequest("Choose a color of the worker you will own.", availableColors);
+            WorkersColorResponse colorResponse = null;
             boolean delivered;
             do {
                 delivered = game.sendRequest(colorRequest, nicknameCurrentPlayer, colorResponse);
