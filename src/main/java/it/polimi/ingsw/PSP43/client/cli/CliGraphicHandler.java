@@ -4,9 +4,10 @@ import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.client.GraphicHandler;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Worker;
-import it.polimi.ingsw.PSP43.server.networkMessages.CellMessage;
-import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
-import it.polimi.ingsw.PSP43.server.networkMessages.WorkerMessage;
+import it.polimi.ingsw.PSP43.server.networkMessages.*;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 
 public class CliGraphicHandler extends GraphicHandler {
@@ -15,6 +16,7 @@ public class CliGraphicHandler extends GraphicHandler {
     private CliTopMenu topMenu = new CliTopMenu();
     private CliMiddleMenu middleMenu = new CliMiddleMenu();
     private CliBottomMenu bottomMenu = new CliBottomMenu();
+
 
     /**
      * This method returns the whole board of the cli.
@@ -60,11 +62,121 @@ public class CliGraphicHandler extends GraphicHandler {
 
 
     /**
+     * This method updates the graphics of the client displaying the message of the players number
+     * request, waiting and sending the response through the ClientBG object.
+     *
+     * @param request message containing the request for the number of the players
+     */
+    @Override
+    public void updateMenuChange(PlayersNumberRequest request) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+    }
+
+
+    /**
+     * This method updates the graphics of the client displaying the message of the initial cards
+     * request, waiting and sending the response through the ClientBG object.
+     *
+     * @param request message containing the request for the cards chosen for this game
+     */
+    @Override
+    public void updateMenuChange(InitialCardsRequest request) {
+
+    }
+
+
+    /**
+     * This method updates the graphics of the client displaying the message of the single card
+     * request, waiting and sending the response through the ClientBG object.
+     *
+     * @param request message containing the request for the card chosen by a player
+     */
+    @Override
+    public void updateMenuChange(CardRequest request) {
+
+    }
+
+
+    /**
+     * This method updates the graphics of the client displaying the message of the workers color
+     * request, waiting and sending the response through the ClientBG object.
+     *
+     * @param request message containing the request for the color of player's workers
+     */
+    @Override
+    public void updateMenuChange(WorkersColorRequest request) {
+
+    }
+
+
+    /**
+     * This method updates the graphics of the client displaying the message of the action
+     * request, waiting and sending the response through the ClientBG object.
+     *
+     * @param request message containing the request for the action a player wants to make
+     */
+    @Override
+    public void updateMenuChange(ActionRequest request) {
+
+    }
+
+
+    /**
+     * This method updates the graphics of the client displaying the message of the generic request
+     * that needs a boolean as a response, waiting and sending the response through the ClientBG object.
+     *
+     * @param request message containing the generic boolean request
+     */
+    @Override
+    public void updateMenuChange(RequestMessage request) {
+
+    }
+
+
+    /**
      * This method updates the cli menu displaying a message that notifies players the game has ended.
      * @param message message containing the sentence to display
      */
     @Override
     public void updateMenuChange(EndGameMessage message) {
+
+    }
+
+
+    /**
+     * This method updates the graphics of the client displaying the message of the request
+     * for a change of the nick, since the chosen one is already in use.
+     *
+     * @param request message that notifies the client that the nick he has just chosen
+     *                is already taken
+     */
+    @Override
+    public void updateMenuChange(ChangeNickRequest request) {
+
+    }
+
+
+    /**
+     * This method updates the graphics of the client displaying the message at the top
+     * of the screen (used to write that it's someone else's turn).
+     *
+     * @param message message to be displayed at the top of the screen
+     */
+    @Override
+    public void updateMenuChange(TextMessage message) {
+
+    }
+
+
+    /**
+     * This method updates the graphics of the client displaying players' nicknames,
+     * the Gods they've chosen and their workers' color.
+     *
+     * @param message message containing workers, their colors and the chosen gods
+     */
+    @Override
+    public void updateMenuChange(PlayersListMessage message) {
 
     }
 

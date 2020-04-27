@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP43.server;
 
 
-public class GraphicObserver {
+public class BoardObserver {
 
 
     /**

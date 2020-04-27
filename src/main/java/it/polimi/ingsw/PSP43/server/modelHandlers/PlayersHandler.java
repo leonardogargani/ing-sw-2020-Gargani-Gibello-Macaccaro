@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP43.server.modelHandlers;
 
-import it.polimi.ingsw.PSP43.server.GraphicObserver;
+import it.polimi.ingsw.PSP43.server.BoardObserver;
 import it.polimi.ingsw.PSP43.server.Observable;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.*;
@@ -15,10 +15,10 @@ import java.util.ArrayList;
  */
 public class PlayersHandler extends Observable {
     private ArrayList<Player> gamePlayers;
-    private GraphicObserver graphicObserver;
+    private BoardObserver boardObserver;
 
     public PlayersHandler(GameSession gameSession) {
-        this.graphicObserver = gameSession.getGraphicObserver();
+        this.boardObserver = gameSession.getBoardObserver();
         this.gamePlayers = new ArrayList<Player>();
     }
 

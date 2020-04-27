@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP43.server.model;
 
-import it.polimi.ingsw.PSP43.server.GraphicObserver;
+import it.polimi.ingsw.PSP43.server.BoardObserver;
 import it.polimi.ingsw.PSP43.server.Observable;
 
 
@@ -15,12 +15,12 @@ public class Cell extends Observable {
     private boolean occupiedByWorker;
     private boolean occupiedByDome;
     private Coord coord;
-    private GraphicObserver graphicObserver;
+    private BoardObserver boardObserver;
 
 
-    public Cell(Coord coord, GraphicObserver observer) {
+    public Cell(Coord coord, BoardObserver observer) {
         this.coord = coord;
-        this.graphicObserver = observer;
+        this.boardObserver = observer;
     }
 
     /**
@@ -38,7 +38,7 @@ public class Cell extends Observable {
      */
     public void setHeight(int height) {
         this.height = height;
-        graphicObserver.notifyBoardChange(this);
+        boardObserver.notifyBoardChange(this);
     }
 
 
@@ -74,8 +74,8 @@ public class Cell extends Observable {
      * @param occupiedByDome boolean representing if the cell is occupied by a dome or not
      */
     public void setOccupiedByDome(boolean occupiedByDome) {
-        graphicObserver.notifyBoardChange(this);
         this.occupiedByDome = occupiedByDome;
+        boardObserver.notifyBoardChange(this);
     }
 
 

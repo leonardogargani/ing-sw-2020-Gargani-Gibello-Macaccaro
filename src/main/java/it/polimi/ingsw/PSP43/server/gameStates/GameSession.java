@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
-import it.polimi.ingsw.PSP43.server.GraphicObserver;
+import it.polimi.ingsw.PSP43.server.BoardObserver;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
@@ -26,7 +26,7 @@ public class GameSession extends GameSessionObservable {
     private WorkersHandler workersHandler;
     private CardsHandler cardsHandler;
 
-    private GraphicObserver graphicObserver;
+    private BoardObserver boardObserver;
 
     /**
      * Not default constructor to inizialize a GameSession
@@ -51,7 +51,7 @@ public class GameSession extends GameSessionObservable {
         this.playersHandler = new PlayersHandler(this);
         this.workersHandler = new WorkersHandler(this);
         this.cardsHandler = new CardsHandler();
-        this.graphicObserver = new GraphicObserver();
+        this.boardObserver = new BoardObserver();
     }
 
     public boolean validateMessage(ClientMessage messageArrived, ClientMessage typeMessageRequested) {
@@ -169,8 +169,8 @@ public class GameSession extends GameSessionObservable {
      * change to a cell or a worker is notified to the client.
      * @return observer of the graphical part of the game
      */
-    public GraphicObserver getGraphicObserver() {
-        return graphicObserver;
+    public BoardObserver getBoardObserver() {
+        return boardObserver;
     }
 
     // TODO : setters/getters that are not listed above if we want to use xml

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP43.server.model;
 
 import it.polimi.ingsw.PSP43.Color;
+import it.polimi.ingsw.PSP43.server.BoardObserver;
 import it.polimi.ingsw.PSP43.server.Observable;
 
 
@@ -16,6 +17,7 @@ public class Worker extends Observable {
     private Coord previousPosition;
     private Color color;
     private boolean latestMoved;
+    private BoardObserver boardObserver;
 
 
     /**
@@ -47,6 +49,7 @@ public class Worker extends Observable {
     public void setCurrentPosition(Coord currentPosition) {
         this.previousPosition = this.currentPosition;
         this.currentPosition = currentPosition;
+        boardObserver.notifyBoardChange(this);
     }
 
 
@@ -76,11 +79,23 @@ public class Worker extends Observable {
         return id;
     }
 
+
+    /**
+     *
+     * @return
+     */
     public boolean isLatestMoved() {
         return latestMoved;
     }
 
+
+    /**
+     *
+     * @param latestMoved
+     */
     public void setLatestMoved(boolean latestMoved) {
         this.latestMoved = latestMoved;
     }
+
+
 }
