@@ -1,13 +1,13 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.ChosenCardResponse;
-import it.polimi.ingsw.PSP43.client.networkMessages.ChosenCardsMessage;
+import it.polimi.ingsw.PSP43.client.networkMessages.ChosenCardsResponse;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
-import it.polimi.ingsw.PSP43.server.networkMessages.CardsMessage;
+import it.polimi.ingsw.PSP43.server.networkMessages.CardRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.TextMessage;
 
 import java.io.IOException;
@@ -34,9 +34,9 @@ public class ChooseCardState extends TurnState {
         game.sendBroadCast(openingMessage, nicksExcluded);
 
         ArrayList<AbstractGodCard> available = game.getCardsHandler().getDeckOfAbstractGodCards();
-        CardsMessage cardsRequest = new CardsMessage("Choose " + playersHandler.getNumOfPlayers() + " cards. You " +
+        CardRequest cardsRequest = new CardRequest("Choose " + playersHandler.getNumOfPlayers() + " cards. You " +
                 "will receive the latest not chosen by other players.", available);
-        ChosenCardsMessage responseCardMessage = null;
+        ChosenCardsResponse responseCardMessage = null;
         boolean delivered;
         do {
             delivered = game.sendRequest(cardsRequest, game.getCurrentPlayer().getNickname(), responseCardMessage);
@@ -60,7 +60,7 @@ public class ChooseCardState extends TurnState {
             Player current = game.getCurrentPlayer();
             nicknameCurrentPlayer = current.getNickname();
 
-            CardsMessage request = new CardsMessage("Choose a card:", cardsAvailable);
+            CardRequest request = new CardRequest("Choose a card:", cardsAvailable);
             ChosenCardResponse response = null;
             boolean delivered;
             do {

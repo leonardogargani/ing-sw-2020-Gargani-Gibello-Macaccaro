@@ -18,6 +18,8 @@ public class ClientMain {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String chosenMode;
 
+
+
         System.out.println("Choose a mode:\n [1] CLI\n [2] GUI");
 
 
@@ -28,10 +30,14 @@ public class ClientMain {
                 case "1":
                     System.out.println("CLI chosen. Starting the game...");
                     client = new Client(new CliGraphicHandler());
+                    Thread clientThread1 = new Thread(client);
+                    clientThread1.start();
                     break;
                 case "2":
                     System.out.println("GUI chosen. Starting the game...");
                     client = new Client(new GuiGraphicHandler());
+                    Thread clientThread2 = new Thread(client);
+                    clientThread2.start();
                     break;
                 default:
                     System.out.println("Choice not valid, try again:");

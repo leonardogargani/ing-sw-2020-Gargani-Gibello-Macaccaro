@@ -1,17 +1,15 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
-import it.polimi.ingsw.PSP43.client.networkMessages.NumberPlayerResponse;
+import it.polimi.ingsw.PSP43.client.networkMessages.PlayersNumberResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
-import it.polimi.ingsw.PSP43.server.ClientListener;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.NicknameAlreadyInUseException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.ChangeNickRequest;
-import it.polimi.ingsw.PSP43.server.networkMessages.NumberPlayerRequest;
+import it.polimi.ingsw.PSP43.server.networkMessages.PlayersNumberRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.TextMessage;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 public class PlayerRegistrationState extends TurnState{
 
@@ -28,9 +26,9 @@ public class PlayerRegistrationState extends TurnState{
             try {
                 registered = playersHandler.createNewPlayer(message.getNick());
                 if (numberOfPlayers == 1) {
-                    NumberPlayerRequest request = new NumberPlayerRequest("Choose between a 2 or 3 game play.");
+                    PlayersNumberRequest request = new PlayersNumberRequest("Choose between a 2 or 3 game play.");
                     // TODO : is it possible to have and empty constructor for messages?
-                    NumberPlayerResponse response = null;
+                    PlayersNumberResponse response = null;
                     boolean delivered;
                     do {
                         delivered = game.sendRequest(request, message.getNick(), response);

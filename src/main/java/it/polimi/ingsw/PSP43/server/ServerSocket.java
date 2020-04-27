@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class ServerSocket {
-    public final static int SOCKET_PORT = 50914;
+    public final static int SOCKET_PORT = 50000;
 
     public static void main(String[] args)
     {

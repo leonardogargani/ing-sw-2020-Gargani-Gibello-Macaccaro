@@ -6,12 +6,12 @@ import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 
 import java.util.HashMap;
 
-public class PlayerList extends TextMessage {
+public class PlayersListMessage extends TextMessage {
     private static final long SerialVersionUID=776776776776776776L;
     private HashMap<Player, AbstractGodCard> players;
     private HashMap<Player, Color> color;
 
-    public PlayerList(String message, HashMap<Player, AbstractGodCard> players,HashMap<Player, Color> color){
+    public PlayersListMessage(String message, HashMap<Player, AbstractGodCard> players, HashMap<Player, Color> color){
         super(message);
         this.players = players;
         this.color = color;

@@ -5,9 +5,12 @@ import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSessionObservable;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.ServerMessage;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -46,13 +49,13 @@ public class ClientListener implements Runnable{
             while (true){
                 if(!lock)
                     receiver(input.readObject());
-            }}catch (IOException | ClassNotFoundException e){
+            }}catch (IOException | ClassNotFoundException | SAXException | ParserConfigurationException | WinnerCaughtException e){
             System.out.println("Invalid message received");
         }
     }
 
 
-    public synchronized void receiver(Object message) throws IOException, ClassNotFoundException {
+    public synchronized void receiver(Object message) throws IOException, ClassNotFoundException, SAXException, ParserConfigurationException, WinnerCaughtException {
 
         if(message instanceof RegistrationMessage)
             handleMessage((RegistrationMessage) message);
@@ -62,7 +65,7 @@ public class ClientListener implements Runnable{
     }
 
 
-    public synchronized void handleMessage(RegistrationMessage message) throws IOException, ClassNotFoundException {
+    public synchronized void handleMessage(RegistrationMessage message) throws IOException, ClassNotFoundException, WinnerCaughtException, ParserConfigurationException, SAXException {
 
         int counter = 0;
 

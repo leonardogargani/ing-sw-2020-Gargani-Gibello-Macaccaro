@@ -1,10 +1,10 @@
 package it.polimi.ingsw.PSP43.client.networkMessages;
 
-public class NumberPlayerResponse extends ClientMessage {
+public class PlayersNumberResponse extends ClientMessage {
     private static final long SerialVersionUID=111112222233333444L;
     private int numberOfPlayer;
 
-    public NumberPlayerResponse(int numberOfPlayer){
+    public PlayersNumberResponse(int numberOfPlayer){
         this.numberOfPlayer=numberOfPlayer;
     }
 

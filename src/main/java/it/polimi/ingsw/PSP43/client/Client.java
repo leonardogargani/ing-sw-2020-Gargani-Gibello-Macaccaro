@@ -2,10 +2,14 @@ package it.polimi.ingsw.PSP43.client;
 
 import it.polimi.ingsw.PSP43.client.cli.Screens;
 
+import java.io.IOException;
+import java.net.Socket;
 
-public class Client {
 
-    private GraphicHandler graphics;
+public class Client implements Runnable{
+private static final String ipServer = "127.0.0.1";
+private static final int serverPort = 50000;
+private GraphicHandler graphics;
 
 
     /**
@@ -15,6 +19,26 @@ public class Client {
      */
     public Client(GraphicHandler graphics) {
         this.graphics = graphics;
+    }
+
+    @Override
+    public void run() {
+        Socket server;
+        try {
+            server = new Socket(ipServer,serverPort);
+        } catch (IOException e) {
+            System.out.println("server unreachable");
+            return;
+        }
+        System.out.println("Connected");
+
+        try {
+            ClientBG clientBG = new ClientBG(server,this);
+            Thread clientBg = new Thread(clientBG);
+            clientBg.start();
+        } catch (IOException e) {
+            System.out.println("Problems opening client background");
+        }
     }
 
 
