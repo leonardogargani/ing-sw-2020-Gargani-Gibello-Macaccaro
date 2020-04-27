@@ -1,15 +1,16 @@
 package it.polimi.ingsw.PSP43.client;
 
 import it.polimi.ingsw.PSP43.client.cli.Screens;
-
 import java.io.IOException;
 import java.net.Socket;
 
 
 public class Client implements Runnable{
-private static final String ipServer = "127.0.0.1";
-private static final int serverPort = 50000;
-private GraphicHandler graphics;
+
+    private static final String SERVER_IP = "127.0.0.1";
+    private static final int SERVER_PORT = 50000;
+    private GraphicHandler graphics;
+    private ClientBG clientBG;
 
 
     /**
@@ -21,11 +22,21 @@ private GraphicHandler graphics;
         this.graphics = graphics;
     }
 
+
+    /**
+     * This method returns the clientBG attribute, which is used to send messages to the server.
+     * @return clientBG attribute, which is used to send messages to the server.
+     */
+    public ClientBG getClientBG() {
+        return clientBG;
+    }
+
+
     @Override
     public void run() {
         Socket server;
         try {
-            server = new Socket(ipServer,serverPort);
+            server = new Socket(SERVER_IP, SERVER_PORT);
         } catch (IOException e) {
             System.out.println("server unreachable");
             return;
@@ -33,7 +44,7 @@ private GraphicHandler graphics;
         System.out.println("Connected");
 
         try {
-            ClientBG clientBG = new ClientBG(server,this);
+            clientBG = new ClientBG(server,this);
             Thread clientBg = new Thread(clientBG);
             clientBg.start();
         } catch (IOException e) {
@@ -52,9 +63,9 @@ private GraphicHandler graphics;
 
 
     /**
-     * This method takes the client to the welcome page. right before the nickname request.
+     * This method takes the client to the welcome page, right before the nickname request.
      */
-    public void start() {
+    public void execute() {
         System.out.println(Screens.WELCOME);
     }
 
