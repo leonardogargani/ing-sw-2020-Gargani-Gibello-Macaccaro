@@ -8,7 +8,7 @@ import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.CardRequest;
-import it.polimi.ingsw.PSP43.server.networkMessages.TextMessage;
+import it.polimi.ingsw.PSP43.server.networkMessages.StartGameMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class ChooseCardState extends TurnState {
         game.setCurrentPlayer(playersHandler.getPlayer(FIRSTPOSITION));
         Player current = game.getCurrentPlayer();
 
-        TextMessage openingMessage = new TextMessage("You are going to choose a God Card to use during the game in some minutes!");
+        StartGameMessage openingMessage = new StartGameMessage("You are going to choose a God Card to use during the game in some minutes!");
         ArrayList<String> nicksExcluded = new ArrayList<>();
         nicksExcluded.add(current.getNickname());
         game.sendBroadCast(openingMessage, nicksExcluded);

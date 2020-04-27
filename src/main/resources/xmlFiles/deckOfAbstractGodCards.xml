@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<deckOfAbstractGodCards xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsdFiles/deckOfAbstractGodCards.xsd">
+    <basicGodCard>
+        <godName>Apollo</godName>
+        <godDescription>God Of Music</godDescription>
+        <godPower>"Your Move: Your Worker may move into an opponent Worker’s space by forcing their Worker to the space yours just vacated."</godPower>
+    </basicGodCard>
+    <basicGodCard>
+        <godName>Prometheus</godName>
+        <godDescription>Titan Benefactor of Mankind</godDescription>
+        <godPower>"Your Turn: If your Worker does not move up, it may build both before and after moving."</godPower>
+        <moveBehaviour>
+            <buildBeforeMoveBehaviour/>
+        </moveBehaviour>
+    </basicGodCard>
+    <basicGodCard>
+        <godName>Artemis</godName>
+        <godDescription>Goddes of the Hunt</godDescription>
+        <godPower>"Your Move: Your Worker may move one additional time, but not back to its initial space."</godPower>
+        <moveBehaviour>
+            <doubleMoveBehaviour/>
+        </moveBehaviour>
+    </basicGodCard>
+    <basicGodCard>
+        <godName>Athena</godName>
+        <godDescription>Goddes of Wisdom</godDescription>
+        <godPower>"Opponent’s Turn: If one of your Workers moved up on your last turn, opponent Workers cannot move up this turn."</godPower>
+        <moveBehaviour>
+            <blockOpponentRiseBehaviour/>
+        </moveBehaviour>
+    </basicGodCard>
+    <basicGodCard>
+        <godName>Hephaestus</godName>
+        <godDescription>God of Blacksmiths</godDescription>
+        <godPower>"Your Build: Your Worker may build one additional block (not dome) on top of your first block."</godPower>
+        <buildBlockBehaviour>
+            <doubleSameSpaceBehaviour/>
+        </buildBlockBehaviour>
+    </basicGodCard>
+    <basicGodCard>
+        <godName>Demeter</godName>
+        <godDescription>Goddess of the Harvest</godDescription>
+        <godPower>"Your Build: Your Worker may build one additional time, but not on the same space."</godPower>
+        <buildBlockBehaviour>
+            <doubleDifferentSpaceBehaviour/>
+        </buildBlockBehaviour>
+    </basicGodCard>
+    <unconditionedBuildDomeDecorator>
+        <basicGodCard>
+            <godName>Atlas</godName>
+            <godDescription>Titan Shouldering the Heavens</godDescription>
+            <godPower>"Your Build: Your Worker may build a dome at any level. "</godPower>
+        </basicGodCard>
+    </unconditionedBuildDomeDecorator>
+    <swapIfPossibleDecorator>
+        <swapMoveDecorator>
+            <basicGodCard>
+                <godName>Minotaur</godName>
+                <godDescription>Bull-headed Monster</godDescription>
+                <godPower>"Your Move: Your Worker may move into an opponent Worker’s space, if their Worker can be forced one space straight backwards to an unoccupied space at any level."</godPower>
+            </basicGodCard>
+        </swapMoveDecorator>
+    </swapIfPossibleDecorator>
+    <winConditionDecorator>
+        <basicGodCard>
+            <godName>Pan</godName>
+            <godDescription>God of the Wild</godDescription>
+            <godPower>"Win Condition: You also win if your Worker moves down two or more levels."</godPower>
+        </basicGodCard>
+    </winConditionDecorator>
+</deckOfAbstractGodCards>

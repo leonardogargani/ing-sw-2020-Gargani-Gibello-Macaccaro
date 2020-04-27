@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP43.server.model.card.decorators;
 
-import it.polimi.ingsw.PSP43.server.ClientListener;
+import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
 import it.polimi.ingsw.PSP43.server.DataToAction;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Cell;
@@ -10,6 +10,7 @@ import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
+import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,15 +35,20 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
             Coord currentWorkerPosition = dataToAction.getWorker().getCurrentPosition();
             CellsHandler cellsHandler = gameSession.getCellsHandler();
             WorkersHandler workersHandler = gameSession.getWorkersHandler();
-            ArrayList<Cell> availablePositionsToForce = directionAvailablePositions(cellsHandler, currentWorkerPosition, dataToAction.getNewPosition());
-
+            HashMap<Coord, ArrayList<Coord>> availablePositionsToForce = new HashMap<>();
+            availablePositionsToForce.put(new Coord(0, 0),
+                    directionAvailableCoords(cellsHandler, currentWorkerPosition, dataToAction.getNewPosition()));
             Worker playerWorker = dataToAction.getWorker();
             Worker opponentWorker = workersHandler.getWorker(dataToAction.getNewPosition());
-            ClientListener receiver = gameSession.getListenersHashMap().get(dataToAction.getPlayer().getNickname());
 
-            // TODO : coordChosen will be initialised with the cell chosen by the player
-            Coord coordChosen = new Coord(0, 0);
-            // TODO : send all the possible positions to the player
+            ActionRequest request = new ActionRequest("Choose a position where to force your opponent.", availablePositionsToForce);
+            ActionResponse response = null;
+            boolean delivered;
+            do {
+                delivered = gameSession.sendRequest(request, dataToAction.getPlayer().getNickname(), response);
+            } while (!delivered);
+
+            Coord coordChosen = response.getPosition();
 
             Cell oldCell = cellsHandler.getCell(playerWorker.getCurrentPosition());
             oldCell.setOccupiedByWorker(false);
@@ -62,7 +68,7 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
         for (Coord actualCell : availablePositions.keySet()) {
             for (Coord cellToMove : availablePositions.get(actualCell)) {
                 if (handler.getCell(cellToMove).getOccupiedByWorker()) {
-                    ArrayList<Cell> availablePositionsOnDirection = directionAvailablePositions(handler, actualCell, cellToMove);
+                    ArrayList<Cell> availablePositionsOnDirection = directionAvailableCells(handler, actualCell, cellToMove);
                     if (availablePositionsOnDirection.size() == 0) availablePositions.get(actualCell).remove(cellToMove);
                 }
             }
@@ -70,7 +76,7 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
         return availablePositions;
     }
 
-    private ArrayList<Cell> directionAvailablePositions (CellsHandler handler, Coord oldPosition, Coord newPosition) {
+    private ArrayList<Cell> directionAvailableCells(CellsHandler handler, Coord oldPosition, Coord newPosition) {
         CellsHandler.AbstractIterator iterator = handler.directionIterator(oldPosition, newPosition);
         ArrayList<Cell> availablePositionsOnDirection = new ArrayList<>();
         Cell cellToCopy;
@@ -78,6 +84,18 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
         while ((cellToCopy = iterator.next()) != null) {
             if (cellToCopy.getHeight() == cellOfOpponent.getHeight())
                 availablePositionsOnDirection.add(cellToCopy);
+        }
+        return availablePositionsOnDirection;
+    }
+
+    private ArrayList<Coord> directionAvailableCoords(CellsHandler handler, Coord oldPosition, Coord newPosition) {
+        CellsHandler.AbstractIterator iterator = handler.directionIterator(oldPosition, newPosition);
+        ArrayList<Coord> availablePositionsOnDirection = new ArrayList<>();
+        Cell cellToCopy;
+        Cell cellOfOpponent = handler.getCell(newPosition);
+        while ((cellToCopy = iterator.next()) != null) {
+            if (cellToCopy.getHeight() == cellOfOpponent.getHeight())
+                availablePositionsOnDirection.add(cellToCopy.getCoord());
         }
         return availablePositionsOnDirection;
     }

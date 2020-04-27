@@ -89,7 +89,7 @@ public abstract class AbstractGodCard {
         workerToMove.setCurrentPosition(newPosition);
     }
 
-    public void buildBlock(DataToAction dataToAction) {
+    public void buildBlock(DataToAction dataToAction) throws IOException, ClassNotFoundException {
         CellsHandler handler = dataToAction.getGameSession().getCellsHandler();
         Cell newCell = handler.getCell(dataToAction.getNewPosition());
         newCell.setHeight(newCell.getHeight()+1);

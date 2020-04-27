@@ -7,12 +7,11 @@ import it.polimi.ingsw.PSP43.server.DataToAction;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
+import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
-import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
-import it.polimi.ingsw.PSP43.server.networkMessages.TextMessage;
-import it.polimi.ingsw.PSP43.server.networkMessages.WorkersColorRequest;
+import it.polimi.ingsw.PSP43.server.networkMessages.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,11 +20,15 @@ import java.util.HashMap;
 public class ChooseWorkerState extends TurnState {
     private static final int FIRSTPOSITION = 0;
     private ArrayList<Color> availableColors;
+    private HashMap<Player, Color> colorsChosen;
 
     public ChooseWorkerState(GameSession gameSession) {
         super(gameSession);
         availableColors = new ArrayList<>();
-        // TODO : why is the color constructor private?
+        availableColors.add(Color.ANSI_RED);
+        availableColors.add(Color.ANSI_BLUE);
+        availableColors.add(Color.ANSI_GREEN);
+        colorsChosen = new HashMap<>();
     }
 
     public void initState() throws IOException, ClassNotFoundException, WinnerCaughtException {
@@ -33,7 +36,7 @@ public class ChooseWorkerState extends TurnState {
         PlayersHandler playersHandler = game.getPlayersHandler();
         game.setCurrentPlayer(playersHandler.getPlayer(FIRSTPOSITION));
 
-        TextMessage openingMessage = new TextMessage("You are going to choose the color and the initial position for your workers!");
+        StartGameMessage openingMessage = new StartGameMessage("You are going to choose the color and the initial position for your workers!");
         game.sendBroadCast(openingMessage);
 
         executeState();
@@ -43,7 +46,6 @@ public class ChooseWorkerState extends TurnState {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
         WorkersHandler workersHandler = game.getWorkersHandler();
-        Worker[] workersArray = (Worker[]) workersHandler.getWorkers().toArray();
         String latestPlayer;
         Player currentPlayer;
 
@@ -59,16 +61,21 @@ public class ChooseWorkerState extends TurnState {
             } while (!delivered);
 
             int[] workersIds = new int[2];
+            for (int i=0; i<2; i++) {
+                workersIds[i] = workersHandler.addNewWorker(colorResponse.getColor());
+            }
+            availableColors.remove(colorResponse.getColor());
+            colorsChosen.put(currentPlayer, colorResponse.getColor());
 
             HashMap<Coord, ArrayList<Coord>> hashAvailablePositions = null;
-            PossibleMovesMessage placementRequest = null;
+            ActionRequest placementRequest = null;
             ActionResponse response;
 
             for (int i = 0; i<workersIds.length; i++) {
                 ArrayList<Coord> availablePositions = game.getCellsHandler().findAllCellsFree();
                 hashAvailablePositions = new HashMap<>();
                 hashAvailablePositions.put(new Coord(0, 0), availablePositions);
-                placementRequest = new PossibleMovesMessage("Choose where to place your worker " + i + " .",
+                placementRequest = new ActionRequest("Choose where to place your worker " + i + " .",
                         hashAvailablePositions);
                 response = null;
                 do {
@@ -91,7 +98,11 @@ public class ChooseWorkerState extends TurnState {
         int indexCurrentState;
         indexCurrentState = game.getTurnMap().indexOf(game.getCurrentState());
         game.setNextState(game.getTurnMap().get(indexCurrentState + 1));
-        // TODO : insert PLayersListMessage
+        HashMap<Player, AbstractGodCard> cardsChosen = new HashMap<>();
+        for (String s : game.getCardsHandler().getMapOwnerCard().keySet()) {
+            cardsChosen.put(game.getPlayersHandler().getPlayer(s), game.getPlayersHandler().getPlayer(s).getAbstractGodCard());
+        }
+        PlayersListMessage listOfPlayers = new PlayersListMessage(null, cardsChosen, colorsChosen);
         game.transitToNextState();
     }
 }

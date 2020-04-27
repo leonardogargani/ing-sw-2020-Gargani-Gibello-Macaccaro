@@ -9,6 +9,7 @@ import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
+import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.TextMessage;
 
 import java.io.IOException;
@@ -76,7 +77,7 @@ public class MoveState extends TurnState {
             workers.add(workersHandler.getWorker(id));
         }
         availablePositions = playerCard.findAvailablePositionsToMove(game.getCellsHandler(), (Worker[]) workers.toArray());
-        Acti message = new PossibleMovesMessage("Choose a position where to place your worker next.", availablePositions);
+        ActionRequest message = new ActionRequest("Choose a position where to place your worker next.", availablePositions);
         ActionResponse response = null;
         boolean delivered;
         do {

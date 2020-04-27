@@ -36,7 +36,7 @@ public abstract class PowerGodDecorator extends AbstractGodCard {
         godComponent.move(dataToAction);
     }
 
-    public void buildBlock(DataToAction dataToAction) {
+    public void buildBlock(DataToAction dataToAction) throws IOException, ClassNotFoundException {
         godComponent.buildBlock(dataToAction);
     }
 

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP43.server.model.card.behaviours;
 
-import it.polimi.ingsw.PSP43.server.ClientListener;
+import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
+import it.polimi.ingsw.PSP43.client.networkMessages.ResponseMessage;
 import it.polimi.ingsw.PSP43.server.DataToAction;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Cell;
@@ -9,8 +10,8 @@ import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
+import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
-import it.polimi.ingsw.PSP43.server.networkMessages.TextMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,9 +26,13 @@ public class BuildBeforeMoveBehaviour extends AbstractGodCard implements MoveBeh
         Cell newCell = gameSession.getCellsHandler().getCell(dataToAction.getNewPosition());
         if (newCell.getHeight() - oldCell.getHeight() == 0) {
             RequestMessage message = new RequestMessage("Do you want to build before moving?");
-            ClientListener receiver = gameSession.getListenersHashMap().get(player.getNickname());
-            // TODO : how do I send the message????
-            boolean response = true; // set only not to have an error because I cannot receive for now from the net;
+            ResponseMessage responseMessage = null;
+            boolean delivered;
+            do {
+                delivered = gameSession.sendRequest(message, player.getNickname(), responseMessage);
+            } while (!delivered);
+
+            boolean response = responseMessage.isResponse();
             if (response) {
                 Worker[] workers = new Worker[1];
                 workers[0] = worker;
@@ -35,9 +40,15 @@ public class BuildBeforeMoveBehaviour extends AbstractGodCard implements MoveBeh
                 for (Coord c : availablePositions.keySet()) {
                     availablePositions.get(c).removeIf(c1 -> c1.getY() == dataToAction.getNewPosition().getY() && c1.getX() == dataToAction.getNewPosition().getX());
                 }
-                // TODO : send the available positions to build and save it into coordToBuild
-                Coord coordToBuild = null;
+                ActionRequest request = new ActionRequest("Choose a cell where to build.", availablePositions);
+                ActionResponse actionResponse = null;
+                do {
+                    delivered = gameSession.sendRequest(request, player.getNickname(), actionResponse);
+                } while (!delivered);
+
+                Coord coordToBuild = actionResponse.getPosition();
                 DataToAction dataBuild = new DataToAction(gameSession, player, worker, coordToBuild);
+                super.buildBlock(dataBuild);
             }
         }
         else super.move(dataToAction);

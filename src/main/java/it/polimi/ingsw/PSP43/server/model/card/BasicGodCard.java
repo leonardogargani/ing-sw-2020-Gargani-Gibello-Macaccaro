@@ -102,7 +102,7 @@ public class BasicGodCard extends AbstractGodCard {
      *
      * @param dataToAction
      */
-    public void buildBlock(DataToAction dataToAction) {
+    public void buildBlock(DataToAction dataToAction) throws IOException, ClassNotFoundException {
         if (buildBlockBehaviour == null) {
             super.buildBlock(dataToAction);
         }
