@@ -14,4 +14,13 @@ public class CliBottomMenu {
     }
 
 
+    /**
+     * Method that sets the content of the menu which will be displayed at the bottom of the screen.
+     * @param content simple statement to display
+     */
+    public void setContent(String content) {
+        this.content = content;
+    }
+    
+
 }

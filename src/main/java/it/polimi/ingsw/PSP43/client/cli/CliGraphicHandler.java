@@ -5,6 +5,7 @@ import it.polimi.ingsw.PSP43.client.GraphicHandler;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.networkMessages.CellMessage;
+import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.WorkerMessage;
 
 
@@ -59,10 +60,21 @@ public class CliGraphicHandler extends GraphicHandler {
 
 
     /**
+     * This method updates the cli menu displaying a message that notifies players the game has ended.
+     * @param message message containing the sentence to display
+     */
+    @Override
+    public void updateMenuChange(EndGameMessage message) {
+
+    }
+
+
+    /**
      * This method renders all the graphic aspects of the cli.
      */
     @Override
     public void render() {
+        // the cli is made of these four graphical components, printed to the screen in the right order
         topMenu.show();
         middleMenu.show();
         board.show();
