@@ -2,11 +2,9 @@ package it.polimi.ingsw.PSP43.client.cli;
 
 import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.client.GraphicHandler;
-import it.polimi.ingsw.PSP43.client.networkMessages.ChosenCardResponse;
-import it.polimi.ingsw.PSP43.client.networkMessages.ChosenCardsResponse;
-import it.polimi.ingsw.PSP43.client.networkMessages.PlayersNumberResponse;
-import it.polimi.ingsw.PSP43.client.networkMessages.WorkersColorResponse;
+import it.polimi.ingsw.PSP43.client.networkMessages.*;
 import it.polimi.ingsw.PSP43.server.model.Cell;
+import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
@@ -15,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class CliGraphicHandler extends GraphicHandler {
@@ -163,7 +162,7 @@ public class CliGraphicHandler extends GraphicHandler {
 
             for (AbstractGodCard card : availableCards) {
                 // the name of every God is preceded by its index in the ArrayList
-                System.out.printf(" %d - ", availableCards.indexOf(card));
+                System.out.printf(" [%d] - ", availableCards.indexOf(card));
                 card.print();
             }
 
@@ -201,7 +200,7 @@ public class CliGraphicHandler extends GraphicHandler {
 
             for (Color color : availableColors) {
                 // the name of every color is preceded by its index in the ArrayList
-                System.out.printf(" %d - ", availableColors.indexOf(color));
+                System.out.printf(" [%d] - ", availableColors.indexOf(color));
                Color.printName(color);
             }
 
@@ -231,6 +230,11 @@ public class CliGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(ActionRequest request) {
+        // first method that needs to render() all the graphic side (menus + board)
+
+        HashMap<Coord,ArrayList<Coord>> availableCells = request.getCellsAvailable();
+
+        // TODO implementation
 
     }
 
@@ -242,6 +246,39 @@ public class CliGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(RequestMessage request) {
+        // TODO implementation
+
+        String message = request.getMessage();
+        bottomMenu.setContent(request.getMessage());
+        this.render();
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+            int intChoice;
+            boolean booleanChoice = false;
+
+            while (true) {
+                System.out.println(" [0] YES \n [1] NO ");
+                intChoice = Integer.parseInt(reader.readLine());
+                if (intChoice == 0 || intChoice == 1) {
+                    break;
+                }
+                System.out.println("Choice not valid, choose again");
+            }
+
+            switch (intChoice) {
+                case 0:
+                    booleanChoice = true;
+                    break;
+                case 1:
+                    booleanChoice = false;
+                    break;
+            }
+
+            ResponseMessage response = new ResponseMessage(booleanChoice);
+            super.getClientBG().sendMessage(response);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -252,6 +289,7 @@ public class CliGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(EndGameMessage message) {
+        // TODO implementation
 
     }
 
@@ -264,6 +302,7 @@ public class CliGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(ChangeNickRequest request) {
+        // TODO implementation
 
     }
 
@@ -275,6 +314,7 @@ public class CliGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(TextMessage message) {
+        // TODO implementation
 
     }
 
@@ -286,6 +326,7 @@ public class CliGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(PlayersListMessage message) {
+        // TODO implementation
 
     }
 
