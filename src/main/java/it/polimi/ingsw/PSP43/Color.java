@@ -1,6 +1,10 @@
 package it.polimi.ingsw.PSP43;
 
 
+import it.polimi.ingsw.PSP43.client.Client;
+import it.polimi.ingsw.PSP43.client.cli.CliGraphicHandler;
+import it.polimi.ingsw.PSP43.client.gui.GuiGraphicHandler;
+
 public enum Color {
 
     ANSI_WHITE("\u001B[37m"),
@@ -34,5 +38,28 @@ public enum Color {
     {
         return escape;
     }
+
+
+    /**
+     * This method prints the name of a color given its ansi code.
+     * @param ansiCode ansi code of the color I want its name
+     */
+    public static void printName(Color ansiCode) {
+        switch(ansiCode) {
+            case ANSI_BLUE:
+                System.out.println("BLUE");
+                break;
+            case ANSI_RED:
+                System.out.println("RED");
+                break;
+            case ANSI_GREEN:
+                System.out.println("GREEN");
+                break;
+            default:
+                System.out.println("This color doesn't exist");
+                break;
+        }
+    }
+
 
 }
