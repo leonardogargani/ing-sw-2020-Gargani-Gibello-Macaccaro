@@ -21,6 +21,7 @@ public class PlayersHandlerTest {
     /**
      * This method initialises a set of players taking their nicknames from a csv file and the cards' data they own
      */
+    /*
     @Before
     public void setUp() throws Exception {
         handlerTest = new PlayersHandler();
@@ -87,4 +88,6 @@ public class PlayersHandlerTest {
             equals = true;
         assertTrue(equals);
     }
+
+     */
 }

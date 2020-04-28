@@ -16,6 +16,7 @@ import static org.junit.Assert.*;
 
 public class WorkersHandlerTest {
 
+    /*
     WorkersHandler test;
     GameSession gameSession;
 
@@ -64,5 +65,7 @@ public class WorkersHandlerTest {
         // TODO find a way to compare elements of two ArrayList
         assertEquals(correctArrayList.size(), test.getWorkers().size());
     }
+
+     */
 
 }

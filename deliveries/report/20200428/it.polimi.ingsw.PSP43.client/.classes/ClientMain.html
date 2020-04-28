@@ -1,0 +1,144 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ClientMain</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.client</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ClientMain (it.polimi.ingsw.PSP43.client)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ClientMain</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 22)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.client;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.cli.CliGraphicHandler;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.gui.GuiGraphicHandler;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;import java.io.BufferedReader;
+<i>7</i>&nbsp;import java.io.IOException;
+<i>8</i>&nbsp;import java.io.InputStreamReader;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;
+<b class="nc"><i>11</i>&nbsp;public class ClientMain {</b>
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;    private static Client client;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;    public static void main(String[] args) throws IOException {
+<i>17</i>&nbsp;
+<b class="nc"><i>18</i>&nbsp;        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));</b>
+<i>19</i>&nbsp;        String chosenMode;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;
+<b class="nc"><i>23</i>&nbsp;        System.out.println(&quot;Choose a mode:\n [1] CLI\n [2] GUI&quot;);</b>
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;        // GUI/CLI decision is taken through the cli for now
+<i>27</i>&nbsp;        do {
+<b class="nc"><i>28</i>&nbsp;            chosenMode = reader.readLine();</b>
+<b class="nc"><i>29</i>&nbsp;            switch(chosenMode) {</b>
+<i>30</i>&nbsp;                case &quot;1&quot;:
+<b class="nc"><i>31</i>&nbsp;                    System.out.println(&quot;CLI chosen. Starting the game...&quot;);</b>
+<b class="nc"><i>32</i>&nbsp;                    CliGraphicHandler cliGraphicHandler = new CliGraphicHandler();</b>
+<b class="nc"><i>33</i>&nbsp;                    client = new Client(cliGraphicHandler);</b>
+<b class="nc"><i>34</i>&nbsp;                    cliGraphicHandler.setClientBG(client.getClientBG());</b>
+<b class="nc"><i>35</i>&nbsp;                    Thread clientThread1 = new Thread(client);</b>
+<b class="nc"><i>36</i>&nbsp;                    clientThread1.start();</b>
+<b class="nc"><i>37</i>&nbsp;                    break;</b>
+<i>38</i>&nbsp;                case &quot;2&quot;:
+<b class="nc"><i>39</i>&nbsp;                    System.out.println(&quot;GUI chosen. Starting the game...&quot;);</b>
+<b class="nc"><i>40</i>&nbsp;                    GuiGraphicHandler guiGraphicHandler = new GuiGraphicHandler();</b>
+<b class="nc"><i>41</i>&nbsp;                    client = new Client(guiGraphicHandler);</b>
+<b class="nc"><i>42</i>&nbsp;                    guiGraphicHandler.setClientBG(client.getClientBG());</b>
+<b class="nc"><i>43</i>&nbsp;                    Thread clientThread2 = new Thread(client);</b>
+<b class="nc"><i>44</i>&nbsp;                    clientThread2.start();</b>
+<b class="nc"><i>45</i>&nbsp;                    break;</b>
+<i>46</i>&nbsp;                default:
+<b class="nc"><i>47</i>&nbsp;                    System.out.println(&quot;Choice not valid, try again:&quot;);</b>
+<i>48</i>&nbsp;                    break;
+<i>49</i>&nbsp;            }
+<b class="nc"><i>50</i>&nbsp;        } while(!chosenMode.equals(&quot;1&quot;) &amp;&amp; !chosenMode.equals(&quot;2&quot;));</b>
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;        // start effectively the client and display welcome message
+<b class="nc"><i>54</i>&nbsp;        client.execute();</b>
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    }
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-28 13:32</div>
+</div>
+</body>
+</html>

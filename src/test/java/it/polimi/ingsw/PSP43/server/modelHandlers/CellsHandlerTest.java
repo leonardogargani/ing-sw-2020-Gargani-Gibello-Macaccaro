@@ -9,6 +9,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class CellsHandlerTest {
+
+    /*
     private GameSession game;
     private Cell c1;
     private Coord c;
@@ -51,4 +53,6 @@ public class CellsHandlerTest {
         cell.setOccupiedByDome(true);
         game.getCellsHandler().changeStateOfCell(cell,c);
         }
+
+     */
 }

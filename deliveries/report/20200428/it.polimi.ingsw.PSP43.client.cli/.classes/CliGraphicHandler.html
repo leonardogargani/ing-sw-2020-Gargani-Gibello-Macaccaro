@@ -1,0 +1,430 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CliGraphicHandler</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.client.cli</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CliGraphicHandler (it.polimi.ingsw.PSP43.client.cli)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CliGraphicHandler</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    13.3%
+  </span>
+  <span class="absValue">
+    (2/ 15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    4.8%
+  </span>
+  <span class="absValue">
+    (6/ 124)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.client.cli;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.Color;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.GraphicHandler;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.*;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Cell;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Worker;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.*;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;import java.io.BufferedReader;
+<i>13</i>&nbsp;import java.io.IOException;
+<i>14</i>&nbsp;import java.io.InputStreamReader;
+<i>15</i>&nbsp;import java.util.ArrayList;
+<i>16</i>&nbsp;import java.util.HashMap;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;
+<b class="fc"><i>19</i>&nbsp;public class CliGraphicHandler extends GraphicHandler {</b>
+<i>20</i>&nbsp;
+<b class="fc"><i>21</i>&nbsp;    private CliBoard board = new CliBoard();</b>
+<b class="fc"><i>22</i>&nbsp;    private CliTopMenu topMenu = new CliTopMenu();</b>
+<b class="fc"><i>23</i>&nbsp;    private CliMiddleMenu middleMenu = new CliMiddleMenu();</b>
+<b class="fc"><i>24</i>&nbsp;    private CliBottomMenu bottomMenu = new CliBottomMenu();</b>
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    /**
+<i>28</i>&nbsp;     * This method returns the whole board of the cli.
+<i>29</i>&nbsp;     * @return whole board of the cli
+<i>30</i>&nbsp;     */
+<i>31</i>&nbsp;    public CliBoard getBoard() {
+<b class="fc"><i>32</i>&nbsp;        return board;</b>
+<i>33</i>&nbsp;    }
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;    /**
+<i>37</i>&nbsp;     * This method updates the cli or the gui changing the color of a cell, based
+<i>38</i>&nbsp;     * on the color of the worker that has been moved.
+<i>39</i>&nbsp;     * @param workerMessage message containing the worker that has been moved
+<i>40</i>&nbsp;     */
+<i>41</i>&nbsp;    @Override
+<i>42</i>&nbsp;    public void updateBoardChange(WorkerMessage workerMessage) {
+<b class="nc"><i>43</i>&nbsp;        Worker worker = workerMessage.getWorker();</b>
+<b class="nc"><i>44</i>&nbsp;        CliCell newCell = board.getCell(worker.getCurrentPosition());</b>
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;        // I need to &quot;free&quot; the previous position only if the worker was already on the board:
+<i>47</i>&nbsp;        // if it has just been place it doesn&#39;t have a previous position
+<b class="nc"><i>48</i>&nbsp;        if (worker.getPreviousPosition() != null) {</b>
+<b class="nc"><i>49</i>&nbsp;            CliCell oldCell = board.getCell(worker.getPreviousPosition());</b>
+<b class="nc"><i>50</i>&nbsp;            oldCell.setColor(Color.ANSI_WHITE);</b>
+<i>51</i>&nbsp;        }
+<i>52</i>&nbsp;
+<b class="nc"><i>53</i>&nbsp;        newCell.setColor(worker.getColor());</b>
+<b class="nc"><i>54</i>&nbsp;        this.render();</b>
+<b class="nc"><i>55</i>&nbsp;    }</b>
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;    /**
+<i>59</i>&nbsp;     * This method updates the cli board changing the symbol of a cell, based
+<i>60</i>&nbsp;     * on the fact that a worker can build on a cell.
+<i>61</i>&nbsp;     * @param cellMessage message containing the cell that has changed (a worker has built on it)
+<i>62</i>&nbsp;     */
+<i>63</i>&nbsp;    @Override
+<i>64</i>&nbsp;    public void updateBoardChange(CellMessage cellMessage) {
+<b class="nc"><i>65</i>&nbsp;        Cell serverCell = cellMessage.getCell();</b>
+<b class="nc"><i>66</i>&nbsp;        CliCell cell = board.getCell(serverCell.getCoord());</b>
+<b class="nc"><i>67</i>&nbsp;        cell.setSymbol(CliCell.SYMBOLS[serverCell.getHeight()]);</b>
+<b class="nc"><i>68</i>&nbsp;        this.render();</b>
+<b class="nc"><i>69</i>&nbsp;    }</b>
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;    /**
+<i>73</i>&nbsp;     * This method updates the graphics of the client displaying the message of the players number
+<i>74</i>&nbsp;     * request, waiting and sending the response through the ClientBG object.
+<i>75</i>&nbsp;     * @param request message containing the request for the number of the players
+<i>76</i>&nbsp;     */
+<i>77</i>&nbsp;    @Override
+<i>78</i>&nbsp;    public void updateMenuChange(PlayersNumberRequest request) {
+<b class="nc"><i>79</i>&nbsp;        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {</b>
+<b class="nc"><i>80</i>&nbsp;            bottomMenu.setContent(request.getMessage());</b>
+<i>81</i>&nbsp;            int chosenNumber;
+<i>82</i>&nbsp;            do {
+<i>83</i>&nbsp;                // I need to show() only the CliTopMenu, containing the request
+<b class="nc"><i>84</i>&nbsp;                bottomMenu.show();</b>
+<b class="nc"><i>85</i>&nbsp;                chosenNumber = Integer.parseInt(reader.readLine());</b>
+<b class="nc"><i>86</i>&nbsp;            } while (chosenNumber != 2 &amp;&amp; chosenNumber != 3);</b>
+<b class="nc"><i>87</i>&nbsp;            PlayersNumberResponse response = new PlayersNumberResponse(chosenNumber);</b>
+<b class="nc"><i>88</i>&nbsp;            super.getClientBG().sendMessage(response);</b>
+<b class="nc"><i>89</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>90</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>91</i>&nbsp;        }</b>
+<b class="nc"><i>92</i>&nbsp;    }</b>
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;    /**
+<i>96</i>&nbsp;     * This method updates the graphics of the client displaying the message of the initial cards
+<i>97</i>&nbsp;     * request, waiting and sending the response through the ClientBG object.
+<i>98</i>&nbsp;     * @param request message containing the request for the cards chosen for this game
+<i>99</i>&nbsp;     */
+<i>100</i>&nbsp;    @Override
+<i>101</i>&nbsp;    public void updateMenuChange(InitialCardsRequest request) {
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;        // display all the cards before making the request
+<b class="nc"><i>104</i>&nbsp;        ArrayList&lt;AbstractGodCard&gt; cards = request.getCards();</b>
+<b class="nc"><i>105</i>&nbsp;        for (AbstractGodCard card : cards) {</b>
+<i>106</i>&nbsp;            // the name of every God is preceded by its index in the ArrayList
+<b class="nc"><i>107</i>&nbsp;            System.out.printf(&quot; %d - &quot;, cards.indexOf(card));</b>
+<b class="nc"><i>108</i>&nbsp;            card.print();</b>
+<b class="nc"><i>109</i>&nbsp;        }</b>
+<b class="nc"><i>110</i>&nbsp;        bottomMenu.setContent(request.getMessage());</b>
+<i>111</i>&nbsp;
+<b class="nc"><i>112</i>&nbsp;        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {</b>
+<i>113</i>&nbsp;
+<i>114</i>&nbsp;
+<b class="nc"><i>115</i>&nbsp;            int playersNumber = 2; // TODO -&gt; INITIALIZE WITH THE INT CONTAINED IN THE REQUEST (number of players)</b>
+<i>116</i>&nbsp;
+<i>117</i>&nbsp;            // I read as many numbers as how many cards have to be chosen (so that the player cannot
+<i>118</i>&nbsp;            // insert neither less nor more than the requested value)
+<i>119</i>&nbsp;
+<b class="nc"><i>120</i>&nbsp;            ArrayList&lt;Integer&gt; chosenIndexes = null;</b>
+<i>121</i>&nbsp;            int chosenIndex;
+<b class="nc"><i>122</i>&nbsp;            for (int i = 0; i &lt; playersNumber; i++) {</b>
+<b class="nc"><i>123</i>&nbsp;                bottomMenu.show();</b>
+<b class="nc"><i>124</i>&nbsp;                System.out.printf(&quot;Write a single number and press Enter (%d remaining): &quot;, playersNumber - i);</b>
+<b class="nc"><i>125</i>&nbsp;                chosenIndex = Integer.parseInt(reader.readLine());</b>
+<i>126</i>&nbsp;                // avoid repetition of the same Gods
+<b class="nc"><i>127</i>&nbsp;                if (!chosenIndexes.contains(chosenIndex)) {</b>
+<b class="nc"><i>128</i>&nbsp;                    chosenIndexes.add(chosenIndex);</b>
+<i>129</i>&nbsp;                } else {
+<b class="nc"><i>130</i>&nbsp;                    System.out.println(&quot;You have already chosen this God&quot;);</b>
+<b class="nc"><i>131</i>&nbsp;                    i--;</b>
+<i>132</i>&nbsp;                }
+<i>133</i>&nbsp;            }
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;            // constructing the ArrayList of cards that needs to be sent as a response
+<b class="nc"><i>136</i>&nbsp;            ArrayList&lt;AbstractGodCard&gt; chosenCards = null;</b>
+<b class="nc"><i>137</i>&nbsp;            for (Integer index : chosenIndexes) {</b>
+<b class="nc"><i>138</i>&nbsp;                chosenCards.add(cards.get(index));</b>
+<b class="nc"><i>139</i>&nbsp;            }</b>
+<i>140</i>&nbsp;
+<b class="nc"><i>141</i>&nbsp;            ChosenCardsResponse response = new ChosenCardsResponse(chosenCards);</b>
+<b class="nc"><i>142</i>&nbsp;            super.getClientBG().sendMessage(response);</b>
+<i>143</i>&nbsp;
+<b class="nc"><i>144</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>145</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>146</i>&nbsp;        }</b>
+<i>147</i>&nbsp;
+<b class="nc"><i>148</i>&nbsp;    }</b>
+<i>149</i>&nbsp;
+<i>150</i>&nbsp;
+<i>151</i>&nbsp;    /**
+<i>152</i>&nbsp;     * This method updates the graphics of the client displaying the message of the single card
+<i>153</i>&nbsp;     * request, waiting and sending the response through the ClientBG object.
+<i>154</i>&nbsp;     * @param request message containing the request for the card chosen by a player
+<i>155</i>&nbsp;     */
+<i>156</i>&nbsp;    @Override
+<i>157</i>&nbsp;    public void updateMenuChange(CardRequest request) {
+<b class="nc"><i>158</i>&nbsp;        ArrayList&lt;AbstractGodCard&gt; availableCards = request.getCards();</b>
+<i>159</i>&nbsp;
+<b class="nc"><i>160</i>&nbsp;        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {</b>
+<b class="nc"><i>161</i>&nbsp;            bottomMenu.setContent(request.getMessage());</b>
+<i>162</i>&nbsp;
+<b class="nc"><i>163</i>&nbsp;            for (AbstractGodCard card : availableCards) {</b>
+<i>164</i>&nbsp;                // the name of every God is preceded by its index in the ArrayList
+<b class="nc"><i>165</i>&nbsp;                System.out.printf(&quot; [%d] - &quot;, availableCards.indexOf(card));</b>
+<b class="nc"><i>166</i>&nbsp;                card.print();</b>
+<b class="nc"><i>167</i>&nbsp;            }</b>
+<i>168</i>&nbsp;
+<i>169</i>&nbsp;            int chosenIndex;
+<i>170</i>&nbsp;            while (true) {
+<b class="nc"><i>171</i>&nbsp;                bottomMenu.show();</b>
+<b class="nc"><i>172</i>&nbsp;                chosenIndex = Integer.parseInt(reader.readLine());</b>
+<b class="nc"><i>173</i>&nbsp;                if (0 &lt; chosenIndex &amp;&amp; chosenIndex &lt; availableCards.size()) {</b>
+<i>174</i>&nbsp;                    // in this case the chosen index is valid, I want to keep its value
+<b class="nc"><i>175</i>&nbsp;                    break;</b>
+<i>176</i>&nbsp;                }
+<b class="nc"><i>177</i>&nbsp;                System.out.println(&quot;The number you wrote is not valid&quot;);</b>
+<i>178</i>&nbsp;            }
+<i>179</i>&nbsp;
+<b class="nc"><i>180</i>&nbsp;            ChosenCardResponse response = new ChosenCardResponse(availableCards.get(chosenIndex));</b>
+<b class="nc"><i>181</i>&nbsp;            super.getClientBG().sendMessage(response);</b>
+<b class="nc"><i>182</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>183</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>184</i>&nbsp;        }</b>
+<i>185</i>&nbsp;
+<b class="nc"><i>186</i>&nbsp;    }</b>
+<i>187</i>&nbsp;
+<i>188</i>&nbsp;
+<i>189</i>&nbsp;    /**
+<i>190</i>&nbsp;     * This method updates the graphics of the client displaying the message of the workers color
+<i>191</i>&nbsp;     * request, waiting and sending the response through the ClientBG object.
+<i>192</i>&nbsp;     * @param request message containing the request for the color of player&#39;s workers
+<i>193</i>&nbsp;     */
+<i>194</i>&nbsp;    @Override
+<i>195</i>&nbsp;    public void updateMenuChange(WorkersColorRequest request) {
+<b class="nc"><i>196</i>&nbsp;        ArrayList&lt;Color&gt; availableColors = request.getColorsAvailable();</b>
+<i>197</i>&nbsp;
+<b class="nc"><i>198</i>&nbsp;        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {</b>
+<b class="nc"><i>199</i>&nbsp;            bottomMenu.setContent(request.getMessage());</b>
+<i>200</i>&nbsp;
+<b class="nc"><i>201</i>&nbsp;            for (Color color : availableColors) {</b>
+<i>202</i>&nbsp;                // the name of every color is preceded by its index in the ArrayList
+<b class="nc"><i>203</i>&nbsp;                System.out.printf(&quot; [%d] - &quot;, availableColors.indexOf(color));</b>
+<b class="nc"><i>204</i>&nbsp;               Color.printName(color);</b>
+<b class="nc"><i>205</i>&nbsp;            }</b>
+<i>206</i>&nbsp;
+<i>207</i>&nbsp;            int chosenIndex;
+<i>208</i>&nbsp;            while (true) {
+<b class="nc"><i>209</i>&nbsp;                bottomMenu.show();</b>
+<b class="nc"><i>210</i>&nbsp;                chosenIndex = Integer.parseInt(reader.readLine());</b>
+<b class="nc"><i>211</i>&nbsp;                if (0 &lt; chosenIndex &amp;&amp; chosenIndex &lt; availableColors.size()) {</b>
+<i>212</i>&nbsp;                    // in this case the chosen index is valid, I want to keep its value
+<b class="nc"><i>213</i>&nbsp;                    break;</b>
+<i>214</i>&nbsp;                }
+<b class="nc"><i>215</i>&nbsp;                System.out.println(&quot;The number you wrote is not valid&quot;);</b>
+<i>216</i>&nbsp;            }
+<i>217</i>&nbsp;
+<b class="nc"><i>218</i>&nbsp;            WorkersColorResponse response = new WorkersColorResponse(availableColors.get(chosenIndex));</b>
+<b class="nc"><i>219</i>&nbsp;            super.getClientBG().sendMessage(response);</b>
+<b class="nc"><i>220</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>221</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>222</i>&nbsp;        }</b>
+<b class="nc"><i>223</i>&nbsp;    }</b>
+<i>224</i>&nbsp;
+<i>225</i>&nbsp;
+<i>226</i>&nbsp;    /**
+<i>227</i>&nbsp;     * This method updates the graphics of the client displaying the message of the action
+<i>228</i>&nbsp;     * request, waiting and sending the response through the ClientBG object.
+<i>229</i>&nbsp;     * @param request message containing the request for the action a player wants to make
+<i>230</i>&nbsp;     */
+<i>231</i>&nbsp;    @Override
+<i>232</i>&nbsp;    public void updateMenuChange(ActionRequest request) {
+<i>233</i>&nbsp;        // first method that needs to render() all the graphic side (menus + board)
+<i>234</i>&nbsp;
+<b class="nc"><i>235</i>&nbsp;        HashMap&lt;Coord,ArrayList&lt;Coord&gt;&gt; availableCells = request.getCellsAvailable();</b>
+<i>236</i>&nbsp;
+<i>237</i>&nbsp;        // TODO implementation
+<i>238</i>&nbsp;
+<b class="nc"><i>239</i>&nbsp;    }</b>
+<i>240</i>&nbsp;
+<i>241</i>&nbsp;
+<i>242</i>&nbsp;    /**
+<i>243</i>&nbsp;     * This method updates the graphics of the client displaying the message of the generic request
+<i>244</i>&nbsp;     * that needs a boolean as a response, waiting and sending the response through the ClientBG object.
+<i>245</i>&nbsp;     * @param request message containing the generic boolean request
+<i>246</i>&nbsp;     */
+<i>247</i>&nbsp;    @Override
+<i>248</i>&nbsp;    public void updateMenuChange(RequestMessage request) {
+<i>249</i>&nbsp;        // TODO implementation
+<i>250</i>&nbsp;
+<b class="nc"><i>251</i>&nbsp;        String message = request.getMessage();</b>
+<b class="nc"><i>252</i>&nbsp;        bottomMenu.setContent(request.getMessage());</b>
+<b class="nc"><i>253</i>&nbsp;        this.render();</b>
+<i>254</i>&nbsp;
+<b class="nc"><i>255</i>&nbsp;        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {</b>
+<i>256</i>&nbsp;            int intChoice;
+<b class="nc"><i>257</i>&nbsp;            boolean booleanChoice = false;</b>
+<i>258</i>&nbsp;
+<i>259</i>&nbsp;            while (true) {
+<b class="nc"><i>260</i>&nbsp;                System.out.println(&quot; [0] YES \n [1] NO &quot;);</b>
+<b class="nc"><i>261</i>&nbsp;                intChoice = Integer.parseInt(reader.readLine());</b>
+<b class="nc"><i>262</i>&nbsp;                if (intChoice == 0 || intChoice == 1) {</b>
+<b class="nc"><i>263</i>&nbsp;                    break;</b>
+<i>264</i>&nbsp;                }
+<b class="nc"><i>265</i>&nbsp;                System.out.println(&quot;Choice not valid, choose again&quot;);</b>
+<i>266</i>&nbsp;            }
+<i>267</i>&nbsp;
+<b class="nc"><i>268</i>&nbsp;            switch (intChoice) {</b>
+<i>269</i>&nbsp;                case 0:
+<b class="nc"><i>270</i>&nbsp;                    booleanChoice = true;</b>
+<b class="nc"><i>271</i>&nbsp;                    break;</b>
+<i>272</i>&nbsp;                case 1:
+<b class="nc"><i>273</i>&nbsp;                    booleanChoice = false;</b>
+<i>274</i>&nbsp;                    break;
+<i>275</i>&nbsp;            }
+<i>276</i>&nbsp;
+<b class="nc"><i>277</i>&nbsp;            ResponseMessage response = new ResponseMessage(booleanChoice);</b>
+<b class="nc"><i>278</i>&nbsp;            super.getClientBG().sendMessage(response);</b>
+<b class="nc"><i>279</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>280</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>281</i>&nbsp;        }</b>
+<i>282</i>&nbsp;
+<b class="nc"><i>283</i>&nbsp;    }</b>
+<i>284</i>&nbsp;
+<i>285</i>&nbsp;
+<i>286</i>&nbsp;    /**
+<i>287</i>&nbsp;     * This method updates the cli menu displaying a message that notifies players the game has ended.
+<i>288</i>&nbsp;     * @param message message containing the sentence to display
+<i>289</i>&nbsp;     */
+<i>290</i>&nbsp;    @Override
+<i>291</i>&nbsp;    public void updateMenuChange(EndGameMessage message) {
+<i>292</i>&nbsp;        // TODO implementation
+<i>293</i>&nbsp;
+<b class="nc"><i>294</i>&nbsp;    }</b>
+<i>295</i>&nbsp;
+<i>296</i>&nbsp;
+<i>297</i>&nbsp;    /**
+<i>298</i>&nbsp;     * This method updates the graphics of the client displaying the message of the request
+<i>299</i>&nbsp;     * for a change of the nick, since the chosen one is already in use.
+<i>300</i>&nbsp;     * @param request message that notifies the client that the nick he has just chosen
+<i>301</i>&nbsp;     *                is already taken
+<i>302</i>&nbsp;     */
+<i>303</i>&nbsp;    @Override
+<i>304</i>&nbsp;    public void updateMenuChange(ChangeNickRequest request) {
+<i>305</i>&nbsp;        // TODO implementation
+<i>306</i>&nbsp;
+<b class="nc"><i>307</i>&nbsp;    }</b>
+<i>308</i>&nbsp;
+<i>309</i>&nbsp;
+<i>310</i>&nbsp;    /**
+<i>311</i>&nbsp;     * This method updates the graphics of the client displaying the message at the top
+<i>312</i>&nbsp;     * of the screen (used to write that it&#39;s someone else&#39;s turn).
+<i>313</i>&nbsp;     * @param message message to be displayed at the top of the screen
+<i>314</i>&nbsp;     */
+<i>315</i>&nbsp;    @Override
+<i>316</i>&nbsp;    public void updateMenuChange(TextMessage message) {
+<i>317</i>&nbsp;        // TODO implementation
+<i>318</i>&nbsp;
+<b class="nc"><i>319</i>&nbsp;    }</b>
+<i>320</i>&nbsp;
+<i>321</i>&nbsp;
+<i>322</i>&nbsp;    /**
+<i>323</i>&nbsp;     * This method updates the graphics of the client displaying players&#39; nicknames,
+<i>324</i>&nbsp;     * the Gods they&#39;ve chosen and their workers&#39; color.
+<i>325</i>&nbsp;     * @param message message containing workers, their colors and the chosen gods
+<i>326</i>&nbsp;     */
+<i>327</i>&nbsp;    @Override
+<i>328</i>&nbsp;    public void updateMenuChange(PlayersListMessage message) {
+<i>329</i>&nbsp;        // TODO implementation
+<i>330</i>&nbsp;
+<b class="nc"><i>331</i>&nbsp;    }</b>
+<i>332</i>&nbsp;
+<i>333</i>&nbsp;
+<i>334</i>&nbsp;    /**
+<i>335</i>&nbsp;     * This method renders all the graphic aspects of the cli.
+<i>336</i>&nbsp;     */
+<i>337</i>&nbsp;    @Override
+<i>338</i>&nbsp;    public void render() {
+<i>339</i>&nbsp;        // the cli is made of these four graphical components, printed to the screen in the right order
+<b class="nc"><i>340</i>&nbsp;        topMenu.show();</b>
+<b class="nc"><i>341</i>&nbsp;        middleMenu.show();</b>
+<b class="nc"><i>342</i>&nbsp;        board.show();</b>
+<b class="nc"><i>343</i>&nbsp;        bottomMenu.show();</b>
+<b class="nc"><i>344</i>&nbsp;    }</b>
+<i>345</i>&nbsp;
+<i>346</i>&nbsp;
+<i>347</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-28 13:32</div>
+</div>
+</body>
+</html>

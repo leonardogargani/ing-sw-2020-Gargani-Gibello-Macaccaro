@@ -1,0 +1,160 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CliCell</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.client.cli</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CliCell (it.polimi.ingsw.PSP43.client.cli)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CliCell</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (5/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    84.6%
+  </span>
+  <span class="absValue">
+    (11/ 13)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.client.cli;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.Color;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;public class CliCell {
+<i>7</i>&nbsp;
+<b class="fc"><i>8</i>&nbsp;    public static final String[] SYMBOLS = {</b>
+<i>9</i>&nbsp;            &quot;\u2B1C&quot;,   // 0: Ground
+<i>10</i>&nbsp;            &quot;\u2460&quot;,   // 1: Level 1
+<i>11</i>&nbsp;            &quot;\u2461&quot;,   // 2: Level 2
+<i>12</i>&nbsp;            &quot;\u2462&quot;,   // 3: Level 3
+<i>13</i>&nbsp;            &quot;\u274E&quot;    // 4: Dome
+<i>14</i>&nbsp;    };
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;    private String background;
+<i>17</i>&nbsp;    private Color color;
+<i>18</i>&nbsp;    private String symbol;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    /**
+<i>22</i>&nbsp;     * Non default constructor that sets the ansi code of the background, the ansi
+<i>23</i>&nbsp;     * code of the color and the ansi code of the symbol of a single cell in the cli.
+<i>24</i>&nbsp;     */
+<i>25</i>&nbsp;    // color will be chosen based on the worker
+<b class="fc"><i>26</i>&nbsp;    public CliCell() {</b>
+<b class="fc"><i>27</i>&nbsp;        this.background = Color.RESET;</b>
+<b class="fc"><i>28</i>&nbsp;        this.color = Color.ANSI_WHITE;</b>
+<b class="fc"><i>29</i>&nbsp;        this.symbol = CliCell.SYMBOLS[0];</b>
+<b class="fc"><i>30</i>&nbsp;    }</b>
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    /**
+<i>34</i>&nbsp;     * This method sets the color of the background, which can be either yellow
+<i>35</i>&nbsp;     * (if the cell is marked as free for a worker to move into) or default.
+<i>36</i>&nbsp;     * @param isFree true if I want to set the cell as free to move into for a
+<i>37</i>&nbsp;     *               worker, false otherwise
+<i>38</i>&nbsp;     */
+<i>39</i>&nbsp;    public void markAsFree(boolean isFree) {
+<b class="nc"><i>40</i>&nbsp;        this.background = isFree ? Color.ANSI_YELLOW_BACKGROUND : Color.RESET;</b>
+<b class="nc"><i>41</i>&nbsp;    }</b>
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    /**
+<i>45</i>&nbsp;     * This method sets the color of the cell, which corresponds
+<i>46</i>&nbsp;     * to the color of the worker occupying that cell.
+<i>47</i>&nbsp;     * @param color color of the worker on cell
+<i>48</i>&nbsp;     */
+<i>49</i>&nbsp;    public void setColor(Color color) {
+<b class="fc"><i>50</i>&nbsp;        this.color = color;</b>
+<b class="fc"><i>51</i>&nbsp;    }</b>
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    /**
+<i>55</i>&nbsp;     * This method sets the color of the cell, which corresponds
+<i>56</i>&nbsp;     * to the color of the worker occupying that cell.
+<i>57</i>&nbsp;     * @param symbol ansi code of: empty square if level0, circled number
+<i>58</i>&nbsp;     *               if level 1-3, cross if level 4 (dome)
+<i>59</i>&nbsp;     */
+<i>60</i>&nbsp;    public void setSymbol(String symbol) {
+<b class="fc"><i>61</i>&nbsp;        this.symbol = symbol;</b>
+<b class="fc"><i>62</i>&nbsp;    }</b>
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    /**
+<i>66</i>&nbsp;     * This method overrides the default toString() in order to return the ansi code of the
+<i>67</i>&nbsp;     * color, the ansi code of the symbol and the ansi code of the default style of the text
+<i>68</i>&nbsp;     * @return ansi code of: background, color, symbol, default style
+<i>69</i>&nbsp;     */
+<i>70</i>&nbsp;    @Override
+<i>71</i>&nbsp;    public String toString() {
+<i>72</i>&nbsp;        // the order of the elements is important since the default value for background is Color.RESET,
+<i>73</i>&nbsp;        // while the one for color is Color.WHITE (in this way default background cannot reset color)
+<b class="fc"><i>74</i>&nbsp;        return this.background + this.color + this.symbol + Color.RESET;</b>
+<i>75</i>&nbsp;    }
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-04-28 13:32</div>
+</div>
+</body>
+</html>

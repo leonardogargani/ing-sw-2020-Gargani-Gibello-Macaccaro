@@ -10,6 +10,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class GameSessionTest {
+
+    /*
     private GameSession actualGame;
     int id=6;
     // private TurnState turnState;
@@ -25,10 +27,8 @@ public class GameSessionTest {
         p1= new Player("Roberto");
     }
 
-    /*@Test
-    public void changeModelDescriptor() {
-
-    }*/
+    @Test
+    //public void changeModelDescriptor() { }
 
     @Test
     public void getGamers() throws FullGameSessionException {
@@ -44,10 +44,7 @@ public class GameSessionTest {
         RegistrationMessage message = new RegistrationMessage(9, "Mark", false);
         actualGame.addGamer(c, message);
         assertEquals(2,actualGame.getListenersHashMap().size());
-        /*
-        oppure
-        assertTrue(actualGame.addGamer(a))
-         */
+        // oppure assertTrue(actualGame.addGamer(a))
     }
 
     @Test
@@ -55,10 +52,7 @@ public class GameSessionTest {
         RegistrationMessage message = new RegistrationMessage(9, "Rick", true);
         actualGame.removeGamer(message);
         assertEquals(0,actualGame.getListenersHashMap().size());
-        /*
-        oppure
-        assertTrue(actualGame.removeGamers
-         */
+        // oppure assertTrue(actualGame.removeGamers
     }
 
     @Test
@@ -103,4 +97,6 @@ public class GameSessionTest {
     public void getCardsHandler() {
         assertFalse(actualGame.getCardsHandler()==null);
     }
+
+     */
 }

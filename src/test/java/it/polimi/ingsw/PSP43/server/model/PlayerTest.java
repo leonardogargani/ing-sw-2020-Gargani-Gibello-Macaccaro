@@ -9,6 +9,7 @@ import static org.junit.Assert.*;
 
 public class PlayerTest {
 
+    /*
     Player test;
 
     @Before
@@ -35,5 +36,7 @@ public class PlayerTest {
         test.setAbstractGodCard(abstractGodCard);
         assertEquals(abstractGodCard, test.getAbstractGodCard());
     }
+
+     */
 
 }
