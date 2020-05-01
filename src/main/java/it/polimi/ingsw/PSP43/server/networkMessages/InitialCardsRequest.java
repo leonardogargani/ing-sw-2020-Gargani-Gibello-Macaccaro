@@ -15,6 +15,12 @@ public class InitialCardsRequest extends TextMessage {
         this.numberOfCard = numberOfCard;
     }
 
+
+    public int getNumberOfCard() {
+        return numberOfCard;
+    }
+
+
     @Override
     public String getMessage() {
         return super.getMessage();

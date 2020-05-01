@@ -5,10 +5,10 @@ import it.polimi.ingsw.PSP43.client.GraphicHandler;
 import it.polimi.ingsw.PSP43.client.networkMessages.*;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
+import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,10 +18,11 @@ import java.util.HashMap;
 
 public class CliGraphicHandler extends GraphicHandler {
 
-    private CliBoard board = new CliBoard();
-    private CliTopMenu topMenu = new CliTopMenu();
-    private CliMiddleMenu middleMenu = new CliMiddleMenu();
-    private CliBottomMenu bottomMenu = new CliBottomMenu();
+    private final CliBoard board = new CliBoard();
+    private final CliTopMenu topMenu = new CliTopMenu();
+    private final CliMiddleMenu middleMenu = new CliMiddleMenu();
+    private final CliBottomMenu bottomMenu = new CliBottomMenu();
+
 
 
     /**
@@ -111,8 +112,7 @@ public class CliGraphicHandler extends GraphicHandler {
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
 
-
-            int playersNumber = 2; // TODO -> INITIALIZE WITH THE INT CONTAINED IN THE REQUEST (number of players)
+            int playersNumber = request.getNumberOfCard();
 
             // I read as many numbers as how many cards have to be chosen (so that the player cannot
             // insert neither less nor more than the requested value)
@@ -201,7 +201,7 @@ public class CliGraphicHandler extends GraphicHandler {
             for (Color color : availableColors) {
                 // the name of every color is preceded by its index in the ArrayList
                 System.out.printf(" [%d] - ", availableColors.indexOf(color));
-               Color.printName(color);
+                Color.printName(color);
             }
 
             int chosenIndex;
@@ -230,11 +230,94 @@ public class CliGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(ActionRequest request) {
-        // first method that needs to render() all the graphic side (menus + board)
 
-        HashMap<Coord,ArrayList<Coord>> availableCells = request.getCellsAvailable();
+        /*
+        Given an HashMap<Coord,ArrayList<Coord>>  I need to choose a couple formed by one of
+        the keys (Coord) and one of the related elements (Coord) in its value (ArrayList). Use cases:
+        - where to first place a worker (server will ignore the key Coord, it only needs the second Coord)
+        - where to build
+        - where to move a worker
+        - ...
+        Note that for the first placement of a worker I will have only one ArrayList: I need to select a Coord in it
+        (and of course the unique key Coord, there aren't 2 iterations as in the other cases. However, I must do
+        the iteration since the method is shared with other scenarios)
+         */
 
-        // TODO implementation
+        HashMap<Coord,ArrayList<Coord>> hashMap = request.getCellsAvailable();
+        bottomMenu.setContent(request.getMessage());
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+
+            // graphically render all the received coordinates as free (yellow background)
+            for (Coord startCoord : hashMap.keySet()) {
+                for (Coord endCoord : hashMap.get(startCoord)) {
+                    board.getCell(endCoord).markAsFree(true);
+                }
+            }
+            this.render();
+
+            int chosenX;
+            int chosenY;
+            Coord chosenCoord;
+            // obtain the second coordinate of the requested couple
+            loop: while (true) {
+                System.out.print("x: ");
+                chosenX = Integer.parseInt(reader.readLine());
+                System.out.print("y: ");
+                chosenY = Integer.parseInt(reader.readLine());
+                for (Coord startCoord : hashMap.keySet()) {
+                    for (Coord endCoord : hashMap.get(startCoord)) {
+                        if (chosenX == endCoord.getX() && chosenY == endCoord.getY()) {
+                            chosenCoord = new Coord(chosenX, chosenY);
+                            break loop;
+                        }
+                    }
+                }
+                System.out.println("The coordinates you wrote are not valid, try again!");
+            }
+
+            // create an ArrayList with the possible values for the first coordinate of the couple
+            ArrayList<Coord> possibleStartCoords = new ArrayList<>();
+            for (Coord startCoord : hashMap.keySet()) {
+                if (hashMap.get(startCoord).contains(chosenCoord)) {
+                    possibleStartCoords.add(startCoord);
+                }
+            }
+
+            // obtain the first coordinate of the couple (among the 1 or 2 possible ones)
+            ActionResponse response;
+            if (possibleStartCoords.size() == 1) {
+                response = new ActionResponse(possibleStartCoords.get(0), chosenCoord);
+            } else {
+                System.out.println("Choose the worker you want to make the action perform:");
+                for (Coord start : possibleStartCoords) {
+                    System.out.printf(" [%d] - (%d, %d)\n", possibleStartCoords.indexOf(start),
+                            start.getX(), start.getY());
+                }
+                int chosenIndex;
+                while (true) {
+                    chosenIndex = Integer.parseInt(reader.readLine());
+                    if (0 < chosenIndex && chosenIndex < possibleStartCoords.size()) {
+                        break;
+                    }
+                    System.out.println("The number you wrote is not valid, try again!");
+                }
+                response = new ActionResponse(possibleStartCoords.get(chosenIndex), chosenCoord);
+            }
+
+            // graphically render back all the received coordinates as normal
+            for (Coord startCoord : hashMap.keySet()) {
+                for (Coord endCoord : hashMap.get(startCoord)) {
+                    board.getCell(endCoord).markAsFree(false);
+                }
+            }
+            this.render();
+
+            super.getClientBG().sendMessage(response);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -246,9 +329,7 @@ public class CliGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(RequestMessage request) {
-        // TODO implementation
 
-        String message = request.getMessage();
         bottomMenu.setContent(request.getMessage());
         this.render();
 
@@ -276,6 +357,7 @@ public class CliGraphicHandler extends GraphicHandler {
 
             ResponseMessage response = new ResponseMessage(booleanChoice);
             super.getClientBG().sendMessage(response);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -289,8 +371,8 @@ public class CliGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(EndGameMessage message) {
-        // TODO implementation
-
+        bottomMenu.setContent(message.getMessage());
+        bottomMenu.show();
     }
 
 
@@ -302,8 +384,17 @@ public class CliGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(ChangeNickRequest request) {
-        // TODO implementation
-
+        bottomMenu.setContent(request.getMessage());
+        bottomMenu.show();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+            String nickname;
+            System.out.print("Choose another nickname:");
+            nickname = reader.readLine();
+            RegistrationMessage message = new RegistrationMessage(nickname);
+            super.getClientBG().sendMessage(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -314,8 +405,8 @@ public class CliGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(TextMessage message) {
-        // TODO implementation
-
+        topMenu.setContentWithNick(message.getMessage());
+        this.render();
     }
 
 
@@ -326,7 +417,21 @@ public class CliGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(PlayersListMessage message) {
-        // TODO implementation
+
+        HashMap<Player, AbstractGodCard> godsHashMap = message.getPlayers();
+        HashMap<Player, Color> colorsHashmap = message.getColor();
+
+        ArrayList<String> playersInfo = new ArrayList<>();
+
+        for (Player player : colorsHashmap.keySet()) {
+            playersInfo.add(
+                    colorsHashmap.get(player) + player.getNickname() + Color.RESET + ": " +
+                    godsHashMap.get(player).getGodName() + " (" +
+                    godsHashMap.get(player).getDescription() + ")");
+        }
+
+        middleMenu.setContentWithInfo(playersInfo);
+        this.render();
 
     }
 

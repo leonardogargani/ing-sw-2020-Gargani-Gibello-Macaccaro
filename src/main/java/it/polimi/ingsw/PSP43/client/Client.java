@@ -1,7 +1,13 @@
 package it.polimi.ingsw.PSP43.client;
 
 import it.polimi.ingsw.PSP43.client.cli.Screens;
+import it.polimi.ingsw.PSP43.client.networkMessages.PlayersNumberResponse;
+import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
+import it.polimi.ingsw.PSP43.server.gameStates.PlayerRegistrationState;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
 
 
@@ -67,6 +73,16 @@ public class Client implements Runnable{
      */
     public void execute() {
         System.out.println(Screens.WELCOME);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+            String nickname;
+            System.out.print("Choose a nickname:");
+            nickname = reader.readLine();
+            RegistrationMessage message = new RegistrationMessage(nickname);
+            clientBG.sendMessage(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

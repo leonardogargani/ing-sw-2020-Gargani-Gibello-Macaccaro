@@ -18,10 +18,7 @@ public class ClientMain {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String chosenMode;
 
-
-
         System.out.println("Choose a mode:\n [1] CLI\n [2] GUI");
-
 
         // GUI/CLI decision is taken through the cli for now
         do {
@@ -49,13 +46,10 @@ public class ClientMain {
             }
         } while(!chosenMode.equals("1") && !chosenMode.equals("2"));
 
-
         // start effectively the client and display welcome message
         client.execute();
 
-
     }
-
 
 
 }
