@@ -24,6 +24,7 @@ public class ClientListener implements Runnable{
     private Object lockOut;
     private ClientMessage message;
     private Object messageArrived;
+    private Sender sender;
     ObjectInputStream input;
     ObjectOutputStream output;
 
@@ -43,7 +44,9 @@ public class ClientListener implements Runnable{
 
     @Override
     public void run(){
-
+        sender = new Sender(this.clientSocket,this);
+        Thread senderThread = new Thread(sender);
+        senderThread.start();
 
 
         while(true){
@@ -121,6 +124,9 @@ public class ClientListener implements Runnable{
         notifyAll();
     }
 
+    public synchronized void removeGameSession(int idGame){
+        gameSessions.remove(idGame);
+    }
 
     public void handleDisconnection() throws IOException {
         gameSessions.get(idGame).unregisterFromGame(new LeaveGameMessage(),this);
@@ -130,4 +136,7 @@ public class ClientListener implements Runnable{
         return input;
     }
 
+    public Sender getSender() {
+        return sender;
+    }
 }

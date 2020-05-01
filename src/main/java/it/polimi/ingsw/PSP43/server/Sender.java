@@ -34,14 +34,14 @@ public class Sender implements Runnable {
         }
     }
 
-    public void send(Object message) throws IOException {
+    public void sendMessage(Object message) throws IOException {
         synchronized (lockOut){
             output = new ObjectOutputStream(client.getOutputStream());
             output.writeObject(message);
         }
     }
 
-    public void send(EndGameMessage message) throws IOException {
+    public void sendMessage(EndGameMessage message) throws IOException {
         synchronized (lockOut){
             output = new ObjectOutputStream(client.getOutputStream());
             output.writeObject(message);
@@ -50,12 +50,12 @@ public class Sender implements Runnable {
         output.close();
         client.close();
     }
-
-    public ClientMessage sendAndReceive(ServerMessage message) throws IOException, InterruptedException, ClassNotFoundException {
+//cambiato sendRequest da sendAndReceive
+    public ClientMessage sendRequest(ServerMessage message) throws IOException, InterruptedException, ClassNotFoundException {
         ClientMessage response;
 
         synchronized (lockOut) {
-           send(message);
+           sendMessage(message);
         }
             ClientMessage messageArrived = null;
             do{
