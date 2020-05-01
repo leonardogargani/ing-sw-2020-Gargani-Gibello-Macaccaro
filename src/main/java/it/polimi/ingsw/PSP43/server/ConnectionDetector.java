@@ -8,13 +8,13 @@ import java.net.Socket;
 public class ConnectionDetector implements Runnable {
     private Socket clientSocket;
     private static final int timeout = 20000;
-    private Sender sender;
+    private ClientListener clientListener;
 
 
 
-    public ConnectionDetector(Socket clientSocket, Sender sender) throws IOException {
+    public ConnectionDetector(Socket clientSocket, ClientListener clientListener) throws IOException {
         this.clientSocket = clientSocket;
-        this.sender = sender;
+        this.clientListener = clientListener;
         clientSocket.setSoTimeout(timeout);
     }
 
@@ -25,7 +25,7 @@ public class ConnectionDetector implements Runnable {
             if(System.currentTimeMillis()==time+timeout/2){
                 time=System.currentTimeMillis();
                 try {
-                            sender.send(new PingMessage());
+                            clientListener.sendMessage(new PingMessage());
                 } catch (IOException e) {
                     System.out.println("Server:problems with ping messages");
                 }

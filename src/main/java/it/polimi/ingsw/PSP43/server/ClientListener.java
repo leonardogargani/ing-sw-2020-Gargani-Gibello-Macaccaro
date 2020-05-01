@@ -7,6 +7,8 @@ import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSessionObservable;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
+import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
+import it.polimi.ingsw.PSP43.server.networkMessages.ServerMessage;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -44,6 +46,16 @@ public class ClientListener implements Runnable{
 
     @Override
     public void run(){
+
+        //Start ping sender thread
+        try{
+            ConnectionDetector connectionDetector = new ConnectionDetector(clientSocket,this);
+            Thread connectionThread = new Thread(connectionDetector);
+            connectionThread.start();
+        }catch (IOException e){
+            System.out.println("Problems starting connection detector");
+        }
+
         sender = new Sender(this.clientSocket,this);
         Thread senderThread = new Thread(sender);
         senderThread.start();
@@ -90,6 +102,25 @@ public class ClientListener implements Runnable{
     }
 
 
+    public void sendMessage(Object message) throws IOException {
+        synchronized (lockOut){
+            output = new ObjectOutputStream(clientSocket.getOutputStream());
+            output.writeObject(message);
+        }
+    }
+
+
+    public void sendMessage(EndGameMessage message) throws IOException {
+        synchronized (lockOut){
+            output = new ObjectOutputStream(clientSocket.getOutputStream());
+            output.writeObject(message);
+        }
+        input.close();
+        output.close();
+        clientSocket.close();
+    }
+
+
     public synchronized void handleMessage(ClientMessage message) throws WinnerCaughtException, IOException, ClassNotFoundException, ParserConfigurationException, SAXException {
         if(message instanceof RegistrationMessage){
 
@@ -112,6 +143,7 @@ public class ClientListener implements Runnable{
             gameSessions.get(idGame).unregisterFromGame((LeaveGameMessage)message,this);
     }
 
+
     public synchronized ClientMessage getMessage() throws InterruptedException {
         while (message == null){
             wait();
@@ -119,22 +151,27 @@ public class ClientListener implements Runnable{
         return message;
     }
 
+
     public synchronized void setMessage(ClientMessage message) {
         this.message = message;
         notifyAll();
     }
 
+
     public synchronized void removeGameSession(int idGame){
         gameSessions.remove(idGame);
     }
+
 
     public void handleDisconnection() throws IOException {
         gameSessions.get(idGame).unregisterFromGame(new LeaveGameMessage(),this);
     }
 
-    public ObjectInputStream getInput() {
-        return input;
+
+    public ClientMessage sendRequest(ServerMessage message) throws InterruptedException, IOException, ClassNotFoundException {
+        return getSender().sendRequest(message);
     }
+
 
     public Sender getSender() {
         return sender;

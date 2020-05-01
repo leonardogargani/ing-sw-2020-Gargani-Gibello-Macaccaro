@@ -1,7 +1,6 @@
 package it.polimi.ingsw.PSP43.server;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
-import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.ServerMessage;
 
 import java.io.*;
@@ -24,38 +23,16 @@ public class Sender implements Runnable {
 
     @Override
     public void run() {
-        //Start ping sender thread
-        try{
-            ConnectionDetector connectionDetector = new ConnectionDetector(client,this);
-            Thread connectionThread = new Thread(connectionDetector);
-            connectionThread.start();
-        }catch (IOException e){
-            System.out.println("Problems starting connection detector");
-        }
+
     }
 
-    public void sendMessage(Object message) throws IOException {
-        synchronized (lockOut){
-            output = new ObjectOutputStream(client.getOutputStream());
-            output.writeObject(message);
-        }
-    }
 
-    public void sendMessage(EndGameMessage message) throws IOException {
-        synchronized (lockOut){
-            output = new ObjectOutputStream(client.getOutputStream());
-            output.writeObject(message);
-        }
-        clientListener.getInput().close();
-        output.close();
-        client.close();
-    }
-//cambiato sendRequest da sendAndReceive
+
     public ClientMessage sendRequest(ServerMessage message) throws IOException, InterruptedException, ClassNotFoundException {
         ClientMessage response;
 
         synchronized (lockOut) {
-           sendMessage(message);
+           clientListener.sendMessage(message);
         }
             ClientMessage messageArrived = null;
             do{
