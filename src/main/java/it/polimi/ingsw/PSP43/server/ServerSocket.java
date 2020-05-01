@@ -20,7 +20,7 @@ public class ServerSocket {
             try {
                 Socket client = socket.accept();
                 ClientListener clientListener = new ClientListener(client);
-                Thread thread= new Thread(clientListener,"server_"+client.getInetAddress());
+                Thread thread= new Thread(clientListener);
                 thread.start();
             }catch (IOException e){
                 System.out.println("connection dropped");

@@ -7,19 +7,14 @@ import java.net.Socket;
 
 public class ConnectionDetector implements Runnable {
     private Socket clientSocket;
-    private static final int timeout = 10000;
-    private ClientListener clientListener;
+    private static final int timeout = 20000;
+    private Sender sender;
 
 
-    /**
-     *
-     * @param clientSocket
-     * @param clientListener
-     * @throws IOException
-     */
-    public ConnectionDetector(Socket clientSocket, ClientListener clientListener) throws IOException {
+
+    public ConnectionDetector(Socket clientSocket, Sender sender) throws IOException {
         this.clientSocket = clientSocket;
-        this.clientListener = clientListener;
+        this.sender = sender;
         clientSocket.setSoTimeout(timeout);
     }
 
@@ -30,8 +25,7 @@ public class ConnectionDetector implements Runnable {
             if(System.currentTimeMillis()==time+timeout/2){
                 time=System.currentTimeMillis();
                 try {
-                            clientListener.sendMessage(new PingMessage());
-
+                            sender.send(new PingMessage());
                 } catch (IOException e) {
                     System.out.println("Server:problems with ping messages");
                 }

@@ -7,7 +7,7 @@ import java.net.Socket;
 
 public class ConnectionDetector implements Runnable {
     private Socket serverSocket;
-    private static final int timeout = 10000;
+    private static final int timeout = 20000;
     private ClientBG clientBG;
 
 
@@ -25,12 +25,7 @@ public class ConnectionDetector implements Runnable {
             if(System.currentTimeMillis()==time+timeout/2){
                 time=System.currentTimeMillis();
                 try {
-                    do{
-                        if(!clientBG.isLock()){
-                                clientBG.setLock(true);
                                 clientBG.sendMessage(new PingMessage());
-                                clientBG.setLock(false);
-                }}while (clientBG.isLock());
                 }
                 catch (IOException e) {
                     System.out.println("Server:problems with ping messages");
