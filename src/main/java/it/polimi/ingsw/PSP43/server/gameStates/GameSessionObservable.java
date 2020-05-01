@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
-import it.polimi.ingsw.PSP43.client.Client;
 import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
@@ -27,7 +26,7 @@ public class GameSessionObservable {
         this.listenersHashMap = new HashMap<>();
     }
 
-    public synchronized int registerToTheGame(RegistrationMessage message, ClientListener player) throws IOException, ClassNotFoundException, WinnerCaughtException {
+    public synchronized int registerToTheGame(RegistrationMessage message, ClientListener player) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         if (getListenersHashMap().size() != maxNumPlayers) {
             listenersHashMap.put(message.getNick(), player);
             currentState.executeState(message);
@@ -75,14 +74,13 @@ public class GameSessionObservable {
         }
     }
 
-    public boolean sendRequest(ServerMessage message, String addressee, ClientMessage typeResponse) throws IOException, ClassNotFoundException {
+    public<T extends ClientMessage> T sendRequest(ServerMessage message, String addressee, Class<?> typeExpected) throws IOException, ClassNotFoundException, InterruptedException {
         ClientListener listenerAddressee = listenersHashMap.get(addressee);
         ClientMessage messageArrived = listenerAddressee.sendRequest(message);
-        if (messageArrived.getClass().isInstance(typeResponse)) {
-            typeResponse = messageArrived;
-            return true;
+        if (messageArrived.getClass().isInstance(typeExpected)) {
+            return (T)messageArrived;
         }
-        else return false;
+        return null;
     }
 
     public void sendEndingMessage(EndGameMessage message, ArrayList<String> nicksExcluded) throws IOException {

@@ -24,7 +24,7 @@ public class MoveState extends TurnState {
         super(gameSession);
     }
 
-    public void initState() throws IOException, ClassNotFoundException, WinnerCaughtException {
+    public void initState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
         WorkersHandler handler = game.getWorkersHandler();
@@ -42,7 +42,7 @@ public class MoveState extends TurnState {
         }
 
         currentPlayer = game.getCurrentPlayer();
-        TextMessage broadcastMessage = new TextMessage("It's " + currentPlayer.getNickname() + "'s turn.");
+        TextMessage broadcastMessage = new TextMessage(currentPlayer.getNickname());
         ArrayList<String> nicksExcluded = new ArrayList<>();
         nicksExcluded.add(currentPlayer.getNickname());
         game.sendBroadCast(broadcastMessage, nicksExcluded);
@@ -62,7 +62,7 @@ public class MoveState extends TurnState {
         }
     }
 
-    public void executeState() throws WinnerCaughtException, IOException, ClassNotFoundException {
+    public void executeState() throws WinnerCaughtException, IOException, ClassNotFoundException, InterruptedException {
         GameSession game = super.getGameSession();
         WorkersHandler workersHandler = game.getWorkersHandler();
         Player currentPlayer = game.getCurrentPlayer();
@@ -79,10 +79,9 @@ public class MoveState extends TurnState {
         availablePositions = playerCard.findAvailablePositionsToMove(game.getCellsHandler(), (Worker[]) workers.toArray());
         ActionRequest message = new ActionRequest("Choose a position where to place your worker next.", availablePositions);
         ActionResponse response = null;
-        boolean delivered;
         do {
-            delivered = game.sendRequest(message, nicknameCurrentPlayer, response);
-        } while (!delivered);
+            response = game.sendRequest(message, nicknameCurrentPlayer, ActionResponse.class);
+        } while (response == null);
 
         Coord nextPositionChosen = response.getPosition();
         Coord oldPosition = response.getWorkerPosition();
@@ -94,7 +93,7 @@ public class MoveState extends TurnState {
         findNextState();
     }
 
-    public void findNextState() throws IOException, ClassNotFoundException, WinnerCaughtException {
+    public void findNextState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         GameSession game = super.getGameSession();
         TurnState currentState = game.getCurrentState();
         int indexCurrentState = game.getTurnMap().indexOf(currentState);

@@ -86,34 +86,20 @@ public class BasicGodCard extends AbstractGodCard {
         this.buildBlockBehaviour = buildBlockBehaviour;
     }
 
-    /**
-     *
-     *
-     * @param dataToAction*/
-    public void move(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException {
+    public void move(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         if (moveBehavior == null) {
             super.move(dataToAction);
         }
         else moveBehavior.handleMove(dataToAction);
     }
 
-    /**
-     *
-     *
-     * @param dataToAction
-     */
-    public void buildBlock(DataToAction dataToAction) throws IOException, ClassNotFoundException {
+    public void buildBlock(DataToAction dataToAction) throws IOException, ClassNotFoundException, InterruptedException {
         if (buildBlockBehaviour == null) {
             super.buildBlock(dataToAction);
         }
         else buildBlockBehaviour.handleBuildBlock(dataToAction);
     }
 
-    /**
-     *
-     *
-     * @param dataToAction
-     */
     public void buildDome(DataToAction dataToAction) {
         super.buildDome(dataToAction);
     }

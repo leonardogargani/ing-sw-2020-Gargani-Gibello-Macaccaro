@@ -24,7 +24,7 @@ public class BuildState extends TurnState {
         super(gameSession);
     }
 
-    public void initState() throws IOException, ClassNotFoundException, WinnerCaughtException {
+    public void initState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         super.initState();
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
@@ -33,7 +33,7 @@ public class BuildState extends TurnState {
         executeState();
     }
 
-    public void executeState() throws IOException, ClassNotFoundException, WinnerCaughtException {
+    public void executeState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
         WorkersHandler workersHandler = game.getWorkersHandler();
@@ -44,27 +44,27 @@ public class BuildState extends TurnState {
         HashMap<Coord, ArrayList<Coord>> availablePositions;
 
         RequestMessage request = new RequestMessage("Do you want to build a dome or a block?");
-        ResponseMessage response = null;
-        boolean delivered;
+        ResponseMessage response;
         do {
-            delivered = game.sendRequest(request, nicknameCurrentPlayer, response);
-        } while (!delivered);
+            response = game.sendRequest(request, nicknameCurrentPlayer, ResponseMessage.class);
+        } while (response == null);
 
         boolean buildBlock = response.isResponse();
 
         int[] workerIds = currentPlayer.getWorkersIdsArray();
         ArrayList<Worker> workersOfPlayer = new ArrayList<>();
         for (int id : workerIds) {
-            workersOfPlayer.add(workersHandler.getWorker(id));
+            if (workersHandler.getWorker(id).isLatestMoved())
+                workersOfPlayer.add(workersHandler.getWorker(id));
         }
         if (buildBlock) availablePositions = playerCard.findAvailablePositionsToBuildBlock(game.getCellsHandler(), (Worker[]) workersOfPlayer.toArray());
         else availablePositions = playerCard.findAvailablePositionsToBuildDome(game.getCellsHandler(), (Worker[]) workersOfPlayer.toArray());
 
         ActionRequest message = new ActionRequest("Choose where to build.", availablePositions);
-        ActionResponse actionResponse = null;
+        ActionResponse actionResponse;
         do {
-            delivered = game.sendRequest(request, nicknameCurrentPlayer, actionResponse);
-        } while (!delivered);
+            actionResponse = game.sendRequest(message, nicknameCurrentPlayer, ActionResponse.class);
+        } while (actionResponse == null);
 
         Coord coordToBuild = actionResponse.getPosition();
         Worker workerToBuild = workersHandler.getWorker(actionResponse.getWorkerPosition());
@@ -74,7 +74,7 @@ public class BuildState extends TurnState {
         findNextState();
     }
 
-    public void findNextState() throws IOException, ClassNotFoundException, WinnerCaughtException {
+    public void findNextState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         GameSession game = super.getGameSession();
         Player currentPlayer = game.getCurrentPlayer();
         PlayersHandler handler = game.getPlayersHandler();

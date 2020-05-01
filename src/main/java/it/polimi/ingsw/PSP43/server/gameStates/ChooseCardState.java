@@ -8,20 +8,30 @@ import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.CardRequest;
+import it.polimi.ingsw.PSP43.server.networkMessages.InitialCardsRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.StartGameMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * This is the State of the game where the players are asked to choose the cards
+ * they will own during the game.
+ */
 public class ChooseCardState extends TurnState {
-    private ArrayList<AbstractGodCard> cardsAvailable;
+    protected ArrayList<AbstractGodCard> cardsAvailable;
     private static final int FIRSTPOSITION = 0;
 
     public ChooseCardState(GameSession gameSession) {
         super(gameSession);
     }
 
-    public void initState() throws IOException, ClassNotFoundException, WinnerCaughtException {
+    /**
+     * This method initialises the god-like player, it asks him to pick up some cards
+     * to use during the game and sends a message to all the other players telling them to wait
+     * several minutes to choose the card they will own.
+     */
+    public void initState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
 
@@ -34,62 +44,70 @@ public class ChooseCardState extends TurnState {
         game.sendBroadCast(openingMessage, nicksExcluded);
 
         ArrayList<AbstractGodCard> available = game.getCardsHandler().getDeckOfAbstractGodCards();
-        CardRequest cardsRequest = new CardRequest("Choose " + playersHandler.getNumOfPlayers() + " cards. You " +
-                "will receive the latest not chosen by other players.", available);
-        ChosenCardsResponse responseCardMessage = null;
-        boolean delivered;
+        InitialCardsRequest cardsRequest = new InitialCardsRequest("Choose " + playersHandler.getNumOfPlayers() + " cards. You " +
+                "will receive the latest not chosen by other players.", available, game.getListenersHashMap().size());
+        ChosenCardsResponse responseCardMessage;
         do {
-            delivered = game.sendRequest(cardsRequest, game.getCurrentPlayer().getNickname(), responseCardMessage);
-        } while (!delivered);
-        // TODO : message class not yet well implemented
+            responseCardMessage = game.sendRequest(cardsRequest, game.getCurrentPlayer().getNickname(), ChosenCardsResponse.class);
+        } while (responseCardMessage==null);
         cardsAvailable = responseCardMessage.getCardsName();
         this.executeState();
     }
 
-    public void executeState() throws IOException, ClassNotFoundException, WinnerCaughtException {
+    /**
+     * This method picks up the next player to the god-like in the list where they are saved
+     * and calls a method that, one at a time, asks to all the players which card they want to
+     * use during the game. The latest card will be assigned to the god-like player.
+     */
+    public void executeState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
-        CardsHandler cardsHandler = game.getCardsHandler();
 
         game.setCurrentPlayer(playersHandler.getPlayer(FIRSTPOSITION + 1));
 
-        String nicknameGodLikePlayer = playersHandler.getPlayer(FIRSTPOSITION).getNickname();
-        String nicknameCurrentPlayer;
-
-        do {
-            Player current = game.getCurrentPlayer();
-            nicknameCurrentPlayer = current.getNickname();
-
-            CardRequest request = new CardRequest("Choose a card:", cardsAvailable);
-            ChosenCardResponse response = null;
-            boolean delivered;
-            do {
-                delivered = game.sendRequest(request, nicknameCurrentPlayer, response);
-            } while (!delivered);
-
-            cardsHandler.setCardToPlayer(nicknameCurrentPlayer, response.getCard().getGodName());
-            cardsAvailable.remove(response.getCard());
-
-            game.setCurrentPlayer(playersHandler.getNextPlayer(nicknameCurrentPlayer));
-        } while (!nicknameGodLikePlayer.equals(nicknameCurrentPlayer));
+        askForCards(game);
 
         findNextState();
     }
 
-    public void findNextState() throws IOException, ClassNotFoundException, WinnerCaughtException {
+    /**
+     * This method asks to all the participants to the game to choose a card they want to use during
+     * the game.
+     * @param gameSession This is a reference to the center of the gameSession database.
+     */
+    private void askForCards(GameSession gameSession) throws IOException, ClassNotFoundException, InterruptedException {
+        PlayersHandler playersHandler = gameSession.getPlayersHandler();
+        String nicknameGodLikePlayer = playersHandler.getPlayer(FIRSTPOSITION).getNickname();
+        String nicknameCurrentPlayer;
+        CardsHandler cardsHandler = gameSession.getCardsHandler();
+
+        do {
+            Player current = gameSession.getCurrentPlayer();
+            nicknameCurrentPlayer = current.getNickname();
+
+            CardRequest request = new CardRequest("Choose a card:", cardsAvailable);
+            ChosenCardResponse response;
+            do {
+                response = gameSession.sendRequest(request, nicknameCurrentPlayer, ChosenCardResponse.class);
+            } while (response == null);
+
+            current.setAbstractGodCard(response.getCard());
+            cardsHandler.setCardToPlayer(nicknameCurrentPlayer, response.getCard().getGodName());
+            cardsAvailable.remove(response.getCard());
+            gameSession.setCurrentPlayer(playersHandler.getNextPlayer(nicknameCurrentPlayer));
+        } while (!nicknameGodLikePlayer.equals(nicknameCurrentPlayer));
+    }
+
+    /**
+     * Finds the next state for the game, saving it in a variable in GameSession, and calls on the
+     * instance of GameSession the method to transit to the next state of play.
+     */
+    public void findNextState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         GameSession game = super.getGameSession();
         int indexCurrentState;
         indexCurrentState = game.getTurnMap().indexOf(game.getCurrentState());
-        game.setNextState(game.getTurnMap().get(indexCurrentState + 1 ));
+        game.setNextState(game.getTurnMap().get(indexCurrentState + 1));
 
         game.transitToNextState();
-    }
-
-    private ArrayList<AbstractGodCard> getCardsAvailable() {
-        return cardsAvailable;
-    }
-
-    private void setCardsAvailable(ArrayList<AbstractGodCard> cardsAvailable) {
-        this.cardsAvailable = cardsAvailable;
     }
 }

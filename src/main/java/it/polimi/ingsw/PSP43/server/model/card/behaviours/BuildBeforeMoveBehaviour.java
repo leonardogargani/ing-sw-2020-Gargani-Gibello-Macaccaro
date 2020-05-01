@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BuildBeforeMoveBehaviour extends AbstractGodCard implements MoveBehavior {
-    public void handleMove(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException {
+    public void handleMove(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         GameSession gameSession = dataToAction.getGameSession();
         Player player = dataToAction.getPlayer();
         Worker worker = dataToAction.getWorker();
@@ -26,11 +26,10 @@ public class BuildBeforeMoveBehaviour extends AbstractGodCard implements MoveBeh
         Cell newCell = gameSession.getCellsHandler().getCell(dataToAction.getNewPosition());
         if (newCell.getHeight() - oldCell.getHeight() == 0) {
             RequestMessage message = new RequestMessage("Do you want to build before moving?");
-            ResponseMessage responseMessage = null;
-            boolean delivered;
+            ResponseMessage responseMessage;
             do {
-                delivered = gameSession.sendRequest(message, player.getNickname(), responseMessage);
-            } while (!delivered);
+                responseMessage = gameSession.sendRequest(message, player.getNickname(), ResponseMessage.class);
+            } while (responseMessage == null);
 
             boolean response = responseMessage.isResponse();
             if (response) {
@@ -41,10 +40,10 @@ public class BuildBeforeMoveBehaviour extends AbstractGodCard implements MoveBeh
                     availablePositions.get(c).removeIf(c1 -> c1.getY() == dataToAction.getNewPosition().getY() && c1.getX() == dataToAction.getNewPosition().getX());
                 }
                 ActionRequest request = new ActionRequest("Choose a cell where to build.", availablePositions);
-                ActionResponse actionResponse = null;
+                ActionResponse actionResponse;
                 do {
-                    delivered = gameSession.sendRequest(request, player.getNickname(), actionResponse);
-                } while (!delivered);
+                    actionResponse = gameSession.sendRequest(request, player.getNickname(), ActionResponse.class);
+                } while (actionResponse == null);
 
                 Coord coordToBuild = actionResponse.getPosition();
                 DataToAction dataBuild = new DataToAction(gameSession, player, worker, coordToBuild);

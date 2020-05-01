@@ -32,11 +32,10 @@ public class UnconditionedDomeBuildDecorator extends PowerGodDecorator {
     }
 
     public AbstractGodCard cleanFromEffects(String nameOfEffect) throws ClassNotFoundException {
-        AbstractGodCard newCard;
         AbstractGodCard component = super.getGodComponent().cleanFromEffects(nameOfEffect);
-        Class c = Class.forName(nameOfEffect);
+        Class<?> c = Class.forName(nameOfEffect);
         if (!c.isInstance(this))
-            return newCard = new UnconditionedDomeBuildDecorator(component);
+            return new UnconditionedDomeBuildDecorator(component);
         else return component;
     }
 }

@@ -20,14 +20,8 @@ public class WinConditionDecorator extends PowerGodDecorator {
         super(godComponent);
     }
 
-    /**
-     *
-     *
-     * @param dataToAction
-     * @throws WinnerCaughtException if the player's worker moves down two or more levels in a move
-     */
     @Override
-    public void move(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException {
+    public void move(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         super.move(dataToAction);
         CellsHandler handler = dataToAction.getGameSession().getCellsHandler();
         Coord oldPosition = dataToAction.getWorker().getPreviousPosition();
@@ -39,11 +33,10 @@ public class WinConditionDecorator extends PowerGodDecorator {
     }
 
     public AbstractGodCard cleanFromEffects(String nameOfEffect) throws ClassNotFoundException {
-        AbstractGodCard newCard;
         AbstractGodCard component = super.getGodComponent().cleanFromEffects(nameOfEffect);
-        Class c = Class.forName(nameOfEffect);
+        Class<?> c = Class.forName(nameOfEffect);
         if (!c.isInstance(this))
-            return newCard = new WinConditionDecorator(component);
+            return new WinConditionDecorator(component);
         else return component;
     }
 }

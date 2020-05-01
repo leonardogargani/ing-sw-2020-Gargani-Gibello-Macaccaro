@@ -6,7 +6,6 @@ import it.polimi.ingsw.PSP43.client.networkMessages.WorkersColorResponse;
 import it.polimi.ingsw.PSP43.server.DataToAction;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
-import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
@@ -31,7 +30,7 @@ public class ChooseWorkerState extends TurnState {
         colorsChosen = new HashMap<>();
     }
 
-    public void initState() throws IOException, ClassNotFoundException, WinnerCaughtException {
+    public void initState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
         game.setCurrentPlayer(playersHandler.getPlayer(FIRSTPOSITION));
@@ -42,7 +41,7 @@ public class ChooseWorkerState extends TurnState {
         executeState();
     }
 
-    public void executeState() throws IOException, ClassNotFoundException, WinnerCaughtException {
+    public void executeState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
         WorkersHandler workersHandler = game.getWorkersHandler();
@@ -54,11 +53,10 @@ public class ChooseWorkerState extends TurnState {
             String nicknameCurrentPlayer = currentPlayer.getNickname();
             int latestPosition;
             WorkersColorRequest colorRequest = new WorkersColorRequest("Choose a color of the worker you will own.", availableColors);
-            WorkersColorResponse colorResponse = null;
-            boolean delivered;
+            WorkersColorResponse colorResponse;
             do {
-                delivered = game.sendRequest(colorRequest, nicknameCurrentPlayer, colorResponse);
-            } while (!delivered);
+                colorResponse = game.sendRequest(colorRequest, nicknameCurrentPlayer, WorkersColorResponse.class);
+            } while (colorResponse == null);
 
             int[] workersIds = new int[2];
             for (int i=0; i<2; i++) {
@@ -68,19 +66,18 @@ public class ChooseWorkerState extends TurnState {
             colorsChosen.put(currentPlayer, colorResponse.getColor());
 
             HashMap<Coord, ArrayList<Coord>> hashAvailablePositions = null;
-            ActionRequest placementRequest = null;
-            ActionResponse response;
+            ActionRequest placementRequest;
 
             for (int i = 0; i<workersIds.length; i++) {
+                ActionResponse response;
                 ArrayList<Coord> availablePositions = game.getCellsHandler().findAllCellsFree();
                 hashAvailablePositions = new HashMap<>();
                 hashAvailablePositions.put(new Coord(0, 0), availablePositions);
                 placementRequest = new ActionRequest("Choose where to place your worker " + i + " .",
                         hashAvailablePositions);
-                response = null;
                 do {
-                    delivered = game.sendRequest(placementRequest, nicknameCurrentPlayer, response);
-                } while(!delivered);
+                    response = game.sendRequest(placementRequest, nicknameCurrentPlayer, ActionResponse.class);
+                } while(response==null);
                 Coord coordChosen = response.getPosition();
                 DataToAction data = new DataToAction(game, currentPlayer, workersHandler.getWorker(workersIds[i]), coordChosen);
                 currentPlayer.getAbstractGodCard().move(data);
@@ -93,7 +90,7 @@ public class ChooseWorkerState extends TurnState {
         findNextState();
     }
 
-    public void findNextState() throws IOException, ClassNotFoundException, WinnerCaughtException {
+    public void findNextState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         GameSession game = super.getGameSession();
         int indexCurrentState;
         indexCurrentState = game.getTurnMap().indexOf(game.getCurrentState());
@@ -103,6 +100,7 @@ public class ChooseWorkerState extends TurnState {
             cardsChosen.put(game.getPlayersHandler().getPlayer(s), game.getPlayersHandler().getPlayer(s).getAbstractGodCard());
         }
         PlayersListMessage listOfPlayers = new PlayersListMessage(null, cardsChosen, colorsChosen);
+        game.sendBroadCast(listOfPlayers);
         game.transitToNextState();
     }
 }

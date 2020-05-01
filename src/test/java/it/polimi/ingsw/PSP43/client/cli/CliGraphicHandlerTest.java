@@ -26,7 +26,7 @@ public class CliGraphicHandlerTest {
     // this method tests all the implementations (signatures) of updateBoardChange()
     @Test
     public void testUpdateBoardChange() {
-        Worker worker = new Worker(0, Color.ANSI_RED);
+        Worker worker = new Worker(0, Color.ANSI_RED, null);
         Coord coord1 = new Coord(2, 3);
         Coord coord2 = new Coord(1, 3);
         CliCell cliCell1 = test.getBoard().getCell(coord1);

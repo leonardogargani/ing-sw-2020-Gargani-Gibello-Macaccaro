@@ -8,16 +8,15 @@ import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
 import java.io.IOException;
 
 public class DoubleSameSpaceBehaviour extends AbstractGodCard implements BuildBlockBehaviour {
-    public void handleBuildBlock(DataToAction dataToAction) throws IOException, ClassNotFoundException {
+    public void handleBuildBlock(DataToAction dataToAction) throws IOException, ClassNotFoundException, InterruptedException {
         super.buildBlock(dataToAction);
         RequestMessage requestMessage = new RequestMessage("Do you want to build another time on the same space?");
-        ResponseMessage responseMessage = null;
-        boolean delivered;
+        ResponseMessage responseMessage;
         do {
-            delivered = dataToAction.getGameSession().sendRequest(  requestMessage,
+            responseMessage = dataToAction.getGameSession().sendRequest(  requestMessage,
                                                                     dataToAction.getPlayer().getNickname(),
-                                                                    responseMessage);
-        } while (!delivered);
+                                                                    ResponseMessage.class);
+        } while (responseMessage == null);
 
         boolean response = responseMessage.isResponse();
         if (response) {

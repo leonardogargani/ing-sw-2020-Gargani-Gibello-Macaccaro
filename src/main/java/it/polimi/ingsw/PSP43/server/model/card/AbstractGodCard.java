@@ -73,7 +73,7 @@ public abstract class AbstractGodCard {
         return power;
     }
 
-    public void move(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException {
+    public void move(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         GameSession gameSession = dataToAction.getGameSession();
         Coord newPosition = dataToAction.getNewPosition();
         Worker workerToMove = dataToAction.getWorker();
@@ -89,7 +89,7 @@ public abstract class AbstractGodCard {
         workerToMove.setCurrentPosition(newPosition);
     }
 
-    public void buildBlock(DataToAction dataToAction) throws IOException, ClassNotFoundException {
+    public void buildBlock(DataToAction dataToAction) throws IOException, ClassNotFoundException, InterruptedException {
         CellsHandler handler = dataToAction.getGameSession().getCellsHandler();
         Cell newCell = handler.getCell(dataToAction.getNewPosition());
         newCell.setHeight(newCell.getHeight()+1);
@@ -138,17 +138,6 @@ public abstract class AbstractGodCard {
             }
         }
         return neighbouringCoords;
-    }
-
-    public Worker[] findWorkersToBuild(Worker[] workers) {
-        Worker workerToBuild = null;
-        for (Worker w : workers) {
-            if (w.isLatestMoved()) workerToBuild = w;
-        }
-
-        Worker[] newWorker = new Worker[1];
-        newWorker[0] = workerToBuild;
-        return newWorker;
     }
 
     public AbstractGodCard cleanFromEffects(String nameOfEffect) throws ClassNotFoundException {

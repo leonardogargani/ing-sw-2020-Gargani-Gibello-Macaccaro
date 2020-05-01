@@ -31,7 +31,6 @@ public class BlockRiseDecorator extends PowerGodDecorator {
     }
 
     public AbstractGodCard cleanFromEffects(String nameOfEffect) throws ClassNotFoundException {
-        AbstractGodCard component = super.getGodComponent().cleanFromEffects(nameOfEffect);
-        return component;
+        return super.getGodComponent().cleanFromEffects(nameOfEffect);
     }
 }

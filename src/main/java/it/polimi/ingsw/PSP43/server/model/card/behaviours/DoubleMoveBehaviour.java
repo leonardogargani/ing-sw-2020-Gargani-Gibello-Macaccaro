@@ -15,16 +15,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DoubleMoveBehaviour extends AbstractGodCard implements MoveBehavior {
-    public void handleMove(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException {
+    public void handleMove(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         super.move(dataToAction);
         RequestMessage requestMessage = new RequestMessage("Do you want to move another time?");
-        ResponseMessage responseMessage = null;
-        boolean delivered;
+        ResponseMessage responseMessage;
         do {
-            delivered = dataToAction.getGameSession().sendRequest(  requestMessage,
+            responseMessage = dataToAction.getGameSession().sendRequest(  requestMessage,
                                                                     dataToAction.getPlayer().getNickname(),
-                                                                    responseMessage);
-        } while (!delivered);
+                                                                    ResponseMessage.class);
+        } while (responseMessage == null);
 
         boolean response  = responseMessage.isResponse();
         if (response) {
@@ -36,10 +35,10 @@ public class DoubleMoveBehaviour extends AbstractGodCard implements MoveBehavior
                         -> c1.getY() == dataToAction.getNewPosition().getY() && c1.getX() == dataToAction.getNewPosition().getX());
             }
             ActionRequest request = new ActionRequest("Choose a cell where to move.", availablePositions);
-            ActionResponse actionResponse = null;
+            ActionResponse actionResponse;
             do {
-                delivered = dataToAction.getGameSession().sendRequest(request, dataToAction.getPlayer().getNickname(), actionResponse);
-            } while (!delivered);
+                actionResponse = dataToAction.getGameSession().sendRequest(request, dataToAction.getPlayer().getNickname(), ActionResponse.class);
+            } while (actionResponse == null);
 
             Coord coordChosen = actionResponse.getPosition();
             super.move(new DataToAction(dataToAction.getGameSession(), dataToAction.getPlayer(), dataToAction.getWorker(), coordChosen));

@@ -46,22 +46,21 @@ public class GameSession extends GameSessionObservable {
         this.turnMap.add(4, new BuildState(this));
         this.turnMap.add(5, new WinState(this));
         this.nextState = null;
-
+        this.boardObserver = new BoardObserver();
         this.cellsHandler = new CellsHandler(this);
         this.playersHandler = new PlayersHandler(this);
         this.workersHandler = new WorkersHandler(this);
         this.cardsHandler = new CardsHandler();
-        this.boardObserver = new BoardObserver();
     }
 
-    public boolean validateMessage(ClientMessage messageArrived, ClientMessage typeMessageRequested) {
+    public boolean validateMessage(ClientMessage messageArrived, Class<?> typeMessageRequested) {
         if (messageArrived.getClass().isInstance(typeMessageRequested)) {
             return true;
         }
         else return false;
     }
 
-    protected void transitToNextState() throws IOException, ClassNotFoundException, WinnerCaughtException {
+    protected void transitToNextState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         int indexNextState = turnMap.indexOf(nextState);
         currentState = turnMap.get(indexNextState);
         super.currentState = turnMap.get(indexNextState);
@@ -93,11 +92,12 @@ public class GameSession extends GameSessionObservable {
      * @param currentState, refers to the kind of turn state
      */
     public void setCurrentState(TurnState currentState) {
+        super.currentState = currentState;
         this.currentState = currentState;
     }
 
     public TurnState getNextState() {
-        return nextState;
+        return this.nextState;
     }
 
     public void setNextState(TurnState nextState) {

@@ -121,7 +121,7 @@ public class ClientListener implements Runnable{
     }
 
 
-    public synchronized void handleMessage(ClientMessage message) throws WinnerCaughtException, IOException, ClassNotFoundException, ParserConfigurationException, SAXException {
+    public synchronized void handleMessage(ClientMessage message) throws WinnerCaughtException, IOException, ClassNotFoundException, ParserConfigurationException, SAXException, InterruptedException {
         if(message instanceof RegistrationMessage){
 
             int counter = 0;

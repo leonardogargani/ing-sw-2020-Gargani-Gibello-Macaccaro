@@ -58,7 +58,7 @@ public class WorkersHandler {
      */
     public int addNewWorker(Color color) {
         int workerId = workers.size();
-        Worker newWorker = new Worker(workerId, color);
+        Worker newWorker = new Worker(workerId, color, gameSession.getBoardObserver());
         workers.add(newWorker);
         return workerId;
     }

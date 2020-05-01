@@ -7,53 +7,73 @@ import it.polimi.ingsw.PSP43.server.modelHandlersException.NicknameAlreadyInUseE
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.ChangeNickRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.PlayersNumberRequest;
-import it.polimi.ingsw.PSP43.server.networkMessages.TextMessage;
+import it.polimi.ingsw.PSP43.server.networkMessages.StartGameMessage;
 
 import java.io.IOException;
 
+/**
+ * This is the initial state where the game accept new players and, for the first one,
+ * asks for the number of participants required.
+ */
 public class PlayerRegistrationState extends TurnState{
 
     public PlayerRegistrationState(GameSession gameSession) {
         super(gameSession);
     }
 
-    public void executeState(RegistrationMessage message) throws IOException, ClassNotFoundException {
+    /**
+     * This method is the one which has to initialise the data of the new player connected.
+     * If the nickname chosen by the player is already used, it sends an error to the client
+     * asking him to re-insert the username. In that case the player will be treated as a
+     * new player connecting to the server.
+     * @param message This is the message sent from the client.
+     */
+    public void executeState(RegistrationMessage message) throws IOException {
         GameSession game = super.getGameSession();
         int numberOfPlayers = game.getListenersHashMap().size();
         PlayersHandler playersHandler = game.getPlayersHandler();
-        boolean registered = false;
-        do {
-            try {
-                registered = playersHandler.createNewPlayer(message.getNick());
-                if (numberOfPlayers == 1) {
-                    PlayersNumberRequest request = new PlayersNumberRequest("Choose between a 2 or 3 game play.");
-                    // TODO : is it possible to have and empty constructor for messages?
-                    PlayersNumberResponse response = null;
-                    boolean delivered;
-                    do {
-                        delivered = game.sendRequest(request, message.getNick(), response);
-                    } while (!delivered);
-                    game.maxNumPlayers = response.getNumberOfPlayer();
-                }
-                if (game.maxNumPlayers == numberOfPlayers) {
-                    findNextState();
-                }
-                else {
-                    TextMessage clientMessage = new TextMessage("We are connecting you with other players!");
-                    game.sendMessage(clientMessage, message.getNick());
-                }
-                registered = true;
-            } catch (NicknameAlreadyInUseException e) {
-                ChangeNickRequest notifyChangeNick = new ChangeNickRequest("We are sorry, but " + message.getNick() +
-                        "is already in use.");
-                game.sendMessage(notifyChangeNick, message.getNick());
-            } catch (IOException | ClassNotFoundException | WinnerCaughtException e) {
-                e.printStackTrace();
+        try {
+            playersHandler.createNewPlayer(message.getNick());
+
+            if (numberOfPlayers == 1) {
+                askNumberPlayers(game, message);
             }
-        } while (!registered);
+
+            if (game.maxNumPlayers == numberOfPlayers) {
+                findNextState();
+            }
+            else {
+                StartGameMessage clientMessage = new StartGameMessage("We are connecting you with other players!");
+                game.sendMessage(clientMessage, message.getNick());
+            }
+        } catch (NicknameAlreadyInUseException e) {
+            ChangeNickRequest notifyChangeNick = new ChangeNickRequest("We are sorry, but " + message.getNick() +
+                    "is already in use.");
+            game.sendMessage(notifyChangeNick, message.getNick());
+        } catch (IOException | ClassNotFoundException | WinnerCaughtException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void findNextState() throws IOException, ClassNotFoundException, WinnerCaughtException {
+    /**
+     * This method asks to the first player of the game how many opponents does he want.
+     * @param gameSession This is a reference to the center of the game database.
+     * @param message This is the message sent from the client.
+     */
+    private void askNumberPlayers(GameSession gameSession, RegistrationMessage message) throws IOException, ClassNotFoundException, InterruptedException {
+        PlayersNumberRequest request = new PlayersNumberRequest("Choose between a 2 or 3 game play.");
+        PlayersNumberResponse response;
+        do {
+            response = gameSession.sendRequest(request, message.getNick(), PlayersNumberResponse.class);
+        } while (response == null);
+        gameSession.maxNumPlayers = response.getNumberOfPlayer();
+    }
+
+    /**
+     * Finds the next state for the game, saving it in a variable in GameSession, and calls on the
+     * instance of GameSession the method to transit to the next state of play.
+     */
+    public void findNextState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         GameSession game = super.getGameSession();
         int indexCurrentState;
         indexCurrentState = game.getTurnMap().indexOf(game.getCurrentState());

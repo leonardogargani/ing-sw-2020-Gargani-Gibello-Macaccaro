@@ -32,11 +32,11 @@ public abstract class PowerGodDecorator extends AbstractGodCard {
         this.godComponent = godComponent;
     }
 
-    public void move(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException {
+    public void move(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         godComponent.move(dataToAction);
     }
 
-    public void buildBlock(DataToAction dataToAction) throws IOException, ClassNotFoundException {
+    public void buildBlock(DataToAction dataToAction) throws IOException, ClassNotFoundException, InterruptedException {
         godComponent.buildBlock(dataToAction);
     }
 
@@ -54,5 +54,21 @@ public abstract class PowerGodDecorator extends AbstractGodCard {
 
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildDome(CellsHandler handler, Worker[] workers) {
         return godComponent.findAvailablePositionsToBuildDome(handler, workers);
+    }
+
+    public String getGodName() {
+        return godComponent.getGodName();
+    }
+
+    public String getDescription() {
+        return godComponent.getDescription();
+    }
+
+    public String getPower() {
+        return godComponent.getPower();
+    }
+
+    public void print() {
+        godComponent.print();
     }
 }

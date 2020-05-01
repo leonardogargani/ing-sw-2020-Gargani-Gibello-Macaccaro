@@ -12,7 +12,7 @@ public class WorkerTest {
 
     @Before
     public void setUp() {
-        test = new Worker(5, Color.ANSI_BLUE);
+        test = new Worker(5, Color.ANSI_BLUE, null);
     }
 
     // getter and setter are tested both at the same time

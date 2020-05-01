@@ -26,7 +26,7 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
     }
 
     @Override
-    public void move(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException {
+    public void move(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         GameSession gameSession = dataToAction.getGameSession();
         Coord coordToMove = dataToAction.getNewPosition();
         Cell cellToMove = gameSession.getCellsHandler().getCell(coordToMove);
@@ -42,11 +42,10 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
             Worker opponentWorker = workersHandler.getWorker(dataToAction.getNewPosition());
 
             ActionRequest request = new ActionRequest("Choose a position where to force your opponent.", availablePositionsToForce);
-            ActionResponse response = null;
-            boolean delivered;
+            ActionResponse response;
             do {
-                delivered = gameSession.sendRequest(request, dataToAction.getPlayer().getNickname(), response);
-            } while (!delivered);
+                response = gameSession.sendRequest(request, dataToAction.getPlayer().getNickname(), ActionResponse.class);
+            } while (response == null);
 
             Coord coordChosen = response.getPosition();
 
@@ -101,11 +100,10 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
     }
 
     public AbstractGodCard cleanFromEffects(String nameOfEffect) throws ClassNotFoundException {
-        AbstractGodCard newCard;
         AbstractGodCard component = super.getGodComponent().cleanFromEffects(nameOfEffect);
-        Class c = Class.forName(nameOfEffect);
+        Class<?> c = Class.forName(nameOfEffect);
         if (!c.isInstance(this))
-            return newCard = new SwapIfPossibleDecorator(component);
+            return new SwapIfPossibleDecorator(component);
         else return component;
     }
 }

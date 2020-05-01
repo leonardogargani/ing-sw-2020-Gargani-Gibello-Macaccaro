@@ -6,9 +6,7 @@ import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -22,7 +20,7 @@ public class SwapMoveDecorator extends PowerGodDecorator {
     }
 
     @Override
-    public void move(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException {
+    public void move(DataToAction dataToAction) {
         WorkersHandler handler = dataToAction.getGameSession().getWorkersHandler();
         Worker opponentWorker = handler.getWorker(dataToAction.getNewPosition());
         swapWorkers(dataToAction.getWorker(), opponentWorker);
@@ -43,11 +41,10 @@ public class SwapMoveDecorator extends PowerGodDecorator {
     }
 
     public AbstractGodCard cleanFromEffects(String nameOfEffect) throws ClassNotFoundException {
-        AbstractGodCard newCard;
         AbstractGodCard component = super.getGodComponent().cleanFromEffects(nameOfEffect);
-        Class c = Class.forName(nameOfEffect);
+        Class<?> c = Class.forName(nameOfEffect);
         if (!c.isInstance(this))
-            return newCard = new SwapMoveDecorator(component);
+            return new SwapMoveDecorator(component);
         else return component;
     }
 }

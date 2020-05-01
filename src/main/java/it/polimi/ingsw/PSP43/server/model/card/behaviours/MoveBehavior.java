@@ -6,5 +6,5 @@ import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException
 import java.io.IOException;
 
 public interface MoveBehavior {
-    public void handleMove(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException;
+    void handleMove(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException;
 }

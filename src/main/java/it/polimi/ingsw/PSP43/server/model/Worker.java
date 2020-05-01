@@ -24,12 +24,13 @@ public class Worker extends Observable {
      * Non-default constructor, it initializes a worker with its color, chosen by the owner.
      * @param color color of the worker
      */
-    public Worker(int id, Color color) {
+    public Worker(int id, Color color, BoardObserver boardObserver) {
         this.id = id;
         this.currentPosition = null;
         this.previousPosition = null;
         this.color = color;
         this.latestMoved = false;
+        this.boardObserver = boardObserver;
     }
 
 
