@@ -45,7 +45,6 @@ public class ChooseCardStateTest {
         ChosenCardsResponse response = new ChosenCardsResponse(deck);
 
         Mockito.doReturn(response).when(spyGame).sendRequest(any(), any(), any());
-        Mockito.doNothing().when(spyObs).notifyBoardChange(any());
         Mockito.doNothing().when(spyState).executeState();
 
         spyState.initState();
@@ -56,6 +55,7 @@ public class ChooseCardStateTest {
                         || !spyState.cardsAvailable.get(i).getDescription().equals(deck.get(i).getDescription())
                         || !spyState.cardsAvailable.get(i).getPower().equals(deck.get(i).getPower())) {
                     equals = false;
+                    break;
                 }
             }
         } else equals = false;
@@ -75,7 +75,6 @@ public class ChooseCardStateTest {
         Mockito.doReturn(new ChosenCardResponse(spyState.cardsAvailable.get(0)))
                 .doReturn(new ChosenCardResponse(spyState.cardsAvailable.get(1)))
                 .when(spyGame).sendRequest(any(), any(), any());
-        Mockito.doNothing().when(spyObs).notifyBoardChange(any());
         Mockito.doNothing().when(spyState).findNextState();
 
         spyState.executeState();

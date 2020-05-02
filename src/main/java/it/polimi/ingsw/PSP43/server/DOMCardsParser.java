@@ -31,7 +31,7 @@ public class DOMCardsParser {
         DocumentBuilder builder = factory.newDocumentBuilder();
 
         ClassLoader classLoader = DOMCardsParser.class.getClassLoader();
-        URL resource = classLoader.getResource("xmlFiles/deckOfAbstractGodCards.xml");
+        URL resource = classLoader.getResource("configurationFiles/xmlFiles/deckOfAbstractGodCards.xml");
         File file;
         if (resource == null) {
             throw new IllegalArgumentException("file is not found!");
