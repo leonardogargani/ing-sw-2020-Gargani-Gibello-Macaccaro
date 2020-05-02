@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 public class PlayerTest {
 
     /*
-    Player test;
+    private Player test;
 
     @Before
     public void setUp() {

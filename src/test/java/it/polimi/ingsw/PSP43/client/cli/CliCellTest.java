@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 
 public class CliCellTest {
 
-    CliCell test;
+    private CliCell test;
 
     @Before
     public void setUp() {
@@ -38,7 +38,9 @@ public class CliCellTest {
     public void testToString() {
         test.setColor(Color.ANSI_RED);
         test.setSymbol(CliCell.SYMBOLS[0]);
-        assertEquals(test.toString(), Color.ANSI_RED.toString() + CliCell.SYMBOLS[0] + Color.RESET);
+        test.markAsFree(true);
+        assertEquals(test.toString(),
+                Color.ANSI_YELLOW_BACKGROUND + Color.ANSI_RED.toString() + CliCell.SYMBOLS[0] + Color.RESET);
     }
 
 

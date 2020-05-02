@@ -13,7 +13,7 @@ public class GameSessionTest {
 
     /*
     private GameSession actualGame;
-    int id=6;
+    private int id=6;
     // private TurnState turnState;
     private ArrayList<ClientListener> players;
     private ClientListener a;

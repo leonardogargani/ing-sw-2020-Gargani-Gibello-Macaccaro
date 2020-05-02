@@ -40,7 +40,7 @@ public enum Screens {
     YOUR_TURN(
             Color.ANSI_WHITE +
                     "          -------------------------------------          \n" +
-                    "          |           It's you turn           |          \n" +
+                    "          |          It's your turn           |          \n" +
                     "          -------------------------------------          \n" +
                     Color.RESET
     );

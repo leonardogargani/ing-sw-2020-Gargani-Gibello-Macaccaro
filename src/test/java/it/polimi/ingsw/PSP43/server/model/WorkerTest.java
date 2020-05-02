@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP43.server.model;
 
 import it.polimi.ingsw.PSP43.Color;
+import it.polimi.ingsw.PSP43.server.BoardObserver;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -8,11 +9,12 @@ import static org.junit.Assert.*;
 
 public class WorkerTest {
 
-    Worker test;
+    private Worker test;
 
     @Before
     public void setUp() {
-        test = new Worker(5, Color.ANSI_BLUE, null);
+        BoardObserver boardObserver = new BoardObserver();
+        test = new Worker(5, Color.ANSI_BLUE, boardObserver);
     }
 
     // getter and setter are tested both at the same time
@@ -34,7 +36,7 @@ public class WorkerTest {
 
     @Test
     public void testGetColor() {
-        assertEquals("blue", test.getColor());
+        assertEquals(Color.ANSI_BLUE, test.getColor());
     }
 
     @Test

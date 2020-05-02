@@ -3,6 +3,7 @@ package it.polimi.ingsw.PSP43.client.cli;
 import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.client.cli.CliGraphicHandler;
 import it.polimi.ingsw.PSP43.client.cli.CliCell;
+import it.polimi.ingsw.PSP43.server.BoardObserver;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.networkMessages.WorkerMessage;
@@ -14,7 +15,7 @@ import static org.junit.Assert.*;
 
 public class CliGraphicHandlerTest {
 
-    CliGraphicHandler test;
+    private CliGraphicHandler test;
 
 
     @Before
@@ -26,7 +27,8 @@ public class CliGraphicHandlerTest {
     // this method tests all the implementations (signatures) of updateBoardChange()
     @Test
     public void testUpdateBoardChange() {
-        Worker worker = new Worker(0, Color.ANSI_RED, null);
+        BoardObserver boardObserver = new BoardObserver();
+        Worker worker = new Worker(0, Color.ANSI_RED, boardObserver);
         Coord coord1 = new Coord(2, 3);
         Coord coord2 = new Coord(1, 3);
         CliCell cliCell1 = test.getBoard().getCell(coord1);

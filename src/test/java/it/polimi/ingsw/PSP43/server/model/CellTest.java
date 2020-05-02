@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 public class CellTest {
 
     /*
-    Cell test;
+    private Cell test;
 
     @Before
     public void setUp() {
