@@ -29,8 +29,7 @@ public class GameSessionObservable {
     public synchronized int registerToTheGame(RegistrationMessage message, ClientListener player) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         if (getListenersHashMap().size() != maxNumPlayers) {
             listenersHashMap.put(message.getNick(), player);
-            PlayerRegistrationState effectiveState = (PlayerRegistrationState)this.currentState;
-            effectiveState.executeState(message);
+            currentState.executeState(message);
             return idGame;
         }
         else return -1;

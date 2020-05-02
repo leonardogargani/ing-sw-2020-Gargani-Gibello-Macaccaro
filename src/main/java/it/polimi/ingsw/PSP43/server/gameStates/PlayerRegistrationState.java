@@ -16,9 +16,11 @@ import java.io.IOException;
  * asks for the number of participants required.
  */
 public class PlayerRegistrationState extends TurnState{
+    private Object lock;
 
     public PlayerRegistrationState(GameSession gameSession) {
         super(gameSession);
+        lock = new Object();
     }
 
     /**
@@ -28,12 +30,12 @@ public class PlayerRegistrationState extends TurnState{
      * new player connecting to the server.
      * @param message This is the message sent from the client.
      */
-    public void executeState(RegistrationMessage message) throws IOException {
+    public synchronized void executeState(RegistrationMessage message) throws IOException {
         GameSession game = super.getGameSession();
-        int numberOfPlayers = game.getListenersHashMap().size();
         PlayersHandler playersHandler = game.getPlayersHandler();
         try {
             playersHandler.createNewPlayer(message.getNick());
+            int numberOfPlayers = game.getPlayersHandler().getNumOfPlayers();
             int num;
             if (numberOfPlayers == 1) {
                num = askNumberPlayers(game, message);
@@ -51,9 +53,7 @@ public class PlayerRegistrationState extends TurnState{
             ChangeNickRequest notifyChangeNick = new ChangeNickRequest("We are sorry, but " + message.getNick() +
                     "is already in use.");
             game.sendMessage(notifyChangeNick, message.getNick());
-        } catch (IOException | ClassNotFoundException | WinnerCaughtException | InterruptedException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException | ClassNotFoundException | WinnerCaughtException | InterruptedException e) {   e.printStackTrace();   }
     }
 
     /**
@@ -61,7 +61,7 @@ public class PlayerRegistrationState extends TurnState{
      * @param gameSession This is a reference to the center of the game database.
      * @param message This is the message sent from the client.
      */
-    private int askNumberPlayers(GameSession gameSession, RegistrationMessage message) throws IOException, ClassNotFoundException, InterruptedException {
+    protected int askNumberPlayers(GameSession gameSession, RegistrationMessage message) throws IOException, ClassNotFoundException, InterruptedException {
         PlayersNumberRequest request = new PlayersNumberRequest("Choose between a 2 or 3 game play.");
         PlayersNumberResponse response;
         do {

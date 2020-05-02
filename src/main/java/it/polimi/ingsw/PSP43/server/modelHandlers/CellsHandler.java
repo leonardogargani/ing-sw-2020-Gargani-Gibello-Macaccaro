@@ -59,7 +59,7 @@ public class CellsHandler {
     public ArrayList<Coord> findAllCellsFree() {
         ArrayList<Coord> freeCells = new ArrayList();
         for (int i=0; i<board.length; i++) {
-            for (int j=0; i<board.length; j++) {
+            for (int j=0; j<board.length; j++) {
                 if (!board[i][j].getOccupiedByWorker() && !board[i][j].getOccupiedByDome())
                     freeCells.add(new Coord(i,j));
             }

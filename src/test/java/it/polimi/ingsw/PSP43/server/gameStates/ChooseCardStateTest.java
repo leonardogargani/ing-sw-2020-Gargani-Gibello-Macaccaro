@@ -3,23 +3,20 @@ package it.polimi.ingsw.PSP43.server.gameStates;
 import it.polimi.ingsw.PSP43.client.networkMessages.ChosenCardResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.ChosenCardsResponse;
 import it.polimi.ingsw.PSP43.server.BoardObserver;
-import it.polimi.ingsw.PSP43.server.DOMCardsParser;
-import it.polimi.ingsw.PSP43.server.GameInitialiser;
+import it.polimi.ingsw.PSP43.server.initialisers.DOMCardsParser;
+import it.polimi.ingsw.PSP43.server.initialisers.GameInitialiser;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 
-@RunWith(MockitoJUnitRunner.class)
 public class ChooseCardStateTest {
     GameSession gameSession;
     GameSession spyGame;
@@ -32,6 +29,7 @@ public class ChooseCardStateTest {
     @Before
     public void setUp() throws Exception {
         gameSession = GameInitialiser.initialiseGame();
+        gameSession = GameInitialiser.initialisePlayers(gameSession);
         spyGame = Mockito.spy(gameSession);
         obs = new BoardObserver();
         spyObs = Mockito.spy(obs);

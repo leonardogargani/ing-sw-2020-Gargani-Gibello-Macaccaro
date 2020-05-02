@@ -81,11 +81,13 @@ public abstract class AbstractGodCard {
         CellsHandler handler = gameSession.getCellsHandler();
         Cell newCell = handler.getCell(newPosition);
         Coord oldPosition = workerToMove.getCurrentPosition();
-        Cell oldCell = handler.getCell(oldPosition);
+        if (oldPosition!=null) {
+            Cell oldCell = handler.getCell(oldPosition);
+            oldCell.setOccupiedByWorker(false);
+            handler.changeStateOfCell(oldCell, oldPosition);
+        }
         newCell.setOccupiedByWorker(true);
-        oldCell.setOccupiedByWorker(false);
         handler.changeStateOfCell(newCell, newPosition);
-        handler.changeStateOfCell(oldCell, oldPosition);
         workerToMove.setCurrentPosition(newPosition);
     }
 

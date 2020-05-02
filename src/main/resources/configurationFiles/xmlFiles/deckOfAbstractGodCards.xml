@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<deckOfAbstractGodCards xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsdFiles/deckOfAbstractGodCards.xsd">
+<deckOfAbstractGodCards xmlns="../xsdFiles/deckOfAbstractGodCards.xsd">
     <basicGodCard>
         <godName>Apollo</godName>
         <godDescription>God Of Music</godDescription>

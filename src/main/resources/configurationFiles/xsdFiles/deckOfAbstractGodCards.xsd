@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <xs:schema targetNamespace="../xsdFiles/deckOfAbstractGodCards.xsd"
            xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:element name="deckOfAbstractGodCards">
-    <xs:complexType>
+    <xs:element name="deckOfAbstractGodCards" type="deckOfAbstractGodCards"/>
+
+    <xs:complexType name="deckOfAbstractGodCards">
         <xs:sequence>
             <xs:choice>
                 <xs:element name="basicGodCard" type="basicGodCard" minOccurs="0"/>
@@ -14,7 +15,6 @@
             </xs:choice>
         </xs:sequence>
     </xs:complexType>
-    </xs:element>
 
     <xs:complexType name="basicGodCard">
         <xs:sequence>

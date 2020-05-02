@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP43.server;
+package it.polimi.ingsw.PSP43.server.initialisers;
 
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.model.card.BasicGodCard;

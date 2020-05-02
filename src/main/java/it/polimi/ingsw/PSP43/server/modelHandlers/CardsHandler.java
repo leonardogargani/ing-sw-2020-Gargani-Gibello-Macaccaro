@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP43.server.modelHandlers;
 
-import it.polimi.ingsw.PSP43.server.DOMCardsParser;
+import it.polimi.ingsw.PSP43.server.initialisers.DOMCardsParser;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.CardAlreadyInUseException;
 import org.xml.sax.SAXException;
@@ -12,10 +12,10 @@ import java.util.HashMap;
 
 public class CardsHandler {
     private ArrayList<AbstractGodCard> deckOfAbstractGodCards;
-    private HashMap<String, AbstractGodCard> mapOwnerCard;
+    private HashMap<String, AbstractGodCard> mapOwnersCard;
 
     public CardsHandler() throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException {
-        this.mapOwnerCard = new HashMap<>();
+        this.mapOwnersCard = new HashMap<>();
         this.deckOfAbstractGodCards = new ArrayList<>();
         DOMCardsParser parser = new DOMCardsParser();
         deckOfAbstractGodCards = DOMCardsParser.buildDeck();
@@ -30,12 +30,12 @@ public class CardsHandler {
         this.deckOfAbstractGodCards = deckOfAbstractGodCards;
     }
 
-    private void setMapOwnerCard(HashMap<String, AbstractGodCard> mapOwnerCard) {
-        this.mapOwnerCard = mapOwnerCard;
+    private void setMapOwnersCard(HashMap<String, AbstractGodCard> mapOwnersCard) {
+        this.mapOwnersCard = mapOwnersCard;
     }
 
-    public HashMap<String, AbstractGodCard> getMapOwnerCard() {
-        return mapOwnerCard;
+    public HashMap<String, AbstractGodCard> getMapOwnersCard() {
+        return mapOwnersCard;
     }
 
     /**
@@ -51,17 +51,17 @@ public class CardsHandler {
                 abstractGodCardToSet = c;
             }
         }
-        mapOwnerCard.put(nickOwner, abstractGodCardToSet);
+        mapOwnersCard.put(nickOwner, abstractGodCardToSet);
     }
 
     public void removeCardToPlayer(String nickOwner) {
-        for (String key : mapOwnerCard.keySet()) {
-            if (nickOwner.equals(key)) mapOwnerCard.remove(nickOwner);
+        for (String key : mapOwnersCard.keySet()) {
+            if (nickOwner.equals(key)) mapOwnersCard.remove(nickOwner);
         }
     }
 
     public AbstractGodCard getCardOwned(String name) {
-        return mapOwnerCard.get(name);
+        return mapOwnersCard.get(name);
     }
 
     public void print() {

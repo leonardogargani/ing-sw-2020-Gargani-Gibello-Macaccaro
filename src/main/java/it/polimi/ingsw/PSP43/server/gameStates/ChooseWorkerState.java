@@ -16,10 +16,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This is the method where the players are asked to choose a color to assign to thei workers
+ * and to choose the initial positions of those workers.
+ */
 public class ChooseWorkerState extends TurnState {
     private static final int FIRSTPOSITION = 0;
-    private ArrayList<Color> availableColors;
-    private HashMap<Player, Color> colorsChosen;
+    private final ArrayList<Color> availableColors;
+    private final HashMap<Player, Color> colorsChosen;
 
     public ChooseWorkerState(GameSession gameSession) {
         super(gameSession);
@@ -30,6 +34,10 @@ public class ChooseWorkerState extends TurnState {
         colorsChosen = new HashMap<>();
     }
 
+    /**
+     * This method initialises the first player of the game, the god-like one (and for this reason the first logged into the
+     * game in our conception of the game).
+     */
     public void initState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
@@ -41,6 +49,10 @@ public class ChooseWorkerState extends TurnState {
         executeState();
     }
 
+
+    /**
+     * This method asks, one at a time, to the players the color chosen for their workers and also where they want to place them.
+     */
     public void executeState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
@@ -58,6 +70,8 @@ public class ChooseWorkerState extends TurnState {
                 colorResponse = game.sendRequest(colorRequest, nicknameCurrentPlayer, WorkersColorResponse.class);
             } while (colorResponse == null);
 
+            // here all the new workers of the player are added into the playersHandler with the color chosen, then the color
+            // is removed from available colors
             int[] workersIds = new int[2];
             for (int i=0; i<2; i++) {
                 workersIds[i] = workersHandler.addNewWorker(colorResponse.getColor());
@@ -65,9 +79,10 @@ public class ChooseWorkerState extends TurnState {
             availableColors.remove(colorResponse.getColor());
             colorsChosen.put(currentPlayer, colorResponse.getColor());
 
-            HashMap<Coord, ArrayList<Coord>> hashAvailablePositions = null;
+            HashMap<Coord, ArrayList<Coord>> hashAvailablePositions;
             ActionRequest placementRequest;
 
+            // here I ask to the player where he wants to place his workers (one at a time I ask him)
             for (int i = 0; i<workersIds.length; i++) {
                 ActionResponse response;
                 ArrayList<Coord> availablePositions = game.getCellsHandler().findAllCellsFree();
@@ -90,17 +105,22 @@ public class ChooseWorkerState extends TurnState {
         findNextState();
     }
 
+    /**
+     * This method has to find the next state and also to send all the infos to the client to display name of players, gods chosen and the color of every player.
+     */
     public void findNextState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         GameSession game = super.getGameSession();
         int indexCurrentState;
         indexCurrentState = game.getTurnMap().indexOf(game.getCurrentState());
         game.setNextState(game.getTurnMap().get(indexCurrentState + 1));
+
+        // here I send all the infos to the client to display name of players, gods chosen and the color of every player
         HashMap<Player, AbstractGodCard> cardsChosen = new HashMap<>();
-        for (String s : game.getCardsHandler().getMapOwnerCard().keySet()) {
+        for (String s : game.getCardsHandler().getMapOwnersCard().keySet())
             cardsChosen.put(game.getPlayersHandler().getPlayer(s), game.getPlayersHandler().getPlayer(s).getAbstractGodCard());
-        }
         PlayersListMessage listOfPlayers = new PlayersListMessage(null, cardsChosen, colorsChosen);
         game.sendBroadCast(listOfPlayers);
+
         game.transitToNextState();
     }
 }

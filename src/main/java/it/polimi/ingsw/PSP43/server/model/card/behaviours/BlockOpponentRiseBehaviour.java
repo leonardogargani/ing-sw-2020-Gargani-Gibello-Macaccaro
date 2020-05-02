@@ -28,7 +28,7 @@ public class BlockOpponentRiseBehaviour extends AbstractGodCard implements MoveB
      * @param gameSession The reference to the active game database.
      */
     private void disablePowers(GameSession gameSession) throws ClassNotFoundException {
-        HashMap<String, AbstractGodCard> mapCardsOwned = gameSession.getCardsHandler().getMapOwnerCard();
+        HashMap<String, AbstractGodCard> mapCardsOwned = gameSession.getCardsHandler().getMapOwnersCard();
         String godName;
         AbstractGodCard card, newCard;
 
@@ -51,10 +51,10 @@ public class BlockOpponentRiseBehaviour extends AbstractGodCard implements MoveB
     private void enablePowers(GameSession gameSession) {
         CardsHandler cardsHandler = gameSession.getCardsHandler();
         AbstractGodCard cardOwned;
-        for (String s : cardsHandler.getMapOwnerCard().keySet()) {
-            cardOwned = cardsHandler.getMapOwnerCard().get(s);
+        for (String s : cardsHandler.getMapOwnersCard().keySet()) {
+            cardOwned = cardsHandler.getMapOwnersCard().get(s);
             if (!cardOwned.getGodName().equals("Athena")) {
-                cardsHandler.getMapOwnerCard().put(s, new BlockRiseDecorator(cardOwned));
+                cardsHandler.getMapOwnersCard().put(s, new BlockRiseDecorator(cardOwned));
             }
         }
     }
