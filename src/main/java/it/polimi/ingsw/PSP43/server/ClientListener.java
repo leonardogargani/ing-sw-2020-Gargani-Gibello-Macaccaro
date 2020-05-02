@@ -25,6 +25,7 @@ public class ClientListener implements Runnable{
     private Object lockIn;
     private Object lockOut;
     private ClientMessage message;
+    //arraylist di client msg
     private Object messageArrived;
     private Sender sender;
     ObjectInputStream input;
@@ -40,6 +41,7 @@ public class ClientListener implements Runnable{
         this.lockIn = new Object();
         this.lockOut = new Object();
         this.messageArrived = new Object();
+        gameSessions= new ArrayList<GameSessionObservable>();
     }
 
 
@@ -87,6 +89,7 @@ public class ClientListener implements Runnable{
      */
     public synchronized ClientMessage receive() throws IOException, ClassNotFoundException, InterruptedException {
        do {
+           //levare MessageArrived
            input = new ObjectInputStream(clientSocket.getInputStream());
            messageArrived = input.readObject();
        }while (messageArrived instanceof PingMessage);
@@ -135,7 +138,7 @@ public class ClientListener implements Runnable{
             }
 
             if(idGame==-1){
-                gameSessions.add(new GameSession(gameSessions.size()+1));
+                gameSessions.add(new GameSession(gameSessions.size()));
                 idGame = gameSessions.get(gameSessions.size()-1).registerToTheGame((RegistrationMessage) message,this);
             }
         }

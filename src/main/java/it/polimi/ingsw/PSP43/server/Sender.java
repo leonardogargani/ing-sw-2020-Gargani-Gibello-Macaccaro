@@ -7,15 +7,14 @@ import java.io.*;
 import java.net.Socket;
 
 public class Sender implements Runnable {
-    private Socket client;
     private ClientListener clientListener;
+    private Socket client;
     private Object lockOut;
-    ObjectOutputStream output;
     File temp;
     OutputStream outputStream;
     InputStream inputStream;
 
-    public Sender(Socket client,ClientListener clientListener){
+    public Sender(Socket client, ClientListener clientListener){
         this.client = client;
         this.clientListener = clientListener;
         this.lockOut = new Object();
@@ -27,7 +26,7 @@ public class Sender implements Runnable {
     }
 
 
-
+//uso callable e uso clone per la copia
     public ClientMessage sendRequest(ServerMessage message) throws IOException, InterruptedException, ClassNotFoundException {
         ClientMessage response;
 

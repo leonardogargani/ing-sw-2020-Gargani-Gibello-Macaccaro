@@ -34,9 +34,10 @@ public class PlayerRegistrationState extends TurnState{
         PlayersHandler playersHandler = game.getPlayersHandler();
         try {
             playersHandler.createNewPlayer(message.getNick());
-
+            int num;
             if (numberOfPlayers == 1) {
-                askNumberPlayers(game, message);
+               num = askNumberPlayers(game, message);
+               game.maxNumPlayers = num;
             }
 
             if (game.maxNumPlayers == numberOfPlayers) {
@@ -60,13 +61,14 @@ public class PlayerRegistrationState extends TurnState{
      * @param gameSession This is a reference to the center of the game database.
      * @param message This is the message sent from the client.
      */
-    private void askNumberPlayers(GameSession gameSession, RegistrationMessage message) throws IOException, ClassNotFoundException, InterruptedException {
+    private int askNumberPlayers(GameSession gameSession, RegistrationMessage message) throws IOException, ClassNotFoundException, InterruptedException {
         PlayersNumberRequest request = new PlayersNumberRequest("Choose between a 2 or 3 game play.");
         PlayersNumberResponse response;
         do {
             response = gameSession.sendRequest(request, message.getNick(), PlayersNumberResponse.class);
         } while (response == null);
-        gameSession.maxNumPlayers = response.getNumberOfPlayer();
+        return response.getNumberOfPlayer();
+
     }
 
     /**
