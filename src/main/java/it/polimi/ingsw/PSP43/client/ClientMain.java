@@ -46,8 +46,6 @@ public class ClientMain {
             }
         } while(!chosenMode.equals("1") && !chosenMode.equals("2"));
 
-        // start effectively the client and display welcome message
-        client.execute();
 
     }
 

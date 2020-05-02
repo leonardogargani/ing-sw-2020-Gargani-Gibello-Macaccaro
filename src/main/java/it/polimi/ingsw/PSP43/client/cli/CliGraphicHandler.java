@@ -77,7 +77,8 @@ public class CliGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(PlayersNumberRequest request) {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        try {
             bottomMenu.setContent(request.getMessage());
             int chosenNumber;
             do {
@@ -110,7 +111,8 @@ public class CliGraphicHandler extends GraphicHandler {
         }
         bottomMenu.setContent(request.getMessage());
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        try {
 
             int playersNumber = request.getNumberOfCard();
 
@@ -157,7 +159,8 @@ public class CliGraphicHandler extends GraphicHandler {
     public void updateMenuChange(CardRequest request) {
         ArrayList<AbstractGodCard> availableCards = request.getCards();
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        try {
             bottomMenu.setContent(request.getMessage());
 
             for (AbstractGodCard card : availableCards) {
@@ -195,7 +198,8 @@ public class CliGraphicHandler extends GraphicHandler {
     public void updateMenuChange(WorkersColorRequest request) {
         ArrayList<Color> availableColors = request.getColorsAvailable();
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        try {
             bottomMenu.setContent(request.getMessage());
 
             for (Color color : availableColors) {
@@ -246,7 +250,8 @@ public class CliGraphicHandler extends GraphicHandler {
         HashMap<Coord,ArrayList<Coord>> hashMap = request.getCellsAvailable();
         bottomMenu.setContent(request.getMessage());
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        try {
 
             // graphically render all the received coordinates as free (yellow background)
             for (Coord startCoord : hashMap.keySet()) {
@@ -333,7 +338,8 @@ public class CliGraphicHandler extends GraphicHandler {
         bottomMenu.setContent(request.getMessage());
         this.render();
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        try {
             int intChoice;
             boolean booleanChoice = false;
 
@@ -386,7 +392,8 @@ public class CliGraphicHandler extends GraphicHandler {
     public void updateMenuChange(ChangeNickRequest request) {
         bottomMenu.setContent(request.getMessage());
         bottomMenu.show();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        try {
             String nickname;
             System.out.print("Choose another nickname:");
             nickname = reader.readLine();

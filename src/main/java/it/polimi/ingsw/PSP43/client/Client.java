@@ -56,6 +56,7 @@ public class Client implements Runnable{
         } catch (IOException e) {
             System.out.println("Problems opening client background");
         }
+        execute();
     }
 
 
@@ -73,7 +74,8 @@ public class Client implements Runnable{
      */
     public void execute() {
         System.out.println(Screens.WELCOME);
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        try {
             String nickname;
             System.out.print("Choose a nickname:");
             nickname = reader.readLine();
