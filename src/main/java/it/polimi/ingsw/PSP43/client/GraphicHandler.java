@@ -7,6 +7,9 @@ public abstract class GraphicHandler {
 
     private ClientBG clientBG;
 
+    public GraphicHandler(ClientBG clientBG) {
+        this.clientBG = clientBG;
+    }
 
     /**
      * This method sets the clientBG attribute, which is used to send messages to the server.

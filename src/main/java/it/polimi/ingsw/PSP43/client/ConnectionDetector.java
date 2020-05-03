@@ -11,7 +11,6 @@ public class ConnectionDetector implements Runnable {
     private ClientBG clientBG;
 
 
-
     public ConnectionDetector(Socket serverSocket, ClientBG clientBG) throws IOException {
         this.serverSocket = serverSocket;
         this.clientBG = clientBG;
@@ -20,14 +19,13 @@ public class ConnectionDetector implements Runnable {
 
     @Override
     public void run() {
-        long time=System.currentTimeMillis();
-        while(true){
-            if(System.currentTimeMillis()==time+timeout/2){
-                time=System.currentTimeMillis();
+        long time = System.currentTimeMillis();
+        while (true) {
+            if (System.currentTimeMillis() > time + timeout / 2) {
+                time = System.currentTimeMillis();
                 try {
-                                clientBG.sendMessage(new PingMessage());
-                }
-                catch (IOException e) {
+                    clientBG.sendMessage(new PingMessage());
+                } catch (IOException e) {
                     System.out.println("Server:problems with ping messages");
                 }
             }

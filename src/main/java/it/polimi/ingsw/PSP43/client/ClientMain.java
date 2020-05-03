@@ -10,17 +10,13 @@ import java.util.Scanner;
 
 
 public class ClientMain {
-    private static ClientBG clientBG;
-
-    private static Client client;
-
 
     public static void main(String[] args) throws IOException {
         System.out.println("Insert server IP address(usually 127.0.0.1)");
         Scanner scanner = new Scanner(System.in);
 
-        clientBG = new ClientBG();
-        clientBG.setSERVER_IP(new String(scanner.nextLine()));
+        String serverIp = scanner.nextLine();
+        ClientBG clientBG = new ClientBG(serverIp);
         Thread clientBGThread = new Thread(clientBG);
         clientBGThread.start();
 
@@ -34,23 +30,23 @@ public class ClientMain {
 
         System.out.println("Choose a mode:\n [1] CLI\n [2] GUI");
 
+        Client client;
         // GUI/CLI decision is taken through the cli for now
         do {
             chosenMode = reader.readLine();
             switch(chosenMode) {
                 case "1":
                     System.out.println("CLI chosen. Starting the game...");
-                    CliGraphicHandler cliGraphicHandler = new CliGraphicHandler();
-                    client = new Client(clientBG,cliGraphicHandler);
+                    CliGraphicHandler cliGraphicHandler = new CliGraphicHandler(clientBG);
+                    client = new Client(clientBG , cliGraphicHandler);
                     Thread clientThread1 = new Thread(client);
                     clientThread1.start();
                     clientBG.setClient(client);
-                    cliGraphicHandler.setClientBG(client.getClientBG());
 
                     break;
                 case "2":
                     System.out.println("GUI chosen. Starting the game...");
-                    GuiGraphicHandler guiGraphicHandler = new GuiGraphicHandler();
+                    GuiGraphicHandler guiGraphicHandler = new GuiGraphicHandler(clientBG);
                     client = new Client(clientBG,guiGraphicHandler);
                     guiGraphicHandler.setClientBG(client.getClientBG());
                     Thread clientThread2 = new Thread(client);

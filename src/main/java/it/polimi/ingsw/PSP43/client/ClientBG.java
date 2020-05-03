@@ -14,9 +14,8 @@ import java.util.Scanner;
 public class ClientBG implements Runnable {
     private Socket serverSocket;
     private Client client;
-    private Object lockIn;
-    private Object lockOut;
-    private ServerMessage message;
+    private final Object lockIn;
+    private final Object lockOut;
     private Object messageArrived;
     private String SERVER_IP ;
     private static final int SERVER_PORT = 50000;
@@ -26,10 +25,11 @@ public class ClientBG implements Runnable {
 
 
 
-    public ClientBG() throws IOException {
+    public ClientBG(String serverIp) {
         this.lockIn = new Object();
         this.lockOut = new Object();
         this.messageArrived = new Object();
+        this.SERVER_IP = serverIp;
     }
 
     /**
@@ -63,14 +63,9 @@ public class ClientBG implements Runnable {
                 ServerMessage message = receive();
                 handleMessage(message);
             } catch (IOException|ClassNotFoundException e) {
-                System.out.println("Invalid message from the server");
+                System.out.println(e.getMessage());
             }
         }
-    }
-
-
-    public void setSERVER_IP(String SERVER_IP) {
-        this.SERVER_IP = SERVER_IP;
     }
 
     public void setClient(Client client) {
@@ -97,7 +92,7 @@ public class ClientBG implements Runnable {
             input = new ObjectInputStream(serverSocket.getInputStream());
             messageArrived = input.readObject();
             }while (messageArrived instanceof PingMessage);
-            message = (ServerMessage)messageArrived;
+            ServerMessage message = (ServerMessage) messageArrived;
             return message;
         }
     }

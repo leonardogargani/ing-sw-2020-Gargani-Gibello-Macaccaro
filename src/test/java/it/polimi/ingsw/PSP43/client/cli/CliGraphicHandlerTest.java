@@ -20,7 +20,7 @@ public class CliGraphicHandlerTest {
 
     @Before
     public void setUp() {
-        test = new CliGraphicHandler();
+        //test = new CliGraphicHandler();
     }
 
 

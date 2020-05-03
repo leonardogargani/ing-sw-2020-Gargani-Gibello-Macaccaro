@@ -4,6 +4,7 @@ import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.ClientListener;
+import it.polimi.ingsw.PSP43.server.Sender;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
@@ -12,10 +13,15 @@ import it.polimi.ingsw.PSP43.server.networkMessages.ServerMessage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
-public class GameSessionObservable {
+public class GameSessionObservable implements Runnable {
     private int idGame;
     protected int maxNumPlayers;
+    private int numOfPlayers;
+    private Boolean active;
+    Lock lockRegistration;
 
     protected TurnState currentState;
 
@@ -24,15 +30,31 @@ public class GameSessionObservable {
     public GameSessionObservable(int idGame) {
         this.idGame = idGame;
         this.listenersHashMap = new HashMap<>();
+        this.active = Boolean.TRUE;
+        numOfPlayers = 0;
+        maxNumPlayers = 1;
+        lockRegistration = new ReentrantLock();
     }
 
-    public synchronized int registerToTheGame(RegistrationMessage message, ClientListener player) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+    public void run() {
+        while (true) {
+            if (!active) break;
+        }
+    }
+
+    public void setActive() {
+        this.active = Boolean.FALSE;
+    }
+
+    public void registerToTheGame(RegistrationMessage message, ClientListener player) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+        lockRegistration.lock();
         if (getListenersHashMap().size() != maxNumPlayers) {
             listenersHashMap.put(message.getNick(), player);
+            numOfPlayers++;
             currentState.executeState(message);
-            return idGame;
+            player.setIdGame(idGame);
         }
-        else return -1;
+        lockRegistration.unlock();
     }
 
     public synchronized boolean unregisterFromGame(LeaveGameMessage message, ClientListener player) throws IOException {
@@ -76,11 +98,15 @@ public class GameSessionObservable {
 
     public<T extends ClientMessage> T sendRequest(ServerMessage message, String addressee, Class<?> typeExpected) throws IOException, ClassNotFoundException, InterruptedException {
         ClientListener listenerAddressee = listenersHashMap.get(addressee);
-        ClientMessage messageArrived = listenerAddressee.sendRequest(message);
-        if (messageArrived.getClass().isInstance(typeExpected)) {
+
+        Sender newSender = new Sender(listenerAddressee, message);
+
+        ClientMessage messageArrived = newSender.call();
+
+        if (typeExpected.getClass().isInstance(messageArrived.getClass())) {
             return (T)messageArrived;
         }
-        return null;
+        else return null;
     }
 
     public void sendEndingMessage(EndGameMessage message, ArrayList<String> nicksExcluded) throws IOException {
@@ -109,4 +135,15 @@ public class GameSessionObservable {
         return idGame;
     }
 
+    public int getMaxNumPlayers() {
+        return maxNumPlayers;
+    }
+
+    public int getNumOfPlayers() {
+        return numOfPlayers;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
 }

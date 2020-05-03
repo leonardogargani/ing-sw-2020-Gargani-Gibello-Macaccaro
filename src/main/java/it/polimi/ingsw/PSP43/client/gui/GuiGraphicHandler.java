@@ -1,11 +1,16 @@
 package it.polimi.ingsw.PSP43.client.gui;
 
+import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.GraphicHandler;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
 
 
 public class GuiGraphicHandler extends GraphicHandler {
 
+
+    public GuiGraphicHandler(ClientBG clientBG) {
+        super(clientBG);
+    }
 
     /**
      * This method updates the cli or the gui changing the color of a cell, based

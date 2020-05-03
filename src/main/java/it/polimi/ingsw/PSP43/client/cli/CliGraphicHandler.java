@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP43.client.cli;
 
 import it.polimi.ingsw.PSP43.Color;
+import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.GraphicHandler;
 import it.polimi.ingsw.PSP43.client.networkMessages.*;
 import it.polimi.ingsw.PSP43.server.model.Cell;
@@ -23,6 +24,9 @@ public class CliGraphicHandler extends GraphicHandler {
     private final CliMiddleMenu middleMenu = new CliMiddleMenu();
     private final CliBottomMenu bottomMenu = new CliBottomMenu();
 
+    public CliGraphicHandler(ClientBG clientBG) {
+        super(clientBG);
+    }
 
 
     /**

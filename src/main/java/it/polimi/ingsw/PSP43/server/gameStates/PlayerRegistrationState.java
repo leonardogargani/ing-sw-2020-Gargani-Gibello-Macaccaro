@@ -30,7 +30,7 @@ public class PlayerRegistrationState extends TurnState{
      * new player connecting to the server.
      * @param message This is the message sent from the client.
      */
-    public synchronized void executeState(RegistrationMessage message) throws IOException {
+    public void executeState(RegistrationMessage message) throws IOException {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
         try {
@@ -43,7 +43,7 @@ public class PlayerRegistrationState extends TurnState{
             }
 
             if (game.maxNumPlayers == numberOfPlayers) {
-                findNextState();
+                this.findNextState();
             }
             else {
                 StartGameMessage clientMessage = new StartGameMessage("We are connecting you with other players!");
