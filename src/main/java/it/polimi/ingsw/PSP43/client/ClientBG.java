@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Scanner;
 
 
 public class ClientBG implements Runnable {
@@ -17,19 +18,15 @@ public class ClientBG implements Runnable {
     private Object lockOut;
     private ServerMessage message;
     private Object messageArrived;
+    private String SERVER_IP ;
+    private static final int SERVER_PORT = 50000;
+    private boolean started = false;
     ObjectInputStream input;
     ObjectOutputStream output;
 
 
-    /**
-     * Not default constructor for the ClientBG class, that is the thread who is going to handle the net
-     * @param serverSocket is the open socket for the connection with the server
-     * @param client refers to his client launcher
-     * @throws IOException
-     */
-    public ClientBG(Socket serverSocket,Client client) throws IOException {
-        this.serverSocket = serverSocket;
-        this.client = client;
+
+    public ClientBG() throws IOException {
         this.lockIn = new Object();
         this.lockOut = new Object();
         this.messageArrived = new Object();
@@ -41,6 +38,17 @@ public class ClientBG implements Runnable {
      */
     @Override
     public void run() {
+
+        try {
+            serverSocket = new Socket(SERVER_IP, SERVER_PORT);
+        } catch (IOException e) {
+            System.out.println("server unreachable");
+            return;
+        }
+        System.out.println("Connected");
+
+        this.started = true;
+
         try {
             ConnectionDetector connectionDetector = new ConnectionDetector(this.serverSocket,this);
             Thread connectionThread = new Thread(connectionDetector);
@@ -61,8 +69,18 @@ public class ClientBG implements Runnable {
     }
 
 
+    public void setSERVER_IP(String SERVER_IP) {
+        this.SERVER_IP = SERVER_IP;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
 
 
+    public boolean isStarted() {
+        return started;
+    }
 
 
     public void sendMessage(ClientMessage message) throws IOException {

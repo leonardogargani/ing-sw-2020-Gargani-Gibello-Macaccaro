@@ -13,8 +13,7 @@ import java.net.Socket;
 
 public class Client implements Runnable{
 
-    private static final String SERVER_IP = "127.0.0.1";
-    private static final int SERVER_PORT = 50000;
+
     private GraphicHandler graphics;
     private ClientBG clientBG;
 
@@ -24,8 +23,9 @@ public class Client implements Runnable{
      * which will be either a CliGraphicHandler or a GuiGraphicHandler at runtime.
      * @param graphics CliGraphicHandler or GuiGraphicHandler object, based on the player's choice
      */
-    public Client(GraphicHandler graphics) {
+    public Client(ClientBG clientBG,GraphicHandler graphics) {
         this.graphics = graphics;
+        this.clientBG = clientBG;
     }
 
 
@@ -40,22 +40,6 @@ public class Client implements Runnable{
 
     @Override
     public void run() {
-        Socket server;
-        try {
-            server = new Socket(SERVER_IP, SERVER_PORT);
-        } catch (IOException e) {
-            System.out.println("server unreachable");
-            return;
-        }
-        System.out.println("Connected");
-
-        try {
-            clientBG = new ClientBG(server,this);
-            Thread clientBg = new Thread(clientBG);
-            clientBg.start();
-        } catch (IOException e) {
-            System.out.println("Problems opening client background");
-        }
         execute();
     }
 

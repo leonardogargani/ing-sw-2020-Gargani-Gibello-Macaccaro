@@ -17,7 +17,7 @@ public class Sender implements Runnable {
     public Sender(Socket client, ClientListener clientListener){
         this.client = client;
         this.clientListener = clientListener;
-        this.lockOut = new Object();
+
     }
 
     @Override
@@ -30,9 +30,8 @@ public class Sender implements Runnable {
     public ClientMessage sendRequest(ServerMessage message) throws IOException, InterruptedException, ClassNotFoundException {
         ClientMessage response;
 
-        synchronized (lockOut) {
+
            clientListener.sendMessage(message);
-        }
             ClientMessage messageArrived = null;
             do{
                 messageArrived = clientListener.getMessage();

@@ -12,9 +12,7 @@ import it.polimi.ingsw.PSP43.server.networkMessages.ServerMessage;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -88,24 +86,24 @@ public class ClientListener implements Runnable{
      * @throws WinnerCaughtException
      */
     public synchronized ClientMessage receive() throws IOException, ClassNotFoundException, InterruptedException {
-       do {
-           //levare MessageArrived
-           input = new ObjectInputStream(clientSocket.getInputStream());
-           messageArrived = input.readObject();
-       }while (messageArrived instanceof PingMessage);
+        do {
+            //levare MessageArrived
+            input = new ObjectInputStream(clientSocket.getInputStream());
+            messageArrived = input.readObject();
+        }while (messageArrived instanceof PingMessage);
 
-       if(messageArrived instanceof RegistrationMessage)
-           return (ClientMessage) messageArrived;
-       else{
-           message = (ClientMessage)messageArrived;
-           notifyAll();
-           wait();
-           return null;
-       }
+        if(messageArrived instanceof RegistrationMessage)
+            return (ClientMessage) messageArrived;
+        else{
+            message = (ClientMessage)messageArrived;
+            notifyAll();
+            wait();
+            return null;
+        }
     }
 
 
-    public void sendMessage(Object message) throws IOException {
+    public synchronized void sendMessage(Object message) throws IOException {
         synchronized (lockOut){
             output = new ObjectOutputStream(clientSocket.getOutputStream());
             output.writeObject(message);
@@ -127,6 +125,7 @@ public class ClientListener implements Runnable{
     public synchronized void handleMessage(ClientMessage message) throws WinnerCaughtException, IOException, ClassNotFoundException, ParserConfigurationException, SAXException, InterruptedException {
         if(message instanceof RegistrationMessage){
 
+
             int counter = 0;
 
             while(idGame ==-1&gameSessions.size()>counter){
@@ -141,9 +140,11 @@ public class ClientListener implements Runnable{
                 gameSessions.add(new GameSession(gameSessions.size()));
                 idGame = gameSessions.get(gameSessions.size()-1).registerToTheGame((RegistrationMessage) message,this);
             }
+
         }
         else if(message instanceof LeaveGameMessage)
             gameSessions.get(idGame).unregisterFromGame((LeaveGameMessage)message,this);
+
     }
 
 
