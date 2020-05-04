@@ -124,7 +124,7 @@ public class CliGraphicHandler extends GraphicHandler {
             // I read as many numbers as how many cards have to be chosen (so that the player cannot
             // insert neither less nor more than the requested value)
 
-            ArrayList<Integer> chosenIndexes = null;
+            ArrayList<Integer> chosenIndexes = new ArrayList<>();
             int chosenIndex;
             for (int i = 0; i < playersNumber; i++) {
                 bottomMenu.show();
@@ -140,7 +140,7 @@ public class CliGraphicHandler extends GraphicHandler {
             }
 
             // constructing the ArrayList of cards that needs to be sent as a response
-            ArrayList<AbstractGodCard> chosenCards = null;
+            ArrayList<AbstractGodCard> chosenCards = new ArrayList<>();
             for (Integer index : chosenIndexes) {
                 chosenCards.add(cards.get(index));
             }
@@ -178,12 +178,14 @@ public class CliGraphicHandler extends GraphicHandler {
             while (true) {
                 bottomMenu.show();
                 chosenIndex = Integer.parseInt(reader.readLine());
-                if (0 < chosenIndex && chosenIndex < availableCards.size()) {
+                if (0 <= chosenIndex && chosenIndex < availableCards.size()) {
                     // in this case the chosen index is valid, I want to keep its value
                     break;
                 }
                 System.out.println("The number you wrote is not valid");
             }
+
+            System.out.println("Perfect, you have chosen " + availableCards.get(chosenIndex).getGodName() + "!");
 
             ChosenCardResponse response = new ChosenCardResponse(availableCards.get(chosenIndex));
             super.getClientBG().sendMessage(response);
@@ -217,7 +219,7 @@ public class CliGraphicHandler extends GraphicHandler {
             while (true) {
                 bottomMenu.show();
                 chosenIndex = Integer.parseInt(reader.readLine());
-                if (0 < chosenIndex && chosenIndex < availableColors.size()) {
+                if (0 <= chosenIndex && chosenIndex < availableColors.size()) {
                     // in this case the chosen index is valid, I want to keep its value
                     break;
                 }
@@ -289,8 +291,11 @@ public class CliGraphicHandler extends GraphicHandler {
             // create an ArrayList with the possible values for the first coordinate of the couple
             ArrayList<Coord> possibleStartCoords = new ArrayList<>();
             for (Coord startCoord : hashMap.keySet()) {
-                if (hashMap.get(startCoord).contains(chosenCoord)) {
-                    possibleStartCoords.add(startCoord);
+                ArrayList<Coord> currentArraylist = hashMap.get(startCoord);
+                for (int i = 0; i < currentArraylist.size(); i++) {
+                    if (currentArraylist.get(i).getX() == chosenCoord.getX() && currentArraylist.get(i).getY() == chosenCoord.getY()) {
+                        possibleStartCoords.add(startCoord);
+                    }
                 }
             }
 
@@ -307,7 +312,7 @@ public class CliGraphicHandler extends GraphicHandler {
                 int chosenIndex;
                 while (true) {
                     chosenIndex = Integer.parseInt(reader.readLine());
-                    if (0 < chosenIndex && chosenIndex < possibleStartCoords.size()) {
+                    if (0 <= chosenIndex && chosenIndex < possibleStartCoords.size()) {
                         break;
                     }
                     System.out.println("The number you wrote is not valid, try again!");
