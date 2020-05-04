@@ -43,7 +43,80 @@ public enum Screens {
                     "          |          It's your turn           |          \n" +
                     "          -------------------------------------          \n" +
                     Color.RESET
+    ),
+
+    PLAYERS_NUMBER_REQUEST(
+            Color.ANSI_WHITE +
+                    "Choose between a 2 or 3 game: " +
+                    Color.RESET
+    ),
+
+    INITIAL_2_CARDS_REQUEST(
+            Color.ANSI_WHITE +
+                    "Choose 2 cards (you will receive the latest not chosen by other players):\n" +
+                    Color.RESET
+    ),
+
+    INITIAL_3_CARDS_REQUEST(
+            Color.ANSI_WHITE +
+                    "Choose 3 cards (you will receive the latest not chosen by other players):\n" +
+                    Color.RESET
+    ),
+
+    CARD_REQUEST(
+            Color.ANSI_WHITE +
+            "Choose a card:\n" +
+            Color.RESET
+    ),
+
+    WORKERS_COLOR_REQUEST(
+            Color.ANSI_WHITE +
+            "Choose a color for your workers:\n" +
+            Color.RESET
+    ),
+
+    BUILD_POSITION_REQUEST(
+            Color.ANSI_WHITE +
+            "Choose where to build:\n" +
+            Color.RESET
+    ),
+
+    WORKER_0_PLACEMENT_REQUEST(
+            Color.ANSI_WHITE +
+            "Choose a position to place your Worker 0 in:\n" +
+            Color.RESET
+    ),
+
+    WORKER_1_PLACEMENT_REQUEST(
+            Color.ANSI_WHITE +
+            "Choose a position to place your Worker 1 in:\n" +
+            Color.RESET
+    ),
+
+    WORKER_MOVE_REQUEST(
+            Color.ANSI_WHITE +
+                    "Choose a position where to place your worker next:\n" +
+                    Color.RESET
+    ),
+
+    WORKER_SECOND_MOVE_REQUEST(
+            Color.ANSI_WHITE +
+                    "Choose a position where to place your worker next (second move):\n" +
+                    Color.RESET
+    ),
+
+    DOME_POSITION_REQUEST(
+            Color.ANSI_WHITE +
+                    "Choose a position where to build a dome:\n" +
+                    Color.RESET
+    ),
+
+    FORCE_OPPONENT_REQUEST(
+            Color.ANSI_WHITE +
+            "Choose a position where to force your opponent:\n" +
+            Color.RESET
     );
+
 
     private final String message;
 

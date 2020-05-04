@@ -132,6 +132,14 @@ public abstract class GraphicHandler {
 
 
     /**
+     * This method updates the graphics of the client displaying, at the beginning of
+     * the game, some useful information about the state of the game preparation.
+     * @param message message to be displayed
+     */
+    public abstract void updateMenuChange(StartGameMessage message);
+
+
+    /**
      * This method renders all the graphic aspects of the cli or the gui.
      */
     public abstract void render();

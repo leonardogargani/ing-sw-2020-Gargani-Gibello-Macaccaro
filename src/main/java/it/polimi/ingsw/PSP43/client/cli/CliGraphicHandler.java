@@ -24,6 +24,7 @@ public class CliGraphicHandler extends GraphicHandler {
     private final CliMiddleMenu middleMenu = new CliMiddleMenu();
     private final CliBottomMenu bottomMenu = new CliBottomMenu();
 
+
     public CliGraphicHandler(ClientBG clientBG) {
         super(clientBG);
     }
@@ -444,6 +445,18 @@ public class CliGraphicHandler extends GraphicHandler {
         middleMenu.setContentWithInfo(playersInfo);
         this.render();
 
+    }
+
+    /**
+     * This method updates the graphics of the client displaying, at the beginning of
+     * the game, some useful information about the state of the game preparation.
+     *
+     * @param message message to be displayed
+     */
+    @Override
+    public void updateMenuChange(StartGameMessage message) {
+        bottomMenu.setContent(message.getMessage());
+        bottomMenu.show();
     }
 
 

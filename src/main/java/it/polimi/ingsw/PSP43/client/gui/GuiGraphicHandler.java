@@ -155,6 +155,17 @@ public class GuiGraphicHandler extends GraphicHandler {
         // TODO implementation with JavaFX
     }
 
+    /**
+     * This method updates the graphics of the client displaying, at the beginning of
+     * the game, some useful information about the state of the game preparation.
+     *
+     * @param message message to be displayed
+     */
+    @Override
+    public void updateMenuChange(StartGameMessage message) {
+        // TODO implementation with JavaFX
+    }
+
 
     /**
      * This method renders all the graphic aspects of the cli or the gui.
