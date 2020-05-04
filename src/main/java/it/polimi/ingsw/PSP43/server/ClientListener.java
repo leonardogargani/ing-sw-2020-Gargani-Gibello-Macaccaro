@@ -112,7 +112,6 @@ public class ClientListener implements Runnable {
 
     public void handleMessage(ClientMessage message) throws WinnerCaughtException, IOException, ClassNotFoundException, ParserConfigurationException, SAXException, InterruptedException, ExecutionException {
         if (message instanceof RegistrationMessage) {
-            int counter = 0;
 
             RegisterClientListener registrator = new RegisterClientListener(this, (RegistrationMessage) message);
             Thread newRegistratorThread = new Thread(registrator);

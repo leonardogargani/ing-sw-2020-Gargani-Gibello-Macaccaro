@@ -9,6 +9,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class RegisterClientListener implements Runnable {
     private static ArrayList<GameSessionObservable> gameSessions = new ArrayList<>();
@@ -31,7 +32,8 @@ public class RegisterClientListener implements Runnable {
 
                 // if the gameSession is in registration phase for the first player, I wait
                 while (gameSession.getMaxNumPlayers() == 1) {}
-                if (gameSession.getMaxNumPlayers() >= gameSession.getNumOfPlayers()) {
+
+                if (gameSession.getMaxNumPlayers() > gameSession.getNumOfPlayers()) {
                     idGame = gameSessions.get(counter).registerToTheGame(message, player);
                 }
 
@@ -52,5 +54,9 @@ public class RegisterClientListener implements Runnable {
         } catch (IOException | WinnerCaughtException | InterruptedException | ClassNotFoundException | SAXException | ParserConfigurationException e) {
             e.printStackTrace();
         }
+    }
+
+    public synchronized void removeGameSession(int idGameSession){
+        gameSessions.removeIf(gameSessionObservable -> gameSessionObservable.getIdGame() == idGameSession);
     }
 }

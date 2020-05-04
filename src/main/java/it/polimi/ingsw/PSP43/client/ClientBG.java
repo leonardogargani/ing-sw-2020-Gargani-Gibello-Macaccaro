@@ -99,7 +99,16 @@ public class ClientBG implements Runnable {
 
 
     public void handleMessage(ServerMessage message) throws IOException {
-        if(message instanceof WorkerMessage)
+        if(message instanceof EndGameMessage){
+            client.getGraphics().updateMenuChange((EndGameMessage)message);
+            output.close();
+            input.close();
+            serverSocket.close();
+        }
+        MessageHandler messageHandler = new MessageHandler(client,message);
+        Thread messageHandlerThread = new Thread(messageHandler);
+        messageHandlerThread.start();
+        /*if(message instanceof WorkerMessage)
             client.getGraphics().updateBoardChange((WorkerMessage)message);
         else if(message instanceof CellMessage)
             client.getGraphics().updateBoardChange((CellMessage)message);
@@ -128,7 +137,7 @@ public class ClientBG implements Runnable {
         else if(message instanceof WorkersColorRequest)
             client.getGraphics().updateMenuChange((WorkersColorRequest)message);
         else if(message instanceof TextMessage)
-            client.getGraphics().updateMenuChange((TextMessage) message);
+            client.getGraphics().updateMenuChange((TextMessage) message);*/
     }
 
 }
