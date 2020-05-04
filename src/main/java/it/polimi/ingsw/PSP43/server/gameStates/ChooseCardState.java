@@ -13,6 +13,7 @@ import it.polimi.ingsw.PSP43.server.networkMessages.StartGameMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * This is the State of the game where the players are asked to choose the cards
@@ -67,7 +68,7 @@ public class ChooseCardState extends TurnState {
 
         askForCards(game);
 
-        findNextState();
+        this.findNextState();
     }
 
     /**
@@ -93,7 +94,12 @@ public class ChooseCardState extends TurnState {
 
             current.setAbstractGodCard(response.getCard());
             cardsHandler.setCardToPlayer(nicknameCurrentPlayer, response.getCard().getGodName());
-            cardsAvailable.remove(response.getCard());
+
+            for (Iterator<AbstractGodCard> cardsIterator = cardsAvailable.iterator(); cardsIterator.hasNext(); ) {
+                AbstractGodCard card = cardsIterator.next();
+                if (card.getGodName().equals(response.getCard().getGodName())) cardsIterator.remove();
+            }
+
             gameSession.setCurrentPlayer(playersHandler.getNextPlayer(nicknameCurrentPlayer));
         } while (!nicknameGodLikePlayer.equals(nicknameCurrentPlayer));
     }

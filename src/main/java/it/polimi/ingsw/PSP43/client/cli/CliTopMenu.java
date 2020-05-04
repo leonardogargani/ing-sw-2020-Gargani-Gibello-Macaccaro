@@ -3,7 +3,7 @@ package it.polimi.ingsw.PSP43.client.cli;
 
 public class CliTopMenu {
 
-    private String content;
+    private String content = "";
 
 
     /**

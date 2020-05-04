@@ -45,11 +45,11 @@ public class GameSessionObservable implements Runnable {
     }
 
     public synchronized int registerToTheGame(RegistrationMessage message, ClientListener player) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
-        if (getListenersHashMap().size() != maxNumPlayers) {
+        if (numOfPlayers < maxNumPlayers) {
             listenersHashMap.put(message.getNick(), player);
             numOfPlayers++;
             currentState.executeState(message);
-            player.setIdGame(idGame);
+            //player.setIdGame(idGame);
             return idGame;
         }
         return -1;

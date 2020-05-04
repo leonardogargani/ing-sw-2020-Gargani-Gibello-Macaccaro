@@ -292,8 +292,8 @@ public class CliGraphicHandler extends GraphicHandler {
             ArrayList<Coord> possibleStartCoords = new ArrayList<>();
             for (Coord startCoord : hashMap.keySet()) {
                 ArrayList<Coord> currentArraylist = hashMap.get(startCoord);
-                for (int i = 0; i < currentArraylist.size(); i++) {
-                    if (currentArraylist.get(i).getX() == chosenCoord.getX() && currentArraylist.get(i).getY() == chosenCoord.getY()) {
+                for (Coord coord : currentArraylist) {
+                    if (coord.getX() == chosenCoord.getX() && coord.getY() == chosenCoord.getY()) {
                         possibleStartCoords.add(startCoord);
                     }
                 }
@@ -326,7 +326,6 @@ public class CliGraphicHandler extends GraphicHandler {
                     board.getCell(endCoord).markAsFree(false);
                 }
             }
-            this.render();
 
             super.getClientBG().sendMessage(response);
 
