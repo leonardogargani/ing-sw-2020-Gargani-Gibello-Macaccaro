@@ -2,11 +2,15 @@ package it.polimi.ingsw.PSP43.server.model;
 
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 
+import java.io.Serializable;
+
 /**
  * Player is the class that represents the actual person who is playing the game.
  * He has a nickname previously chosen, two workers he can move and a abstractGodCard of a god.
  */
-public class Player {
+public class Player implements Serializable {
+
+    private static final long serialVersionUID = -5073826840767054806L;
 
     private String nickname;
     private int[] workersIdsArray;

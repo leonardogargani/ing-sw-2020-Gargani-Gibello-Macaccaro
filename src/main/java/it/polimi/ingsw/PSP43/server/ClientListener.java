@@ -4,8 +4,6 @@ import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.PingMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
-import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
-import it.polimi.ingsw.PSP43.server.gameStates.GameSessionObservable;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
 import org.xml.sax.SAXException;
@@ -17,7 +15,6 @@ import java.util.ArrayList;
 import java.util.concurrent.*;
 
 public class ClientListener implements Runnable {
-    private static ArrayList<GameSessionObservable> gameSessions;
     private Integer idGame = -1;
     private final Socket clientSocket;
     private final Object lockOut;
@@ -35,7 +32,6 @@ public class ClientListener implements Runnable {
         this.clientSocket = clientSocket;
         this.lockOut = new Object();
         this.stackMessages = new ArrayList<>();
-        gameSessions = new ArrayList<>();
     }
 
 
@@ -62,10 +58,7 @@ public class ClientListener implements Runnable {
             } catch (IOException | WinnerCaughtException | ParserConfigurationException | SAXException | ClassNotFoundException | InterruptedException | ExecutionException e) {
                 //Player left the game
                 System.out.println("A player lost the connection or left the game");
-                try {
-                    handleDisconnection();
-                } catch (IOException ex) {
-                }
+                // TODO : handleDisconnection();
             }
         }
     }
@@ -120,32 +113,13 @@ public class ClientListener implements Runnable {
     public void handleMessage(ClientMessage message) throws WinnerCaughtException, IOException, ClassNotFoundException, ParserConfigurationException, SAXException, InterruptedException, ExecutionException {
         if (message instanceof RegistrationMessage) {
             int counter = 0;
-            ExecutorService exe = Executors.newSingleThreadExecutor();
 
-            while (idGame == -1 && gameSessions.size() > counter) {
-                GameSessionObservable gameSession = gameSessions.get(counter);
-                while (gameSession.getMaxNumPlayers() == 1) {}
-                if (gameSession.getMaxNumPlayers() >= gameSession.getNumOfPlayers()) {
-                    RegisterClientListener registrator = new RegisterClientListener(gameSessions.get(counter), this, message);
-                    Thread newRegistratorThread = new Thread(registrator);
-                    newRegistratorThread.start();
-                }
-
-                counter++;
-            }
-
-            if (idGame == -1) {
-                GameSession game = new GameSession(gameSessions.size());
-                gameSessions.add(game);
-                Thread gameThread = new Thread(game);
-                gameThread.start();
-
-                RegisterClientListener registrator = new RegisterClientListener(game, this, message);
-                Thread newRegistratorThread = new Thread(registrator);
-                newRegistratorThread.start();
-            }
-        } else if (message instanceof LeaveGameMessage)
-            gameSessions.get(idGame).unregisterFromGame((LeaveGameMessage) message, this);
+            RegisterClientListener registrator = new RegisterClientListener(this, (RegistrationMessage) message);
+            Thread newRegistratorThread = new Thread(registrator);
+            newRegistratorThread.start();
+        } else if (message instanceof LeaveGameMessage) {
+            // thread for unregistration and so on other "routine" operations
+        }
     }
 
 
@@ -161,15 +135,16 @@ public class ClientListener implements Runnable {
         notifyAll();
     }
 
-
-    public synchronized void removeGameSession(int idGame) {
+    // TODO : is it still necessary? Shouldn't we only handle that in the gameSession stopping the thread with
+    //          the boolean "active"?
+    /*public synchronized void removeGameSession(int idGame) {
         gameSessions.remove(idGame);
-    }
+    }*/
 
-
-    public void handleDisconnection() throws IOException {
+    // TODO : now the handling should be restricted only to handle your socket no?
+    /*public void handleDisconnection() throws IOException {
         gameSessions.get(idGame).unregisterFromGame(new LeaveGameMessage(), this);
-    }
+    }*/
 
     public void setIdGame(Integer idGame) {
         this.idGame = idGame;

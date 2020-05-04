@@ -1,6 +1,8 @@
 package it.polimi.ingsw.PSP43.server.model.card;
 
+import it.polimi.ingsw.PSP43.server.BoardObserver;
 import it.polimi.ingsw.PSP43.server.DataToAction;
+import it.polimi.ingsw.PSP43.server.Observable;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
@@ -9,6 +11,7 @@ import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -17,7 +20,9 @@ import java.util.HashMap;
  * corresponding description of its power.
  * Each player owns a single card for the entire duration of the game.
  */
-public abstract class AbstractGodCard {
+public abstract class AbstractGodCard implements Serializable {
+
+    private static final long serialVersionUID = -4690178671081548142L;
 
     private String godName;
     private String description;

@@ -1,6 +1,11 @@
 package it.polimi.ingsw.PSP43.server.model;
 
-public class Coord {
+import java.io.Serializable;
+
+public class Coord implements Serializable {
+
+    private static final long serialVersionUID = 82606752933927860L;
+
     private final int xPosition;
     private final int yPosition;
 

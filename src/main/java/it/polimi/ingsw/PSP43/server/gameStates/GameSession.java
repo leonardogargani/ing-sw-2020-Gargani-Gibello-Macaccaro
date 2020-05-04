@@ -48,7 +48,7 @@ public class GameSession extends GameSessionObservable {
         this.nextState = null;
         this.boardObserver = new BoardObserver();
         this.cellsHandler = new CellsHandler(this);
-        this.playersHandler = new PlayersHandler(this);
+        this.playersHandler = new PlayersHandler();
         this.workersHandler = new WorkersHandler(this);
         this.cardsHandler = new CardsHandler();
     }

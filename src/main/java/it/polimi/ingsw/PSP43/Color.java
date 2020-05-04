@@ -5,6 +5,8 @@ import it.polimi.ingsw.PSP43.client.Client;
 import it.polimi.ingsw.PSP43.client.cli.CliGraphicHandler;
 import it.polimi.ingsw.PSP43.client.gui.GuiGraphicHandler;
 
+import java.io.Serializable;
+
 public enum Color {
 
     ANSI_WHITE("\u001B[37m"),

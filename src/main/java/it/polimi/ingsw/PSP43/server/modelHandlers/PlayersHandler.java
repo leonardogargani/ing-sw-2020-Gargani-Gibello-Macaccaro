@@ -1,7 +1,5 @@
 package it.polimi.ingsw.PSP43.server.modelHandlers;
 
-import it.polimi.ingsw.PSP43.server.BoardObserver;
-import it.polimi.ingsw.PSP43.server.Observable;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.*;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
@@ -13,13 +11,11 @@ import java.util.ArrayList;
  * This is a class intended to handle all the requests to store informations about players in game
  * (such as nickname) and the cards they own during the game;
  */
-public class PlayersHandler extends Observable {
+public class PlayersHandler {
     private ArrayList<Player> gamePlayers;
-    private BoardObserver boardObserver;
 
-    public PlayersHandler(GameSession gameSession) {
-        this.boardObserver = gameSession.getBoardObserver();
-        this.gamePlayers = new ArrayList<Player>();
+    public PlayersHandler() {
+        this.gamePlayers = new ArrayList<>();
     }
 
     /**

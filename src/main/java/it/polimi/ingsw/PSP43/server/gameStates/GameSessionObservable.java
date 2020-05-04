@@ -21,7 +21,6 @@ public class GameSessionObservable implements Runnable {
     protected int maxNumPlayers;
     private int numOfPlayers;
     private Boolean active;
-    Lock lockRegistration;
 
     protected TurnState currentState;
 
@@ -33,7 +32,6 @@ public class GameSessionObservable implements Runnable {
         this.active = Boolean.TRUE;
         numOfPlayers = 0;
         maxNumPlayers = 1;
-        lockRegistration = new ReentrantLock();
     }
 
     public void run() {
@@ -46,15 +44,15 @@ public class GameSessionObservable implements Runnable {
         this.active = Boolean.FALSE;
     }
 
-    public void registerToTheGame(RegistrationMessage message, ClientListener player) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
-        lockRegistration.lock();
+    public synchronized int registerToTheGame(RegistrationMessage message, ClientListener player) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         if (getListenersHashMap().size() != maxNumPlayers) {
             listenersHashMap.put(message.getNick(), player);
             numOfPlayers++;
             currentState.executeState(message);
             player.setIdGame(idGame);
+            return idGame;
         }
-        lockRegistration.unlock();
+        return -1;
     }
 
     public synchronized boolean unregisterFromGame(LeaveGameMessage message, ClientListener player) throws IOException {
@@ -66,7 +64,7 @@ public class GameSessionObservable implements Runnable {
         ArrayList<String> listExcluded = new ArrayList<>();
         listExcluded.add(nicknameLeft);
         sendBroadCast(endGameMessage, listExcluded);
-        listenersHashMap.get(nicknameLeft).removeGameSession(this.idGame);
+        //listenersHashMap.get(nicknameLeft).removeGameSession(this.idGame);
         return true;
     }
 
@@ -117,7 +115,7 @@ public class GameSessionObservable implements Runnable {
             }
         }
         listenersHashMap.get(nicksExcluded.get(0)).sendMessage(messageForTheWinner);
-        listenersHashMap.get(nicksExcluded.get(0)).removeGameSession(this.idGame);
+        //listenersHashMap.get(nicksExcluded.get(0)).removeGameSession(this.idGame);
     }
 
     /**

@@ -12,12 +12,13 @@ import it.polimi.ingsw.PSP43.server.Observable;
  */
 public class Worker extends Observable {
 
+    private static final long serialVersionUID = -415589018906535869L;
+
     private int id;
     private Coord currentPosition;
     private Coord previousPosition;
     private Color color;
     private boolean latestMoved;
-    private BoardObserver boardObserver;
 
 
     /**
@@ -25,12 +26,12 @@ public class Worker extends Observable {
      * @param color color of the worker
      */
     public Worker(int id, Color color, BoardObserver boardObserver) {
+        super(boardObserver);
         this.id = id;
         this.currentPosition = null;
         this.previousPosition = null;
         this.color = color;
         this.latestMoved = false;
-        this.boardObserver = boardObserver;
     }
 
 
@@ -50,7 +51,7 @@ public class Worker extends Observable {
     public void setCurrentPosition(Coord currentPosition) {
         this.previousPosition = this.currentPosition;
         this.currentPosition = currentPosition;
-        boardObserver.notifyBoardChange(this);
+        super.notifyBoardChange();
     }
 
 
