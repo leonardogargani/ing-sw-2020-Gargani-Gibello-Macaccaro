@@ -1,0 +1,186 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Worker</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Worker (it.polimi.ingsw.PSP43.server.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Worker</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (6/ 8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (15/ 18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.Color;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.server.BoardObserver;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.Observable;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;/**
+<i>9</i>&nbsp; * Worker is the class that represents a worker, which is the piece players can control.
+<i>10</i>&nbsp; * Every player has two workers, both of the same color and able to move their position
+<i>11</i>&nbsp; * during the game.
+<i>12</i>&nbsp; */
+<i>13</i>&nbsp;public class Worker extends Observable {
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;    private static final long serialVersionUID = -415589018906535869L;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    private int id;
+<i>18</i>&nbsp;    private Coord currentPosition;
+<i>19</i>&nbsp;    private Coord previousPosition;
+<i>20</i>&nbsp;    private Color color;
+<i>21</i>&nbsp;    private boolean latestMoved;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    /**
+<i>25</i>&nbsp;     * Non-default constructor, it initializes a worker with its color, chosen by the owner.
+<i>26</i>&nbsp;     * @param color color of the worker
+<i>27</i>&nbsp;     */
+<i>28</i>&nbsp;    public Worker(int id, Color color, BoardObserver boardObserver) {
+<b class="fc"><i>29</i>&nbsp;        super(boardObserver);</b>
+<b class="fc"><i>30</i>&nbsp;        this.id = id;</b>
+<b class="fc"><i>31</i>&nbsp;        this.currentPosition = null;</b>
+<b class="fc"><i>32</i>&nbsp;        this.previousPosition = null;</b>
+<b class="fc"><i>33</i>&nbsp;        this.color = color;</b>
+<b class="fc"><i>34</i>&nbsp;        this.latestMoved = false;</b>
+<b class="fc"><i>35</i>&nbsp;    }</b>
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    /**
+<i>39</i>&nbsp;     * This method returns the position the worker is in at this moment.
+<i>40</i>&nbsp;     * @return the position the worker is in at this moment
+<i>41</i>&nbsp;     */
+<i>42</i>&nbsp;    public Coord getCurrentPosition() {
+<b class="fc"><i>43</i>&nbsp;        return currentPosition;</b>
+<i>44</i>&nbsp;    }
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    /**
+<i>48</i>&nbsp;     * This method sets the position the worker is in at this moment.
+<i>49</i>&nbsp;     * @param currentPosition the position the worker is in at this moment
+<i>50</i>&nbsp;     */
+<i>51</i>&nbsp;    public void setCurrentPosition(Coord currentPosition) {
+<b class="fc"><i>52</i>&nbsp;        this.previousPosition = this.currentPosition;</b>
+<b class="fc"><i>53</i>&nbsp;        this.currentPosition = currentPosition;</b>
+<b class="fc"><i>54</i>&nbsp;        super.notifyBoardChange();</b>
+<b class="fc"><i>55</i>&nbsp;    }</b>
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;    /**
+<i>59</i>&nbsp;     * This method returns the position the worker was before its last move.
+<i>60</i>&nbsp;     * @return position the worker was before its last move
+<i>61</i>&nbsp;     */
+<i>62</i>&nbsp;    public Coord getPreviousPosition() {
+<b class="fc"><i>63</i>&nbsp;        return previousPosition;</b>
+<i>64</i>&nbsp;    }
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    /**
+<i>68</i>&nbsp;     * This method returns the color of the worker.
+<i>69</i>&nbsp;     * @return color of the worker
+<i>70</i>&nbsp;     */
+<i>71</i>&nbsp;    public Color getColor() {
+<b class="fc"><i>72</i>&nbsp;        return color;</b>
+<i>73</i>&nbsp;    }
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    /**
+<i>77</i>&nbsp;     * This method returns the unique id of the worker.
+<i>78</i>&nbsp;     * @return unique id of the worker
+<i>79</i>&nbsp;     */
+<i>80</i>&nbsp;    public int getId() {
+<b class="fc"><i>81</i>&nbsp;        return id;</b>
+<i>82</i>&nbsp;    }
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;    /**
+<i>86</i>&nbsp;     *
+<i>87</i>&nbsp;     * @return
+<i>88</i>&nbsp;     */
+<i>89</i>&nbsp;    public boolean isLatestMoved() {
+<b class="nc"><i>90</i>&nbsp;        return latestMoved;</b>
+<i>91</i>&nbsp;    }
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;    /**
+<i>95</i>&nbsp;     *
+<i>96</i>&nbsp;     * @param latestMoved
+<i>97</i>&nbsp;     */
+<i>98</i>&nbsp;    public void setLatestMoved(boolean latestMoved) {
+<b class="nc"><i>99</i>&nbsp;        this.latestMoved = latestMoved;</b>
+<b class="nc"><i>100</i>&nbsp;    }</b>
+<i>101</i>&nbsp;
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-05 16:39</div>
+</div>
+</body>
+</html>

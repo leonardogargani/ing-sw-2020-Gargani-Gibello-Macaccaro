@@ -1,0 +1,248 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CellsHandler</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.modelHandlers</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CellsHandler (it.polimi.ingsw.PSP43.server.modelHandlers)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CellsHandler</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (4/ 8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    51.4%
+  </span>
+  <span class="absValue">
+    (19/ 37)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">CellsHandler$AbstractIterator</td>
+  </tr>
+  <tr>
+    <td class="name">CellsHandler$GenericDirectionIterator</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 14)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    36.4%
+  </span>
+  <span class="absValue">
+    (4/ 11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    37.3%
+  </span>
+  <span class="absValue">
+    (19/ 51)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.modelHandlers;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Cell;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Worker;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;import java.util.ArrayList;
+<i>9</i>&nbsp;import java.util.HashMap;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;public class CellsHandler {
+<i>13</i>&nbsp;    private static final int DIM = 5;
+<i>14</i>&nbsp;    private Cell[][] board;
+<i>15</i>&nbsp;    private GameSession gameSession;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    /**
+<i>19</i>&nbsp;     * Not default constructor for initialize the game board
+<i>20</i>&nbsp;     */
+<b class="fc"><i>21</i>&nbsp;    public CellsHandler(GameSession gameSession) {</b>
+<b class="fc"><i>22</i>&nbsp;        this.gameSession = gameSession;</b>
+<b class="fc"><i>23</i>&nbsp;        board = new Cell[DIM][DIM];</b>
+<b class="fc"><i>24</i>&nbsp;        for(int i = 0;i &lt; DIM;i++)</b>
+<b class="fc"><i>25</i>&nbsp;            for (int j = 0;j &lt; DIM;j++) {</b>
+<b class="fc"><i>26</i>&nbsp;                board[i][j] = new Cell(new Coord(i, j), gameSession.getBoardObserver());</b>
+<i>27</i>&nbsp;            }
+<i>28</i>&nbsp;
+<b class="fc"><i>29</i>&nbsp;    }</b>
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    public GameSession getGameSession() {
+<b class="nc"><i>32</i>&nbsp;        return gameSession;</b>
+<i>33</i>&nbsp;    }
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    public void setGameSession(GameSession gameSession) {
+<b class="nc"><i>36</i>&nbsp;        this.gameSession = gameSession;</b>
+<b class="nc"><i>37</i>&nbsp;    }</b>
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    /**
+<i>40</i>&nbsp;     * Method to get the game board useful to other method of that class
+<i>41</i>&nbsp;     * @return the searched cell
+<i>42</i>&nbsp;     */
+<i>43</i>&nbsp;    public Cell getCell(Coord c) {
+<b class="fc"><i>44</i>&nbsp;            return board[c.getX()][c.getY()];</b>
+<i>45</i>&nbsp;    }
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    /**
+<i>48</i>&nbsp;     * Method tu update cell&#39;s attributes
+<i>49</i>&nbsp;     * @param newDescriptionCell is a cell received from a client that specifies the new state of a cell, identified by c
+<i>50</i>&nbsp;     * @param c includes the coordinates of the cell that are going to be modified
+<i>51</i>&nbsp;     */
+<i>52</i>&nbsp;    public void changeStateOfCell (Cell newDescriptionCell, Coord c) {
+<b class="fc"><i>53</i>&nbsp;        Cell cellToChange = board[c.getX()][c.getY()];</b>
+<b class="fc"><i>54</i>&nbsp;        cellToChange.setOccupiedByDome(newDescriptionCell.getOccupiedByDome());</b>
+<b class="fc"><i>55</i>&nbsp;        cellToChange.setOccupiedByWorker(newDescriptionCell.getOccupiedByWorker());</b>
+<b class="fc"><i>56</i>&nbsp;        cellToChange.setHeight(newDescriptionCell.getHeight());</b>
+<b class="fc"><i>57</i>&nbsp;    }</b>
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    public ArrayList&lt;Coord&gt; findAllCellsFree() {
+<b class="fc"><i>60</i>&nbsp;        ArrayList&lt;Coord&gt; freeCells = new ArrayList();</b>
+<b class="fc"><i>61</i>&nbsp;        for (int i=0; i&lt;board.length; i++) {</b>
+<b class="fc"><i>62</i>&nbsp;            for (int j=0; j&lt;board.length; j++) {</b>
+<b class="fc"><i>63</i>&nbsp;                if (!board[i][j].getOccupiedByWorker() &amp;&amp; !board[i][j].getOccupiedByDome())</b>
+<b class="fc"><i>64</i>&nbsp;                    freeCells.add(new Coord(i,j));</b>
+<i>65</i>&nbsp;            }
+<i>66</i>&nbsp;        }
+<b class="fc"><i>67</i>&nbsp;        return freeCells;</b>
+<i>68</i>&nbsp;    }
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;    public HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; findNeighbouringCoords(Worker[] workers) {
+<b class="nc"><i>71</i>&nbsp;        HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositions = new HashMap&lt;&gt;();</b>
+<i>72</i>&nbsp;        ArrayList&lt;Coord&gt; positions;
+<i>73</i>&nbsp;
+<b class="nc"><i>74</i>&nbsp;        for (Worker w : workers) {</b>
+<b class="nc"><i>75</i>&nbsp;            Coord currentCoord = w.getCurrentPosition();</b>
+<b class="nc"><i>76</i>&nbsp;            positions = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>77</i>&nbsp;            for (int i=-1; i&lt;2 ; i++) {</b>
+<b class="nc"><i>78</i>&nbsp;                for (int j=-1; j&lt;2; j++) {</b>
+<b class="nc"><i>79</i>&nbsp;                    if (currentCoord.getX() + i &gt; -1 &amp;&amp; currentCoord.getX() + i &lt; DIM) {</b>
+<b class="nc"><i>80</i>&nbsp;                        if (currentCoord.getY() + j &gt; -1 &amp;&amp; currentCoord.getY() + j &lt; DIM) {</b>
+<b class="nc"><i>81</i>&nbsp;                            if (i!=0 &amp;&amp; j!=0) {</b>
+<b class="nc"><i>82</i>&nbsp;                                positions.add(new Coord(currentCoord.getX() + i, currentCoord.getY() + j));</b>
+<i>83</i>&nbsp;                            }
+<i>84</i>&nbsp;                        }
+<i>85</i>&nbsp;                    }
+<i>86</i>&nbsp;                }
+<i>87</i>&nbsp;            }
+<b class="nc"><i>88</i>&nbsp;            availablePositions.put(currentCoord, positions);</b>
+<i>89</i>&nbsp;        }
+<b class="nc"><i>90</i>&nbsp;        return availablePositions;</b>
+<i>91</i>&nbsp;    }
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;    public AbstractIterator directionIterator(Coord initialPosition, Coord finalPosition) {
+<b class="nc"><i>94</i>&nbsp;        int xIncrement = initialPosition.getX() - finalPosition.getX();</b>
+<b class="nc"><i>95</i>&nbsp;        int yIncrement = initialPosition.getY() - finalPosition.getY();</b>
+<b class="nc"><i>96</i>&nbsp;        return new GenericDirectionIterator(initialPosition, xIncrement, yIncrement);</b>
+<i>97</i>&nbsp;    }
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;    public interface AbstractIterator {
+<i>101</i>&nbsp;        Cell next();
+<i>102</i>&nbsp;    }
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;    private class GenericDirectionIterator implements AbstractIterator {
+<i>105</i>&nbsp;        Coord initialPosition;
+<i>106</i>&nbsp;        Coord currentPosition;
+<i>107</i>&nbsp;        int xIncrement;
+<i>108</i>&nbsp;        int yIncrement;
+<i>109</i>&nbsp;
+<b class="nc"><i>110</i>&nbsp;        public GenericDirectionIterator(Coord initialPosition, int xIncrement, int yIncrement) {</b>
+<b class="nc"><i>111</i>&nbsp;            this.initialPosition = initialPosition;</b>
+<b class="nc"><i>112</i>&nbsp;            this.currentPosition = initialPosition;</b>
+<b class="nc"><i>113</i>&nbsp;            this.xIncrement = xIncrement;</b>
+<b class="nc"><i>114</i>&nbsp;            this.yIncrement = yIncrement;</b>
+<i>115</i>&nbsp;        }
+<i>116</i>&nbsp;
+<i>117</i>&nbsp;        public boolean hasNext() {
+<b class="nc"><i>118</i>&nbsp;            if ((currentPosition.getX() + xIncrement == DIM || currentPosition.getX() + xIncrement == 0) &amp;&amp; xIncrement != 0) {</b>
+<b class="nc"><i>119</i>&nbsp;                return false;</b>
+<i>120</i>&nbsp;            }
+<b class="nc"><i>121</i>&nbsp;            else if ((currentPosition.getY() + yIncrement == DIM || currentPosition.getY() + yIncrement == 0) &amp;&amp; yIncrement != 0) {</b>
+<b class="nc"><i>122</i>&nbsp;                return false;</b>
+<i>123</i>&nbsp;            }
+<b class="nc"><i>124</i>&nbsp;            else return true;</b>
+<i>125</i>&nbsp;        }
+<i>126</i>&nbsp;
+<i>127</i>&nbsp;        public Cell next() {
+<b class="nc"><i>128</i>&nbsp;            if (this.hasNext()) {</b>
+<b class="nc"><i>129</i>&nbsp;                currentPosition = new Coord(currentPosition.getX() + xIncrement, currentPosition.getY() + yIncrement);</b>
+<b class="nc"><i>130</i>&nbsp;                return getCell(currentPosition);</b>
+<i>131</i>&nbsp;            }
+<b class="nc"><i>132</i>&nbsp;            else return null;</b>
+<i>133</i>&nbsp;        }
+<i>134</i>&nbsp;
+<i>135</i>&nbsp;    }
+<i>136</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-05 16:39</div>
+</div>
+</body>
+</html>

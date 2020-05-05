@@ -1,0 +1,138 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BuildBeforeMoveBehaviour</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.model.card.behaviours</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BuildBeforeMoveBehaviour (it.polimi.ingsw.PSP43.server.model.card.behaviours)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BuildBeforeMoveBehaviour</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 26)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.model.card.behaviours;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.ResponseMessage;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.DataToAction;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Cell;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Player;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Worker;
+<i>11</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+<i>12</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
+<i>13</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
+<i>14</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;import java.io.IOException;
+<i>17</i>&nbsp;import java.util.ArrayList;
+<i>18</i>&nbsp;import java.util.HashMap;
+<i>19</i>&nbsp;
+<b class="nc"><i>20</i>&nbsp;public class BuildBeforeMoveBehaviour extends AbstractGodCard implements MoveBehavior {</b>
+<i>21</i>&nbsp;    public void handleMove(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+<b class="nc"><i>22</i>&nbsp;        GameSession gameSession = dataToAction.getGameSession();</b>
+<b class="nc"><i>23</i>&nbsp;        Player player = dataToAction.getPlayer();</b>
+<b class="nc"><i>24</i>&nbsp;        Worker worker = dataToAction.getWorker();</b>
+<b class="nc"><i>25</i>&nbsp;        Cell oldCell = gameSession.getCellsHandler().getCell(worker.getCurrentPosition());</b>
+<b class="nc"><i>26</i>&nbsp;        Cell newCell = gameSession.getCellsHandler().getCell(dataToAction.getNewPosition());</b>
+<b class="nc"><i>27</i>&nbsp;        if (newCell.getHeight() - oldCell.getHeight() == 0) {</b>
+<b class="nc"><i>28</i>&nbsp;            RequestMessage message = new RequestMessage(&quot;Do you want to build before moving?&quot;);</b>
+<i>29</i>&nbsp;            ResponseMessage responseMessage;
+<i>30</i>&nbsp;            do {
+<b class="nc"><i>31</i>&nbsp;                responseMessage = gameSession.sendRequest(message, player.getNickname(), ResponseMessage.class);</b>
+<b class="nc"><i>32</i>&nbsp;            } while (responseMessage == null);</b>
+<i>33</i>&nbsp;
+<b class="nc"><i>34</i>&nbsp;            boolean response = responseMessage.isResponse();</b>
+<b class="nc"><i>35</i>&nbsp;            if (response) {</b>
+<b class="nc"><i>36</i>&nbsp;                Worker[] workers = new Worker[1];</b>
+<b class="nc"><i>37</i>&nbsp;                workers[0] = worker;</b>
+<b class="nc"><i>38</i>&nbsp;                HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositions = gameSession.getCellsHandler().findNeighbouringCoords(workers);</b>
+<b class="nc"><i>39</i>&nbsp;                for (Coord c : availablePositions.keySet()) {</b>
+<b class="nc"><i>40</i>&nbsp;                    availablePositions.get(c).removeIf(c1 -&gt; c1.getY() == dataToAction.getNewPosition().getY() &amp;&amp; c1.getX() == dataToAction.getNewPosition().getX());</b>
+<b class="nc"><i>41</i>&nbsp;                }</b>
+<b class="nc"><i>42</i>&nbsp;                ActionRequest request = new ActionRequest(&quot;Choose a cell where to build.&quot;, availablePositions);</b>
+<i>43</i>&nbsp;                ActionResponse actionResponse;
+<i>44</i>&nbsp;                do {
+<b class="nc"><i>45</i>&nbsp;                    actionResponse = gameSession.sendRequest(request, player.getNickname(), ActionResponse.class);</b>
+<b class="nc"><i>46</i>&nbsp;                } while (actionResponse == null);</b>
+<i>47</i>&nbsp;
+<b class="nc"><i>48</i>&nbsp;                Coord coordToBuild = actionResponse.getPosition();</b>
+<b class="nc"><i>49</i>&nbsp;                DataToAction dataBuild = new DataToAction(gameSession, player, worker, coordToBuild);</b>
+<b class="nc"><i>50</i>&nbsp;                super.buildBlock(dataBuild);</b>
+<i>51</i>&nbsp;            }
+<b class="nc"><i>52</i>&nbsp;        }</b>
+<b class="nc"><i>53</i>&nbsp;        else super.move(dataToAction);</b>
+<i>54</i>&nbsp;    }
+<i>55</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-05 16:39</div>
+</div>
+</body>
+</html>

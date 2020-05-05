@@ -1,0 +1,206 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BasicGodCard</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.model.card</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BasicGodCard (it.polimi.ingsw.PSP43.server.model.card)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BasicGodCard</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    26.3%
+  </span>
+  <span class="absValue">
+    (5/ 19)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    28.6%
+  </span>
+  <span class="absValue">
+    (10/ 35)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.model.card;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.server.DataToAction;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.*;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.card.behaviours.BuildBlockBehaviour;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.card.behaviours.MoveBehavior;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;import java.io.IOException;
+<i>11</i>&nbsp;import java.util.ArrayList;
+<i>12</i>&nbsp;import java.util.HashMap;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;/**
+<i>15</i>&nbsp; * AbstractGodCard is the class that represents the cards with God Powers, thus it is associated to a God and the
+<i>16</i>&nbsp; * corresponding description of its power.
+<i>17</i>&nbsp; * Each player owns a single card for the entire duration of the game.
+<i>18</i>&nbsp; */
+<i>19</i>&nbsp;public class BasicGodCard extends AbstractGodCard {
+<i>20</i>&nbsp;    private MoveBehavior moveBehavior;
+<i>21</i>&nbsp;    private BuildBlockBehaviour buildBlockBehaviour;
+<i>22</i>&nbsp;
+<b class="nc"><i>23</i>&nbsp;    public BasicGodCard() {</b>
+<b class="nc"><i>24</i>&nbsp;    }</b>
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    /**
+<i>27</i>&nbsp;     * Non-default constructor, it initializes the card with the name of the god and its description.
+<i>28</i>&nbsp;     * @param godName name of the god whose power has been chosen by the player
+<i>29</i>&nbsp;     * @param description description of the ability of the god
+<i>30</i>&nbsp;     */
+<i>31</i>&nbsp;    public BasicGodCard(String godName, String description, String power, MoveBehavior moveBehaviour, BuildBlockBehaviour buildBlockBehaviour) {
+<b class="fc"><i>32</i>&nbsp;        super(godName, description, power);</b>
+<b class="fc"><i>33</i>&nbsp;        this.moveBehavior = moveBehaviour;</b>
+<b class="fc"><i>34</i>&nbsp;        this.buildBlockBehaviour = buildBlockBehaviour;</b>
+<b class="fc"><i>35</i>&nbsp;    }</b>
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    public void setGodName(String godName) {
+<b class="nc"><i>38</i>&nbsp;        super.setGodName(godName);</b>
+<b class="nc"><i>39</i>&nbsp;    }</b>
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    /**
+<i>42</i>&nbsp;     * Method that returns the name of the god.
+<i>43</i>&nbsp;     * @return name of the god
+<i>44</i>&nbsp;     */
+<i>45</i>&nbsp;    public String getGodName() {
+<b class="fc"><i>46</i>&nbsp;        return super.getGodName();</b>
+<i>47</i>&nbsp;    }
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    public void setDescription(String description) {
+<b class="nc"><i>50</i>&nbsp;        super.setDescription(description);</b>
+<b class="nc"><i>51</i>&nbsp;    }</b>
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    /**
+<i>54</i>&nbsp;     * Method that returns the description of the power of the god.
+<i>55</i>&nbsp;     * @return description of the power of the god
+<i>56</i>&nbsp;     */
+<i>57</i>&nbsp;    public String getDescription() {
+<b class="fc"><i>58</i>&nbsp;        return super.getDescription();</b>
+<i>59</i>&nbsp;    }
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    public void setPower(String power) {
+<b class="nc"><i>62</i>&nbsp;        super.setPower(power);</b>
+<b class="nc"><i>63</i>&nbsp;    }</b>
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    /**
+<i>66</i>&nbsp;     * Method that returns the description of the power of the god.
+<i>67</i>&nbsp;     * @return description of the power of the god
+<i>68</i>&nbsp;     */
+<i>69</i>&nbsp;    public String getPower() {
+<b class="fc"><i>70</i>&nbsp;        return super.getPower();</b>
+<i>71</i>&nbsp;    }
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;    public MoveBehavior getMoveBehavior() {
+<b class="nc"><i>74</i>&nbsp;        return moveBehavior;</b>
+<i>75</i>&nbsp;    }
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;    public void setMoveBehavior(MoveBehavior moveBehavior) {
+<b class="nc"><i>78</i>&nbsp;        this.moveBehavior = moveBehavior;</b>
+<b class="nc"><i>79</i>&nbsp;    }</b>
+<i>80</i>&nbsp;
+<i>81</i>&nbsp;    public BuildBlockBehaviour getBuildBlockBehaviour() {
+<b class="nc"><i>82</i>&nbsp;        return buildBlockBehaviour;</b>
+<i>83</i>&nbsp;    }
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;    public void setBuildBlockBehaviour(BuildBlockBehaviour buildBlockBehaviour) {
+<b class="nc"><i>86</i>&nbsp;        this.buildBlockBehaviour = buildBlockBehaviour;</b>
+<b class="nc"><i>87</i>&nbsp;    }</b>
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;    public void move(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+<b class="fc"><i>90</i>&nbsp;        if (moveBehavior == null) {</b>
+<b class="fc"><i>91</i>&nbsp;            super.move(dataToAction);</b>
+<i>92</i>&nbsp;        }
+<b class="nc"><i>93</i>&nbsp;        else moveBehavior.handleMove(dataToAction);</b>
+<b class="fc"><i>94</i>&nbsp;    }</b>
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;    public void buildBlock(DataToAction dataToAction) throws IOException, ClassNotFoundException, InterruptedException {
+<b class="nc"><i>97</i>&nbsp;        if (buildBlockBehaviour == null) {</b>
+<b class="nc"><i>98</i>&nbsp;            super.buildBlock(dataToAction);</b>
+<i>99</i>&nbsp;        }
+<b class="nc"><i>100</i>&nbsp;        else buildBlockBehaviour.handleBuildBlock(dataToAction);</b>
+<b class="nc"><i>101</i>&nbsp;    }</b>
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;    public void buildDome(DataToAction dataToAction) {
+<b class="nc"><i>104</i>&nbsp;        super.buildDome(dataToAction);</b>
+<b class="nc"><i>105</i>&nbsp;    }</b>
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;    public HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; findAvailablePositionsToMove(CellsHandler handler, Worker[] workers) {
+<b class="nc"><i>108</i>&nbsp;        return super.findAvailablePositionsToMove(handler, workers);</b>
+<i>109</i>&nbsp;    }
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;    public HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; findAvailablePositionsToBuildBlock(CellsHandler handler, Worker[] workers) {
+<b class="nc"><i>112</i>&nbsp;        return super.findAvailablePositionsToBuildBlock(handler, workers);</b>
+<i>113</i>&nbsp;    }
+<i>114</i>&nbsp;
+<i>115</i>&nbsp;    public HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; findAvailablePositionsToBuildDome(CellsHandler handler, Worker[] workers) {
+<b class="nc"><i>116</i>&nbsp;        return super.findAvailablePositionsToBuildDome(handler, workers);</b>
+<i>117</i>&nbsp;    }
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;    public AbstractGodCard cleanFromEffects(String nameOfEffect) throws ClassNotFoundException {
+<i>120</i>&nbsp;        AbstractGodCard newCard;
+<b class="nc"><i>121</i>&nbsp;        return newCard = new BasicGodCard(super.getGodName(), super.getDescription(), super.getPower(), moveBehavior, buildBlockBehaviour);</b>
+<i>122</i>&nbsp;    }
+<i>123</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-05 16:39</div>
+</div>
+</body>
+</html>

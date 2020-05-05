@@ -1,0 +1,157 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: PowerGodDecorator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.model.card.decorators</a> ]
+</div>
+
+<h1>Coverage Summary for Class: PowerGodDecorator (it.polimi.ingsw.PSP43.server.model.card.decorators)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PowerGodDecorator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    35.7%
+  </span>
+  <span class="absValue">
+    (5/ 14)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    38.1%
+  </span>
+  <span class="absValue">
+    (8/ 21)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.model.card.decorators;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.server.DataToAction;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Worker;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;import java.io.IOException;
+<i>11</i>&nbsp;import java.util.ArrayList;
+<i>12</i>&nbsp;import java.util.HashMap;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;/**
+<i>15</i>&nbsp; * This decoration is made to add dinamically features to the cards, in order to give powers to the players&#39; Gods and
+<i>16</i>&nbsp; * to limit their possibilities because of the opponents&#39; Gods
+<i>17</i>&nbsp; */
+<i>18</i>&nbsp;public abstract class PowerGodDecorator extends AbstractGodCard {
+<i>19</i>&nbsp;    private AbstractGodCard godComponent;
+<i>20</i>&nbsp;
+<b class="nc"><i>21</i>&nbsp;    public PowerGodDecorator() {}</b>
+<i>22</i>&nbsp;
+<b class="fc"><i>23</i>&nbsp;    public PowerGodDecorator(AbstractGodCard godComponent) {</b>
+<b class="fc"><i>24</i>&nbsp;        this.godComponent = godComponent;</b>
+<b class="fc"><i>25</i>&nbsp;    }</b>
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    public AbstractGodCard getGodComponent() {
+<b class="nc"><i>28</i>&nbsp;        return godComponent;</b>
+<i>29</i>&nbsp;    }
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    public void setGodComponent(AbstractGodCard godComponent) {
+<b class="nc"><i>32</i>&nbsp;        this.godComponent = godComponent;</b>
+<b class="nc"><i>33</i>&nbsp;    }</b>
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    public void move(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+<b class="nc"><i>36</i>&nbsp;        godComponent.move(dataToAction);</b>
+<b class="nc"><i>37</i>&nbsp;    }</b>
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    public void buildBlock(DataToAction dataToAction) throws IOException, ClassNotFoundException, InterruptedException {
+<b class="nc"><i>40</i>&nbsp;        godComponent.buildBlock(dataToAction);</b>
+<b class="nc"><i>41</i>&nbsp;    }</b>
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    public void buildDome(DataToAction dataToAction) {
+<b class="nc"><i>44</i>&nbsp;        godComponent.buildDome(dataToAction);</b>
+<b class="nc"><i>45</i>&nbsp;    }</b>
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    public HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; findAvailablePositionsToMove(CellsHandler handler, Worker[] workers) {
+<b class="nc"><i>48</i>&nbsp;        return godComponent.findAvailablePositionsToMove(handler, workers);</b>
+<i>49</i>&nbsp;    }
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    public HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; findAvailablePositionsToBuildBlock(CellsHandler handler, Worker[] workers) {
+<b class="nc"><i>52</i>&nbsp;        return godComponent.findAvailablePositionsToBuildBlock(handler, workers);</b>
+<i>53</i>&nbsp;    }
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;    public HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; findAvailablePositionsToBuildDome(CellsHandler handler, Worker[] workers) {
+<b class="nc"><i>56</i>&nbsp;        return godComponent.findAvailablePositionsToBuildDome(handler, workers);</b>
+<i>57</i>&nbsp;    }
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    public String getGodName() {
+<b class="fc"><i>60</i>&nbsp;        return godComponent.getGodName();</b>
+<i>61</i>&nbsp;    }
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    public String getDescription() {
+<b class="fc"><i>64</i>&nbsp;        return godComponent.getDescription();</b>
+<i>65</i>&nbsp;    }
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    public String getPower() {
+<b class="fc"><i>68</i>&nbsp;        return godComponent.getPower();</b>
+<i>69</i>&nbsp;    }
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;    public void print() {
+<b class="fc"><i>72</i>&nbsp;        godComponent.print();</b>
+<b class="fc"><i>73</i>&nbsp;    }</b>
+<i>74</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-05 16:39</div>
+</div>
+</body>
+</html>
