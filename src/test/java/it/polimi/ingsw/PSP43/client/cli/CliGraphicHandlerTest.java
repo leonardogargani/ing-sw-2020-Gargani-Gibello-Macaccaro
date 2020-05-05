@@ -1,8 +1,7 @@
 package it.polimi.ingsw.PSP43.client.cli;
 
 import it.polimi.ingsw.PSP43.Color;
-import it.polimi.ingsw.PSP43.client.cli.CliGraphicHandler;
-import it.polimi.ingsw.PSP43.client.cli.CliCell;
+import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.server.BoardObserver;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Worker;
@@ -10,7 +9,8 @@ import it.polimi.ingsw.PSP43.server.networkMessages.WorkerMessage;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertThat;
 
 
 public class CliGraphicHandlerTest {
@@ -20,7 +20,8 @@ public class CliGraphicHandlerTest {
 
     @Before
     public void setUp() {
-        //test = new CliGraphicHandler();
+        ClientBG clientBG = new ClientBG("127.0.0.1");
+        test = new CliGraphicHandler(clientBG);
     }
 
 

@@ -62,7 +62,9 @@ public class Client implements Runnable{
         try {
             String nickname;
             System.out.print("Choose a nickname:");
-            nickname = reader.readLine();
+            do {
+                nickname = reader.readLine();
+            } while (nickname.equals(""));
             RegistrationMessage message = new RegistrationMessage(nickname);
             clientBG.sendMessage(message);
         } catch (IOException e) {

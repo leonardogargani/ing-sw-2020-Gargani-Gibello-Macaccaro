@@ -25,6 +25,10 @@ public class CliGraphicHandler extends GraphicHandler {
     private final CliBottomMenu bottomMenu = new CliBottomMenu();
 
 
+    /**
+     * Non default constructor that sets the clientGB attribute.
+     * @param clientBG clientBG attribute of the client
+     */
     public CliGraphicHandler(ClientBG clientBG) {
         super(clientBG);
     }
@@ -86,10 +90,14 @@ public class CliGraphicHandler extends GraphicHandler {
         try {
             bottomMenu.setContent(request.getMessage());
             int chosenNumber;
+            String line;
             do {
                 // I need to show() only the CliTopMenu, containing the request
                 bottomMenu.show();
-                chosenNumber = Integer.parseInt(reader.readLine());
+                do {
+                    line = reader.readLine();
+                } while (line.equals(""));
+                chosenNumber = Integer.parseInt(line);
             } while (chosenNumber != 2 && chosenNumber != 3);
             PlayersNumberResponse response = new PlayersNumberResponse(chosenNumber);
             super.getClientBG().sendMessage(response);
@@ -126,10 +134,14 @@ public class CliGraphicHandler extends GraphicHandler {
 
             ArrayList<Integer> chosenIndexes = new ArrayList<>();
             int chosenIndex;
+            String line;
             for (int i = 0; i < playersNumber; i++) {
                 bottomMenu.show();
                 System.out.printf("Write a single number and press Enter (%d remaining): ", playersNumber - i);
-                chosenIndex = Integer.parseInt(reader.readLine());
+                do {
+                    line = reader.readLine();
+                } while (line.equals(""));
+                chosenIndex = Integer.parseInt(line);
                 // avoid repetition of the same Gods
                 if (!chosenIndexes.contains(chosenIndex)) {
                     chosenIndexes.add(chosenIndex);
@@ -175,9 +187,13 @@ public class CliGraphicHandler extends GraphicHandler {
             }
 
             int chosenIndex;
+            String line;
             while (true) {
                 bottomMenu.show();
-                chosenIndex = Integer.parseInt(reader.readLine());
+                do {
+                    line = reader.readLine();
+                } while (line.equals(""));
+                chosenIndex = Integer.parseInt(line);
                 if (0 <= chosenIndex && chosenIndex < availableCards.size()) {
                     // in this case the chosen index is valid, I want to keep its value
                     break;
@@ -216,9 +232,13 @@ public class CliGraphicHandler extends GraphicHandler {
             }
 
             int chosenIndex;
+            String line;
             while (true) {
                 bottomMenu.show();
-                chosenIndex = Integer.parseInt(reader.readLine());
+                do {
+                    line = reader.readLine();
+                } while (line.equals(""));
+                chosenIndex = Integer.parseInt(line);
                 if (0 <= chosenIndex && chosenIndex < availableColors.size()) {
                     // in this case the chosen index is valid, I want to keep its value
                     break;
@@ -271,12 +291,19 @@ public class CliGraphicHandler extends GraphicHandler {
             int chosenX;
             int chosenY;
             Coord chosenCoord;
+            String line;
             // obtain the second coordinate of the requested couple
             loop: while (true) {
                 System.out.print("x: ");
-                chosenX = Integer.parseInt(reader.readLine());
+                do {
+                    line = reader.readLine();
+                } while (line.equals(""));
+                chosenX = Integer.parseInt(line);
                 System.out.print("y: ");
-                chosenY = Integer.parseInt(reader.readLine());
+                do {
+                    line = reader.readLine();
+                } while (line.equals(""));
+                chosenY = Integer.parseInt(line);
                 for (Coord startCoord : hashMap.keySet()) {
                     for (Coord endCoord : hashMap.get(startCoord)) {
                         if (chosenX == endCoord.getX() && chosenY == endCoord.getY()) {
@@ -351,10 +378,14 @@ public class CliGraphicHandler extends GraphicHandler {
         try {
             int intChoice;
             boolean booleanChoice = false;
+            String line;
 
             while (true) {
                 System.out.println(" [0] YES \n [1] NO ");
-                intChoice = Integer.parseInt(reader.readLine());
+                do {
+                    line = reader.readLine();
+                } while (line.equals(""));
+                intChoice = Integer.parseInt(line);
                 if (intChoice == 0 || intChoice == 1) {
                     break;
                 }
@@ -405,7 +436,9 @@ public class CliGraphicHandler extends GraphicHandler {
         try {
             String nickname;
             System.out.print("Choose another nickname:");
-            nickname = reader.readLine();
+            do {
+                nickname = reader.readLine();
+            } while (nickname.equals(""));
             RegistrationMessage message = new RegistrationMessage(nickname);
             super.getClientBG().sendMessage(message);
         } catch (IOException e) {
