@@ -1,7 +1,8 @@
 package it.polimi.ingsw.PSP43.server.model;
 
 import it.polimi.ingsw.PSP43.server.BoardObserver;
-import it.polimi.ingsw.PSP43.server.Observable;
+
+import java.io.IOException;
 
 /**
  * Cell is the class that represents a single board square. It can be occupied either by a worker or a dome.
@@ -36,9 +37,9 @@ public class Cell extends Observable {
      * This method sets the height (number of blocks) of the tower built on the cell.
      * @param height the height (number of blocks) of the tower built on the cell
      */
-    public void setHeight(int height) {
+    public void setHeight(int height) throws IOException {
         this.height = height;
-        super.notifyBoardChange();
+        notifyBoardChange();
     }
 
 
@@ -55,8 +56,9 @@ public class Cell extends Observable {
      * This method sets if the cell is occupied by a worker or not.
      * @param occupiedByWorker boolean representing if the cell is occupied by a worker or not
      */
-    public void setOccupiedByWorker(boolean occupiedByWorker) {
+    public void setOccupiedByWorker(boolean occupiedByWorker) throws IOException {
         this.occupiedByWorker = occupiedByWorker;
+        notifyBoardChange();
     }
 
 
@@ -73,9 +75,9 @@ public class Cell extends Observable {
      * This method sets if the cell is occupied by a dome or not.
      * @param occupiedByDome boolean representing if the cell is occupied by a dome or not
      */
-    public void setOccupiedByDome(boolean occupiedByDome) {
+    public void setOccupiedByDome(boolean occupiedByDome) throws IOException {
         this.occupiedByDome = occupiedByDome;
-        super.notifyBoardChange();
+        notifyBoardChange();
     }
 
 
@@ -96,8 +98,16 @@ public class Cell extends Observable {
         this.coord = coord;
     }
 
+    /**
+     * This method notifies the related observer that a change occurred and the client has to be advised of that
+     * @throws IOException
+     */
+    public void notifyBoardChange() throws IOException {
+        super.getBoardObserver().notifyBoardChange(this);
+    }
+
     @Override
     public Cell clone() {
-        return new Cell(coord.clone(), new BoardObserver());
+        return new Cell(coord.clone(), super.getBoardObserver());
     }
 }

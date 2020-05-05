@@ -15,9 +15,10 @@ import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class SwapIfPossibleDecorator extends PowerGodDecorator {
+    private static final long serialVersionUID = 8250965157977039866L;
+
     public SwapIfPossibleDecorator() {
         super();
     }
@@ -90,9 +91,7 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
         ArrayList<Coord> coordsInDirection = handler.findSameDirectionCoords(oldPosition, newPosition);
         int heightOpponent = handler.getCell(newPosition).getHeight();
 
-        for (int i = 0; i < coordsInDirection.size(); i++) {
-            if (handler.getCell(coordsInDirection.get(i)).getHeight() == heightOpponent) coordsInDirection.remove(i);
-        }
+        coordsInDirection.removeIf(coord -> handler.getCell(coord).getHeight() == heightOpponent);
 
         return coordsInDirection;
     }

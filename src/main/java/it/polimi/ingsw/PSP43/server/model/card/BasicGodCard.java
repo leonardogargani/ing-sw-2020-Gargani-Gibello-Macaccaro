@@ -17,6 +17,8 @@ import java.util.HashMap;
  * Each player owns a single card for the entire duration of the game.
  */
 public class BasicGodCard extends AbstractGodCard {
+    private static final long serialVersionUID = 6236626696645439491L;
+
     private MoveBehavior moveBehavior;
     private BuildBlockBehaviour buildBlockBehaviour;
 
@@ -70,20 +72,8 @@ public class BasicGodCard extends AbstractGodCard {
         return super.getPower();
     }
 
-    public MoveBehavior getMoveBehavior() {
-        return moveBehavior;
-    }
-
-    public void setMoveBehavior(MoveBehavior moveBehavior) {
-        this.moveBehavior = moveBehavior;
-    }
-
     public BuildBlockBehaviour getBuildBlockBehaviour() {
         return buildBlockBehaviour;
-    }
-
-    public void setBuildBlockBehaviour(BuildBlockBehaviour buildBlockBehaviour) {
-        this.buildBlockBehaviour = buildBlockBehaviour;
     }
 
     public void move(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
@@ -100,7 +90,7 @@ public class BasicGodCard extends AbstractGodCard {
         else buildBlockBehaviour.handleBuildBlock(dataToAction);
     }
 
-    public void buildDome(DataToAction dataToAction) {
+    public void buildDome(DataToAction dataToAction) throws IOException {
         super.buildDome(dataToAction);
     }
 
@@ -116,8 +106,7 @@ public class BasicGodCard extends AbstractGodCard {
         return super.findAvailablePositionsToBuildDome(handler, workers);
     }
 
-    public AbstractGodCard cleanFromEffects(String nameOfEffect) throws ClassNotFoundException {
-        AbstractGodCard newCard;
-        return newCard = new BasicGodCard(super.getGodName(), super.getDescription(), super.getPower(), moveBehavior, buildBlockBehaviour);
+    public AbstractGodCard cleanFromEffects(String nameOfEffect) {
+        return new BasicGodCard(super.getGodName(), super.getDescription(), super.getPower(), moveBehavior, buildBlockBehaviour);
     }
 }

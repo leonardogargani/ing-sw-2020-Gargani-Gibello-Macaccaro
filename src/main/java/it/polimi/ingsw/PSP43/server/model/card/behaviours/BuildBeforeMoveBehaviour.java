@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BuildBeforeMoveBehaviour extends AbstractGodCard implements MoveBehavior {
+    private static final long serialVersionUID = 2762718994928009618L;
+
     public void handleMove(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         GameSession gameSession = dataToAction.getGameSession();
         Player player = dataToAction.getPlayer();

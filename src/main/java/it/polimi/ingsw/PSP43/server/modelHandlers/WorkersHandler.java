@@ -6,6 +6,7 @@ import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -30,7 +31,7 @@ public class WorkersHandler {
     }
 
 
-    public void removeWorkers(int[] workersIds) {
+    public void removeWorkers(int[] workersIds) throws IOException {
         CellsHandler cellsHandler = gameSession.getCellsHandler();
         Worker workerToRemove;
         Cell cellOccupiedByWorker;
@@ -71,7 +72,7 @@ public class WorkersHandler {
      * @param worker worker whose position is wanted to be changed
      * @param position position the player wants to move the worker to
      */
-    public void changePosition(Worker worker, Coord position) {
+    public void changePosition(Worker worker, Coord position) throws IOException {
         Coord coordBeforeMove = worker.getCurrentPosition();
         Cell cellBeforeMove = gameSession.getCellsHandler().getCell(coordBeforeMove);
         Cell cellAfterMove = gameSession.getCellsHandler().getCell(position);
@@ -109,6 +110,10 @@ public class WorkersHandler {
         return null;
     }
 
-    // TODO add getGameSession() (or maybe not because it is not needed from outside the class...)
+    public void setInitialPosition(int idWorker, Coord initialCoord) throws IOException {
+        for (Worker w : workers) {
+            if (w.getId() == idWorker) w.setCurrentPosition(initialCoord);
+        }
+    }
 
 }

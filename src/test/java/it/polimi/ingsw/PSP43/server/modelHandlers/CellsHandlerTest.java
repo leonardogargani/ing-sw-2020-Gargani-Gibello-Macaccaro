@@ -38,12 +38,12 @@ public class CellsHandlerTest {
         GameInitialiser.initialiseCards(gameSession);
         GameInitialiser.initialiseWorkers(gameSession);
         spyGame = Mockito.spy(gameSession);
-        obs = new BoardObserver();
+        obs = new BoardObserver(gameSession);
         spyObs = Mockito.spy(obs);
     }
 
     @Test
-    public void changeStateOfCell() {
+    public void changeStateOfCell() throws IOException {
         CellsHandler handler = gameSession.getCellsHandler();
 
         Coord coordOccupiedByDome = new Coord(0, 3);
@@ -71,6 +71,8 @@ public class CellsHandlerTest {
         coords = gameSession.getCellsHandler().findAllCoordsFree();
 
         boolean right = true;
+        if (coords.size() != 21) right = false;
+
         for (Coord c : coords) {
             if (c.equals(new Coord(0, 0)) || c.equals(new Coord(1, 1)) ||
             c.equals(new Coord(4, 2)) || c.equals(new Coord(4, 3))) {
@@ -83,7 +85,7 @@ public class CellsHandlerTest {
     }
 
     @Test
-    public void findNeighbouringCoordsLowerBound() {
+    public void findNeighbouringCoordsLowerBound() throws IOException {
         Worker workerToCheckNeighbours = new Worker(0, Color.ANSI_RED, gameSession.getBoardObserver());
         workerToCheckNeighbours.setCurrentPosition(new Coord(2, 4));
         ArrayList<Worker> workersToFindNeighbours = new ArrayList<>();
@@ -126,7 +128,7 @@ public class CellsHandlerTest {
     }
 
     @Test
-    public void findNeighbouringCoordsUpperBound() {
+    public void findNeighbouringCoordsUpperBound() throws IOException {
         Worker workerToCheckNeighbours = new Worker(0, Color.ANSI_RED, gameSession.getBoardObserver());
         workerToCheckNeighbours.setCurrentPosition(new Coord(3, 0));
         ArrayList<Worker> workersToFindNeighbours = new ArrayList<>();
@@ -169,7 +171,7 @@ public class CellsHandlerTest {
     }
 
     @Test
-    public void findNeighbouringCoordsRightBound() {
+    public void findNeighbouringCoordsRightBound() throws IOException {
         Worker workerToCheckNeighbours = new Worker(0, Color.ANSI_RED, gameSession.getBoardObserver());
         workerToCheckNeighbours.setCurrentPosition(new Coord(4, 2));
         ArrayList<Worker> workersToFindNeighbours = new ArrayList<>();
@@ -212,7 +214,7 @@ public class CellsHandlerTest {
     }
 
     @Test
-    public void findNeighbouringCoordsLeftBound() {
+    public void findNeighbouringCoordsLeftBound() throws IOException {
         Worker workerToCheckNeighbours = new Worker(0, Color.ANSI_RED, gameSession.getBoardObserver());
         workerToCheckNeighbours.setCurrentPosition(new Coord(0 , 2));
         ArrayList<Worker> workersToFindNeighbours = new ArrayList<>();

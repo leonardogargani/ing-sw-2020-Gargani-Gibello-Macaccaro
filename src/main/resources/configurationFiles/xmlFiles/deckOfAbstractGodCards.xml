@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <deckOfAbstractGodCards xmlns="../xsdFiles/deckOfAbstractGodCards.xsd">
-    <basicGodCard>
-        <godName>Apollo</godName>
-        <godDescription>God Of Music</godDescription>
-        <godPower>"Your Move: Your Worker may move into an opponent Worker’s space by forcing their Worker to the space yours just vacated."</godPower>
-    </basicGodCard>
+    <swapMoveDecorator>
+        <basicGodCard>
+            <godName>Apollo</godName>
+            <godDescription>God Of Music</godDescription>
+            <godPower>"Your Move: Your Worker may move into an opponent Worker’s space by forcing their Worker to the space yours just vacated."</godPower>
+        </basicGodCard>
+    </swapMoveDecorator>
     <basicGodCard>
         <godName>Prometheus</godName>
         <godDescription>Titan Benefactor of Mankind</godDescription>

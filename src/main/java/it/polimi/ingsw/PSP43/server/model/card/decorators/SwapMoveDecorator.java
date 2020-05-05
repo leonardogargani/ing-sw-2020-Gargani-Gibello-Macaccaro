@@ -7,10 +7,13 @@ import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SwapMoveDecorator extends PowerGodDecorator {
+    private static final long serialVersionUID = 1282873326963180012L;
+
     public SwapMoveDecorator() {
         super();
     }
@@ -20,7 +23,7 @@ public class SwapMoveDecorator extends PowerGodDecorator {
     }
 
     @Override
-    public void move(DataToAction dataToAction) {
+    public void move(DataToAction dataToAction) throws IOException {
         WorkersHandler handler = dataToAction.getGameSession().getWorkersHandler();
         Worker opponentWorker = handler.getWorker(dataToAction.getNewPosition());
         swapWorkers(dataToAction.getWorker(), opponentWorker);
@@ -35,7 +38,7 @@ public class SwapMoveDecorator extends PowerGodDecorator {
         return availablePositions;
     }
 
-    private void swapWorkers(Worker worker1, Worker worker2) {
+    private void swapWorkers(Worker worker1, Worker worker2) throws IOException {
         worker1.setCurrentPosition(worker2.getCurrentPosition());
         worker2.setCurrentPosition(worker1.getPreviousPosition());
     }

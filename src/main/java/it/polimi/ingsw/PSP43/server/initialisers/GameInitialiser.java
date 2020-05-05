@@ -5,7 +5,6 @@ import it.polimi.ingsw.PSP43.server.BoardObserver;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
-import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
@@ -19,22 +18,20 @@ import java.util.ArrayList;
 
 public class GameInitialiser {
 
-    public static GameSession initialiseGame() throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException, NicknameAlreadyInUseException {
-        GameSession game = new GameSession(9);
-
-        return game;
+    public static GameSession initialiseGame() throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException {
+        return new GameSession(9);
     }
 
     public static GameSession initialisePlayers(GameSession gameSession) throws NicknameAlreadyInUseException {
         String[] players = new String[]{"Gibi" , "Rob"};
-        for (int i=0; i<players.length; i++) {
-            gameSession.getPlayersHandler().createNewPlayer(players[i]);
+        for (String player : players) {
+            gameSession.getPlayersHandler().createNewPlayer(player);
         }
 
         return gameSession;
     }
 
-    public static GameSession initialiseWorkers(GameSession gameSession) {
+    public static void initialiseWorkers(GameSession gameSession) throws IOException {
         Color[] colors = new Color[]{Color.ANSI_RED, Color.ANSI_GREEN};
         int[] workerIds = new int[2];
 
@@ -48,15 +45,15 @@ public class GameInitialiser {
 
         Coord coord1 = new Coord(4,3);
         Coord coord2 = new Coord(1,1);
-        Cell cell1 = new Cell(coord1, new BoardObserver());
+        Cell cell1 = new Cell(coord1, new BoardObserver(gameSession));
         cell1.setOccupiedByWorker(true);
-        Cell cell2 = new Cell(coord2, new BoardObserver());
+        Cell cell2 = new Cell(coord2, new BoardObserver(gameSession));
         cell2.setOccupiedByWorker(true);
         Coord coord3 = new Coord(0, 0);
-        Cell cell3 = new Cell(coord3, new BoardObserver());
+        Cell cell3 = new Cell(coord3, new BoardObserver(gameSession));
         cell3.setOccupiedByWorker(true);
         Coord coord4 = new Coord(4, 2);
-        Cell cell4 = new Cell(coord4, new BoardObserver());
+        Cell cell4 = new Cell(coord4, new BoardObserver(gameSession));
         cell4.setOccupiedByWorker(true);
 
         Coord[] coords = new Coord[]{coord1, coord2, coord3, coord4};
@@ -72,10 +69,9 @@ public class GameInitialiser {
             i++;
         }
 
-        return gameSession;
     }
 
-    public static GameSession initialiseCards(GameSession gameSession) {
+    public static void initialiseCards(GameSession gameSession) {
         PlayersHandler playersHandler = gameSession.getPlayersHandler();
         CardsHandler cardsHandler = gameSession.getCardsHandler();
         ArrayList<AbstractGodCard> cards = gameSession.getCardsHandler().getDeckOfAbstractGodCards();
@@ -85,6 +81,5 @@ public class GameInitialiser {
             playersHandler.getPlayer(i).setAbstractGodCard(cards.get(i));
         }
 
-        return gameSession;
     }
 }

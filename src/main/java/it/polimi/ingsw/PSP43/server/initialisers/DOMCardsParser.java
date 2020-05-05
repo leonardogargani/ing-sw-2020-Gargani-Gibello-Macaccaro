@@ -26,7 +26,7 @@ public class DOMCardsParser {
     }
 
     public static ArrayList<AbstractGodCard> buildDeck() throws ParserConfigurationException,
-            IOException, org.xml.sax.SAXException, ClassNotFoundException {
+            IOException, org.xml.sax.SAXException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
 
@@ -41,11 +41,10 @@ public class DOMCardsParser {
         Document document = builder.parse(file);
         Element deck = document.getDocumentElement();
         NodeList cards = deck.getChildNodes();
-        ArrayList<AbstractGodCard> effectiveDeck = buildCompleteDeck(cards);
-        return effectiveDeck;
+        return buildCompleteDeck(cards);
     }
 
-    public static ArrayList<AbstractGodCard> buildCompleteDeck(NodeList list) throws ClassNotFoundException {
+    public static ArrayList<AbstractGodCard> buildCompleteDeck(NodeList list) {
         ArrayList<AbstractGodCard> deck = new ArrayList<>();
         for (int i = 0; i<list.getLength(); i++) {
             if (list.item(i).getNodeType() == Node.ELEMENT_NODE) {
@@ -56,18 +55,37 @@ public class DOMCardsParser {
         return deck;
     }
 
-    public static AbstractGodCard buildComponent(Element element) throws ClassNotFoundException {
+    public static AbstractGodCard buildComponent(Element element) {
         String nodeName = element.getNodeName().substring(0,1).toUpperCase() + element.getNodeName().substring(1);
         if (nodeName.equals("BasicGodCard") && element.getNodeType() == Node.ELEMENT_NODE) {
             String godName = element.getElementsByTagName("godName").item(0).getTextContent();
             String godDescription = element.getElementsByTagName("godDescription").item(0).getTextContent();
             String godPower = element.getElementsByTagName("godPower").item(0).getTextContent();
+
             MoveBehavior moveBehavior = null;
             BuildBlockBehaviour buildBlockBehaviour = null;
-            if (element.getElementsByTagName("moveBehaviour").item(0) != null)
-                moveBehavior = buildMoveBehaviour(element.getElementsByTagName("moveBehaviour").item(0).getNodeName());
-            if (element.getElementsByTagName("buildBlockBehaviour").item(0) != null)
-                buildBlockBehaviour = buildBuildBlockBehaviour(element.getElementsByTagName("buildBlockBehaviour").item(0).getNodeName());
+            NodeList nodeListMoveBehaviour = element.getElementsByTagName("moveBehaviour");
+            NodeList nodeListBuildBlockBehaviour = element.getElementsByTagName("buildBlockBehaviour");
+
+            for (int i=0; i<nodeListMoveBehaviour.getLength(); i++) {
+                if (nodeListMoveBehaviour.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                    NodeList effectiveNodeListMoveBehaviour = nodeListMoveBehaviour.item(i).getChildNodes();
+                    for (int j=0; j<effectiveNodeListMoveBehaviour.getLength(); j++) {
+                        if (effectiveNodeListMoveBehaviour.item(j).getNodeType() == Node.ELEMENT_NODE)
+                            moveBehavior = buildMoveBehaviour(((Element) effectiveNodeListMoveBehaviour.item(j)).getTagName());
+                    }
+                }
+            }
+            for (int i=0; i<nodeListBuildBlockBehaviour.getLength(); i++) {
+                if (nodeListBuildBlockBehaviour.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                    NodeList effectiveNodeListBuildBlockBehaviour = nodeListBuildBlockBehaviour.item(i).getChildNodes();
+                    for (int j=0; j<effectiveNodeListBuildBlockBehaviour.getLength(); j++) {
+                        if (effectiveNodeListBuildBlockBehaviour.item(j).getNodeType() == Node.ELEMENT_NODE)
+                            buildBlockBehaviour = buildBuildBlockBehaviour(((Element) effectiveNodeListBuildBlockBehaviour.item(j)).getTagName());
+                    }
+                }
+            }
+
             return new BasicGodCard(godName, godDescription, godPower, moveBehavior, buildBlockBehaviour);
         } else {
             AbstractGodCard component = null;
@@ -75,36 +93,39 @@ public class DOMCardsParser {
                 if (element.getChildNodes().item(i).getNodeType() == Node.ELEMENT_NODE)
                     component = buildComponent((Element) element.getChildNodes().item(i));
                 }
-            if (nodeName.equals("SwapIfPossibleDecorator")) {
-                return new SwapIfPossibleDecorator(component);
-            } else if (nodeName.equals("SwapMoveDecorator")) {
-                return new SwapMoveDecorator(component);
-            } else if (nodeName.equals("UnconditionedDomeBuildDecorator")) {
-                return new UnconditionedDomeBuildDecorator(component);
-            } else {
-                return new WinConditionDecorator(component);
+            switch (nodeName) {
+                case "SwapIfPossibleDecorator":
+                    return new SwapIfPossibleDecorator(component);
+                case "SwapMoveDecorator":
+                    return new SwapMoveDecorator(component);
+                case "UnconditionedDomeBuildDecorator":
+                    return new UnconditionedDomeBuildDecorator(component);
+                default:
+                    return new WinConditionDecorator(component);
             }
         }
     }
 
-    public static MoveBehavior buildMoveBehaviour(String nameMoveBehaviour) throws ClassNotFoundException {
-        if (nameMoveBehaviour.equals("BlockOpponentRiseBehaviour")) {
-            return new BlockOpponentRiseBehaviour();
+    public static MoveBehavior buildMoveBehaviour(String nameMoveBehaviour) {
+        String moveBehavior = nameMoveBehaviour.substring(0,1).toUpperCase() + nameMoveBehaviour.substring(1);
+        switch (moveBehavior) {
+            case "BlockOpponentRiseBehaviour":
+                return new BlockOpponentRiseBehaviour();
+            case "BuildBeforeMoveBehaviour":
+                return new BuildBeforeMoveBehaviour();
+            case "DoubleMoveBehaviour":
+                return new DoubleMoveBehaviour();
+            default:
+                return null;
         }
-        else if (nameMoveBehaviour.equals("BuildBeforeMoveBehaviour")) {
-            return new BuildBeforeMoveBehaviour();
-        }
-        else if (nameMoveBehaviour.equals("DoubleMoveBehaviour")) {
-            return new DoubleMoveBehaviour();
-        }
-        else return null;
     }
 
-    public static BuildBlockBehaviour buildBuildBlockBehaviour(String nameBlockBehaviour) throws ClassNotFoundException {
-        if (nameBlockBehaviour.equals("DoubleSameSpaceBehaviour")) {
+    public static BuildBlockBehaviour buildBuildBlockBehaviour(String nameBlockBehaviour) {
+        String buildBlockBehaviour = nameBlockBehaviour.substring(0,1).toUpperCase() + nameBlockBehaviour.substring(1);
+        if (buildBlockBehaviour.equals("DoubleSameSpaceBehaviour")) {
             return new DoubleSameSpaceBehaviour();
         }
-        else if (nameBlockBehaviour.equals("DoubleDifferentSpaceBehaviour")) {
+        else if (buildBlockBehaviour.equals("DoubleDifferentSpaceBehaviour")) {
             return new DoubleDifferentSpaceBehaviour();
         }
         else return null;

@@ -36,7 +36,7 @@ public class ChooseWorkerStateTest {
         gameSession = GameInitialiser.initialiseGame();
         gameSession = GameInitialiser.initialisePlayers(gameSession);
         spyGame = Mockito.spy(gameSession);
-        obs = new BoardObserver();
+        obs = new BoardObserver(gameSession);
         spyObs = Mockito.spy(obs);
         deck = DOMCardsParser.buildDeck();
         state = new ChooseWorkerState(spyGame);

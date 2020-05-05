@@ -18,6 +18,7 @@ import java.util.HashMap;
  * in a turn.
  */
 public class BlockOpponentRiseBehaviour extends AbstractGodCard implements MoveBehavior {
+    private static final long serialVersionUID = 409949207020680510L;
 
     public BlockOpponentRiseBehaviour() {
     }

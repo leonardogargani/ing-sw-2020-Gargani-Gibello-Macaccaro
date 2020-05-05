@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DoubleMoveBehaviour extends AbstractGodCard implements MoveBehavior {
+    private static final long serialVersionUID = -6730459810903042771L;
+
     public void handleMove(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         super.move(dataToAction);
         RequestMessage requestMessage = new RequestMessage("Do you want to move another time?");

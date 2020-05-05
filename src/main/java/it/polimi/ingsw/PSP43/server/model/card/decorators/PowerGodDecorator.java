@@ -16,6 +16,7 @@ import java.util.HashMap;
  * to limit their possibilities because of the opponents' Gods
  */
 public abstract class PowerGodDecorator extends AbstractGodCard {
+    private static final long serialVersionUID = -1361536654497716050L;
     private AbstractGodCard godComponent;
 
     public PowerGodDecorator() {}
@@ -40,7 +41,7 @@ public abstract class PowerGodDecorator extends AbstractGodCard {
         godComponent.buildBlock(dataToAction);
     }
 
-    public void buildDome(DataToAction dataToAction) {
+    public void buildDome(DataToAction dataToAction) throws IOException {
         godComponent.buildDome(dataToAction);
     }
 

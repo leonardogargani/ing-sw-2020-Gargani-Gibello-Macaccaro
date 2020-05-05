@@ -46,7 +46,9 @@ public class GameSession extends GameSessionObservable {
         this.turnMap.add(4, new BuildState(this));
         this.turnMap.add(5, new WinState(this));
         this.nextState = null;
-        this.boardObserver = new BoardObserver();
+
+        this.boardObserver = new BoardObserver(this);
+
         this.cellsHandler = new CellsHandler(this);
         this.playersHandler = new PlayersHandler();
         this.workersHandler = new WorkersHandler(this);

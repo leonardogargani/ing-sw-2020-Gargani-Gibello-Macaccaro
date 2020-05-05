@@ -3,12 +3,17 @@ package it.polimi.ingsw.PSP43.client.cli;
 import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.server.BoardObserver;
+import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.networkMessages.WorkerMessage;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 
 import static org.junit.Assert.assertThat;
 
@@ -27,8 +32,8 @@ public class CliGraphicHandlerTest {
 
     // this method tests all the implementations (signatures) of updateBoardChange()
     @Test
-    public void testUpdateBoardChange() {
-        BoardObserver boardObserver = new BoardObserver();
+    public void testUpdateBoardChange() throws IOException, SAXException, ParserConfigurationException, ClassNotFoundException {
+        BoardObserver boardObserver = new BoardObserver(new GameSession(9));
         Worker worker = new Worker(0, Color.ANSI_RED, boardObserver);
         Coord coord1 = new Coord(2, 3);
         Coord coord2 = new Coord(1, 3);

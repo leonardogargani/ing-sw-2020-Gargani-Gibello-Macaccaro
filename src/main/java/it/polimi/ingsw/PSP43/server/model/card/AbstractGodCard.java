@@ -102,7 +102,7 @@ public abstract class AbstractGodCard implements Serializable {
         handler.changeStateOfCell(newCell, dataToAction.getNewPosition());
     }
 
-    public void buildDome(DataToAction dataToAction) {
+    public void buildDome(DataToAction dataToAction) throws IOException {
         CellsHandler handler = dataToAction.getGameSession().getCellsHandler();
         Cell newCell = handler.getCell(dataToAction.getNewPosition());
         newCell.setOccupiedByDome(true);

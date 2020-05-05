@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DoubleDifferentSpaceBehaviour extends AbstractGodCard implements BuildBlockBehaviour {
+    private static final long serialVersionUID = 5472654096820247816L;
+
     public void handleBuildBlock(DataToAction dataToAction) throws IOException, ClassNotFoundException, InterruptedException {
         super.buildBlock(dataToAction);
         RequestMessage requestMessage = new RequestMessage("Do you want to build another time on a different space?");

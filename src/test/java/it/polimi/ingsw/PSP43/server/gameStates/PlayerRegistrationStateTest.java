@@ -33,7 +33,7 @@ public class PlayerRegistrationStateTest {
     public void setUp() throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException, NicknameAlreadyInUseException {
         gameSession = GameInitialiser.initialiseGame();
         spyGame = Mockito.spy(gameSession);
-        obs = new BoardObserver();
+        obs = new BoardObserver(gameSession);
         spyObs = Mockito.spy(obs);
         deck = DOMCardsParser.buildDeck();
         state = new PlayerRegistrationState(spyGame);

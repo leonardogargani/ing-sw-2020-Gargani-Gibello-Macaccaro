@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BlockRiseDecorator extends PowerGodDecorator {
+    private static final long serialVersionUID = -5029682300766417371L;
+
     public BlockRiseDecorator() {
         super();
     }

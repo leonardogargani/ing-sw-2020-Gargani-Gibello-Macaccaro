@@ -2,8 +2,15 @@ package it.polimi.ingsw.PSP43.server.model;
 
 import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.server.BoardObserver;
+import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
+import it.polimi.ingsw.PSP43.server.gameStates.GameSessionObservable;
 import org.junit.Before;
 import org.junit.Test;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+
 import static org.junit.Assert.*;
 
 
@@ -12,21 +19,21 @@ public class WorkerTest {
     private Worker test;
 
     @Before
-    public void setUp() {
-        BoardObserver boardObserver = new BoardObserver();
+    public void setUp() throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException {
+        BoardObserver boardObserver = new BoardObserver(new GameSession(9));
         test = new Worker(5, Color.ANSI_BLUE, boardObserver);
     }
 
     // getter and setter are tested both at the same time
     @Test
-    public void testGetSetCurrentPosition() {
+    public void testGetSetCurrentPosition() throws IOException {
         Coord coord1 = new Coord(1, 2);
         test.setCurrentPosition(coord1);
         assertEquals(coord1, test.getCurrentPosition());
     }
 
     @Test
-    public void testGetPreviousPosition() {
+    public void testGetPreviousPosition() throws IOException {
         Coord coord1 = new Coord(1, 2);
         Coord coord2 = new Coord(2, 2);
         test.setCurrentPosition(coord1);

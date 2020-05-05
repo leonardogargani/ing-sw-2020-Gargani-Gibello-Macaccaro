@@ -2,7 +2,8 @@ package it.polimi.ingsw.PSP43.server.model;
 
 import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.server.BoardObserver;
-import it.polimi.ingsw.PSP43.server.Observable;
+
+import java.io.IOException;
 
 
 /**
@@ -14,10 +15,10 @@ public class Worker extends Observable {
 
     private static final long serialVersionUID = -415589018906535869L;
 
-    private int id;
+    private final int id;
     private Coord currentPosition;
     private Coord previousPosition;
-    private Color color;
+    private final Color color;
     private boolean latestMoved;
 
 
@@ -48,10 +49,18 @@ public class Worker extends Observable {
      * This method sets the position the worker is in at this moment.
      * @param currentPosition the position the worker is in at this moment
      */
-    public void setCurrentPosition(Coord currentPosition) {
+    public void setCurrentPosition(Coord currentPosition) throws IOException {
         this.previousPosition = this.currentPosition;
         this.currentPosition = currentPosition;
-        super.notifyBoardChange();
+        notifyBoardChange();
+    }
+
+    /**
+     * This method notifies the related observer that a change occurred and the client has to be advised of that
+     * @throws IOException
+     */
+    public void notifyBoardChange() throws IOException {
+        super.getBoardObserver().notifyBoardChange(this);
     }
 
 
@@ -83,8 +92,8 @@ public class Worker extends Observable {
 
 
     /**
-     *
-     * @return
+     * This method returns if the worker has been moved in the latest turn by the player
+     * @return if the worker has been moved in the latest turn by the player
      */
     public boolean isLatestMoved() {
         return latestMoved;
@@ -92,12 +101,10 @@ public class Worker extends Observable {
 
 
     /**
-     *
-     * @param latestMoved
+     * This method sets the boolean representing if a worker was moved in the last turn by the player
+     * @param latestMoved sets the boolean representing if a worker was moved in the last turn by the player
      */
     public void setLatestMoved(boolean latestMoved) {
         this.latestMoved = latestMoved;
     }
-
-
 }

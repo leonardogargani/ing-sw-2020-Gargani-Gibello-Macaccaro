@@ -1,18 +1,20 @@
-package it.polimi.ingsw.PSP43.server;
+package it.polimi.ingsw.PSP43.server.model;
 
+
+import it.polimi.ingsw.PSP43.server.BoardObserver;
 
 import java.io.Serializable;
 
 public abstract class Observable implements Serializable {
     private static final long serialVersionUID = -6752357803627291761L;
 
-    private BoardObserver boardObserver;
+    private final transient BoardObserver boardObserver;
 
     public Observable(BoardObserver boardObserver) {
         this.boardObserver = boardObserver;
     }
 
-    public void notifyBoardChange() {
-        boardObserver.notifyBoardChange(this);
+    public BoardObserver getBoardObserver() {
+        return boardObserver;
     }
 }

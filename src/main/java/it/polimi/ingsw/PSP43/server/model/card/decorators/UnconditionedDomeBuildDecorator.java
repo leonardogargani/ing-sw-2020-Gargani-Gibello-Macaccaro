@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class UnconditionedDomeBuildDecorator extends PowerGodDecorator {
+    private static final long serialVersionUID = 8289108530021462717L;
+
     public UnconditionedDomeBuildDecorator() {
     }
 

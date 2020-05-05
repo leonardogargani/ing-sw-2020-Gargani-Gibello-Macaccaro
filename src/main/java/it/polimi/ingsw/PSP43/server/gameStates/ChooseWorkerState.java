@@ -4,6 +4,7 @@ import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.WorkersColorResponse;
 import it.polimi.ingsw.PSP43.server.DataToAction;
+import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
@@ -94,8 +95,10 @@ public class ChooseWorkerState extends TurnState {
                     response = game.sendRequest(placementRequest, nicknameCurrentPlayer, ActionResponse.class);
                 } while(response==null);
                 Coord coordChosen = response.getPosition();
-                DataToAction data = new DataToAction(game, currentPlayer, workersHandler.getWorker(workersIds[i]), coordChosen);
-                currentPlayer.getAbstractGodCard().move(data);
+                game.getWorkersHandler().setInitialPosition(i, coordChosen);
+                Cell cell = game.getCellsHandler().getCell(coordChosen);
+                cell.setOccupiedByWorker(true);
+                game.getCellsHandler().changeStateOfCell(cell, coordChosen);
             }
             latestPosition = playersHandler.getNumOfPlayers()-1;
             latestPlayer = playersHandler.getPlayer(latestPosition).getNickname();

@@ -12,6 +12,7 @@ import java.io.IOException;
  * This decorator is used to give to the player the opportunity to win if his worker moves down two or more levels in a move
  */
 public class WinConditionDecorator extends PowerGodDecorator {
+    private static final long serialVersionUID = -9171126719022096338L;
 
     public WinConditionDecorator() {
     }
