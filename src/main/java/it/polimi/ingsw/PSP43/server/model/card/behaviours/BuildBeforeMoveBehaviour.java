@@ -33,23 +33,31 @@ public class BuildBeforeMoveBehaviour extends AbstractGodCard implements MoveBeh
 
             boolean response = responseMessage.isResponse();
             if (response) {
-                Worker[] workers = new Worker[1];
-                workers[0] = worker;
-                HashMap<Coord, ArrayList<Coord>> availablePositions = gameSession.getCellsHandler().findNeighbouringCoords(workers);
-                for (Coord c : availablePositions.keySet()) {
-                    availablePositions.get(c).removeIf(c1 -> c1.getY() == dataToAction.getNewPosition().getY() && c1.getX() == dataToAction.getNewPosition().getX());
-                }
-                ActionRequest request = new ActionRequest("Choose a cell where to build.", availablePositions);
-                ActionResponse actionResponse;
-                do {
-                    actionResponse = gameSession.sendRequest(request, player.getNickname(), ActionResponse.class);
-                } while (actionResponse == null);
-
-                Coord coordToBuild = actionResponse.getPosition();
-                DataToAction dataBuild = new DataToAction(gameSession, player, worker, coordToBuild);
-                super.buildBlock(dataBuild);
+                buildBeforeMove(dataToAction);
             }
         }
         else super.move(dataToAction);
+    }
+
+    private void buildBeforeMove(DataToAction oldData) throws InterruptedException, IOException, ClassNotFoundException {
+        GameSession gameSession = oldData.getGameSession();
+        ArrayList<Worker> workers = new ArrayList<>();
+        Worker workerAllowedToBuild = oldData.getWorker();
+        workers.add(workerAllowedToBuild);
+        HashMap<Coord, ArrayList<Coord>> availablePositions = gameSession.getCellsHandler().findNeighbouringCoords(workers);
+        for (Coord c : availablePositions.keySet()) {
+            availablePositions.get(c).removeIf(c1 ->
+                    (c1.getY() == oldData.getNewPosition().getY() && c1.getX() == oldData.getNewPosition().getX()) ||
+                    c1.getY() == workerAllowedToBuild.getCurrentPosition().getY() && c1.getX() == workerAllowedToBuild.getCurrentPosition().getX());
+        }
+        ActionRequest request = new ActionRequest("Choose a cell where to build.", availablePositions);
+        ActionResponse actionResponse;
+        do {
+            actionResponse = gameSession.sendRequest(request, gameSession.getCurrentPlayer().getNickname(), ActionResponse.class);
+        } while (actionResponse == null);
+
+        Coord coordToBuild = actionResponse.getPosition();
+        DataToAction dataBuild = new DataToAction(gameSession, oldData.getPlayer(), workerAllowedToBuild, coordToBuild);
+        super.buildBlock(dataBuild);
     }
 }

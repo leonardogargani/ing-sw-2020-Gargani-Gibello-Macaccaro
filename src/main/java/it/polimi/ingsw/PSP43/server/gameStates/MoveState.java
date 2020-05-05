@@ -76,7 +76,7 @@ public class MoveState extends TurnState {
         for (int id : workerIds) {
             workers.add(workersHandler.getWorker(id));
         }
-        availablePositions = playerCard.findAvailablePositionsToMove(game.getCellsHandler(), (Worker[]) workers.toArray());
+        availablePositions = playerCard.findAvailablePositionsToMove(game.getCellsHandler(), workers);
         ActionRequest message = new ActionRequest("Choose a position where to place your worker next.", availablePositions);
         ActionResponse response = null;
         do {

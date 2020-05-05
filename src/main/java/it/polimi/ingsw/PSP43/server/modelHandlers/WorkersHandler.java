@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 
 /**
- *WorkersHandler has the tasks of keeping track of all the workers, adding new ones
+ * WorkersHandler has the tasks of keeping track of all the workers, adding new ones
  * and changing their position.
  * Their methods are called from the GameSession object, which has a workersHandler attribute.
  */

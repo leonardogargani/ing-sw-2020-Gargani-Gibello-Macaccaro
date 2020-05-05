@@ -96,4 +96,8 @@ public class Cell extends Observable {
         this.coord = coord;
     }
 
+    @Override
+    public Cell clone() {
+        return new Cell(coord.clone(), new BoardObserver());
+    }
 }

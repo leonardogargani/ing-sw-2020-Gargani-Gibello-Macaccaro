@@ -1,8 +1,6 @@
 package it.polimi.ingsw.PSP43.server.model.card;
 
-import it.polimi.ingsw.PSP43.server.BoardObserver;
 import it.polimi.ingsw.PSP43.server.DataToAction;
-import it.polimi.ingsw.PSP43.server.Observable;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
@@ -14,6 +12,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * AbstractGodCard is the class that represents the cards with God Powers, thus it is associated to a God and the
@@ -110,18 +109,19 @@ public abstract class AbstractGodCard implements Serializable {
         handler.changeStateOfCell(newCell, dataToAction.getNewPosition());
     }
 
-    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(CellsHandler handler, Worker[] workers) {
+    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(CellsHandler handler, ArrayList<Worker> workers) {
         HashMap<Coord, ArrayList<Coord>> neighbouringCoords = handler.findNeighbouringCoords(workers);
         Cell actualCell;
         int actualHeight;
         int newHeight;
         for (Coord c : neighbouringCoords.keySet()) {
-            for (Coord c1 : neighbouringCoords.get(c)) {
+            for (Iterator<Coord> coordIterator = neighbouringCoords.get(c).iterator(); coordIterator.hasNext(); ) {
+                Coord c1 = coordIterator.next();
                 if (!handler.getCell(c1).getOccupiedByWorker() && !handler.getCell(c1).getOccupiedByDome()) {
                     actualCell = handler.getCell(c);
                     actualHeight = actualCell.getHeight();
                     newHeight = handler.getCell(c1).getHeight();
-                    if (newHeight - actualHeight > 1) neighbouringCoords.get(c).remove(c1);
+                    if (newHeight - actualHeight > 1) coordIterator.remove();
                 }
                 else neighbouringCoords.remove(c);
             }
@@ -129,15 +129,15 @@ public abstract class AbstractGodCard implements Serializable {
         return neighbouringCoords;
     }
 
-    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildBlock(CellsHandler handler, Worker[] workers) {
+    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildBlock(CellsHandler handler, ArrayList<Worker> workers) {
         HashMap<Coord, ArrayList<Coord>> neighbouringCoords = handler.findNeighbouringCoords(workers);
         for (Coord c : neighbouringCoords.keySet()) {
-            neighbouringCoords.get(c).removeIf(c1 -> handler.getCell(c1).getOccupiedByWorker() || handler.getCell(c1).getOccupiedByDome() || handler.getCell(c1).getHeight() == 3);
+            neighbouringCoords.get(c).removeIf(c1 -> handler.getCell(c1).getOccupiedByWorker() || handler.getCell(c1).getOccupiedByDome() || handler.getCell(c1).getHeight() >= 3);
         }
         return neighbouringCoords;
     }
 
-    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildDome(CellsHandler handler, Worker[] workers) {
+    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildDome(CellsHandler handler, ArrayList<Worker> workers) {
         HashMap<Coord, ArrayList<Coord>> neighbouringCoords = handler.findNeighbouringCoords(workers);
         for (Coord c : neighbouringCoords.keySet()) {
             if (handler.getCell(c).getOccupiedByWorker() || handler.getCell(c).getOccupiedByDome() || handler.getCell(c).getHeight() < 4) {

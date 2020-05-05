@@ -30,4 +30,21 @@ public class Coord implements Serializable {
      * @return the y coordinate
      */
     public int getY(){return yPosition;}
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Coord) {
+            Coord coordCheckEquality = (Coord) obj;
+            if (coordCheckEquality.getX() == xPosition && coordCheckEquality.getY() == yPosition) return true;
+            else return false;
+        }
+        else {
+            return false;
+        }
+    }
+
+    @Override
+    public Coord clone() {
+        return new Coord(this.getX(), this.getY());
+    }
 }

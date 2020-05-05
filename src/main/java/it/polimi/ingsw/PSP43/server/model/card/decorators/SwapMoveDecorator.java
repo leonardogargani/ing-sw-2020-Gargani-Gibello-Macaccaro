@@ -27,7 +27,7 @@ public class SwapMoveDecorator extends PowerGodDecorator {
     }
 
     @Override
-    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(CellsHandler handler, Worker[] workers) {
+    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(CellsHandler handler, ArrayList<Worker> workers) {
         HashMap<Coord, ArrayList<Coord>> availablePositions = handler.findNeighbouringCoords(workers);
         for (Coord actualCell : availablePositions.keySet()) {
             availablePositions.get(actualCell).removeIf(cellToMove -> handler.getCell(cellToMove).getOccupiedByDome());

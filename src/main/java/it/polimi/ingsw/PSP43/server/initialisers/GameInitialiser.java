@@ -57,7 +57,7 @@ public class GameInitialiser {
         cell3.setOccupiedByWorker(true);
         Coord coord4 = new Coord(4, 2);
         Cell cell4 = new Cell(coord4, new BoardObserver());
-        cell3.setOccupiedByWorker(true);
+        cell4.setOccupiedByWorker(true);
 
         Coord[] coords = new Coord[]{coord1, coord2, coord3, coord4};
 

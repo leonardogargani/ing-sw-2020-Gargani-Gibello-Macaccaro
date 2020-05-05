@@ -18,7 +18,7 @@ public class BlockRiseDecorator extends PowerGodDecorator {
         super(godComponent);
     }
 
-    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(CellsHandler handler, Worker[] workers) {
+    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(CellsHandler handler, ArrayList<Worker> workers) {
         HashMap<Coord, ArrayList<Coord>> positions = super.findAvailablePositionsToMove(handler, workers);
         for (Coord c : positions.keySet()) {
             for (Coord c1 : positions.get(c)) {

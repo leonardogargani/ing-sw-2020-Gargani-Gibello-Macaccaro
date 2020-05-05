@@ -27,8 +27,8 @@ public class DoubleMoveBehaviour extends AbstractGodCard implements MoveBehavior
 
         boolean response  = responseMessage.isResponse();
         if (response) {
-            Worker [] workersToMove = new Worker[1];
-            workersToMove[0] = dataToAction.getWorker();
+            ArrayList<Worker> workersToMove = new ArrayList<>();
+            workersToMove.add(dataToAction.getWorker());
             HashMap<Coord, ArrayList<Coord>> availablePositions =  super.findAvailablePositionsToMove(dataToAction.getGameSession().getCellsHandler(), workersToMove);
             for (Coord c : availablePositions.keySet()) {
                 availablePositions.get(c).removeIf(c1

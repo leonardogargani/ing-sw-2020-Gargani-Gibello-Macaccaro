@@ -44,15 +44,15 @@ public abstract class PowerGodDecorator extends AbstractGodCard {
         godComponent.buildDome(dataToAction);
     }
 
-    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(CellsHandler handler, Worker[] workers) {
+    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(CellsHandler handler, ArrayList<Worker> workers) {
         return godComponent.findAvailablePositionsToMove(handler, workers);
     }
 
-    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildBlock(CellsHandler handler, Worker[] workers) {
+    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildBlock(CellsHandler handler, ArrayList<Worker> workers) {
         return godComponent.findAvailablePositionsToBuildBlock(handler, workers);
     }
 
-    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildDome(CellsHandler handler, Worker[] workers) {
+    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildDome(CellsHandler handler, ArrayList<Worker> workers) {
         return godComponent.findAvailablePositionsToBuildDome(handler, workers);
     }
 

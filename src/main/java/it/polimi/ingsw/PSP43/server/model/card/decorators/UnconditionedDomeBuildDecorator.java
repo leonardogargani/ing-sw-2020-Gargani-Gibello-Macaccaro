@@ -18,7 +18,7 @@ public class UnconditionedDomeBuildDecorator extends PowerGodDecorator {
     }
 
     @Override
-    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildDome(CellsHandler handler, Worker[] workers) {
+    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildDome(CellsHandler handler, ArrayList<Worker> workers) {
         HashMap<Coord, ArrayList<Coord>> availablePositions = handler.findNeighbouringCoords(workers);
         for (Coord c : availablePositions.keySet()) {
             for (Coord c1 : availablePositions.get(c)) {

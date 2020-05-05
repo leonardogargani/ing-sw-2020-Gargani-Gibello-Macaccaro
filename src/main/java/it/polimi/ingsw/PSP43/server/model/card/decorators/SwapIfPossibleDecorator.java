@@ -15,6 +15,7 @@ import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class SwapIfPossibleDecorator extends PowerGodDecorator {
     public SwapIfPossibleDecorator() {
@@ -62,7 +63,7 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
     }
 
     @Override
-    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(CellsHandler handler, Worker[] workers) {
+    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(CellsHandler handler, ArrayList<Worker> workers) {
         HashMap<Coord, ArrayList<Coord>> availablePositions = super.findAvailablePositionsToMove(handler, workers);
         for (Coord actualCell : availablePositions.keySet()) {
             for (Coord cellToMove : availablePositions.get(actualCell)) {
@@ -76,27 +77,24 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
     }
 
     private ArrayList<Cell> directionAvailableCells(CellsHandler handler, Coord oldPosition, Coord newPosition) {
-        CellsHandler.AbstractIterator iterator = handler.directionIterator(oldPosition, newPosition);
-        ArrayList<Cell> availablePositionsOnDirection = new ArrayList<>();
-        Cell cellToCopy;
-        Cell cellOfOpponent = handler.getCell(newPosition);
-        while ((cellToCopy = iterator.next()) != null) {
-            if (cellToCopy.getHeight() == cellOfOpponent.getHeight())
-                availablePositionsOnDirection.add(cellToCopy);
-        }
-        return availablePositionsOnDirection;
+        ArrayList<Coord> coordsInDirection = handler.findSameDirectionCoords(oldPosition, newPosition);
+        ArrayList<Cell> cellsInDirection = handler.getCells(coordsInDirection);
+        Cell cellOpponent = handler.getCell(newPosition);
+
+        cellsInDirection.removeIf(c -> c.getHeight() != cellOpponent.getHeight());
+
+        return cellsInDirection;
     }
 
     private ArrayList<Coord> directionAvailableCoords(CellsHandler handler, Coord oldPosition, Coord newPosition) {
-        CellsHandler.AbstractIterator iterator = handler.directionIterator(oldPosition, newPosition);
-        ArrayList<Coord> availablePositionsOnDirection = new ArrayList<>();
-        Cell cellToCopy;
-        Cell cellOfOpponent = handler.getCell(newPosition);
-        while ((cellToCopy = iterator.next()) != null) {
-            if (cellToCopy.getHeight() == cellOfOpponent.getHeight())
-                availablePositionsOnDirection.add(cellToCopy.getCoord());
+        ArrayList<Coord> coordsInDirection = handler.findSameDirectionCoords(oldPosition, newPosition);
+        int heightOpponent = handler.getCell(newPosition).getHeight();
+
+        for (int i = 0; i < coordsInDirection.size(); i++) {
+            if (handler.getCell(coordsInDirection.get(i)).getHeight() == heightOpponent) coordsInDirection.remove(i);
         }
-        return availablePositionsOnDirection;
+
+        return coordsInDirection;
     }
 
     public AbstractGodCard cleanFromEffects(String nameOfEffect) throws ClassNotFoundException {

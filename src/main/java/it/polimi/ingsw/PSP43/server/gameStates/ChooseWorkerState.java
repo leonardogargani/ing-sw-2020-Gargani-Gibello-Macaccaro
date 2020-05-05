@@ -85,7 +85,7 @@ public class ChooseWorkerState extends TurnState {
             // here I ask to the player where he wants to place his workers (one at a time I ask him)
             for (int i = 0; i<workersIds.length; i++) {
                 ActionResponse response;
-                ArrayList<Coord> availablePositions = game.getCellsHandler().findAllCellsFree();
+                ArrayList<Coord> availablePositions = game.getCellsHandler().findAllCoordsFree();
                 hashAvailablePositions = new HashMap<>();
                 hashAvailablePositions.put(new Coord(0, 0), availablePositions);
                 placementRequest = new ActionRequest("Choose where to place your worker " + i + " .",

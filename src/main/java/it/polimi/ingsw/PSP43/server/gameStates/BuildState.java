@@ -57,8 +57,8 @@ public class BuildState extends TurnState {
             if (workersHandler.getWorker(id).isLatestMoved())
                 workersOfPlayer.add(workersHandler.getWorker(id));
         }
-        if (buildBlock) availablePositions = playerCard.findAvailablePositionsToBuildBlock(game.getCellsHandler(), (Worker[]) workersOfPlayer.toArray());
-        else availablePositions = playerCard.findAvailablePositionsToBuildDome(game.getCellsHandler(), (Worker[]) workersOfPlayer.toArray());
+        if (buildBlock) availablePositions = playerCard.findAvailablePositionsToBuildBlock(game.getCellsHandler(), workersOfPlayer);
+        else availablePositions = playerCard.findAvailablePositionsToBuildDome(game.getCellsHandler(), workersOfPlayer);
 
         ActionRequest message = new ActionRequest("Choose where to build.", availablePositions);
         ActionResponse actionResponse;
