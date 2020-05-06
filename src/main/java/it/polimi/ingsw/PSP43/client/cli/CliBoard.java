@@ -14,9 +14,9 @@ public class CliBoard {
      * to empty cells (white colored and with a height of zero).
      */
     public CliBoard() {
-        for (int i = 0; i < DIM; i++) {
-            for (int j = 0; j < DIM; j++) {
-                cells[i][j] = new CliCell();
+        for (int y = 0; y < DIM; y++) {
+            for (int x = 0; x < DIM; x++) {
+                cells[y][x] = new CliCell();
             }
         }
     }
@@ -28,10 +28,10 @@ public class CliBoard {
      */
     public void show() {
         System.out.print("\n\n\t\t\t0\t\t1\t\t2\t\t3\t\t4\n\n\n");
-        for (int i = 0; i < DIM; i++) {
-            System.out.print("\t" + i + "\t\t");
-            for (int j = 0; j < DIM; j++) {
-                System.out.print(cells[i][j] + "\t\t");
+        for (int y = 0; y < DIM; y++) {
+            System.out.print("\t" + y + "\t\t");
+            for (int x = 0; x < DIM; x++) {
+                System.out.print(cells[y][x] + "\t\t");
             }
             System.out.print("\n\n\n");
         }
@@ -45,7 +45,7 @@ public class CliBoard {
      * @return cell at the given coordinate
      */
     public CliCell getCell(Coord coord) {
-        return cells[coord.getX()][coord.getY()];
+        return cells[coord.getY()][coord.getX()];
     }
 
 

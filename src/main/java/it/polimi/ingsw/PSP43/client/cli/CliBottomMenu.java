@@ -21,6 +21,13 @@ public class CliBottomMenu {
     public void setContent(String content) {
         this.content = content;
     }
-    
+
+
+    /**
+     * Method that clears the content of this menu.
+     */
+    public void clear() {
+        this.setContent("");
+    }
 
 }

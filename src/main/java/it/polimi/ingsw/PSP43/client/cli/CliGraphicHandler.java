@@ -24,6 +24,8 @@ public class CliGraphicHandler extends GraphicHandler {
     private final CliMiddleMenu middleMenu = new CliMiddleMenu();
     private final CliBottomMenu bottomMenu = new CliBottomMenu();
 
+    private final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
 
     /**
      * Non default constructor that sets the clientGB attribute.
@@ -86,7 +88,6 @@ public class CliGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(PlayersNumberRequest request) {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
             bottomMenu.setContent(request.getMessage());
             int chosenNumber;
@@ -99,6 +100,7 @@ public class CliGraphicHandler extends GraphicHandler {
                 } while (line.equals(""));
                 chosenNumber = Integer.parseInt(line);
             } while (chosenNumber != 2 && chosenNumber != 3);
+            bottomMenu.clear();
             PlayersNumberResponse response = new PlayersNumberResponse(chosenNumber);
             super.getClientBG().sendMessage(response);
         } catch (IOException e) {
@@ -124,7 +126,6 @@ public class CliGraphicHandler extends GraphicHandler {
         }
         bottomMenu.setContent(request.getMessage());
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
 
             int playersNumber = request.getNumberOfCard();
@@ -157,6 +158,7 @@ public class CliGraphicHandler extends GraphicHandler {
                 chosenCards.add(cards.get(index));
             }
 
+            bottomMenu.clear();
             ChosenCardsResponse response = new ChosenCardsResponse(chosenCards);
             super.getClientBG().sendMessage(response);
 
@@ -176,7 +178,6 @@ public class CliGraphicHandler extends GraphicHandler {
     public void updateMenuChange(CardRequest request) {
         ArrayList<AbstractGodCard> availableCards = request.getCards();
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
             bottomMenu.setContent(request.getMessage());
 
@@ -203,6 +204,7 @@ public class CliGraphicHandler extends GraphicHandler {
 
             System.out.println("Perfect, you have chosen " + availableCards.get(chosenIndex).getGodName() + "!");
 
+            bottomMenu.clear();
             ChosenCardResponse response = new ChosenCardResponse(availableCards.get(chosenIndex));
             super.getClientBG().sendMessage(response);
         } catch (IOException e) {
@@ -221,7 +223,6 @@ public class CliGraphicHandler extends GraphicHandler {
     public void updateMenuChange(WorkersColorRequest request) {
         ArrayList<Color> availableColors = request.getColorsAvailable();
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
             bottomMenu.setContent(request.getMessage());
 
@@ -246,6 +247,7 @@ public class CliGraphicHandler extends GraphicHandler {
                 System.out.println("The number you wrote is not valid");
             }
 
+            bottomMenu.clear();
             WorkersColorResponse response = new WorkersColorResponse(availableColors.get(chosenIndex));
             super.getClientBG().sendMessage(response);
         } catch (IOException e) {
@@ -277,7 +279,6 @@ public class CliGraphicHandler extends GraphicHandler {
         HashMap<Coord,ArrayList<Coord>> hashMap = request.getCellsAvailable();
         bottomMenu.setContent(request.getMessage());
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
 
             // graphically render all the received coordinates as free (yellow background)
@@ -354,6 +355,7 @@ public class CliGraphicHandler extends GraphicHandler {
                 }
             }
 
+            bottomMenu.clear();
             super.getClientBG().sendMessage(response);
 
         } catch (IOException e) {
@@ -374,7 +376,6 @@ public class CliGraphicHandler extends GraphicHandler {
         bottomMenu.setContent(request.getMessage());
         this.render();
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
             int intChoice;
             boolean booleanChoice = false;
@@ -401,6 +402,7 @@ public class CliGraphicHandler extends GraphicHandler {
                     break;
             }
 
+            bottomMenu.clear();
             ResponseMessage response = new ResponseMessage(booleanChoice);
             super.getClientBG().sendMessage(response);
 
@@ -432,7 +434,6 @@ public class CliGraphicHandler extends GraphicHandler {
     public void updateMenuChange(ChangeNickRequest request) {
         bottomMenu.setContent(request.getMessage());
         bottomMenu.show();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
             String nickname;
             System.out.print("Choose another nickname:");
