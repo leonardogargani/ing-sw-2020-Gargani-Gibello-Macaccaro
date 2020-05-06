@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * AbstractGodCard is the class that represents the cards with God Powers, thus it is associated to a God and the
@@ -114,16 +115,18 @@ public abstract class AbstractGodCard implements Serializable {
         Cell actualCell;
         int actualHeight;
         int newHeight;
-        for (Coord c : neighbouringCoords.keySet()) {
-            for (Iterator<Coord> coordIterator = neighbouringCoords.get(c).iterator(); coordIterator.hasNext(); ) {
+        for (Iterator<Map.Entry<Coord, ArrayList<Coord>>> keysIterator = neighbouringCoords.entrySet().iterator(); keysIterator.hasNext(); ) {
+            Map.Entry<Coord, ArrayList<Coord>> pair = keysIterator.next();
+            ArrayList<Coord> coordsAvailable = pair.getValue();
+            for (Iterator<Coord> coordIterator = coordsAvailable.iterator(); coordIterator.hasNext(); ) {
                 Coord c1 = coordIterator.next();
                 if (!handler.getCell(c1).getOccupiedByWorker() && !handler.getCell(c1).getOccupiedByDome()) {
-                    actualCell = handler.getCell(c);
+                    actualCell = handler.getCell(pair.getKey());
                     actualHeight = actualCell.getHeight();
                     newHeight = handler.getCell(c1).getHeight();
                     if (newHeight - actualHeight > 1) coordIterator.remove();
                 }
-                else neighbouringCoords.remove(c);
+                else coordIterator.remove();
             }
         }
         return neighbouringCoords;
