@@ -1,6 +1,9 @@
 package it.polimi.ingsw.PSP43.client;
 
+import it.polimi.ingsw.PSP43.client.cli.QuitPlayerException;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
+
+import java.io.IOException;
 
 
 public abstract class GraphicHandler {
@@ -53,7 +56,7 @@ public abstract class GraphicHandler {
      * request, waiting and sending the response through the ClientBG object.
      * @param request message containing the request for the number of the players
      */
-    public abstract void updateMenuChange(PlayersNumberRequest request);
+    public abstract void updateMenuChange(PlayersNumberRequest request) throws QuitPlayerException;
 
 
     /**
@@ -61,7 +64,7 @@ public abstract class GraphicHandler {
      * request, waiting and sending the response through the ClientBG object.
      * @param request message containing the request for the cards chosen for this game
      */
-    public abstract void updateMenuChange(InitialCardsRequest request);
+    public abstract void updateMenuChange(InitialCardsRequest request) throws QuitPlayerException;
 
 
     /**
@@ -69,7 +72,7 @@ public abstract class GraphicHandler {
      * request, waiting and sending the response through the ClientBG object.
      * @param request message containing the request for the card chosen by a player
      */
-    public abstract void updateMenuChange(CardRequest request);
+    public abstract void updateMenuChange(CardRequest request) throws QuitPlayerException;
 
 
     /**
@@ -77,7 +80,7 @@ public abstract class GraphicHandler {
      * request, waiting and sending the response through the ClientBG object.
      * @param request message containing the request for the color of player's workers
      */
-    public abstract void updateMenuChange(WorkersColorRequest request);
+    public abstract void updateMenuChange(WorkersColorRequest request) throws QuitPlayerException;
 
 
     /**
@@ -85,7 +88,7 @@ public abstract class GraphicHandler {
      * request, waiting and sending the response through the ClientBG object.
      * @param request message containing the request for the action a player wants to make
      */
-    public abstract void updateMenuChange(ActionRequest request);
+    public abstract void updateMenuChange(ActionRequest request) throws QuitPlayerException;
 
 
     /**
@@ -93,7 +96,7 @@ public abstract class GraphicHandler {
      * that needs a boolean as a response, waiting and sending the response through the ClientBG object.
      * @param request message containing the generic boolean request
      */
-    public abstract void updateMenuChange(RequestMessage request);
+    public abstract void updateMenuChange(RequestMessage request) throws QuitPlayerException;
 
 
     // following update methods do not send a response
@@ -112,7 +115,7 @@ public abstract class GraphicHandler {
      * @param request message that notifies the client that the nick he has just chosen
      *                is already taken
      */
-    public abstract void updateMenuChange(ChangeNickRequest request);
+    public abstract void updateMenuChange(ChangeNickRequest request) throws QuitPlayerException;
 
 
     /**

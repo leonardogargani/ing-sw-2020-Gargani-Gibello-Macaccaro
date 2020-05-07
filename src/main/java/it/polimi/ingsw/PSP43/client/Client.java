@@ -1,5 +1,7 @@
 package it.polimi.ingsw.PSP43.client;
 
+import it.polimi.ingsw.PSP43.client.cli.InputHandler;
+import it.polimi.ingsw.PSP43.client.cli.QuitPlayerException;
 import it.polimi.ingsw.PSP43.client.cli.Screens;
 import it.polimi.ingsw.PSP43.client.networkMessages.PlayersNumberResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
@@ -57,21 +59,24 @@ public class Client implements Runnable{
      * This method takes the client to the welcome page, right before the nickname request.
      */
     public void execute() {
+        InputHandler inputHandler = new InputHandler();
+
         System.out.println(Screens.WELCOME);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
         try {
             String nickname;
-            System.out.print("Choose a nickname:");
+            System.out.println("Choose a nickname:");
             do {
-                nickname = reader.readLine();
+                nickname = inputHandler.requestInput();
             } while (nickname.equals(""));
             RegistrationMessage message = new RegistrationMessage(nickname);
             clientBG.sendMessage(message);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (QuitPlayerException e) {
+            // TODO implement the handling of a QuitPlayerException when a player writes "quit" in the cli
+        } catch (IOException i) {
+            i.printStackTrace();
         }
 
     }
-
 
 }

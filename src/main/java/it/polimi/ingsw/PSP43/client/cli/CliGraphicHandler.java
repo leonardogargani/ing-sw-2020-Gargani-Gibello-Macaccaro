@@ -10,9 +10,7 @@ import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -23,9 +21,7 @@ public class CliGraphicHandler extends GraphicHandler {
     private final CliTopMenu topMenu = new CliTopMenu();
     private final CliMiddleMenu middleMenu = new CliMiddleMenu();
     private final CliBottomMenu bottomMenu = new CliBottomMenu();
-
-    private final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-
+    private final InputHandler inputHandler = new InputHandler();
 
     /**
      * Non default constructor that sets the clientGB attribute.
@@ -85,23 +81,23 @@ public class CliGraphicHandler extends GraphicHandler {
      * This method updates the graphics of the client displaying the message of the players number
      * request, waiting and sending the response through the ClientBG object.
      * @param request message containing the request for the number of the players
+     * @throws QuitPlayerException exception thrown if a player writes "quit" (ignore capitalization) in the cli
      */
     @Override
-    public void updateMenuChange(PlayersNumberRequest request) {
+    public void updateMenuChange(PlayersNumberRequest request) throws QuitPlayerException {
+
+        bottomMenu.setContent(request.getMessage());
+        int chosenNumber;
+        String line;
+        do {
+            // I need to show() only the CliTopMenu, containing the request
+            bottomMenu.show();
+            line = inputHandler.requestInput();
+            chosenNumber = Integer.parseInt(line);
+        } while (chosenNumber != 2 && chosenNumber != 3);
+        bottomMenu.clear();
+        PlayersNumberResponse response = new PlayersNumberResponse(chosenNumber);
         try {
-            bottomMenu.setContent(request.getMessage());
-            int chosenNumber;
-            String line;
-            do {
-                // I need to show() only the CliTopMenu, containing the request
-                bottomMenu.show();
-                do {
-                    line = reader.readLine();
-                } while (line.equals(""));
-                chosenNumber = Integer.parseInt(line);
-            } while (chosenNumber != 2 && chosenNumber != 3);
-            bottomMenu.clear();
-            PlayersNumberResponse response = new PlayersNumberResponse(chosenNumber);
             super.getClientBG().sendMessage(response);
         } catch (IOException e) {
             e.printStackTrace();
@@ -115,7 +111,7 @@ public class CliGraphicHandler extends GraphicHandler {
      * @param request message containing the request for the cards chosen for this game
      */
     @Override
-    public void updateMenuChange(InitialCardsRequest request) {
+    public void updateMenuChange(InitialCardsRequest request) throws QuitPlayerException {
 
         // display all the cards before making the request
         ArrayList<AbstractGodCard> cards = request.getCards();
@@ -125,8 +121,6 @@ public class CliGraphicHandler extends GraphicHandler {
             card.print();
         }
         bottomMenu.setContent(request.getMessage());
-
-        try {
 
             int playersNumber = request.getNumberOfCard();
 
@@ -138,10 +132,8 @@ public class CliGraphicHandler extends GraphicHandler {
             String line;
             for (int i = 0; i < playersNumber; i++) {
                 bottomMenu.show();
-                System.out.printf("Write a single number and press Enter (%d remaining): ", playersNumber - i);
-                do {
-                    line = reader.readLine();
-                } while (line.equals(""));
+                System.out.printf("Write a single number and press Enter (%d remaining):\n", playersNumber - i);
+                line = inputHandler.requestInput();
                 chosenIndex = Integer.parseInt(line);
                 // avoid repetition of the same Gods
                 if (!chosenIndexes.contains(chosenIndex)) {
@@ -160,12 +152,11 @@ public class CliGraphicHandler extends GraphicHandler {
 
             bottomMenu.clear();
             ChosenCardsResponse response = new ChosenCardsResponse(chosenCards);
+        try {
             super.getClientBG().sendMessage(response);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
 
@@ -175,37 +166,36 @@ public class CliGraphicHandler extends GraphicHandler {
      * @param request message containing the request for the card chosen by a player
      */
     @Override
-    public void updateMenuChange(CardRequest request) {
+    public void updateMenuChange(CardRequest request) throws QuitPlayerException {
         ArrayList<AbstractGodCard> availableCards = request.getCards();
 
+        bottomMenu.setContent(request.getMessage());
+
+        for (AbstractGodCard card : availableCards) {
+            // the name of every God is preceded by its index in the ArrayList
+            System.out.printf(" [%d] - ", availableCards.indexOf(card));
+            card.print();
+        }
+
+        int chosenIndex;
+        String line;
+        while (true) {
+            bottomMenu.show();
+            line = inputHandler.requestInput();
+            chosenIndex = Integer.parseInt(line);
+            if (0 <= chosenIndex && chosenIndex < availableCards.size()) {
+                // in this case the chosen index is valid, I want to keep its value
+                break;
+            }
+            System.out.println("The number you wrote is not valid");
+        }
+
+        System.out.println("Perfect, you have chosen " + availableCards.get(chosenIndex).getGodName() + "!");
+
+        bottomMenu.clear();
+        ChosenCardResponse response = new ChosenCardResponse(availableCards.get(chosenIndex));
+
         try {
-            bottomMenu.setContent(request.getMessage());
-
-            for (AbstractGodCard card : availableCards) {
-                // the name of every God is preceded by its index in the ArrayList
-                System.out.printf(" [%d] - ", availableCards.indexOf(card));
-                card.print();
-            }
-
-            int chosenIndex;
-            String line;
-            while (true) {
-                bottomMenu.show();
-                do {
-                    line = reader.readLine();
-                } while (line.equals(""));
-                chosenIndex = Integer.parseInt(line);
-                if (0 <= chosenIndex && chosenIndex < availableCards.size()) {
-                    // in this case the chosen index is valid, I want to keep its value
-                    break;
-                }
-                System.out.println("The number you wrote is not valid");
-            }
-
-            System.out.println("Perfect, you have chosen " + availableCards.get(chosenIndex).getGodName() + "!");
-
-            bottomMenu.clear();
-            ChosenCardResponse response = new ChosenCardResponse(availableCards.get(chosenIndex));
             super.getClientBG().sendMessage(response);
         } catch (IOException e) {
             e.printStackTrace();
@@ -220,39 +210,38 @@ public class CliGraphicHandler extends GraphicHandler {
      * @param request message containing the request for the color of player's workers
      */
     @Override
-    public void updateMenuChange(WorkersColorRequest request) {
+    public void updateMenuChange(WorkersColorRequest request) throws QuitPlayerException {
         ArrayList<Color> availableColors = request.getColorsAvailable();
 
+        bottomMenu.setContent(request.getMessage());
+
+        for (Color color : availableColors) {
+            // the name of every color is preceded by its index in the ArrayList
+            System.out.printf(" [%d] - ", availableColors.indexOf(color));
+            Color.printName(color);
+        }
+
+        int chosenIndex;
+        String line;
+        while (true) {
+            bottomMenu.show();
+            line = inputHandler.requestInput();
+            chosenIndex = Integer.parseInt(line);
+            if (0 <= chosenIndex && chosenIndex < availableColors.size()) {
+                // in this case the chosen index is valid, I want to keep its value
+                break;
+            }
+            System.out.println("The number you wrote is not valid");
+        }
+
+        bottomMenu.clear();
+        WorkersColorResponse response = new WorkersColorResponse(availableColors.get(chosenIndex));
         try {
-            bottomMenu.setContent(request.getMessage());
-
-            for (Color color : availableColors) {
-                // the name of every color is preceded by its index in the ArrayList
-                System.out.printf(" [%d] - ", availableColors.indexOf(color));
-                Color.printName(color);
-            }
-
-            int chosenIndex;
-            String line;
-            while (true) {
-                bottomMenu.show();
-                do {
-                    line = reader.readLine();
-                } while (line.equals(""));
-                chosenIndex = Integer.parseInt(line);
-                if (0 <= chosenIndex && chosenIndex < availableColors.size()) {
-                    // in this case the chosen index is valid, I want to keep its value
-                    break;
-                }
-                System.out.println("The number you wrote is not valid");
-            }
-
-            bottomMenu.clear();
-            WorkersColorResponse response = new WorkersColorResponse(availableColors.get(chosenIndex));
             super.getClientBG().sendMessage(response);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
 
@@ -262,7 +251,7 @@ public class CliGraphicHandler extends GraphicHandler {
      * @param request message containing the request for the action a player wants to make
      */
     @Override
-    public void updateMenuChange(ActionRequest request) {
+    public void updateMenuChange(ActionRequest request) throws QuitPlayerException {
 
         /*
         Given an HashMap<Coord,ArrayList<Coord>>  I need to choose a couple formed by one of
@@ -279,8 +268,6 @@ public class CliGraphicHandler extends GraphicHandler {
         HashMap<Coord,ArrayList<Coord>> hashMap = request.getCellsAvailable();
         bottomMenu.setContent(request.getMessage());
 
-        try {
-
             // graphically render all the received coordinates as free (yellow background)
             for (Coord startCoord : hashMap.keySet()) {
                 for (Coord endCoord : hashMap.get(startCoord)) {
@@ -296,14 +283,10 @@ public class CliGraphicHandler extends GraphicHandler {
             // obtain the second coordinate of the requested couple
             loop: while (true) {
                 System.out.print("x: ");
-                do {
-                    line = reader.readLine();
-                } while (line.equals(""));
+                line = inputHandler.requestInput();
                 chosenX = Integer.parseInt(line);
                 System.out.print("y: ");
-                do {
-                    line = reader.readLine();
-                } while (line.equals(""));
+                line = inputHandler.requestInput();
                 chosenY = Integer.parseInt(line);
                 for (Coord startCoord : hashMap.keySet()) {
                     for (Coord endCoord : hashMap.get(startCoord)) {
@@ -339,7 +322,8 @@ public class CliGraphicHandler extends GraphicHandler {
                 }
                 int chosenIndex;
                 while (true) {
-                    chosenIndex = Integer.parseInt(reader.readLine());
+                    line = inputHandler.requestInput();
+                    chosenIndex = Integer.parseInt(line);
                     if (0 <= chosenIndex && chosenIndex < possibleStartCoords.size()) {
                         break;
                     }
@@ -354,10 +338,9 @@ public class CliGraphicHandler extends GraphicHandler {
                     board.getCell(endCoord).markAsFree(false);
                 }
             }
-
             bottomMenu.clear();
+        try {
             super.getClientBG().sendMessage(response);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -371,41 +354,39 @@ public class CliGraphicHandler extends GraphicHandler {
      * @param request message containing the generic boolean request
      */
     @Override
-    public void updateMenuChange(RequestMessage request) {
+    public void updateMenuChange(RequestMessage request) throws QuitPlayerException {
 
         bottomMenu.setContent(request.getMessage());
         this.render();
 
+        int intChoice;
+        boolean booleanChoice = false;
+        String line;
+
+        while (true) {
+            System.out.println(" [0] YES \n [1] NO ");
+            line = inputHandler.requestInput();
+            intChoice = Integer.parseInt(line);
+            if (intChoice == 0 || intChoice == 1) {
+                break;
+            }
+            System.out.println("Choice not valid, try again!");
+        }
+
+        switch (intChoice) {
+            case 0:
+                booleanChoice = true;
+                break;
+            case 1:
+                booleanChoice = false;
+                break;
+        }
+
+        bottomMenu.clear();
+        ResponseMessage response = new ResponseMessage(booleanChoice);
+
         try {
-            int intChoice;
-            boolean booleanChoice = false;
-            String line;
-
-            while (true) {
-                System.out.println(" [0] YES \n [1] NO ");
-                do {
-                    line = reader.readLine();
-                } while (line.equals(""));
-                intChoice = Integer.parseInt(line);
-                if (intChoice == 0 || intChoice == 1) {
-                    break;
-                }
-                System.out.println("Choice not valid, choose again");
-            }
-
-            switch (intChoice) {
-                case 0:
-                    booleanChoice = true;
-                    break;
-                case 1:
-                    booleanChoice = false;
-                    break;
-            }
-
-            bottomMenu.clear();
-            ResponseMessage response = new ResponseMessage(booleanChoice);
             super.getClientBG().sendMessage(response);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -431,16 +412,14 @@ public class CliGraphicHandler extends GraphicHandler {
      *                is already taken
      */
     @Override
-    public void updateMenuChange(ChangeNickRequest request) {
+    public void updateMenuChange(ChangeNickRequest request) throws QuitPlayerException {
         bottomMenu.setContent(request.getMessage());
         bottomMenu.show();
+        String nickname;
+        System.out.print("Choose another nickname:\n");
+        nickname = inputHandler.requestInput();
+        RegistrationMessage message = new RegistrationMessage(nickname);
         try {
-            String nickname;
-            System.out.print("Choose another nickname:");
-            do {
-                nickname = reader.readLine();
-            } while (nickname.equals(""));
-            RegistrationMessage message = new RegistrationMessage(nickname);
             super.getClientBG().sendMessage(message);
         } catch (IOException e) {
             e.printStackTrace();
