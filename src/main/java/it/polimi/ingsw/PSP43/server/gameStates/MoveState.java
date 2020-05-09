@@ -53,10 +53,13 @@ public class MoveState extends TurnState {
 
         try {
             executeState();
-        } catch (WinnerCaughtException | IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch (WinnerCaughtException e) {
             int winnerStateIndex = game.getTurnMap().size() - 1;
             WinState nextState = (WinState) game.getTurnMap().get(winnerStateIndex);
-            nextState.setWinner(currentPlayer.getNickname());
+            nextState.setWinner(e.getWinner());
             game.setNextState(nextState);
             game.transitToNextState();
         }

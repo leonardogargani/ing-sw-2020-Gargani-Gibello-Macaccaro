@@ -29,7 +29,7 @@ public class WinConditionDecorator extends PowerGodDecorator {
         int heightOldPosition = handler.getCell(oldPosition).getHeight();
         int heightNewPosition = handler.getCell(dataToAction.getNewPosition()).getHeight();
         if (heightOldPosition - heightNewPosition >= 2) {
-            throw new WinnerCaughtException();
+            throw new WinnerCaughtException(dataToAction.getPlayer().getNickname());
         }
     }
 

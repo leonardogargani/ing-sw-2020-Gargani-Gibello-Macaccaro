@@ -42,7 +42,7 @@ public class GameSessionObservable implements Runnable {
         return -1;
     }
 
-    public synchronized boolean unregisterFromGame(LeaveGameMessage message, ClientListener player) throws IOException {
+    public synchronized void unregisterFromGame(LeaveGameMessage message, ClientListener player) throws IOException {
         EndGameMessage endGameMessage = new EndGameMessage("We are sorry, due to connection problems the play is ended.");
         String nicknameLeft = null;
         for (String s : listenersHashMap.keySet()) {
@@ -52,7 +52,6 @@ public class GameSessionObservable implements Runnable {
         listExcluded.add(nicknameLeft);
         sendBroadCast(endGameMessage, listExcluded);
         //listenersHashMap.get(nicknameLeft).removeGameSession(this.idGame);
-        return true;
     }
 
     public void eliminatePlayer(Player playerEliminated) throws IOException, ClassNotFoundException {

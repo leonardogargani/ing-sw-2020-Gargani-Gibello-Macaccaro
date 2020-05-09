@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP43.server.model.card.decorators;
 
 import it.polimi.ingsw.PSP43.server.DataToAction;
+import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
@@ -11,6 +12,7 @@ import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class SwapMoveDecorator extends PowerGodDecorator {
     private static final long serialVersionUID = 1282873326963180012L;
@@ -40,8 +42,15 @@ public class SwapMoveDecorator extends PowerGodDecorator {
     @Override
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(CellsHandler handler, ArrayList<Worker> workers) {
         HashMap<Coord, ArrayList<Coord>> availablePositions = handler.findWorkersNeighbouringCoords(workers);
-        for (Coord actualCell : availablePositions.keySet()) {
-            availablePositions.get(actualCell).removeIf(cellToMove -> handler.getCell(cellToMove).getOccupiedByDome());
+        for (Coord actualCoord : availablePositions.keySet()) {
+            Cell actualCell = handler.getCell(actualCoord);
+            ArrayList<Coord> neighbouringPositions = availablePositions.get(actualCoord);
+            for (Iterator<Coord> coordIterator = neighbouringPositions.iterator(); coordIterator.hasNext(); ) {
+                Coord coordToCheck = coordIterator.next();
+                Cell cellToCheck = handler.getCell(coordToCheck);
+                if (cellToCheck.getOccupiedByDome() || (cellToCheck.getHeight() - actualCell.getHeight() > 1))
+                    coordIterator.remove();
+            }
         }
         return availablePositions;
     }
