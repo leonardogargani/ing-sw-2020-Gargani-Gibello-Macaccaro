@@ -17,10 +17,10 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">it.polimi.ingsw.PSP43.client</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.clientManager</a> ]
 </div>
 
-<h1>Coverage Summary for Class: ClientMain (it.polimi.ingsw.PSP43.client)</h1>
+<h1>Coverage Summary for Class: ClientMain (it.polimi.ingsw.PSP43.clientManager)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -72,10 +72,10 @@
 <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.client;
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.clientManager;
 <i>2</i>&nbsp;
-<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.cli.CliGraphicHandler;
-<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.gui.GuiGraphicHandler;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.clientManager.cli.CliGraphicHandler;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.clientManager.gui.GuiGraphicHandler;
 <i>5</i>&nbsp;
 <i>6</i>&nbsp;import java.io.BufferedReader;
 <i>7</i>&nbsp;import java.io.IOException;
@@ -84,7 +84,7 @@
 <i>10</i>&nbsp;
 <b class="nc"><i>11</i>&nbsp;public class ClientMain {</b>
 <i>12</i>&nbsp;
-<i>13</i>&nbsp;    private static Client client;
+<i>13</i>&nbsp;    private static Client clientManager;
 <i>14</i>&nbsp;
 <i>15</i>&nbsp;
 <i>16</i>&nbsp;    public static void main(String[] args) throws IOException {
@@ -104,17 +104,17 @@
 <i>30</i>&nbsp;                case &quot;1&quot;:
 <b class="nc"><i>31</i>&nbsp;                    System.out.println(&quot;CLI chosen. Starting the game...&quot;);</b>
 <b class="nc"><i>32</i>&nbsp;                    CliGraphicHandler cliGraphicHandler = new CliGraphicHandler();</b>
-<b class="nc"><i>33</i>&nbsp;                    client = new Client(cliGraphicHandler);</b>
-<b class="nc"><i>34</i>&nbsp;                    cliGraphicHandler.setClientBG(client.getClientBG());</b>
-<b class="nc"><i>35</i>&nbsp;                    Thread clientThread1 = new Thread(client);</b>
+<b class="nc"><i>33</i>&nbsp;                    clientManager = new Client(cliGraphicHandler);</b>
+<b class="nc"><i>34</i>&nbsp;                    cliGraphicHandler.setClientBG(clientManager.getClientBG());</b>
+<b class="nc"><i>35</i>&nbsp;                    Thread clientThread1 = new Thread(clientManager);</b>
 <b class="nc"><i>36</i>&nbsp;                    clientThread1.start();</b>
 <b class="nc"><i>37</i>&nbsp;                    break;</b>
 <i>38</i>&nbsp;                case &quot;2&quot;:
 <b class="nc"><i>39</i>&nbsp;                    System.out.println(&quot;GUI chosen. Starting the game...&quot;);</b>
 <b class="nc"><i>40</i>&nbsp;                    GuiGraphicHandler guiGraphicHandler = new GuiGraphicHandler();</b>
-<b class="nc"><i>41</i>&nbsp;                    client = new Client(guiGraphicHandler);</b>
-<b class="nc"><i>42</i>&nbsp;                    guiGraphicHandler.setClientBG(client.getClientBG());</b>
-<b class="nc"><i>43</i>&nbsp;                    Thread clientThread2 = new Thread(client);</b>
+<b class="nc"><i>41</i>&nbsp;                    clientManager = new Client(guiGraphicHandler);</b>
+<b class="nc"><i>42</i>&nbsp;                    guiGraphicHandler.setClientBG(clientManager.getClientBG());</b>
+<b class="nc"><i>43</i>&nbsp;                    Thread clientThread2 = new Thread(clientManager);</b>
 <b class="nc"><i>44</i>&nbsp;                    clientThread2.start();</b>
 <b class="nc"><i>45</i>&nbsp;                    break;</b>
 <i>46</i>&nbsp;                default:
@@ -124,8 +124,8 @@
 <b class="nc"><i>50</i>&nbsp;        } while(!chosenMode.equals(&quot;1&quot;) &amp;&amp; !chosenMode.equals(&quot;2&quot;));</b>
 <i>51</i>&nbsp;
 <i>52</i>&nbsp;
-<i>53</i>&nbsp;        // start effectively the client and display welcome message
-<b class="nc"><i>54</i>&nbsp;        client.execute();</b>
+<i>53</i>&nbsp;        // start effectively the clientManager and display welcome message
+<b class="nc"><i>54</i>&nbsp;        clientManager.execute();</b>
 <i>55</i>&nbsp;
 <i>56</i>&nbsp;
 <i>57</i>&nbsp;    }

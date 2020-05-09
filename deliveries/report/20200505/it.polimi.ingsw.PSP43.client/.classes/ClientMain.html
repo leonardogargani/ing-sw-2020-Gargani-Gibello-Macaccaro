@@ -17,10 +17,10 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">it.polimi.ingsw.PSP43.client</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.clientManager</a> ]
 </div>
 
-<h1>Coverage Summary for Class: ClientMain (it.polimi.ingsw.PSP43.client)</h1>
+<h1>Coverage Summary for Class: ClientMain (it.polimi.ingsw.PSP43.clientManager)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -72,10 +72,10 @@
 <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.client;
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.clientManager;
 <i>2</i>&nbsp;
-<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.cli.CliGraphicHandler;
-<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.gui.GuiGraphicHandler;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.clientManager.cli.CliGraphicHandler;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.clientManager.gui.GuiGraphicHandler;
 <i>5</i>&nbsp;
 <i>6</i>&nbsp;import java.io.BufferedReader;
 <i>7</i>&nbsp;import java.io.IOException;
@@ -105,7 +105,7 @@
 <i>31</i>&nbsp;
 <b class="nc"><i>32</i>&nbsp;        System.out.println(&quot;Choose a mode:\n [1] CLI\n [2] GUI&quot;);</b>
 <i>33</i>&nbsp;
-<i>34</i>&nbsp;        Client client;
+<i>34</i>&nbsp;        Client clientManager;
 <i>35</i>&nbsp;        // GUI/CLI decision is taken through the cli for now
 <i>36</i>&nbsp;        do {
 <i>37</i>&nbsp;            String line;
@@ -117,17 +117,17 @@
 <i>43</i>&nbsp;                case 1:
 <b class="nc"><i>44</i>&nbsp;                    System.out.println(&quot;CLI chosen. Starting the game...&quot;);</b>
 <b class="nc"><i>45</i>&nbsp;                    CliGraphicHandler cliGraphicHandler = new CliGraphicHandler(clientBG);</b>
-<b class="nc"><i>46</i>&nbsp;                    client = new Client(clientBG , cliGraphicHandler);</b>
-<b class="nc"><i>47</i>&nbsp;                    Thread clientThread1 = new Thread(client);</b>
+<b class="nc"><i>46</i>&nbsp;                    clientManager = new Client(clientBG , cliGraphicHandler);</b>
+<b class="nc"><i>47</i>&nbsp;                    Thread clientThread1 = new Thread(clientManager);</b>
 <b class="nc"><i>48</i>&nbsp;                    clientThread1.start();</b>
-<b class="nc"><i>49</i>&nbsp;                    clientBG.setClient(client);</b>
+<b class="nc"><i>49</i>&nbsp;                    clientBG.setClient(clientManager);</b>
 <b class="nc"><i>50</i>&nbsp;                    break;</b>
 <i>51</i>&nbsp;                case 2:
 <b class="nc"><i>52</i>&nbsp;                    System.out.println(&quot;GUI chosen. Starting the game...&quot;);</b>
 <b class="nc"><i>53</i>&nbsp;                    GuiGraphicHandler guiGraphicHandler = new GuiGraphicHandler(clientBG);</b>
-<b class="nc"><i>54</i>&nbsp;                    client = new Client(clientBG,guiGraphicHandler);</b>
-<b class="nc"><i>55</i>&nbsp;                    guiGraphicHandler.setClientBG(client.getClientBG());</b>
-<b class="nc"><i>56</i>&nbsp;                    Thread clientThread2 = new Thread(client);</b>
+<b class="nc"><i>54</i>&nbsp;                    clientManager = new Client(clientBG,guiGraphicHandler);</b>
+<b class="nc"><i>55</i>&nbsp;                    guiGraphicHandler.setClientBG(clientManager.getClientBG());</b>
+<b class="nc"><i>56</i>&nbsp;                    Thread clientThread2 = new Thread(clientManager);</b>
 <b class="nc"><i>57</i>&nbsp;                    clientThread2.start();</b>
 <b class="nc"><i>58</i>&nbsp;                    break;</b>
 <i>59</i>&nbsp;                default:

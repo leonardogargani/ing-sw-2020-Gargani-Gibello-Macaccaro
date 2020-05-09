@@ -111,8 +111,8 @@
 
 <div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.gameStates;
 <i>2</i>&nbsp;
-<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.PlayersNumberResponse;
-<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.clientManager.networkMessages.PlayersNumberResponse;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.clientManager.networkMessages.RegistrationMessage;
 <i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 <i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.NicknameAlreadyInUseException;
 <i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
@@ -140,11 +140,11 @@
 <i>29</i>&nbsp;
 <i>30</i>&nbsp;    /**
 <i>31</i>&nbsp;     * This method is the one which has to initialise the data of the new player connected.
-<i>32</i>&nbsp;     * If the nickname chosen by the player is already used, it sends an error to the client
+<i>32</i>&nbsp;     * If the nickname chosen by the player is already used, it sends an error to the clientManager
 <i>33</i>&nbsp;     * asking him to re-insert the username. In that case the player will be treated as a
 <i>34</i>&nbsp;     * new player connecting to the server.
 <i>35</i>&nbsp;     *
-<i>36</i>&nbsp;     * @param message This is the message sent from the client.
+<i>36</i>&nbsp;     * @param message This is the message sent from the clientManager.
 <i>37</i>&nbsp;     */
 <i>38</i>&nbsp;    public void executeState(RegistrationMessage message) throws IOException {
 <b class="fc"><i>39</i>&nbsp;        GameSession game = super.getGameSession();</b>
@@ -178,7 +178,7 @@
 <i>67</i>&nbsp;     * This method asks to the first player of the game how many opponents does he want.
 <i>68</i>&nbsp;     *
 <i>69</i>&nbsp;     * @param gameSession This is a reference to the center of the game database.
-<i>70</i>&nbsp;     * @param message     This is the message sent from the client.
+<i>70</i>&nbsp;     * @param message     This is the message sent from the clientManager.
 <i>71</i>&nbsp;     */
 <i>72</i>&nbsp;    protected int askNumberPlayers(GameSession gameSession, RegistrationMessage message) throws IOException, ClassNotFoundException, InterruptedException {
 <b class="fc"><i>73</i>&nbsp;        PlayersNumberRequest request = new PlayersNumberRequest(&quot;Choose between a 2 or 3 game play.&quot;);</b>

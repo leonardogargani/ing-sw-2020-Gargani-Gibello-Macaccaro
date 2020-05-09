@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP43.server;
 
+import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSessionObservable;
@@ -34,10 +35,10 @@ public class RegisterClientListener implements Runnable {
                 GameSessionObservable gameSession = gameSessions.get(counter);
 
                 // if the gameSession is in registration phase for the first player, I wait
-                while (gameSession.getMaxNumPlayers() == 1) {}
+                while (gameSession.getMaxNumPlayers() == 1) { }
 
                 if (gameSession.getMaxNumPlayers() > gameSession.getNumOfPlayers()) {
-                    idGame = gameSessions.get(counter).registerToTheGame(message, player);
+                    idGame = gameSession.registerToTheGame(message, player);
                 }
 
                 counter++;
@@ -50,7 +51,7 @@ public class RegisterClientListener implements Runnable {
                 Thread gameThread = new Thread(game);
                 gameThread.start();
 
-                game.registerToTheGame(message, player);
+                idGame = game.registerToTheGame(message, player);
             }
 
             player.setIdGame(idGame);
@@ -61,5 +62,14 @@ public class RegisterClientListener implements Runnable {
 
     public synchronized void removeGameSession(int idGameSession){
         gameSessions.removeIf(gameSessionObservable -> gameSessionObservable.getIdGame() == idGameSession);
+    }
+
+    public void notifyDisconnection(int idGameSession) throws IOException {
+        for (int i = 0; i < gameSessions.size(); i++)
+        {
+            if(gameSessions.get(i).getIdGame() == idGameSession)
+                gameSessions.get(i).unregisterFromGame(new LeaveGameMessage(),player);
+        }
+
     }
 }

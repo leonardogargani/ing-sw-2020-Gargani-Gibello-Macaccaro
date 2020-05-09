@@ -92,8 +92,8 @@
 <b class="nc"><i>18</i>&nbsp;        }</b>
 <i>19</i>&nbsp;        while (true){
 <i>20</i>&nbsp;            try {
-<b class="nc"><i>21</i>&nbsp;                Socket client = socket.accept();</b>
-<b class="nc"><i>22</i>&nbsp;                ClientListener clientListener = new ClientListener(client);</b>
+<b class="nc"><i>21</i>&nbsp;                Socket clientManager = socket.accept();</b>
+<b class="nc"><i>22</i>&nbsp;                ClientListener clientListener = new ClientListener(clientManager);</b>
 <b class="nc"><i>23</i>&nbsp;                Thread thread= new Thread(clientListener);</b>
 <b class="nc"><i>24</i>&nbsp;                thread.start();</b>
 <b class="nc"><i>25</i>&nbsp;            }catch (IOException e){</b>

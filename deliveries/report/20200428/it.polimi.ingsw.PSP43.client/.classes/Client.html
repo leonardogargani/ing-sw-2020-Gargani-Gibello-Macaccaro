@@ -17,10 +17,10 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">it.polimi.ingsw.PSP43.client</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.clientManager</a> ]
 </div>
 
-<h1>Coverage Summary for Class: Client (it.polimi.ingsw.PSP43.client)</h1>
+<h1>Coverage Summary for Class: Client (it.polimi.ingsw.PSP43.clientManager)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -72,9 +72,9 @@
 <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.client;
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.clientManager;
 <i>2</i>&nbsp;
-<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.cli.Screens;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.clientManager.cli.Screens;
 <i>4</i>&nbsp;import java.io.IOException;
 <i>5</i>&nbsp;import java.net.Socket;
 <i>6</i>&nbsp;
@@ -122,14 +122,14 @@
 <b class="nc"><i>48</i>&nbsp;            Thread clientBg = new Thread(clientBG);</b>
 <b class="nc"><i>49</i>&nbsp;            clientBg.start();</b>
 <b class="nc"><i>50</i>&nbsp;        } catch (IOException e) {</b>
-<b class="nc"><i>51</i>&nbsp;            System.out.println(&quot;Problems opening client background&quot;);</b>
+<b class="nc"><i>51</i>&nbsp;            System.out.println(&quot;Problems opening clientManager background&quot;);</b>
 <b class="nc"><i>52</i>&nbsp;        }</b>
 <i>53</i>&nbsp;    }
 <i>54</i>&nbsp;
 <i>55</i>&nbsp;
 <i>56</i>&nbsp;    /**
-<i>57</i>&nbsp;     * Method that returns the object that handles the graphic side of the client.
-<i>58</i>&nbsp;     * @return object that handles the graphic side of the client
+<i>57</i>&nbsp;     * Method that returns the object that handles the graphic side of the clientManager.
+<i>58</i>&nbsp;     * @return object that handles the graphic side of the clientManager
 <i>59</i>&nbsp;     */
 <i>60</i>&nbsp;    public GraphicHandler getGraphics() {
 <b class="nc"><i>61</i>&nbsp;        return graphics;</b>
@@ -137,7 +137,7 @@
 <i>63</i>&nbsp;
 <i>64</i>&nbsp;
 <i>65</i>&nbsp;    /**
-<i>66</i>&nbsp;     * This method takes the client to the welcome page, right before the nickname request.
+<i>66</i>&nbsp;     * This method takes the clientManager to the welcome page, right before the nickname request.
 <i>67</i>&nbsp;     */
 <i>68</i>&nbsp;    public void execute() {
 <b class="nc"><i>69</i>&nbsp;        System.out.println(Screens.WELCOME);</b>

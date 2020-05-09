@@ -17,10 +17,10 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">it.polimi.ingsw.PSP43.client</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.clientManager</a> ]
 </div>
 
-<h1>Coverage Summary for Class: ClientBG (it.polimi.ingsw.PSP43.client)</h1>
+<h1>Coverage Summary for Class: ClientBG (it.polimi.ingsw.PSP43.clientManager)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -72,7 +72,7 @@
 <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.client;
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.clientManager;
 <i>2</i>&nbsp;
 <i>3</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.*;
 <i>4</i>&nbsp;
@@ -83,19 +83,19 @@
 <i>9</i>&nbsp;
 <i>10</i>&nbsp;public class ClientBG implements Runnable {
 <i>11</i>&nbsp;    private Socket serverSocket;
-<i>12</i>&nbsp;    private Client client;
+<i>12</i>&nbsp;    private Client clientManager;
 <i>13</i>&nbsp;    private boolean lock;
 <i>14</i>&nbsp;
 <i>15</i>&nbsp;
 <i>16</i>&nbsp;    /**
 <i>17</i>&nbsp;     * Not default constructor for the ClientBG class, that is the thread who is going to handle the net
 <i>18</i>&nbsp;     * @param serverSocket is the open socket for the connection with the server
-<i>19</i>&nbsp;     * @param client refers to his client launcher
+<i>19</i>&nbsp;     * @param clientManager refers to his clientManager launcher
 <i>20</i>&nbsp;     * @throws IOException
 <i>21</i>&nbsp;     */
-<b class="nc"><i>22</i>&nbsp;    public ClientBG(Socket serverSocket,Client client) throws IOException {</b>
+<b class="nc"><i>22</i>&nbsp;    public ClientBG(Socket serverSocket,Client clientManager) throws IOException {</b>
 <b class="nc"><i>23</i>&nbsp;        this.serverSocket = serverSocket;</b>
-<b class="nc"><i>24</i>&nbsp;        this.client = client;</b>
+<b class="nc"><i>24</i>&nbsp;        this.clientManager = clientManager;</b>
 <i>25</i>&nbsp;    }
 <i>26</i>&nbsp;
 <i>27</i>&nbsp;    /**
@@ -138,8 +138,8 @@
 <i>64</i>&nbsp;    //Modified input parameter from ClientMessage to Object
 <i>65</i>&nbsp;
 <i>66</i>&nbsp;    /**
-<i>67</i>&nbsp;     * Method that allows client to send messages to the server
-<i>68</i>&nbsp;     * @param message is the message created from the client and that will be send
+<i>67</i>&nbsp;     * Method that allows clientManager to send messages to the server
+<i>68</i>&nbsp;     * @param message is the message created from the clientManager and that will be send
 <i>69</i>&nbsp;     * @throws IOException
 <i>70</i>&nbsp;     */
 <i>71</i>&nbsp;    public void sendMessage(Object message) throws IOException {
@@ -173,7 +173,7 @@
 <i>99</i>&nbsp;     * @param message is a WorkerMessage
 <i>100</i>&nbsp;     */
 <i>101</i>&nbsp;    public void handleMessage(WorkerMessage message){
-<b class="nc"><i>102</i>&nbsp;        client.getGraphics().updateBoardChange(message);</b>
+<b class="nc"><i>102</i>&nbsp;        clientManager.getGraphics().updateBoardChange(message);</b>
 <i>103</i>&nbsp;    }
 <i>104</i>&nbsp;
 <i>105</i>&nbsp;    /**
@@ -181,7 +181,7 @@
 <i>107</i>&nbsp;     * @param message is a CellMessage
 <i>108</i>&nbsp;     */
 <i>109</i>&nbsp;    public void handleMessage(CellMessage message){
-<b class="nc"><i>110</i>&nbsp;        client.getGraphics().updateBoardChange(message);</b>
+<b class="nc"><i>110</i>&nbsp;        clientManager.getGraphics().updateBoardChange(message);</b>
 <i>111</i>&nbsp;    }
 <i>112</i>&nbsp;
 <i>113</i>&nbsp;    /**
@@ -191,29 +191,29 @@
 <i>117</i>&nbsp;     */
 <i>118</i>&nbsp;    public void handleMessage(TextMessage message) throws IOException {
 <b class="nc"><i>119</i>&nbsp;        if(message instanceof ActionRequest)</b>
-<b class="nc"><i>120</i>&nbsp;            client.getGraphics().updateMenuChange((ActionRequest)message);</b>
+<b class="nc"><i>120</i>&nbsp;            clientManager.getGraphics().updateMenuChange((ActionRequest)message);</b>
 <b class="nc"><i>121</i>&nbsp;        else if(message instanceof CardRequest)</b>
-<b class="nc"><i>122</i>&nbsp;            client.getGraphics().updateMenuChange((CardRequest)message);</b>
+<b class="nc"><i>122</i>&nbsp;            clientManager.getGraphics().updateMenuChange((CardRequest)message);</b>
 <b class="nc"><i>123</i>&nbsp;        else if(message instanceof ChangeNickRequest)</b>
-<b class="nc"><i>124</i>&nbsp;            client.getGraphics().updateMenuChange((ChangeNickRequest)message);</b>
+<b class="nc"><i>124</i>&nbsp;            clientManager.getGraphics().updateMenuChange((ChangeNickRequest)message);</b>
 <b class="nc"><i>125</i>&nbsp;        else if(message instanceof EndGameMessage){</b>
-<b class="nc"><i>126</i>&nbsp;            client.getGraphics().updateMenuChange((EndGameMessage)message);</b>
+<b class="nc"><i>126</i>&nbsp;            clientManager.getGraphics().updateMenuChange((EndGameMessage)message);</b>
 <i>127</i>&nbsp;           //TODO close input stream, output stream and socket
 <i>128</i>&nbsp;        }
 <b class="nc"><i>129</i>&nbsp;        else if(message instanceof InitialCardsRequest)</b>
-<b class="nc"><i>130</i>&nbsp;            client.getGraphics().updateMenuChange((InitialCardsRequest)message);</b>
+<b class="nc"><i>130</i>&nbsp;            clientManager.getGraphics().updateMenuChange((InitialCardsRequest)message);</b>
 <b class="nc"><i>131</i>&nbsp;        else if(message instanceof PlayersNumberRequest)</b>
-<b class="nc"><i>132</i>&nbsp;            client.getGraphics().updateMenuChange((PlayersNumberRequest)message);</b>
+<b class="nc"><i>132</i>&nbsp;            clientManager.getGraphics().updateMenuChange((PlayersNumberRequest)message);</b>
 <b class="nc"><i>133</i>&nbsp;        else if(message instanceof PlayersListMessage)</b>
-<b class="nc"><i>134</i>&nbsp;            client.getGraphics().updateMenuChange((PlayersListMessage)message);</b>
+<b class="nc"><i>134</i>&nbsp;            clientManager.getGraphics().updateMenuChange((PlayersListMessage)message);</b>
 <b class="nc"><i>135</i>&nbsp;        else if(message instanceof RequestMessage)</b>
-<b class="nc"><i>136</i>&nbsp;            client.getGraphics().updateMenuChange((RequestMessage)message);</b>
+<b class="nc"><i>136</i>&nbsp;            clientManager.getGraphics().updateMenuChange((RequestMessage)message);</b>
 <b class="nc"><i>137</i>&nbsp;        else if(message instanceof StartGameMessage)</b>
-<b class="nc"><i>138</i>&nbsp;            client.getGraphics().updateMenuChange((StartGameMessage)message);</b>
+<b class="nc"><i>138</i>&nbsp;            clientManager.getGraphics().updateMenuChange((StartGameMessage)message);</b>
 <b class="nc"><i>139</i>&nbsp;        else if(message instanceof WorkersColorRequest)</b>
-<b class="nc"><i>140</i>&nbsp;            client.getGraphics().updateMenuChange((WorkersColorRequest)message);</b>
+<b class="nc"><i>140</i>&nbsp;            clientManager.getGraphics().updateMenuChange((WorkersColorRequest)message);</b>
 <b class="nc"><i>141</i>&nbsp;        else if(message != null)</b>
-<b class="nc"><i>142</i>&nbsp;            client.getGraphics().updateMenuChange(message);</b>
+<b class="nc"><i>142</i>&nbsp;            clientManager.getGraphics().updateMenuChange(message);</b>
 <i>143</i>&nbsp;    }
 <i>144</i>&nbsp;}
 </div>

@@ -17,10 +17,10 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">it.polimi.ingsw.PSP43.client</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.clientManager</a> ]
 </div>
 
-<h1>Coverage Summary for Class: Client (it.polimi.ingsw.PSP43.client)</h1>
+<h1>Coverage Summary for Class: Client (it.polimi.ingsw.PSP43.clientManager)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -72,11 +72,11 @@
 <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.client;
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.clientManager;
 <i>2</i>&nbsp;
-<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.cli.Screens;
-<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.PlayersNumberResponse;
-<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.clientManager.cli.Screens;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.clientManager.networkMessages.PlayersNumberResponse;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.clientManager.networkMessages.RegistrationMessage;
 <i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.gameStates.PlayerRegistrationState;
 <i>7</i>&nbsp;
 <i>8</i>&nbsp;import java.io.BufferedReader;
@@ -119,8 +119,8 @@
 <i>45</i>&nbsp;
 <i>46</i>&nbsp;
 <i>47</i>&nbsp;    /**
-<i>48</i>&nbsp;     * Method that returns the object that handles the graphic side of the client.
-<i>49</i>&nbsp;     * @return object that handles the graphic side of the client
+<i>48</i>&nbsp;     * Method that returns the object that handles the graphic side of the clientManager.
+<i>49</i>&nbsp;     * @return object that handles the graphic side of the clientManager
 <i>50</i>&nbsp;     */
 <i>51</i>&nbsp;    public GraphicHandler getGraphics() {
 <b class="nc"><i>52</i>&nbsp;        return graphics;</b>
@@ -128,7 +128,7 @@
 <i>54</i>&nbsp;
 <i>55</i>&nbsp;
 <i>56</i>&nbsp;    /**
-<i>57</i>&nbsp;     * This method takes the client to the welcome page, right before the nickname request.
+<i>57</i>&nbsp;     * This method takes the clientManager to the welcome page, right before the nickname request.
 <i>58</i>&nbsp;     */
 <i>59</i>&nbsp;    public void execute() {
 <b class="nc"><i>60</i>&nbsp;        System.out.println(Screens.WELCOME);</b>

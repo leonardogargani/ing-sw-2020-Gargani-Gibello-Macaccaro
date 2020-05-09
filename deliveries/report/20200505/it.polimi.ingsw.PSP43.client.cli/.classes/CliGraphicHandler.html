@@ -17,10 +17,10 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">it.polimi.ingsw.PSP43.client.cli</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.clientManager.cli</a> ]
 </div>
 
-<h1>Coverage Summary for Class: CliGraphicHandler (it.polimi.ingsw.PSP43.client.cli)</h1>
+<h1>Coverage Summary for Class: CliGraphicHandler (it.polimi.ingsw.PSP43.clientManager.cli)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -72,12 +72,12 @@
 <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.client.cli;
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.clientManager.cli;
 <i>2</i>&nbsp;
 <i>3</i>&nbsp;import it.polimi.ingsw.PSP43.Color;
-<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.ClientBG;
-<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.client.GraphicHandler;
-<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.*;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.clientManager.ClientBG;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.clientManager.GraphicHandler;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.clientManager.networkMessages.*;
 <i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Cell;
 <i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
 <i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Player;
@@ -101,7 +101,7 @@
 <i>27</i>&nbsp;
 <i>28</i>&nbsp;    /**
 <i>29</i>&nbsp;     * Non default constructor that sets the clientGB attribute.
-<i>30</i>&nbsp;     * @param clientBG clientBG attribute of the client
+<i>30</i>&nbsp;     * @param clientBG clientBG attribute of the clientManager
 <i>31</i>&nbsp;     */
 <i>32</i>&nbsp;    public CliGraphicHandler(ClientBG clientBG) {
 <b class="fc"><i>33</i>&nbsp;        super(clientBG);</b>
@@ -154,7 +154,7 @@
 <i>80</i>&nbsp;
 <i>81</i>&nbsp;
 <i>82</i>&nbsp;    /**
-<i>83</i>&nbsp;     * This method updates the graphics of the client displaying the message of the players number
+<i>83</i>&nbsp;     * This method updates the graphics of the clientManager displaying the message of the players number
 <i>84</i>&nbsp;     * request, waiting and sending the response through the ClientBG object.
 <i>85</i>&nbsp;     * @param request message containing the request for the number of the players
 <i>86</i>&nbsp;     */
@@ -182,7 +182,7 @@
 <i>108</i>&nbsp;
 <i>109</i>&nbsp;
 <i>110</i>&nbsp;    /**
-<i>111</i>&nbsp;     * This method updates the graphics of the client displaying the message of the initial cards
+<i>111</i>&nbsp;     * This method updates the graphics of the clientManager displaying the message of the initial cards
 <i>112</i>&nbsp;     * request, waiting and sending the response through the ClientBG object.
 <i>113</i>&nbsp;     * @param request message containing the request for the cards chosen for this game
 <i>114</i>&nbsp;     */
@@ -242,7 +242,7 @@
 <i>168</i>&nbsp;
 <i>169</i>&nbsp;
 <i>170</i>&nbsp;    /**
-<i>171</i>&nbsp;     * This method updates the graphics of the client displaying the message of the single card
+<i>171</i>&nbsp;     * This method updates the graphics of the clientManager displaying the message of the single card
 <i>172</i>&nbsp;     * request, waiting and sending the response through the ClientBG object.
 <i>173</i>&nbsp;     * @param request message containing the request for the card chosen by a player
 <i>174</i>&nbsp;     */
@@ -287,7 +287,7 @@
 <i>213</i>&nbsp;
 <i>214</i>&nbsp;
 <i>215</i>&nbsp;    /**
-<i>216</i>&nbsp;     * This method updates the graphics of the client displaying the message of the workers color
+<i>216</i>&nbsp;     * This method updates the graphics of the clientManager displaying the message of the workers color
 <i>217</i>&nbsp;     * request, waiting and sending the response through the ClientBG object.
 <i>218</i>&nbsp;     * @param request message containing the request for the color of player&#39;s workers
 <i>219</i>&nbsp;     */
@@ -329,7 +329,7 @@
 <i>255</i>&nbsp;
 <i>256</i>&nbsp;
 <i>257</i>&nbsp;    /**
-<i>258</i>&nbsp;     * This method updates the graphics of the client displaying the message of the action
+<i>258</i>&nbsp;     * This method updates the graphics of the clientManager displaying the message of the action
 <i>259</i>&nbsp;     * request, waiting and sending the response through the ClientBG object.
 <i>260</i>&nbsp;     * @param request message containing the request for the action a player wants to make
 <i>261</i>&nbsp;     */
@@ -438,7 +438,7 @@
 <i>364</i>&nbsp;
 <i>365</i>&nbsp;
 <i>366</i>&nbsp;    /**
-<i>367</i>&nbsp;     * This method updates the graphics of the client displaying the message of the generic request
+<i>367</i>&nbsp;     * This method updates the graphics of the clientManager displaying the message of the generic request
 <i>368</i>&nbsp;     * that needs a boolean as a response, waiting and sending the response through the ClientBG object.
 <i>369</i>&nbsp;     * @param request message containing the generic boolean request
 <i>370</i>&nbsp;     */
@@ -497,9 +497,9 @@
 <i>423</i>&nbsp;
 <i>424</i>&nbsp;
 <i>425</i>&nbsp;    /**
-<i>426</i>&nbsp;     * This method updates the graphics of the client displaying the message of the request
+<i>426</i>&nbsp;     * This method updates the graphics of the clientManager displaying the message of the request
 <i>427</i>&nbsp;     * for a change of the nick, since the chosen one is already in use.
-<i>428</i>&nbsp;     * @param request message that notifies the client that the nick he has just chosen
+<i>428</i>&nbsp;     * @param request message that notifies the clientManager that the nick he has just chosen
 <i>429</i>&nbsp;     *                is already taken
 <i>430</i>&nbsp;     */
 <i>431</i>&nbsp;    @Override
@@ -522,7 +522,7 @@
 <i>448</i>&nbsp;
 <i>449</i>&nbsp;
 <i>450</i>&nbsp;    /**
-<i>451</i>&nbsp;     * This method updates the graphics of the client displaying the message at the top
+<i>451</i>&nbsp;     * This method updates the graphics of the clientManager displaying the message at the top
 <i>452</i>&nbsp;     * of the screen (used to write that it&#39;s someone else&#39;s turn).
 <i>453</i>&nbsp;     * @param message message to be displayed at the top of the screen
 <i>454</i>&nbsp;     */
@@ -534,7 +534,7 @@
 <i>460</i>&nbsp;
 <i>461</i>&nbsp;
 <i>462</i>&nbsp;    /**
-<i>463</i>&nbsp;     * This method updates the graphics of the client displaying players&#39; nicknames,
+<i>463</i>&nbsp;     * This method updates the graphics of the clientManager displaying players&#39; nicknames,
 <i>464</i>&nbsp;     * the Gods they&#39;ve chosen and their workers&#39; color.
 <i>465</i>&nbsp;     * @param message message containing workers, their colors and the chosen gods
 <i>466</i>&nbsp;     */
@@ -559,7 +559,7 @@
 <b class="nc"><i>485</i>&nbsp;    }</b>
 <i>486</i>&nbsp;
 <i>487</i>&nbsp;    /**
-<i>488</i>&nbsp;     * This method updates the graphics of the client displaying, at the beginning of
+<i>488</i>&nbsp;     * This method updates the graphics of the clientManager displaying, at the beginning of
 <i>489</i>&nbsp;     * the game, some useful information about the state of the game preparation.
 <i>490</i>&nbsp;     *
 <i>491</i>&nbsp;     * @param message message to be displayed

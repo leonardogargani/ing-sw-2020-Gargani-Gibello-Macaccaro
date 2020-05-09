@@ -21,6 +21,8 @@ public class ConnectionDetector implements Runnable {
     public void run() {
         long time = System.currentTimeMillis();
         while (true) {
+            if(clientListener.isDisconnected())
+                break;
             if (System.currentTimeMillis() > time + timeout / 2) {
                 time = System.currentTimeMillis();
                 try {

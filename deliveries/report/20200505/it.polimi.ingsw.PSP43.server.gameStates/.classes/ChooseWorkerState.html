@@ -109,8 +109,8 @@
 <div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.gameStates;
 <i>2</i>&nbsp;
 <i>3</i>&nbsp;import it.polimi.ingsw.PSP43.Color;
-<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
-<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.WorkersColorResponse;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.clientManager.networkMessages.ActionResponse;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.clientManager.networkMessages.WorkersColorResponse;
 <i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.DataToAction;
 <i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
 <i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Player;
@@ -214,7 +214,7 @@
 <b class="fc"><i>106</i>&nbsp;    }</b>
 <i>107</i>&nbsp;
 <i>108</i>&nbsp;    /**
-<i>109</i>&nbsp;     * This method has to find the next state and also to send all the infos to the client to display name of players, gods chosen and the color of every player.
+<i>109</i>&nbsp;     * This method has to find the next state and also to send all the infos to the clientManager to display name of players, gods chosen and the color of every player.
 <i>110</i>&nbsp;     */
 <i>111</i>&nbsp;    public void findNextState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
 <b class="fc"><i>112</i>&nbsp;        GameSession game = super.getGameSession();</b>
@@ -222,7 +222,7 @@
 <b class="fc"><i>114</i>&nbsp;        indexCurrentState = game.getTurnMap().indexOf(game.getCurrentState());</b>
 <b class="fc"><i>115</i>&nbsp;        game.setNextState(game.getTurnMap().get(indexCurrentState + 1));</b>
 <i>116</i>&nbsp;
-<i>117</i>&nbsp;        // here I send all the infos to the client to display name of players, gods chosen and the color of every player
+<i>117</i>&nbsp;        // here I send all the infos to the clientManager to display name of players, gods chosen and the color of every player
 <b class="fc"><i>118</i>&nbsp;        HashMap&lt;Player, AbstractGodCard&gt; cardsChosen = new HashMap&lt;&gt;();</b>
 <b class="fc"><i>119</i>&nbsp;        for (String s : game.getCardsHandler().getMapOwnersCard().keySet())</b>
 <b class="nc"><i>120</i>&nbsp;            cardsChosen.put(game.getPlayersHandler().getPlayer(s), game.getPlayersHandler().getPlayer(s).getAbstractGodCard());</b>

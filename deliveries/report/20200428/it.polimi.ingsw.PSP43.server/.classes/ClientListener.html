@@ -74,9 +74,9 @@
 
 <div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server;
 <i>2</i>&nbsp;
-<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
-<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
-<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.clientManager.networkMessages.ClientMessage;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.clientManager.networkMessages.LeaveGameMessage;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.clientManager.networkMessages.RegistrationMessage;
 <i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 <i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.gameStates.GameSessionObservable;
 <i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
@@ -101,7 +101,7 @@
 <i>27</i>&nbsp;
 <i>28</i>&nbsp;    /**
 <i>29</i>&nbsp;     * Not default constructor for the ClientListener class
-<i>30</i>&nbsp;     * @param clientSocket is the socket that is connected to the client
+<i>30</i>&nbsp;     * @param clientSocket is the socket that is connected to the clientManager
 <i>31</i>&nbsp;     * @throws IOException
 <i>32</i>&nbsp;     */
 <b class="nc"><i>33</i>&nbsp;    ClientListener(Socket clientSocket)throws IOException {</b>
@@ -233,7 +233,7 @@
 <i>159</i>&nbsp;
 <i>160</i>&nbsp;//Modified input parameter in object from ServerMessage
 <i>161</i>&nbsp;    /**
-<i>162</i>&nbsp;     * Method that allows server to sends messages to the client
+<i>162</i>&nbsp;     * Method that allows server to sends messages to the clientManager
 <i>163</i>&nbsp;     * @param message is the message that will be send
 <i>164</i>&nbsp;     * @throws IOException
 <i>165</i>&nbsp;     */
@@ -249,7 +249,7 @@
 <i>175</i>&nbsp;
 <i>176</i>&nbsp;
 <i>177</i>&nbsp;    /**
-<i>178</i>&nbsp;     * Method that sends a message and wait for a return from the client
+<i>178</i>&nbsp;     * Method that sends a message and wait for a return from the clientManager
 <i>179</i>&nbsp;     * @param message is the request message that will be send
 <i>180</i>&nbsp;     * @return
 <i>181</i>&nbsp;     * @throws IOException

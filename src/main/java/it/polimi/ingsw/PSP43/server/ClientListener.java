@@ -11,6 +11,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.concurrent.*;
 
@@ -19,6 +20,7 @@ public class ClientListener implements Runnable {
     private final Socket clientSocket;
     private final Object lockOut;
     private final ArrayList<ClientMessage> stackMessages;
+    private boolean disconnected = false;
     ObjectInputStream input;
     ObjectOutputStream output;
 
@@ -28,10 +30,11 @@ public class ClientListener implements Runnable {
      * @param clientSocket is the socket that is connected to the client
      * @throws IOException
      */
-    ClientListener(Socket clientSocket) {
+    ClientListener(Socket clientSocket) throws SocketException {
         this.clientSocket = clientSocket;
         this.lockOut = new Object();
         this.stackMessages = new ArrayList<>();
+        clientSocket.setSoTimeout(20000);
     }
 
 
@@ -50,15 +53,20 @@ public class ClientListener implements Runnable {
         ClientMessage message;
 
         while (true) {
+            if(disconnected)
+                break;
             try {
                 message = receive();
                 if (message != null) {
                     handleMessage(message);
                 }
             } catch (IOException | WinnerCaughtException | ParserConfigurationException | SAXException | ClassNotFoundException | InterruptedException | ExecutionException e) {
-                //Player left the game
-                System.out.println("A player lost the connection or left the game");
-                // TODO : handleDisconnection();
+                //a player left the game
+                try {
+                    handleDisconnection();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
         }
     }
@@ -82,6 +90,7 @@ public class ClientListener implements Runnable {
 
         if (objectArrived instanceof RegistrationMessage)
             return (ClientMessage) objectArrived;
+
         else {
             stackMessages.add((ClientMessage) objectArrived);
             notifyAll();
@@ -92,14 +101,15 @@ public class ClientListener implements Runnable {
 
 
     public void sendMessage(Object message) throws IOException {
-        synchronized (lockOut) {
-            output = new ObjectOutputStream(clientSocket.getOutputStream());
-            output.writeObject(message);
-        }
+        try{
+            synchronized (lockOut) {
+                output = new ObjectOutputStream(clientSocket.getOutputStream());
+                output.writeObject(message);
+            }}catch (IOException e){handleDisconnection();}
     }
 
 
-    public void sendMessage(EndGameMessage message) throws IOException {
+    public void sendMessage(EndGameMessage message) throws IOException, ClassNotFoundException {
         synchronized (lockOut) {
             output = new ObjectOutputStream(clientSocket.getOutputStream());
             output.writeObject(message);
@@ -117,7 +127,7 @@ public class ClientListener implements Runnable {
             Thread newRegistratorThread = new Thread(registrator);
             newRegistratorThread.start();
         } else if (message instanceof LeaveGameMessage) {
-            // thread for unregistration and so on other "routine" operations
+            handleDisconnection();
         }
     }
 
@@ -134,18 +144,21 @@ public class ClientListener implements Runnable {
         notifyAll();
     }
 
-    // TODO : is it still necessary? Shouldn't we only handle that in the gameSession stopping the thread with
-    //          the boolean "active"?
-    /*public synchronized void removeGameSession(int idGame) {
-        gameSessions.remove(idGame);
-    }*/
-
-    // TODO : now the handling should be restricted only to handle your socket no?
-    /*public void handleDisconnection() throws IOException {
-        gameSessions.get(idGame).unregisterFromGame(new LeaveGameMessage(), this);
-    }*/
+    //TODO fix problems with this method
+    public void handleDisconnection() throws IOException {
+        this.disconnected = true;
+        input.close();
+        output.close();
+        clientSocket.close();
+        RegisterClientListener unregister = new RegisterClientListener(this,null);
+        unregister.notifyDisconnection(this.idGame);
+    }
 
     public void setIdGame(Integer idGame) {
         this.idGame = idGame;
+    }
+
+    public boolean isDisconnected() {
+        return disconnected;
     }
 }

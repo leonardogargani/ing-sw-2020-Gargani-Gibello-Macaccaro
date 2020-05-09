@@ -5,10 +5,27 @@ import it.polimi.ingsw.PSP43.client.cli.InputHandler;
 import it.polimi.ingsw.PSP43.client.cli.QuitPlayerException;
 import it.polimi.ingsw.PSP43.client.gui.GuiGraphicHandler;
 
+import java.util.Scanner;
+
 
 public class ClientMain {
 
-    private static final String SERVER_IP = "127.0.0.1";
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Insert 1 for the cli or 2 for the gui");
+        int chosenInterface = scanner.nextInt();
+        boolean choiceOK = false;
+        do {
+            if(chosenInterface == 1 | chosenInterface == 2)
+                choiceOK = true;
+        }while(!choiceOK);
+        ClientManager clientManager = new ClientManager(chosenInterface);
+        Thread clientManagerThread = new Thread(clientManager);
+        clientManagerThread.start();
+    }
+
+
+    /*private static final String SERVER_IP = "127.0.0.1";
 
 
     public static void main(String[] args) {
@@ -26,7 +43,7 @@ public class ClientMain {
         int chosenMode;
         System.out.println("Choose a mode:\n [1] CLI\n [2] GUI");
 
-        Client client;
+        ClientManager clientManager;
 
         InputHandler inputHandler = new InputHandler();
         String line;
@@ -41,17 +58,17 @@ public class ClientMain {
                     case 1:
                         System.out.println("CLI chosen. Starting the game...");
                         CliGraphicHandler cliGraphicHandler = new CliGraphicHandler(clientBG);
-                        client = new Client(clientBG, cliGraphicHandler);
-                        Thread clientThread1 = new Thread(client);
+                        clientManager = new ClientManager(clientBG, cliGraphicHandler);
+                        Thread clientThread1 = new Thread(clientManager);
                         clientThread1.start();
-                        clientBG.setClient(client);
+                        clientBG.setClientManager(clientManager);
                         break;
                     case 2:
                         System.out.println("GUI chosen. Starting the game...");
                         GuiGraphicHandler guiGraphicHandler = new GuiGraphicHandler(clientBG);
-                        client = new Client(clientBG, guiGraphicHandler);
-                        guiGraphicHandler.setClientBG(client.getClientBG());
-                        Thread clientThread2 = new Thread(client);
+                        clientManager = new ClientManager(clientBG, guiGraphicHandler);
+                        guiGraphicHandler.setClientBG(clientManager.getClientBG());
+                        Thread clientThread2 = new Thread(clientManager);
                         clientThread2.start();
                         break;
                     default:
@@ -64,7 +81,7 @@ public class ClientMain {
             // TODO implement the handling of a QuitPlayerException when a player writes "quit" in the cli
         }
 
-    }
+    }*/
 
 
 }
