@@ -58,7 +58,6 @@ public class Cell extends Observable {
      */
     public void setOccupiedByWorker(boolean occupiedByWorker) throws IOException {
         this.occupiedByWorker = occupiedByWorker;
-        notifyBoardChange();
     }
 
 

@@ -93,12 +93,10 @@ public class MoveState extends TurnState {
         findNextState();
     }
 
-    public void findNextState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+    public void findNextState() {
         GameSession game = super.getGameSession();
         TurnState currentState = game.getCurrentState();
         int indexCurrentState = game.getTurnMap().indexOf(currentState);
         TurnState nextState = game.getTurnMap().get(indexCurrentState + 1);
-        game.setNextState(nextState);
-        game.transitToNextState();
     }
 }

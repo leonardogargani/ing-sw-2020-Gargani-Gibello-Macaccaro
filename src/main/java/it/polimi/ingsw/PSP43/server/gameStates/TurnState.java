@@ -39,6 +39,5 @@ public abstract class TurnState {
     }
 
     public void findNextState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
-        gameSession.transitToNextState();
     }
 }

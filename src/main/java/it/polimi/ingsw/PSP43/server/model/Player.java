@@ -12,8 +12,8 @@ public class Player implements Serializable {
 
     private static final long serialVersionUID = -5073826840767054806L;
 
-    private String nickname;
-    private int[] workersIdsArray;
+    private final String nickname;
+    private final int[] workersIdsArray;
     private AbstractGodCard abstractGodCard;
 
 
@@ -45,16 +45,14 @@ public class Player implements Serializable {
         return workersIdsArray.clone();
     }
 
-
     /**
      * This method assigns a couple of workers, represented by their ids, to their owner.
-     * @param id1 id of the first worker owned by the same player
-     * @param id2 id of the second worker owned by the same player
+     * @param workersIdsArray ids of the workers owned by the player
      */
-    public void setWorkersIdsArray(int id1, int id2) {
-        // I don't need to use a copy of the array since the parameters
-        // are two int values and not a single int[]
-        this.workersIdsArray = new int[]{id1, id2};
+    public void setWorkersIdsArray(int[] workersIdsArray) {
+        for (int i=0; i<workersIdsArray.length && i<this.workersIdsArray.length; i++) {
+            this.workersIdsArray[i] = workersIdsArray[i];
+        }
     }
 
         /**

@@ -58,7 +58,8 @@ public class PlayerRegistrationState extends TurnState {
             ChangeNickRequest notifyChangeNick = new ChangeNickRequest("We are sorry, but " + message.getNick() +
                     "is already in use.");
             game.sendMessage(notifyChangeNick, message.getNick());
-        } catch (IOException | ClassNotFoundException | WinnerCaughtException | InterruptedException e) {
+            game.getListenersHashMap().remove(message.getNick());
+        } catch (IOException | ClassNotFoundException | InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -83,12 +84,10 @@ public class PlayerRegistrationState extends TurnState {
      * Finds the next state for the game, saving it in a variable in GameSession, and calls on the
      * instance of GameSession the method to transit to the next state of play.
      */
-    public void findNextState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+    public void findNextState() {
         GameSession game = super.getGameSession();
         int indexCurrentState;
         indexCurrentState = game.getTurnMap().indexOf(game.getCurrentState());
         game.setNextState(game.getTurnMap().get(indexCurrentState + 1));
-
-        game.transitToNextState();
     }
 }

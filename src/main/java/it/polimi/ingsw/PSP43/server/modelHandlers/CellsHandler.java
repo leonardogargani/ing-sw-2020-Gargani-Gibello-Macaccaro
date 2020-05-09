@@ -8,6 +8,7 @@ import it.polimi.ingsw.PSP43.server.model.Worker;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * CellsHandler has the task to handle all the cells of the board of the game. It has to make consistent the state of the cells
@@ -56,7 +57,7 @@ public class CellsHandler {
      * This method finds all the free cells of a board and returns their coordinates
      * @return an ArrayList containing all the coordinates of the free cells
      */
-    public ArrayList<Coord> findAllCoordsFree() {
+    public ArrayList<Coord> findAllFreeCoords() {
         ArrayList<Coord> freeCells = new ArrayList<>();
         for (int i=0; i<board.length; i++) {
             for (int j=0; j<board.length; j++) {
@@ -67,33 +68,62 @@ public class CellsHandler {
         return freeCells;
     }
 
+    public ArrayList<Coord> selectAllFreeCoords(ArrayList<Coord> positions) {
+        ArrayList<Coord> newPositions = new ArrayList<>();
+        for (Coord c : positions) {
+            if (!board[c.getX()][c.getY()].getOccupiedByWorker() && !board[c.getX()][c.getY()].getOccupiedByDome())
+                newPositions.add(c.clone());
+        }
+        return newPositions;
+    }
+
     /**
      * This method finds all the neighbouring cells for the workers provided from the caller
      * @param workers references of the workers of which the method has to find the neighbouring cells
      * @return an HashMap in which the key value are the coordinates of the workers supplied by the caller and the values are all the neighbouring
      * cells of that worker
      */
-    public HashMap<Coord, ArrayList<Coord>> findNeighbouringCoords(ArrayList<Worker> workers) {
+    public HashMap<Coord, ArrayList<Coord>> findWorkersNeighbouringCoords(ArrayList<Worker> workers) {
         HashMap<Coord, ArrayList<Coord>> availablePositions = new HashMap<>();
         ArrayList<Coord> positions;
 
         for (Worker w : workers) {
-            Coord currentCoord = w.getCurrentPosition();
-            positions = new ArrayList<>();
-            for (int i=-1; i<2 ; i++) {
-                for (int j=-1; j<2; j++) {
-                    if (currentCoord.getX() + i > -1 && currentCoord.getX() + i < DIM) {
-                        if (currentCoord.getY() + j > -1 && currentCoord.getY() + j < DIM) {
-                            if (i!=0 || j!=0) {
-                                positions.add(new Coord(currentCoord.getX() + i, currentCoord.getY() + j));
-                            }
+            positions = findNeighbouringCoords(w.getCurrentPosition());
+            availablePositions.put(w.getCurrentPosition(), positions);
+        }
+        return availablePositions;
+    }
+
+    /**
+     * This method finds all the neighbouring cells for the worker provided from the caller
+     * @param worker reference of the worker of which the method has to find the neighbouring cells
+     * @return an HashMap in which the key value are the coordinates of the worker supplied by the caller and the values are all the neighbouring
+     * cells of that worker
+     */
+    public HashMap<Coord, ArrayList<Coord>> findWorkerNeighbouringCoords(Worker worker) {
+        HashMap<Coord, ArrayList<Coord>> availablePositions = new HashMap<>();
+        ArrayList<Coord> positions;
+
+        positions = findNeighbouringCoords(worker.getCurrentPosition());
+        availablePositions.put(worker.getCurrentPosition(), positions);
+        return availablePositions;
+    }
+
+    private ArrayList<Coord> findNeighbouringCoords(Coord coord) {
+        ArrayList<Coord> positions = new ArrayList<>();
+
+        for (int i=-1; i<2 ; i++) {
+            for (int j=-1; j<2; j++) {
+                if (coord.getX() + i > -1 && coord.getX() + i < DIM) {
+                    if (coord.getY() + j > -1 && coord.getY() + j < DIM) {
+                        if (i!=0 || j!=0) {
+                            positions.add(new Coord(coord.getX() + i, coord.getY() + j));
                         }
                     }
                 }
             }
-            availablePositions.put(currentCoord, positions);
         }
-        return availablePositions;
+        return positions;
     }
 
     /**

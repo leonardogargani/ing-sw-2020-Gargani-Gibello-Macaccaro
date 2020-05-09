@@ -68,7 +68,7 @@ public class CellsHandlerTest {
     @Test
     public void findAllCoordsFree() {
         ArrayList<Coord> coords;
-        coords = gameSession.getCellsHandler().findAllCoordsFree();
+        coords = gameSession.getCellsHandler().findAllFreeCoords();
 
         boolean right = true;
         if (coords.size() != 21) right = false;
@@ -90,7 +90,7 @@ public class CellsHandlerTest {
         workerToCheckNeighbours.setCurrentPosition(new Coord(2, 4));
         ArrayList<Worker> workersToFindNeighbours = new ArrayList<>();
         workersToFindNeighbours.add(workerToCheckNeighbours);
-        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = gameSession.getCellsHandler().findNeighbouringCoords(workersToFindNeighbours);
+        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = gameSession.getCellsHandler().findWorkersNeighbouringCoords(workersToFindNeighbours);
 
         ArrayList<Coord> coordsToCheck = new ArrayList<>();
         coordsToCheck.add(new Coord(1,4));
@@ -133,7 +133,7 @@ public class CellsHandlerTest {
         workerToCheckNeighbours.setCurrentPosition(new Coord(3, 0));
         ArrayList<Worker> workersToFindNeighbours = new ArrayList<>();
         workersToFindNeighbours.add(workerToCheckNeighbours);
-        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = gameSession.getCellsHandler().findNeighbouringCoords(workersToFindNeighbours);
+        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = gameSession.getCellsHandler().findWorkersNeighbouringCoords(workersToFindNeighbours);
 
         ArrayList<Coord> coordsToCheck = new ArrayList<>();
         coordsToCheck.add(new Coord(2,0));
@@ -176,7 +176,7 @@ public class CellsHandlerTest {
         workerToCheckNeighbours.setCurrentPosition(new Coord(4, 2));
         ArrayList<Worker> workersToFindNeighbours = new ArrayList<>();
         workersToFindNeighbours.add(workerToCheckNeighbours);
-        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = gameSession.getCellsHandler().findNeighbouringCoords(workersToFindNeighbours);
+        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = gameSession.getCellsHandler().findWorkersNeighbouringCoords(workersToFindNeighbours);
 
         ArrayList<Coord> coordsToCheck = new ArrayList<>();
         coordsToCheck.add(new Coord(4,1));
@@ -219,7 +219,7 @@ public class CellsHandlerTest {
         workerToCheckNeighbours.setCurrentPosition(new Coord(0 , 2));
         ArrayList<Worker> workersToFindNeighbours = new ArrayList<>();
         workersToFindNeighbours.add(workerToCheckNeighbours);
-        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = gameSession.getCellsHandler().findNeighbouringCoords(workersToFindNeighbours);
+        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = gameSession.getCellsHandler().findWorkersNeighbouringCoords(workersToFindNeighbours);
 
         ArrayList<Coord> coordsToCheck = new ArrayList<>();
         coordsToCheck.add(new Coord(0,1));

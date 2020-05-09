@@ -68,7 +68,7 @@ public class BlockOpponentRiseBehaviour extends AbstractGodCard implements MoveB
      */
     public void handleMove(DataToAction dataToAction) throws ClassNotFoundException, IOException, WinnerCaughtException, InterruptedException {
         disablePowers(dataToAction.getGameSession());
-        super.move(dataToAction);
+        move(dataToAction);
         Coord newCoord = dataToAction.getWorker().getCurrentPosition();
         Cell newCell = dataToAction.getGameSession().getCellsHandler().getCell(newCoord);
         Coord oldCoord = dataToAction.getWorker().getPreviousPosition();

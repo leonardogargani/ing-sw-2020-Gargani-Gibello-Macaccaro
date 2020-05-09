@@ -8,13 +8,17 @@ import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
+import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class GameSession extends GameSessionObservable {
+    private Boolean active;
+
     private Player currentPlayer;
 
     private TurnState currentState;
@@ -40,12 +44,12 @@ public class GameSession extends GameSessionObservable {
         this.turnMap.add(0, new PlayerRegistrationState(this));
         this.currentState = turnMap.get(0);
         super.currentState = turnMap.get(0);
+        this.nextState = turnMap.get(0);
         this.turnMap.add(1, new ChooseCardState(this));
         this.turnMap.add(2, new ChooseWorkerState(this));
         this.turnMap.add(3, new MoveState(this));
         this.turnMap.add(4, new BuildState(this));
         this.turnMap.add(5, new WinState(this));
-        this.nextState = null;
 
         this.boardObserver = new BoardObserver(this);
 
@@ -53,7 +57,38 @@ public class GameSession extends GameSessionObservable {
         this.playersHandler = new PlayersHandler();
         this.workersHandler = new WorkersHandler(this);
         this.cardsHandler = new CardsHandler();
+
+        this.active = Boolean.TRUE;
     }
+
+    public void run() {
+        System.out.println("avv");
+        while (active) {
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (!(currentState.getClass().isInstance(nextState))) {
+                try {
+                    System.out.println("prova");
+                    this.transitToNextState();
+                } catch (IOException | ClassNotFoundException | WinnerCaughtException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive() {
+        this.active = Boolean.FALSE;
+    }
+
 
     public boolean validateMessage(ClientMessage messageArrived, Class<?> typeMessageRequested) {
         if (messageArrived.getClass().isInstance(typeMessageRequested)) {
@@ -175,5 +210,9 @@ public class GameSession extends GameSessionObservable {
         return boardObserver;
     }
 
-    // TODO : setters/getters that are not listed above if we want to use xml
+    @Override
+    public void sendEndingMessage(EndGameMessage message, ArrayList<String> nicksExcluded) throws IOException {
+        super.sendEndingMessage(message, nicksExcluded);
+        this.active = Boolean.FALSE;
+    }
 }

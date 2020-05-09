@@ -4,6 +4,7 @@ import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.ClientListener;
+import it.polimi.ingsw.PSP43.server.RegisterClientListener;
 import it.polimi.ingsw.PSP43.server.Sender;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
@@ -13,14 +14,12 @@ import it.polimi.ingsw.PSP43.server.networkMessages.ServerMessage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.TimeUnit;
 
 public class GameSessionObservable implements Runnable {
     private int idGame;
     protected int maxNumPlayers;
     private int numOfPlayers;
-    private Boolean active;
 
     protected TurnState currentState;
 
@@ -29,19 +28,8 @@ public class GameSessionObservable implements Runnable {
     public GameSessionObservable(int idGame) {
         this.idGame = idGame;
         this.listenersHashMap = new HashMap<>();
-        this.active = Boolean.TRUE;
         numOfPlayers = 0;
         maxNumPlayers = 1;
-    }
-
-    public void run() {
-        while (true) {
-            if (!active) break;
-        }
-    }
-
-    public void setActive() {
-        this.active = Boolean.FALSE;
     }
 
     public synchronized int registerToTheGame(RegistrationMessage message, ClientListener player) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
@@ -89,7 +77,7 @@ public class GameSessionObservable implements Runnable {
 
     public void sendBroadCast(ServerMessage message, ArrayList<String> nicksExcluded) throws IOException {
         for (String s : getListenersHashMap().keySet()) {
-            if (!nicksExcluded.contains(getListenersHashMap().get(s)))
+            if (!nicksExcluded.contains(s))
                 getListenersHashMap().get(s).sendMessage(message);
         }
     }
@@ -115,6 +103,8 @@ public class GameSessionObservable implements Runnable {
             }
         }
         listenersHashMap.get(nicksExcluded.get(0)).sendMessage(messageForTheWinner);
+        RegisterClientListener ending = new RegisterClientListener();
+        ending.removeGameSession(this.idGame);
         //listenersHashMap.get(nicksExcluded.get(0)).removeGameSession(this.idGame);
     }
 
@@ -141,7 +131,8 @@ public class GameSessionObservable implements Runnable {
         return numOfPlayers;
     }
 
-    public Boolean getActive() {
-        return active;
+    @Override
+    public void run() {
+
     }
 }

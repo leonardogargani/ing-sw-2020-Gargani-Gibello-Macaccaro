@@ -7,6 +7,7 @@ import it.polimi.ingsw.PSP43.server.BoardObserver;
 import it.polimi.ingsw.PSP43.server.initialisers.DOMCardsParser;
 import it.polimi.ingsw.PSP43.server.initialisers.GameInitialiser;
 import it.polimi.ingsw.PSP43.server.model.Coord;
+import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.NicknameAlreadyInUseException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
@@ -67,17 +68,28 @@ public class ChooseWorkerStateTest {
 
         spyState.executeState();
 
-        // checks that every color was set right
+        // checks that every player has a different worker ids from the others
+        // because that is a fact not true at the instantiation of the array of workers during
+        // the instantiation of each player
+        ArrayList<Integer> idsWorkers =  new ArrayList<>();
         for (int i=0; i<gameSession.getPlayersHandler().getNumOfPlayers(); i++) {
-            int[] idsWorkers = gameSession.getPlayersHandler().getPlayer(i).getWorkersIdsArray();
-            for (int j : idsWorkers) {
-                if (j < 2) assertSame(gameSession.getWorkersHandler().getWorker(j).getColor(), Color.ANSI_BLUE);
-                else assertSame(gameSession.getWorkersHandler().getWorker(j).getColor(), Color.ANSI_RED);
-
-                Coord coord = gameSession.getWorkersHandler().getWorker(j).getCurrentPosition();
-                assertTrue(gameSession.getCellsHandler().getCell(coord).getOccupiedByWorker());
+            int[] workers = gameSession.getPlayersHandler().getPlayer(i).getWorkersIdsArray();
+            for (int j = 0; j<workers.length; j++) {
+                idsWorkers.add(workers[j]);
             }
         }
+
+        boolean equal = true;
+        for (int i = 0; i<idsWorkers.size() - 1; i++) {
+            for (int j = i+1; j<idsWorkers.size(); j++) {
+                if (idsWorkers.get(i) == idsWorkers.get(j)) {
+                    equal = false;
+                    break;
+                }
+            }
+        }
+
+        assertTrue(equal);
     }
 
     @Test

@@ -111,7 +111,7 @@ public abstract class AbstractGodCard implements Serializable {
     }
 
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(CellsHandler handler, ArrayList<Worker> workers) {
-        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = handler.findNeighbouringCoords(workers);
+        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = handler.findWorkersNeighbouringCoords(workers);
         Cell actualCell;
         int actualHeight;
         int newHeight;
@@ -133,7 +133,7 @@ public abstract class AbstractGodCard implements Serializable {
     }
 
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildBlock(CellsHandler handler, ArrayList<Worker> workers) {
-        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = handler.findNeighbouringCoords(workers);
+        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = handler.findWorkersNeighbouringCoords(workers);
         for (Coord c : neighbouringCoords.keySet()) {
             neighbouringCoords.get(c).removeIf(c1 -> handler.getCell(c1).getOccupiedByWorker() || handler.getCell(c1).getOccupiedByDome() || handler.getCell(c1).getHeight() >= 3);
         }
@@ -141,7 +141,7 @@ public abstract class AbstractGodCard implements Serializable {
     }
 
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildDome(CellsHandler handler, ArrayList<Worker> workers) {
-        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = handler.findNeighbouringCoords(workers);
+        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = handler.findWorkersNeighbouringCoords(workers);
         for (Coord c : neighbouringCoords.keySet()) {
             if (handler.getCell(c).getOccupiedByWorker() || handler.getCell(c).getOccupiedByDome() || handler.getCell(c).getHeight() < 4) {
                 neighbouringCoords.remove(c);

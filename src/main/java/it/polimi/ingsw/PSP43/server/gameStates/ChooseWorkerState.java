@@ -3,7 +3,6 @@ package it.polimi.ingsw.PSP43.server.gameStates;
 import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.WorkersColorResponse;
-import it.polimi.ingsw.PSP43.server.DataToAction;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
@@ -64,14 +63,13 @@ public class ChooseWorkerState extends TurnState {
         do {
             currentPlayer = game.getCurrentPlayer();
             String nicknameCurrentPlayer = currentPlayer.getNickname();
-            int latestPosition;
             WorkersColorRequest colorRequest = new WorkersColorRequest("Choose a color of the worker you will own.", availableColors);
             WorkersColorResponse colorResponse;
             do {
                 colorResponse = game.sendRequest(colorRequest, nicknameCurrentPlayer, WorkersColorResponse.class);
             } while (colorResponse == null);
 
-            // here all the new workers of the player are added into the playersHandler with the color chosen, then the color
+            // here all the new workers of the player are added into the workersHandler with the color chosen, then the color
             // is removed from available colors
             int[] workersIds = new int[2];
             for (int i=0; i<2; i++) {
@@ -80,13 +78,16 @@ public class ChooseWorkerState extends TurnState {
             availableColors.remove(colorResponse.getColor());
             colorsChosen.put(currentPlayer, colorResponse.getColor());
 
+            // then the ids of the workers are set into the related owner
+            currentPlayer.setWorkersIdsArray(workersIds);
+
             HashMap<Coord, ArrayList<Coord>> hashAvailablePositions;
             ActionRequest placementRequest;
 
             // here I ask to the player where he wants to place his workers (one at a time I ask him)
             for (int i = 0; i<workersIds.length; i++) {
                 ActionResponse response;
-                ArrayList<Coord> availablePositions = game.getCellsHandler().findAllCoordsFree();
+                ArrayList<Coord> availablePositions = game.getCellsHandler().findAllFreeCoords();
                 hashAvailablePositions = new HashMap<>();
                 hashAvailablePositions.put(new Coord(0, 0), availablePositions);
                 placementRequest = new ActionRequest("Choose where to place your worker " + i + " .",
@@ -95,12 +96,14 @@ public class ChooseWorkerState extends TurnState {
                     response = game.sendRequest(placementRequest, nicknameCurrentPlayer, ActionResponse.class);
                 } while(response==null);
                 Coord coordChosen = response.getPosition();
-                game.getWorkersHandler().setInitialPosition(i, coordChosen);
+
+                game.getWorkersHandler().setInitialPosition(workersIds[i], coordChosen);
                 Cell cell = game.getCellsHandler().getCell(coordChosen);
                 cell.setOccupiedByWorker(true);
                 game.getCellsHandler().changeStateOfCell(cell, coordChosen);
             }
-            latestPosition = playersHandler.getNumOfPlayers()-1;
+
+            int latestPosition = playersHandler.getNumOfPlayers()-1;
             latestPlayer = playersHandler.getPlayer(latestPosition).getNickname();
             game.setCurrentPlayer(playersHandler.getNextPlayer(currentPlayer.getNickname()));
         } while (!latestPlayer.equals(currentPlayer.getNickname()));

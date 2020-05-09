@@ -32,7 +32,7 @@ public class DoubleDifferentSpaceBehaviour extends AbstractGodCard implements Bu
             GameSession game = dataToAction.getGameSession();
             ArrayList<Worker> workersToMove = new ArrayList<>();
             workersToMove.add(dataToAction.getWorker());
-            HashMap<Coord, ArrayList<Coord>> availablePositions = game.getCellsHandler().findNeighbouringCoords(workersToMove);
+            HashMap<Coord, ArrayList<Coord>> availablePositions = game.getCellsHandler().findWorkersNeighbouringCoords(workersToMove);
             Coord oldCoordsBuilt = dataToAction.getNewPosition();
             for (Coord c : availablePositions.keySet()) {
                 availablePositions.get(c).removeIf(c1 -> c1.getY() == oldCoordsBuilt.getY() && c1.getX() == oldCoordsBuilt.getY());

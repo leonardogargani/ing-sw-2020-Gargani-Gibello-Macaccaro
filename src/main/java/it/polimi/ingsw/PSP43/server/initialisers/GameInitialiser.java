@@ -40,7 +40,7 @@ public class GameInitialiser {
             for (int j=0; j<2; j++) {
                 workerIds[i] = gameSession.getWorkersHandler().addNewWorker(colors[i]);
             }
-            gameSession.getPlayersHandler().getPlayer(nicknameCurrent).setWorkersIdsArray(workerIds[0], workerIds[1]);
+            gameSession.getPlayersHandler().getPlayer(nicknameCurrent).setWorkersIdsArray(workerIds);
         }
 
         Coord coord1 = new Coord(4,3);

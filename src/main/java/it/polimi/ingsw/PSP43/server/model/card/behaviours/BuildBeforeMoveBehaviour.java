@@ -9,6 +9,7 @@ import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
@@ -16,6 +17,8 @@ import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class BuildBeforeMoveBehaviour extends AbstractGodCard implements MoveBehavior {
     private static final long serialVersionUID = 2762718994928009618L;
@@ -38,21 +41,25 @@ public class BuildBeforeMoveBehaviour extends AbstractGodCard implements MoveBeh
                 buildBeforeMove(dataToAction);
             }
         }
-        else super.move(dataToAction);
+        super.move(dataToAction);
     }
 
     private void buildBeforeMove(DataToAction oldData) throws InterruptedException, IOException, ClassNotFoundException {
         GameSession gameSession = oldData.getGameSession();
-        ArrayList<Worker> workers = new ArrayList<>();
         Worker workerAllowedToBuild = oldData.getWorker();
-        workers.add(workerAllowedToBuild);
-        HashMap<Coord, ArrayList<Coord>> availablePositions = gameSession.getCellsHandler().findNeighbouringCoords(workers);
-        for (Coord c : availablePositions.keySet()) {
-            availablePositions.get(c).removeIf(c1 ->
-                    (c1.getY() == oldData.getNewPosition().getY() && c1.getX() == oldData.getNewPosition().getX()) ||
-                    c1.getY() == workerAllowedToBuild.getCurrentPosition().getY() && c1.getX() == workerAllowedToBuild.getCurrentPosition().getX());
+        HashMap<Coord, ArrayList<Coord>> hashMapNeighbouringPositions = gameSession.getCellsHandler().findWorkerNeighbouringCoords(workerAllowedToBuild);
+        for (Iterator<Map.Entry<Coord, ArrayList<Coord>>> coordsIterator = hashMapNeighbouringPositions.entrySet().iterator(); coordsIterator.hasNext(); ) {
+            Map.Entry<Coord, ArrayList<Coord>> currentEntry = coordsIterator.next();
+            ArrayList<Coord> neighbouringPositions = currentEntry.getValue();
+
+            ArrayList<Coord> availableNeighbouringPositions = gameSession.getCellsHandler().selectAllFreeCoords(neighbouringPositions);
+            availableNeighbouringPositions.removeIf(currentCoord -> (currentCoord.getY() == oldData.getNewPosition().getY() && currentCoord.getX() == oldData.getNewPosition().getX()) ||
+                    currentCoord.getY() == workerAllowedToBuild.getCurrentPosition().getY() && currentCoord.getX() == workerAllowedToBuild.getCurrentPosition().getX());
+
+            currentEntry.setValue(availableNeighbouringPositions);
         }
-        ActionRequest request = new ActionRequest("Choose a cell where to build.", availablePositions);
+
+        ActionRequest request = new ActionRequest("Choose a cell where to build.", hashMapNeighbouringPositions);
         ActionResponse actionResponse;
         do {
             actionResponse = gameSession.sendRequest(request, gameSession.getCurrentPlayer().getNickname(), ActionResponse.class);

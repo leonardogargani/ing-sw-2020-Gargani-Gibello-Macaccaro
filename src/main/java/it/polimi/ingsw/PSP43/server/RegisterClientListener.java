@@ -21,6 +21,9 @@ public class RegisterClientListener implements Runnable {
         this.message = message;
     }
 
+    public RegisterClientListener() {
+    }
+
     @Override
     public void run() {
         try {
