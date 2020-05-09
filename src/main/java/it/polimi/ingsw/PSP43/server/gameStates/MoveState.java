@@ -18,7 +18,7 @@ import java.util.HashMap;
 
 public class MoveState extends TurnState {
     private static final int FIRSTPOSITION = 0;
-    private int initFirst = -1;
+    protected int initFirst = -1;
 
     public MoveState(GameSession gameSession) {
         super(gameSession);
@@ -78,7 +78,7 @@ public class MoveState extends TurnState {
         }
         availablePositions = playerCard.findAvailablePositionsToMove(game.getCellsHandler(), workers);
         ActionRequest message = new ActionRequest("Choose a position where to place your worker next.", availablePositions);
-        ActionResponse response = null;
+        ActionResponse response;
         do {
             response = game.sendRequest(message, nicknameCurrentPlayer, ActionResponse.class);
         } while (response == null);
@@ -98,5 +98,6 @@ public class MoveState extends TurnState {
         TurnState currentState = game.getCurrentState();
         int indexCurrentState = game.getTurnMap().indexOf(currentState);
         TurnState nextState = game.getTurnMap().get(indexCurrentState + 1);
+        game.setNextState(nextState);
     }
 }

@@ -104,7 +104,7 @@ public class GameSession extends GameSessionObservable {
         currentState.initState();
     }
 
-    public void eliminatePlayer(Player playerEliminated) throws IOException {
+    public void eliminatePlayer(Player playerEliminated) throws IOException, ClassNotFoundException {
         cardsHandler.removeCardToPlayer(playerEliminated.getNickname());
         Player playerToRemove = playersHandler.getPlayer(playerEliminated.getNickname());
 
@@ -211,7 +211,7 @@ public class GameSession extends GameSessionObservable {
     }
 
     @Override
-    public void sendEndingMessage(EndGameMessage message, ArrayList<String> nicksExcluded) throws IOException {
+    public void sendEndingMessage(EndGameMessage message, ArrayList<String> nicksExcluded) throws IOException, ClassNotFoundException {
         super.sendEndingMessage(message, nicksExcluded);
         this.active = Boolean.FALSE;
     }

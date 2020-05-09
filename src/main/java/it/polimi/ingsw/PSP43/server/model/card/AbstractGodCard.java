@@ -96,20 +96,6 @@ public abstract class AbstractGodCard implements Serializable {
         workerToMove.setCurrentPosition(newPosition);
     }
 
-    public void buildBlock(DataToAction dataToAction) throws IOException, ClassNotFoundException, InterruptedException {
-        CellsHandler handler = dataToAction.getGameSession().getCellsHandler();
-        Cell newCell = handler.getCell(dataToAction.getNewPosition());
-        newCell.setHeight(newCell.getHeight()+1);
-        handler.changeStateOfCell(newCell, dataToAction.getNewPosition());
-    }
-
-    public void buildDome(DataToAction dataToAction) throws IOException {
-        CellsHandler handler = dataToAction.getGameSession().getCellsHandler();
-        Cell newCell = handler.getCell(dataToAction.getNewPosition());
-        newCell.setOccupiedByDome(true);
-        handler.changeStateOfCell(newCell, dataToAction.getNewPosition());
-    }
-
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(CellsHandler handler, ArrayList<Worker> workers) {
         HashMap<Coord, ArrayList<Coord>> neighbouringCoords = handler.findWorkersNeighbouringCoords(workers);
         Cell actualCell;
@@ -132,12 +118,26 @@ public abstract class AbstractGodCard implements Serializable {
         return neighbouringCoords;
     }
 
+    public void buildBlock(DataToAction dataToAction) throws IOException, ClassNotFoundException, InterruptedException {
+        CellsHandler handler = dataToAction.getGameSession().getCellsHandler();
+        Cell newCell = handler.getCell(dataToAction.getNewPosition());
+        newCell.setHeight(newCell.getHeight()+1);
+        handler.changeStateOfCell(newCell, dataToAction.getNewPosition());
+    }
+
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildBlock(CellsHandler handler, ArrayList<Worker> workers) {
         HashMap<Coord, ArrayList<Coord>> neighbouringCoords = handler.findWorkersNeighbouringCoords(workers);
         for (Coord c : neighbouringCoords.keySet()) {
             neighbouringCoords.get(c).removeIf(c1 -> handler.getCell(c1).getOccupiedByWorker() || handler.getCell(c1).getOccupiedByDome() || handler.getCell(c1).getHeight() >= 3);
         }
         return neighbouringCoords;
+    }
+
+    public void buildDome(DataToAction dataToAction) throws IOException {
+        CellsHandler handler = dataToAction.getGameSession().getCellsHandler();
+        Cell newCell = handler.getCell(dataToAction.getNewPosition());
+        newCell.setOccupiedByDome(true);
+        handler.changeStateOfCell(newCell, dataToAction.getNewPosition());
     }
 
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildDome(CellsHandler handler, ArrayList<Worker> workers) {

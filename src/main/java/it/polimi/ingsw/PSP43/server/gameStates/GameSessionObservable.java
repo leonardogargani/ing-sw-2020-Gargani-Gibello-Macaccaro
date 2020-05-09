@@ -14,7 +14,6 @@ import it.polimi.ingsw.PSP43.server.networkMessages.ServerMessage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 public class GameSessionObservable implements Runnable {
     private int idGame;
@@ -56,7 +55,7 @@ public class GameSessionObservable implements Runnable {
         return true;
     }
 
-    public void eliminatePlayer(Player playerEliminated) throws IOException {
+    public void eliminatePlayer(Player playerEliminated) throws IOException, ClassNotFoundException {
         EndGameMessage message = new EndGameMessage("We are sorry but you have lost the game.");
         listenersHashMap.get(playerEliminated.getNickname()).sendMessage(message);
         listenersHashMap.remove(playerEliminated.getNickname());
@@ -95,7 +94,7 @@ public class GameSessionObservable implements Runnable {
         else return null;
     }
 
-    public void sendEndingMessage(EndGameMessage message, ArrayList<String> nicksExcluded) throws IOException {
+    public void sendEndingMessage(EndGameMessage message, ArrayList<String> nicksExcluded) throws IOException, ClassNotFoundException {
         EndGameMessage messageForTheWinner = new EndGameMessage("Congratulations! You have won the game!");
         for (String s : listenersHashMap.keySet()) {
             if (!nicksExcluded.contains(s)) {
@@ -105,7 +104,6 @@ public class GameSessionObservable implements Runnable {
         listenersHashMap.get(nicksExcluded.get(0)).sendMessage(messageForTheWinner);
         RegisterClientListener ending = new RegisterClientListener();
         ending.removeGameSession(this.idGame);
-        //listenersHashMap.get(nicksExcluded.get(0)).removeGameSession(this.idGame);
     }
 
     /**

@@ -16,7 +16,7 @@ public class WinState extends TurnState {
         this.winner = winner;
     }
 
-    public void executeState() throws IOException {
+    public void executeState() throws IOException, ClassNotFoundException {
         EndGameMessage message = new EndGameMessage(winner + " win the play!");
         ArrayList<String> nicksExcluded = new ArrayList<>();
         nicksExcluded.add(winner);
