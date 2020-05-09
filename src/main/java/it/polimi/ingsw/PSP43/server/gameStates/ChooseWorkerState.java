@@ -98,9 +98,6 @@ public class ChooseWorkerState extends TurnState {
                 Coord coordChosen = response.getPosition();
 
                 game.getWorkersHandler().setInitialPosition(workersIds[i], coordChosen);
-                Cell cell = game.getCellsHandler().getCell(coordChosen);
-                cell.setOccupiedByWorker(true);
-                game.getCellsHandler().changeStateOfCell(cell, coordChosen);
             }
 
             int latestPosition = playersHandler.getNumOfPlayers()-1;

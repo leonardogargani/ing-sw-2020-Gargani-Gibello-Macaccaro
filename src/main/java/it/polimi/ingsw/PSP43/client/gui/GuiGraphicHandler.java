@@ -13,18 +13,6 @@ public class GuiGraphicHandler extends GraphicHandler {
     }
 
     /**
-     * This method updates the cli or the gui changing the color of a cell, based
-     * on the color of the worker that has been moved.
-     *
-     * @param workerMessage message containing the worker that has been moved
-     */
-    @Override
-    public void updateBoardChange(WorkerMessage workerMessage) {
-        // TODO implementation with JavaFX
-    }
-
-
-    /**
      * This method updates the cli board changing the symbol of a cell, based
      * on the fact that a worker can build on a cell.
      *

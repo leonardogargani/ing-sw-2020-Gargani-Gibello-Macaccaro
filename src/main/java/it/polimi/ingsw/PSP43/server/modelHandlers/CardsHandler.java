@@ -25,8 +25,7 @@ public class CardsHandler {
         return deckOfAbstractGodCards;
     }
 
-    // TODO : REMEMBER TO CHANGE INTO PRIVATE!!!!
-    public void setDeckOfAbstractGodCards(ArrayList<AbstractGodCard> deckOfAbstractGodCards) {
+    private void setDeckOfAbstractGodCards(ArrayList<AbstractGodCard> deckOfAbstractGodCards) {
         this.deckOfAbstractGodCards = deckOfAbstractGodCards;
     }
 

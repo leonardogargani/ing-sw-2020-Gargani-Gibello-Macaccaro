@@ -27,7 +27,6 @@ public class PlayersHandler {
         for (Player p : gamePlayers)
             if (p.getNickname().equals(nick)) throw new NicknameAlreadyInUseException("We are sorry, " + nick + " is already in use.");
         gamePlayers.add(new Player(nick));
-        // TODO call here notifyMenuChange() once it is implemented
     }
 
     /**

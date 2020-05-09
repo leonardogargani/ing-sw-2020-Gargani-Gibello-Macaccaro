@@ -55,10 +55,7 @@ public class ClientManager implements Runnable{
     public void handleEvent() throws QuitPlayerException {
         if( messageBox.size() >= 1)
         {
-            if(messageBox.get(0) instanceof WorkerMessage)
-            {getGraphicHandler().updateBoardChange((WorkerMessage)messageBox.get(0));
-                messageBox.remove(0);}
-            else if(messageBox.get(0) instanceof CellMessage)
+            if(messageBox.get(0) instanceof CellMessage)
             {getGraphicHandler().updateBoardChange((CellMessage)messageBox.get(0));
                 messageBox.remove(0);}
             else if(messageBox.get(0) instanceof ActionRequest)

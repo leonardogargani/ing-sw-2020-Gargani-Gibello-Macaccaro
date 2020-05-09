@@ -29,7 +29,7 @@ public class ChooseCardStateTest {
     @Before
     public void setUp() throws Exception {
         gameSession = GameInitialiser.initialiseGame();
-        gameSession = GameInitialiser.initialisePlayers(gameSession);
+        GameInitialiser.initialisePlayers(gameSession);
         spyGame = Mockito.spy(gameSession);
         obs = new BoardObserver(gameSession);
         spyObs = Mockito.spy(obs);

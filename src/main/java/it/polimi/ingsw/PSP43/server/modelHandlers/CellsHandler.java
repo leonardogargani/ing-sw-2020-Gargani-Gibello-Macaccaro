@@ -51,6 +51,7 @@ public class CellsHandler {
         cellToChange.setOccupiedByDome(newDescriptionCell.getOccupiedByDome());
         cellToChange.setOccupiedByWorker(newDescriptionCell.getOccupiedByWorker());
         cellToChange.setHeight(newDescriptionCell.getHeight());
+        cellToChange.setColor(newDescriptionCell.getColor());
     }
 
     /**

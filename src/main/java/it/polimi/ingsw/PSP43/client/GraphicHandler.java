@@ -33,14 +33,6 @@ public abstract class GraphicHandler {
 
 
     /**
-     * This method updates the graphics of the client changing the color of a cell, based
-     * on the color of the worker that has been moved.
-     * @param workerMessage message containing the worker that has been moved
-     */
-    public abstract void updateBoardChange(WorkerMessage workerMessage);
-
-
-    /**
      * This method updates the graphics of the client changing the symbol of a cell, based
      * on the fact that a worker can build on a cell.
      * @param cellMessage message containing the cell that has changed (a worker has built on it)

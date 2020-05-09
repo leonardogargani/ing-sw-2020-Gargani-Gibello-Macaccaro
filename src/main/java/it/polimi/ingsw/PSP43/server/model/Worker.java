@@ -11,9 +11,7 @@ import java.io.IOException;
  * Every player has two workers, both of the same color and able to move their position
  * during the game.
  */
-public class Worker extends Observable {
-
-    private static final long serialVersionUID = -415589018906535869L;
+public class Worker {
 
     private final int id;
     private Coord currentPosition;
@@ -27,7 +25,6 @@ public class Worker extends Observable {
      * @param color color of the worker
      */
     public Worker(int id, Color color, BoardObserver boardObserver) {
-        super(boardObserver);
         this.id = id;
         this.currentPosition = null;
         this.previousPosition = null;
@@ -52,15 +49,6 @@ public class Worker extends Observable {
     public void setCurrentPosition(Coord currentPosition) throws IOException {
         this.previousPosition = this.currentPosition;
         this.currentPosition = currentPosition;
-        notifyBoardChange();
-    }
-
-    /**
-     * This method notifies the related observer that a change occurred and the client has to be advised of that
-     * @throws IOException
-     */
-    public void notifyBoardChange() throws IOException {
-        super.getBoardObserver().notifyBoardChange(this);
     }
 
 

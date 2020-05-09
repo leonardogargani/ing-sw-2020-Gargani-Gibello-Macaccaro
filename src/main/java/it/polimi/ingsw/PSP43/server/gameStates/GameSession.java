@@ -62,7 +62,6 @@ public class GameSession extends GameSessionObservable {
     }
 
     public void run() {
-        System.out.println("avv");
         while (active) {
             try {
                 TimeUnit.SECONDS.sleep(1);
@@ -71,7 +70,6 @@ public class GameSession extends GameSessionObservable {
             }
             if (!(currentState.getClass().isInstance(nextState))) {
                 try {
-                    System.out.println("prova");
                     this.transitToNextState();
                 } catch (IOException | ClassNotFoundException | WinnerCaughtException | InterruptedException e) {
                     e.printStackTrace();

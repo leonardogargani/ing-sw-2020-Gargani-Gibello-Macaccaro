@@ -7,7 +7,6 @@ import it.polimi.ingsw.PSP43.client.networkMessages.*;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
-import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
 import java.io.IOException;
@@ -42,28 +41,6 @@ public class CliGraphicHandler extends GraphicHandler {
 
 
     /**
-     * This method updates the cli or the gui changing the color of a cell, based
-     * on the color of the worker that has been moved.
-     * @param workerMessage message containing the worker that has been moved
-     */
-    @Override
-    public void updateBoardChange(WorkerMessage workerMessage) {
-        Worker worker = workerMessage.getWorker();
-        CliCell newCell = board.getCell(worker.getCurrentPosition());
-
-        // I need to "free" the previous position only if the worker was already on the board:
-        // if it has just been place it doesn't have a previous position
-        if (worker.getPreviousPosition() != null) {
-            CliCell oldCell = board.getCell(worker.getPreviousPosition());
-            oldCell.setColor(Color.ANSI_WHITE);
-        }
-
-        newCell.setColor(worker.getColor());
-        this.render();
-    }
-
-
-    /**
      * This method updates the cli board changing the symbol of a cell, based
      * on the fact that a worker can build on a cell.
      * @param cellMessage message containing the cell that has changed (a worker has built on it)
@@ -73,6 +50,7 @@ public class CliGraphicHandler extends GraphicHandler {
         Cell serverCell = cellMessage.getCell();
         CliCell cell = board.getCell(serverCell.getCoord());
         cell.setSymbol(CliCell.SYMBOLS[serverCell.getHeight()]);
+        cell.setColor(cellMessage.getCell().getColor());
         this.render();
     }
 

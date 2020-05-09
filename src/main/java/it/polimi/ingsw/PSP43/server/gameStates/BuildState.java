@@ -26,11 +26,6 @@ public class BuildState extends TurnState {
 
     public void initState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         super.initState();
-        GameSession game = super.getGameSession();
-        PlayersHandler playersHandler = game.getPlayersHandler();
-        game.setCurrentPlayer(playersHandler.getPlayer(FIRSTPOSITION));
-
-        executeState();
     }
 
     public void executeState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
@@ -76,9 +71,6 @@ public class BuildState extends TurnState {
 
     public void findNextState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         GameSession game = super.getGameSession();
-        Player currentPlayer = game.getCurrentPlayer();
-        PlayersHandler handler = game.getPlayersHandler();
-        game.setCurrentPlayer(handler.getNextPlayer(currentPlayer.getNickname()));
         TurnState currentState = game.getCurrentState();
         int indexCurrentState = game.getTurnMap().indexOf(currentState);
         TurnState nextState = game.getTurnMap().get(indexCurrentState - 1);

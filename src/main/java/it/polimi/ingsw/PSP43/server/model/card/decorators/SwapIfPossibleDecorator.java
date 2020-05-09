@@ -37,29 +37,22 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
             Coord currentWorkerPosition = dataToAction.getWorker().getCurrentPosition();
             CellsHandler cellsHandler = gameSession.getCellsHandler();
             WorkersHandler workersHandler = gameSession.getWorkersHandler();
-            HashMap<Coord, ArrayList<Coord>> availablePositionsToForce = new HashMap<>();
-            availablePositionsToForce.put(new Coord(0, 0),
-                    directionAvailableCoords(cellsHandler, currentWorkerPosition, dataToAction.getNewPosition()));
             Worker playerWorker = dataToAction.getWorker();
             Worker opponentWorker = workersHandler.getWorker(dataToAction.getNewPosition());
 
+            HashMap<Coord, ArrayList<Coord>> availablePositionsToForce = new HashMap<>();
+            availablePositionsToForce.put(new Coord(0, 0),
+                    directionAvailableCoords(cellsHandler, currentWorkerPosition, dataToAction.getNewPosition()));
             ActionRequest request = new ActionRequest("Choose a position where to force your opponent.", availablePositionsToForce);
             ActionResponse response;
             do {
                 response = gameSession.sendRequest(request, dataToAction.getPlayer().getNickname(), ActionResponse.class);
             } while (response == null);
 
-            Coord coordChosen = response.getPosition();
+            Coord coordToForce = response.getPosition();
 
-            Cell oldCell = cellsHandler.getCell(playerWorker.getCurrentPosition());
-            oldCell.setOccupiedByWorker(false);
-            cellsHandler.changeStateOfCell(oldCell, playerWorker.getCurrentPosition());
-            playerWorker.setCurrentPosition(dataToAction.getNewPosition());
-
-            Cell newOpponentCell = cellsHandler.getCell(coordChosen);
-            newOpponentCell.setOccupiedByWorker(true);
-            cellsHandler.changeStateOfCell(newOpponentCell, coordChosen);
-            opponentWorker.setCurrentPosition(coordChosen);
+            workersHandler.changePosition(playerWorker, coordToMove);
+            workersHandler.changePosition(opponentWorker, coordToForce);
         }
     }
 

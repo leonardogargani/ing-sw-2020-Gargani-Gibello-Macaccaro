@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP43.server.model;
 
+import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.server.BoardObserver;
 
 import java.io.IOException;
@@ -17,11 +18,13 @@ public class Cell extends Observable {
     private boolean occupiedByWorker;
     private boolean occupiedByDome;
     private Coord coord;
+    private Color color;
 
 
     public Cell(Coord coord, BoardObserver observer) {
         super(observer);
         this.coord = coord;
+        this.color = Color.ANSI_WHITE;
     }
 
     /**
@@ -58,6 +61,7 @@ public class Cell extends Observable {
      */
     public void setOccupiedByWorker(boolean occupiedByWorker) throws IOException {
         this.occupiedByWorker = occupiedByWorker;
+        super.getBoardObserver().notifyBoardChange(this);
     }
 
 
@@ -95,6 +99,15 @@ public class Cell extends Observable {
      */
     public void setCoord(Coord coord) {
         this.coord = coord;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) throws IOException {
+        this.color = color;
+        super.getBoardObserver().notifyBoardChange(this);
     }
 
     /**

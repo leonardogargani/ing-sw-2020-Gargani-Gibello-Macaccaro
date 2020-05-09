@@ -34,7 +34,6 @@ public class WorkersHandlerTest {
         ArrayList<Worker> correctArrayList = new ArrayList<>(Arrays.asList(worker1, worker2));
         test.addNewWorker(Color.ANSI_BLUE);
         test.addNewWorker(Color.ANSI_RED);
-        // TODO find a way to compare elements of two ArrayList
         assertEquals(correctArrayList.size(), test.getWorkers().size());
     }
 
@@ -62,7 +61,6 @@ public class WorkersHandlerTest {
         ArrayList<Worker> correctArrayList = new ArrayList<>(Arrays.asList(worker1, worker2));
         test.addNewWorker(Color.ANSI_BLUE);
         test.addNewWorker(Color.ANSI_RED);
-        // TODO find a way to compare elements of two ArrayList
         assertEquals(correctArrayList.size(), test.getWorkers().size());
     }
 

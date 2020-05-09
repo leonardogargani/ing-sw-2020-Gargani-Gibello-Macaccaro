@@ -4,6 +4,7 @@ import it.polimi.ingsw.PSP43.client.networkMessages.PingMessage;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.TimeUnit;
 
 public class ConnectionDetector implements Runnable {
     //private Socket serverSocket;
@@ -21,7 +22,11 @@ public class ConnectionDetector implements Runnable {
     public void run() {
         long time = System.currentTimeMillis();
         while (true) {
-
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             if (System.currentTimeMillis() > time + timeout / 2) {
                 time = System.currentTimeMillis();
                 try {

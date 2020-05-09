@@ -6,6 +6,7 @@ import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,10 +24,17 @@ public class SwapMoveDecorator extends PowerGodDecorator {
     }
 
     @Override
-    public void move(DataToAction dataToAction) throws IOException {
-        WorkersHandler handler = dataToAction.getGameSession().getWorkersHandler();
-        Worker opponentWorker = handler.getWorker(dataToAction.getNewPosition());
-        swapWorkers(dataToAction.getWorker(), opponentWorker);
+    public void move(DataToAction dataToAction) throws IOException, WinnerCaughtException, InterruptedException, ClassNotFoundException {
+        CellsHandler cellsHandler = dataToAction.getGameSession().getCellsHandler();
+        Coord newCoord = dataToAction.getNewPosition();
+
+        if (!cellsHandler.getCell(newCoord).getOccupiedByWorker())
+            super.move(dataToAction);
+        else {
+            WorkersHandler handler = dataToAction.getGameSession().getWorkersHandler();
+            Worker opponentWorker = handler.getWorker(dataToAction.getNewPosition());
+            swapWorkers(handler, dataToAction.getWorker(), opponentWorker);
+        }
     }
 
     @Override
@@ -38,9 +46,8 @@ public class SwapMoveDecorator extends PowerGodDecorator {
         return availablePositions;
     }
 
-    private void swapWorkers(Worker worker1, Worker worker2) throws IOException {
-        worker1.setCurrentPosition(worker2.getCurrentPosition());
-        worker2.setCurrentPosition(worker1.getPreviousPosition());
+    private void swapWorkers(WorkersHandler workersHandler, Worker worker1, Worker worker2) throws IOException {
+        workersHandler.swapPositions(worker1, worker2);
     }
 
     public AbstractGodCard cleanFromEffects(String nameOfEffect) throws ClassNotFoundException {

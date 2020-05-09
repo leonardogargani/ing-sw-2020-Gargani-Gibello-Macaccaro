@@ -19,15 +19,7 @@ public abstract class TurnState {
     }
 
     public void initState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
-        try {
-            executeState();
-        } catch (WinnerCaughtException | IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void executeState(ClientMessage message) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
-        findNextState();
+        executeState();
     }
 
     public void executeState(RegistrationMessage message) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {

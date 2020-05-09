@@ -84,9 +84,7 @@ public class MoveState extends TurnState {
         } while (response == null);
 
         Coord nextPositionChosen = response.getPosition();
-        Coord oldPosition = response.getWorkerPosition();
-        Worker workerMoved = workersHandler.getWorker(oldPosition);
-        workerMoved.setLatestMoved(true);
+        Worker workerMoved = workersHandler.getWorker(response.getWorkerPosition());
 
         playerCard.move(new DataToAction(game, currentPlayer, workerMoved, nextPositionChosen));
 

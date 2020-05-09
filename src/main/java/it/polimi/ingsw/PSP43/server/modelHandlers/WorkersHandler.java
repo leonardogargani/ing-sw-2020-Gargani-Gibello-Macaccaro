@@ -19,6 +19,7 @@ public class WorkersHandler {
 
     private ArrayList<Worker> workers = new ArrayList<>();
     private GameSession gameSession;
+    private CellsHandler cellsHandler;
 
 
     /**
@@ -28,6 +29,7 @@ public class WorkersHandler {
      */
     public WorkersHandler(GameSession gameSession) {
         this.gameSession = gameSession;
+        this.cellsHandler = gameSession.getCellsHandler();
     }
 
 
@@ -66,23 +68,45 @@ public class WorkersHandler {
 
 
     /**
-     * This method changes the position of a worker, checking if the move is possible and
+     * This method changes the coordAfterMove of a worker, checking if the move is possible and
      * throwing an exception if not possible.
      * It also sets the occupation boolean flags of the two involved cells.
-     * @param worker worker whose position is wanted to be changed
-     * @param position position the player wants to move the worker to
+     * @param worker worker whose coordAfterMove is wanted to be changed
+     * @param coordAfterMove coordAfterMove the player wants to move the worker to
      */
-    public void changePosition(Worker worker, Coord position) throws IOException {
+    public void changePosition(Worker worker, Coord coordAfterMove) throws IOException {
         Coord coordBeforeMove = worker.getCurrentPosition();
         Cell cellBeforeMove = gameSession.getCellsHandler().getCell(coordBeforeMove);
-        Cell cellAfterMove = gameSession.getCellsHandler().getCell(position);
+        Cell cellAfterMove = gameSession.getCellsHandler().getCell(coordAfterMove);
 
-
-        worker.setCurrentPosition(position);
         cellBeforeMove.setOccupiedByWorker(false);
+        cellBeforeMove.setColor(Color.ANSI_WHITE);
         cellAfterMove.setOccupiedByWorker(true);
+        cellAfterMove.setColor(worker.getColor());
+        cellsHandler.changeStateOfCell(cellAfterMove, coordAfterMove);
+        cellsHandler.changeStateOfCell(cellBeforeMove, coordBeforeMove);
+
+
+        worker.setCurrentPosition(coordAfterMove);
+        worker.setLatestMoved(true);
     }
 
+    public void swapPositions(Worker currentPlayerWorker, Worker opponentWorker) throws IOException {
+        currentPlayerWorker.setCurrentPosition(opponentWorker.getCurrentPosition());
+        currentPlayerWorker.setLatestMoved(true);
+        opponentWorker.setCurrentPosition(currentPlayerWorker.getPreviousPosition());
+
+
+        Coord coordFirstWorker = currentPlayerWorker.getCurrentPosition();
+        Cell cellFirstWorker = cellsHandler.getCell(coordFirstWorker);
+        cellFirstWorker.setColor(currentPlayerWorker.getColor());
+        cellsHandler.changeStateOfCell(cellFirstWorker, coordFirstWorker);
+
+        Coord coordSecondWorker = opponentWorker.getCurrentPosition();
+        Cell cellSecondWorker = cellsHandler.getCell(coordSecondWorker);
+        cellSecondWorker.setColor(opponentWorker.getColor());
+        cellsHandler.changeStateOfCell(cellSecondWorker, coordSecondWorker);
+    }
 
     /**
      * This method returns the ArrayList containing all the workers.
@@ -112,7 +136,14 @@ public class WorkersHandler {
 
     public void setInitialPosition(int idWorker, Coord initialCoord) throws IOException {
         for (Worker w : workers) {
-            if (w.getId() == idWorker) w.setCurrentPosition(initialCoord);
+            if (w.getId() == idWorker) {
+                Cell initialCell = cellsHandler.getCell(initialCoord);
+                initialCell.setColor(w.getColor());
+                initialCell.setOccupiedByWorker(true);
+                cellsHandler.changeStateOfCell(initialCell, initialCoord);
+
+                w.setCurrentPosition(initialCoord);
+            }
         }
     }
 

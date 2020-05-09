@@ -83,17 +83,7 @@ public abstract class AbstractGodCard implements Serializable {
         Coord newPosition = dataToAction.getNewPosition();
         Worker workerToMove = dataToAction.getWorker();
 
-        CellsHandler handler = gameSession.getCellsHandler();
-        Cell newCell = handler.getCell(newPosition);
-        Coord oldPosition = workerToMove.getCurrentPosition();
-        if (oldPosition!=null) {
-            Cell oldCell = handler.getCell(oldPosition);
-            oldCell.setOccupiedByWorker(false);
-            handler.changeStateOfCell(oldCell, oldPosition);
-        }
-        newCell.setOccupiedByWorker(true);
-        handler.changeStateOfCell(newCell, newPosition);
-        workerToMove.setCurrentPosition(newPosition);
+        gameSession.getWorkersHandler().changePosition(workerToMove, newPosition);
     }
 
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(CellsHandler handler, ArrayList<Worker> workers) {

@@ -1,8 +1,10 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
+import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
 import it.polimi.ingsw.PSP43.server.BoardObserver;
 import it.polimi.ingsw.PSP43.server.initialisers.DOMCardsParser;
 import it.polimi.ingsw.PSP43.server.initialisers.GameInitialiser;
+import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
@@ -21,7 +23,7 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.*;
 
 public class MoveStateTest {
     GameSession gameSession;
@@ -95,7 +97,23 @@ public class MoveStateTest {
     }
 
     @Test
-    public void executeState() {
+    public void executeState() throws ClassNotFoundException, WinnerCaughtException, InterruptedException, IOException {
+        // TODO : change a bit the configuration of the MoveState, removing some responsabilities
+
+        AbstractGodCard mockCard = mock(AbstractGodCard.class);
+        doNothing().when(mockCard).move(any());
+        doReturn(new ActionResponse(new Coord(4, 3), new Coord(3, 3))).when(spyGame).sendRequest(any(), any(), any());
+        doNothing().when(spyState).findNextState();
+        Player currentPlayer = spyGame.getPlayersHandler().getPlayer(0);
+        spyGame.setCurrentPlayer(currentPlayer);
+
+        WorkersHandler workersHandler = spyGame.getWorkersHandler();
+        int[] playerWorkers = spyGame.getPlayersHandler().getPlayer(currentPlayer.getNickname()).getWorkersIdsArray();
+
+        Coord coordWorkerMoved = workersHandler.getWorker(playerWorkers[0]).getCurrentPosition();
+
+
+        spyState.executeState();
     }
 
     @Test
