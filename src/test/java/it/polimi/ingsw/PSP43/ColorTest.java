@@ -26,18 +26,18 @@ public class ColorTest {
     }
 
     @Test
-    public void testPrintName() throws IOException {
+    public void testPrintName() {
         Color.printName(Color.ANSI_BLUE);
-        assertEquals("BLUE\n", outContent.toString());
+        assertEquals(("BLUE" + System.lineSeparator()), outContent.toString());
         outContent.reset();
         Color.printName(Color.ANSI_RED);
-        assertEquals("RED\n", outContent.toString());
+        assertEquals(("RED" + System.lineSeparator()), outContent.toString());
         outContent.reset();
         Color.printName(Color.ANSI_GREEN);
-        assertEquals("GREEN\n", outContent.toString());
+        assertEquals(("GREEN" + System.lineSeparator()), outContent.toString());
         outContent.reset();
         Color.printName(Color.ANSI_WHITE);
-        assertEquals("This color doesn't exist\n", outContent.toString());
+        assertEquals(("This color doesn't exist" + System.lineSeparator()), outContent.toString());
     }
 
 }

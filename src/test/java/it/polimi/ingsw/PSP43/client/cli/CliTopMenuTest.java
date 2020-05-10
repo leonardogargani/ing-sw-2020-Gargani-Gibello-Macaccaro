@@ -25,7 +25,7 @@ public class CliTopMenuTest {
     public void testShowSetContent() {
         test.setContent("This is a test");
         test.show();
-        assertEquals("This is a test\n", outContent.toString());
+        assertEquals(("This is a test" + System.lineSeparator()), outContent.toString());
     }
 
     // methods show() and setContentWihNick() are tested both at the same time
@@ -33,9 +33,9 @@ public class CliTopMenuTest {
     public void testShowSetContentWithNick() {
         test.setContentWithNick("TestNick");
         test.show();
-        assertEquals("          -------------------------------------          \n" +
-                              "                    It's TestNick's turn\n" +
-                              "          -------------------------------------          \n\n",
+        assertEquals(("          -------------------------------------          " + System.lineSeparator() +
+                              "                    It's TestNick's turn" + System.lineSeparator() +
+                              "          -------------------------------------          " + System.lineSeparator() + System.lineSeparator()),
                 outContent.toString());
     }
 }

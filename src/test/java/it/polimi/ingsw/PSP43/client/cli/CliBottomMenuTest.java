@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP43.client.cli;
 
-import org.junit.Before;
+import  org.junit.Before;
 import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -22,8 +22,9 @@ public class CliBottomMenuTest {
     // methods show() and setContent() are tested both at the same time
     @Test
     public void testShowSetContent() {
-        test.setContent("This is a test");
+        String s = "This is a test";
+        test.setContent(s);
         test.show();
-        assertEquals("This is a test\n", outContent.toString());
+        assertEquals((s + System.lineSeparator()), outContent.toString());
     }
 }
