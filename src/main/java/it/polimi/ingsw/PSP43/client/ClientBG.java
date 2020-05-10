@@ -13,8 +13,7 @@ import java.net.Socket;
 
 public class ClientBG implements Runnable {
     private Socket serverSocket;
-    private ClientManager clientManager;
-    private String SERVER_IP = "127.0.0.1";
+    private final ClientManager clientManager;
     private static final int SERVER_PORT = 50000;
     public Object messageArrived;
     private boolean disconnect = false;
@@ -32,6 +31,7 @@ public class ClientBG implements Runnable {
     public void run() {
 
         try {
+            String SERVER_IP = "127.0.0.1";
             serverSocket = new Socket(SERVER_IP, SERVER_PORT);
         } catch (IOException e) {
             System.out.println("server unreachable");
@@ -78,7 +78,6 @@ public class ClientBG implements Runnable {
         try{
             output = new ObjectOutputStream(serverSocket.getOutputStream());
             output.writeObject(message);}catch (IOException e){
-            //System.out.println("");
         }
     }
 

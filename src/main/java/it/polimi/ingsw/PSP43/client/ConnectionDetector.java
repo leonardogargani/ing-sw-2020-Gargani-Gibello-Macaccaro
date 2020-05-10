@@ -7,13 +7,11 @@ import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 
 public class ConnectionDetector implements Runnable {
-    //private Socket serverSocket;
     private static final int timeout = 20000;
-    private ClientBG clientBG;
+    private final ClientBG clientBG;
 
 
     public ConnectionDetector(Socket serverSocket, ClientBG clientBG) throws IOException {
-        //this.serverSocket = serverSocket;
         this.clientBG = clientBG;
         serverSocket.setSoTimeout(timeout);
     }
@@ -34,7 +32,7 @@ public class ConnectionDetector implements Runnable {
                         break;
                     clientBG.sendMessage(new PingMessage());
                 } catch (IOException e) {
-                    //System.out.println("Server:problems with ping messages");
+                    // TODO handle this exception
                 }
             }
         }

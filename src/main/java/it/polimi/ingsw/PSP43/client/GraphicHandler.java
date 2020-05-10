@@ -10,9 +10,15 @@ public abstract class GraphicHandler {
 
     private ClientBG clientBG;
 
+
+    /**
+     * Not default constructor to initialize the ClientBG attribute.
+     * @param clientBG client background for this graphics
+     */
     public GraphicHandler(ClientBG clientBG) {
         this.clientBG = clientBG;
     }
+
 
     /**
      * This method sets the clientBG attribute, which is used to send messages to the server.

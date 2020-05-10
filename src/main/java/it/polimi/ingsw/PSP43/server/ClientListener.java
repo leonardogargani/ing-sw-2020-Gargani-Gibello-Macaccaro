@@ -4,16 +4,12 @@ import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.PingMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.concurrent.*;
+
 
 public class ClientListener implements Runnable {
     private Integer idGame = -1;
@@ -28,7 +24,6 @@ public class ClientListener implements Runnable {
      * Not default constructor for the ClientListener class
      *
      * @param clientSocket is the socket that is connected to the client
-     * @throws IOException
      */
     ClientListener(Socket clientSocket) throws SocketException {
         this.clientSocket = clientSocket;
@@ -52,15 +47,13 @@ public class ClientListener implements Runnable {
 
         ClientMessage message;
 
-        while (true) {
-            if(disconnected)
-                break;
+        while (!disconnected) {
             try {
                 message = receive();
                 if (message != null) {
                     handleMessage(message);
                 }
-            } catch (IOException | WinnerCaughtException | ParserConfigurationException | SAXException | ClassNotFoundException | InterruptedException | ExecutionException e) {
+            } catch (IOException | ClassNotFoundException | InterruptedException e) {
                 //a player left the game
                 try {
                     handleDisconnection();
@@ -77,9 +70,6 @@ public class ClientListener implements Runnable {
      *
      * @throws IOException
      * @throws ClassNotFoundException
-     * @throws SAXException
-     * @throws ParserConfigurationException
-     * @throws WinnerCaughtException
      */
     public synchronized ClientMessage receive() throws IOException, ClassNotFoundException, InterruptedException {
         Object objectArrived;
@@ -109,7 +99,7 @@ public class ClientListener implements Runnable {
     }
 
 
-    public void sendMessage(EndGameMessage message) throws IOException, ClassNotFoundException {
+    public void sendMessage(EndGameMessage message) throws IOException {
         synchronized (lockOut) {
             output = new ObjectOutputStream(clientSocket.getOutputStream());
             output.writeObject(message);
@@ -120,7 +110,7 @@ public class ClientListener implements Runnable {
     }
 
 
-    public void handleMessage(ClientMessage message) throws WinnerCaughtException, IOException, ClassNotFoundException, ParserConfigurationException, SAXException, InterruptedException, ExecutionException {
+    public void handleMessage(ClientMessage message) throws IOException {
         if (message instanceof RegistrationMessage) {
 
             RegisterClientListener registrator = new RegisterClientListener(this, (RegistrationMessage) message);

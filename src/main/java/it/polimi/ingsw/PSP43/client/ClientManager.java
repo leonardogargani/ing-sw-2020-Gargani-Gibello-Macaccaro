@@ -18,11 +18,11 @@ import java.util.ArrayList;
 
 
 public class ClientManager implements Runnable{
-    private int chosenInterface;
+    private final int chosenInterface;
     private GraphicHandler graphicHandler;
     private ClientBG clientBG;
     private boolean isActive;
-    private ArrayList<ServerMessage> messageBox;
+    private final ArrayList<ServerMessage> messageBox;
 
     public ClientManager(int chosenInterface){
         this.chosenInterface = chosenInterface;
@@ -45,7 +45,7 @@ public class ClientManager implements Runnable{
             try {
                 handleEvent();
             } catch (QuitPlayerException e) {
-                //TODO gestisco eccezione
+                // TODO implement the handling of a QuitPlayerException when a player writes "quit" in the cli
                 e.printStackTrace();
             }
         }
@@ -116,16 +116,17 @@ public class ClientManager implements Runnable{
     public void execute() {
         System.out.println(Screens.WELCOME);
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
         try {
-            String nickname;
-            System.out.print("Choose a nickname:");
-            do {
-                nickname = reader.readLine();
-            } while (nickname.equals(""));
+            System.out.print("Choose a nickname:\n");
+            InputHandler inputHandler = new InputHandler();
+            String nickname = inputHandler.requestInput();
             RegistrationMessage message = new RegistrationMessage(nickname);
             clientBG.sendMessage(message);
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (QuitPlayerException e) {
+            // TODO implement the handling of a QuitPlayerException when a player writes "quit" in the cli
         }
 
     }
