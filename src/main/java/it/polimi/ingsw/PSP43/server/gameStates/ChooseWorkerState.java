@@ -9,6 +9,7 @@ import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
 
@@ -64,9 +65,14 @@ public class ChooseWorkerState extends TurnState {
             currentPlayer = game.getCurrentPlayer();
             String nicknameCurrentPlayer = currentPlayer.getNickname();
             WorkersColorRequest colorRequest = new WorkersColorRequest("Choose a color of the worker you will own.", availableColors);
-            WorkersColorResponse colorResponse;
+            WorkersColorResponse colorResponse = null;
             do {
-                colorResponse = game.sendRequest(colorRequest, nicknameCurrentPlayer, WorkersColorResponse.class);
+                try {
+                    colorResponse = game.sendRequest(colorRequest, nicknameCurrentPlayer, new WorkersColorResponse());
+                } catch (GameEndedException e) {
+                    game.setActive();
+                    return;
+                }
             } while (colorResponse == null);
 
             // here all the new workers of the player are added into the workersHandler with the color chosen, then the color
@@ -86,14 +92,19 @@ public class ChooseWorkerState extends TurnState {
 
             // here I ask to the player where he wants to place his workers (one at a time I ask him)
             for (int i = 0; i<workersIds.length; i++) {
-                ActionResponse response;
+                ActionResponse response = null;
                 ArrayList<Coord> availablePositions = game.getCellsHandler().findAllFreeCoords();
                 hashAvailablePositions = new HashMap<>();
                 hashAvailablePositions.put(new Coord(0, 0), availablePositions);
                 placementRequest = new ActionRequest("Choose where to place your worker " + i + " .",
                         hashAvailablePositions);
                 do {
-                    response = game.sendRequest(placementRequest, nicknameCurrentPlayer, ActionResponse.class);
+                    try {
+                        response = game.sendRequest(placementRequest, nicknameCurrentPlayer, new ActionResponse());
+                    } catch (GameEndedException e) {
+                        game.setActive();
+                        return;
+                    }
                 } while(response==null);
                 Coord coordChosen = response.getPosition();
 

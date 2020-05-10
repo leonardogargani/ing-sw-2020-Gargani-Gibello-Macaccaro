@@ -9,6 +9,7 @@ import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
@@ -32,7 +33,12 @@ public class BuildBeforeMoveBehaviour extends AbstractGodCard implements MoveBeh
             RequestMessage message = new RequestMessage("Do you want to build before moving?");
             ResponseMessage responseMessage;
             do {
-                responseMessage = gameSession.sendRequest(message, player.getNickname(), ResponseMessage.class);
+                try {
+                    responseMessage = gameSession.sendRequest(message, player.getNickname(), new ResponseMessage());
+                } catch (GameEndedException e) {
+                    gameSession.setActive();
+                    return;
+                }
             } while (responseMessage == null);
 
             boolean response = responseMessage.isResponse();
@@ -61,7 +67,12 @@ public class BuildBeforeMoveBehaviour extends AbstractGodCard implements MoveBeh
         ActionRequest request = new ActionRequest("Choose a cell where to build.", hashMapNeighbouringPositions);
         ActionResponse actionResponse;
         do {
-            actionResponse = gameSession.sendRequest(request, gameSession.getCurrentPlayer().getNickname(), ActionResponse.class);
+            try {
+                actionResponse = gameSession.sendRequest(request, gameSession.getCurrentPlayer().getNickname(), new ActionResponse());
+            } catch (GameEndedException e) {
+                gameSession.setActive();
+                return;
+            }
         } while (actionResponse == null);
 
         Coord coordToBuild = actionResponse.getPosition();

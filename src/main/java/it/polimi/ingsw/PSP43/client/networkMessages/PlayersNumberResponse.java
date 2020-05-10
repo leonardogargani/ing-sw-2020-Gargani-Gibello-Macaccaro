@@ -8,6 +8,9 @@ public class PlayersNumberResponse extends ClientMessage {
         this.numberOfPlayer=numberOfPlayer;
     }
 
+    public PlayersNumberResponse() {
+    }
+
     public int getNumberOfPlayer() {
         return numberOfPlayer;
     }

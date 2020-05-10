@@ -10,6 +10,9 @@ public class ChosenCardResponse extends ClientMessage {
         this.card = card;
     }
 
+    public ChosenCardResponse() {
+    }
+
     public AbstractGodCard getCard() {
         return card;
     }

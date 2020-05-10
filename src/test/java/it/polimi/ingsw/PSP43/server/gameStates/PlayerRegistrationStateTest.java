@@ -6,6 +6,7 @@ import it.polimi.ingsw.PSP43.server.BoardObserver;
 import it.polimi.ingsw.PSP43.server.initialisers.DOMCardsParser;
 import it.polimi.ingsw.PSP43.server.initialisers.GameInitialiser;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.NicknameAlreadyInUseException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import org.junit.Before;
@@ -41,7 +42,7 @@ public class PlayerRegistrationStateTest {
     }
 
     @Test
-    public void executeState() throws InterruptedException, IOException, ClassNotFoundException, WinnerCaughtException {
+    public void executeState() throws InterruptedException, IOException, ClassNotFoundException, WinnerCaughtException, GameEndedException {
         Mockito.doReturn(new PlayersNumberResponse(2)).when(spyGame).sendRequest(any(), any(), any());
         Mockito.doNothing().when(spyGame).sendMessage(any(), any());
         Mockito.doNothing().when(spyState).findNextState();

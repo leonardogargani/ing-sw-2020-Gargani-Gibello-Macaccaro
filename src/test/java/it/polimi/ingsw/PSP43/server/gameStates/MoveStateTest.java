@@ -10,6 +10,7 @@ import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.NicknameAlreadyInUseException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import org.junit.Before;
@@ -97,7 +98,7 @@ public class MoveStateTest {
     }
 
     @Test
-    public void executeState() throws ClassNotFoundException, WinnerCaughtException, InterruptedException, IOException {
+    public void executeState() throws ClassNotFoundException, WinnerCaughtException, InterruptedException, IOException, GameEndedException {
         // TODO : change a bit the configuration of the MoveState, removing some responsabilities
 
         AbstractGodCard mockCard = mock(AbstractGodCard.class);

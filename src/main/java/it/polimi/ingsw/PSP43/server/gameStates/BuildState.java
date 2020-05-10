@@ -9,6 +9,7 @@ import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
@@ -39,9 +40,14 @@ public class BuildState extends TurnState {
         HashMap<Coord, ArrayList<Coord>> availablePositions;
 
         RequestMessage request = new RequestMessage("Do you want to build a dome or a block?");
-        ResponseMessage response;
+        ResponseMessage response = null;
         do {
-            response = game.sendRequest(request, nicknameCurrentPlayer, ResponseMessage.class);
+            try {
+                response = game.sendRequest(request, nicknameCurrentPlayer, new ResponseMessage());
+            } catch (GameEndedException e) {
+                game.setActive();
+                return;
+            }
         } while (response == null);
 
         boolean buildBlock = response.isResponse();
@@ -56,9 +62,14 @@ public class BuildState extends TurnState {
         else availablePositions = playerCard.findAvailablePositionsToBuildDome(game.getCellsHandler(), workersOfPlayer);
 
         ActionRequest message = new ActionRequest("Choose where to build.", availablePositions);
-        ActionResponse actionResponse;
+        ActionResponse actionResponse = null;
         do {
-            actionResponse = game.sendRequest(message, nicknameCurrentPlayer, ActionResponse.class);
+            try {
+                actionResponse = game.sendRequest(message, nicknameCurrentPlayer, new ActionResponse());
+            } catch (GameEndedException e) {
+                game.setActive();
+                return;
+            }
         } while (actionResponse == null);
 
         Coord coordToBuild = actionResponse.getPosition();

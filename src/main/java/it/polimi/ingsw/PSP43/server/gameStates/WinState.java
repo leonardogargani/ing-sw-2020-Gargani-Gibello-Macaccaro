@@ -17,9 +17,11 @@ public class WinState extends TurnState {
     }
 
     public void executeState() throws IOException, ClassNotFoundException {
-        EndGameMessage message = new EndGameMessage(winner + " win the play!");
+        EndGameMessage messageForLosers = new EndGameMessage(winner + " win the play!");
+        EndGameMessage messageForTheWinner = new EndGameMessage("Congratulations! You have won the game!");
+
         ArrayList<String> nicksExcluded = new ArrayList<>();
         nicksExcluded.add(winner);
-        super.getGameSession().sendEndingMessage(message, nicksExcluded);
+        super.getGameSession().sendEndingMessage(messageForLosers, messageForTheWinner, nicksExcluded);
     }
 }

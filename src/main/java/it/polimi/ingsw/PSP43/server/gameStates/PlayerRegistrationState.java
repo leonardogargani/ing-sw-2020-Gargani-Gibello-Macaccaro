@@ -3,6 +3,7 @@ package it.polimi.ingsw.PSP43.server.gameStates;
 import it.polimi.ingsw.PSP43.client.networkMessages.PlayersNumberResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.NicknameAlreadyInUseException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.ChangeNickRequest;
@@ -74,7 +75,12 @@ public class PlayerRegistrationState extends TurnState {
         PlayersNumberRequest request = new PlayersNumberRequest("Choose between a 2 or 3 game play.");
         PlayersNumberResponse response;
         do {
-            response = gameSession.sendRequest(request, message.getNick(), PlayersNumberResponse.class);
+            try {
+                response = gameSession.sendRequest(request, message.getNick(), new PlayersNumberResponse());
+            } catch (GameEndedException e) {
+                gameSession.setActive();
+                return 1;
+            }
         } while (response == null);
         return response.getNumberOfPlayer();
 

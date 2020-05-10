@@ -6,6 +6,7 @@ import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.CardRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.InitialCardsRequest;
@@ -47,9 +48,14 @@ public class ChooseCardState extends TurnState {
         ArrayList<AbstractGodCard> available = game.getCardsHandler().getDeckOfAbstractGodCards();
         InitialCardsRequest cardsRequest = new InitialCardsRequest("Choose " + playersHandler.getNumOfPlayers() + " cards. You " +
                 "will receive the latest not chosen by other players.", available, game.getListenersHashMap().size());
-        ChosenCardsResponse responseCardMessage;
+        ChosenCardsResponse responseCardMessage = null;
         do {
-            responseCardMessage = game.sendRequest(cardsRequest, game.getCurrentPlayer().getNickname(), ChosenCardsResponse.class);
+            try {
+                responseCardMessage = game.sendRequest(cardsRequest, game.getCurrentPlayer().getNickname(), new ChosenCardsResponse());
+            } catch (GameEndedException e) {
+                game.setActive();
+                return;
+            }
         } while (responseCardMessage==null);
         cardsAvailable = responseCardMessage.getCardsName();
         this.executeState();
@@ -87,9 +93,14 @@ public class ChooseCardState extends TurnState {
             nicknameCurrentPlayer = current.getNickname();
 
             CardRequest request = new CardRequest("Choose a card:", cardsAvailable);
-            ChosenCardResponse response;
+            ChosenCardResponse response = null;
             do {
-                response = gameSession.sendRequest(request, nicknameCurrentPlayer, ChosenCardResponse.class);
+                try {
+                    response = gameSession.sendRequest(request, nicknameCurrentPlayer, new ChosenCardResponse());
+                } catch (GameEndedException e) {
+                    gameSession.setActive();
+                    return;
+                }
             } while (response == null);
 
             current.setAbstractGodCard(response.getCard());

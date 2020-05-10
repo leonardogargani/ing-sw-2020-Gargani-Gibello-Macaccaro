@@ -8,6 +8,7 @@ import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.TextMessage;
@@ -81,9 +82,14 @@ public class MoveState extends TurnState {
         }
         availablePositions = playerCard.findAvailablePositionsToMove(game.getCellsHandler(), workers);
         ActionRequest message = new ActionRequest("Choose a position where to place your worker next.", availablePositions);
-        ActionResponse response;
+        ActionResponse response = null;
         do {
-            response = game.sendRequest(message, nicknameCurrentPlayer, ActionResponse.class);
+            try {
+                response = game.sendRequest(message, nicknameCurrentPlayer, new ActionResponse());
+            } catch (GameEndedException e) {
+                game.setActive();
+                return;
+            }
         } while (response == null);
 
         Coord nextPositionChosen = response.getPosition();

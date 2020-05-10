@@ -11,6 +11,7 @@ import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,7 +58,7 @@ public class BuildBeforeMoveBehaviourTest {
      * @throws WinnerCaughtException
      */
     @Test
-    public void handleMove() throws InterruptedException, IOException, ClassNotFoundException, WinnerCaughtException {
+    public void handleMove() throws InterruptedException, IOException, ClassNotFoundException, WinnerCaughtException, GameEndedException {
         Player currentPlayer = spyGame.getPlayersHandler().getPlayer(0);
         int[] playerWorkers = currentPlayer.getWorkersIdsArray();
         Worker workerToBuild = null;

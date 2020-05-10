@@ -7,6 +7,7 @@ import it.polimi.ingsw.PSP43.server.ClientListener;
 import it.polimi.ingsw.PSP43.server.RegisterClientListener;
 import it.polimi.ingsw.PSP43.server.Sender;
 import it.polimi.ingsw.PSP43.server.model.Player;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.ServerMessage;
@@ -51,7 +52,8 @@ public class GameSessionObservable implements Runnable {
         ArrayList<String> listExcluded = new ArrayList<>();
         listExcluded.add(nicknameLeft);
         sendBroadCast(endGameMessage, listExcluded);
-        //listenersHashMap.get(nicknameLeft).removeGameSession(this.idGame);
+        RegisterClientListener ending = new RegisterClientListener();
+        ending.removeGameSession(this.idGame);
     }
 
     public void eliminatePlayer(Player playerEliminated) throws IOException, ClassNotFoundException {
@@ -80,24 +82,27 @@ public class GameSessionObservable implements Runnable {
         }
     }
 
-    public<T extends ClientMessage> T sendRequest(ServerMessage message, String addressee, Class<?> typeExpected) throws IOException, ClassNotFoundException, InterruptedException {
+    public<T extends ClientMessage> T sendRequest(ServerMessage message, String addressee, ClientMessage typeExpected) throws IOException, ClassNotFoundException, InterruptedException, GameEndedException {
         ClientListener listenerAddressee = listenersHashMap.get(addressee);
 
         Sender newSender = new Sender(listenerAddressee, message);
 
         ClientMessage messageArrived = newSender.call();
 
-        if (typeExpected.getClass().isInstance(messageArrived.getClass())) {
+        if (typeExpected.getClass().isInstance(messageArrived)) {
             return (T)messageArrived;
+        }
+        else if (messageArrived instanceof LeaveGameMessage /* tipo end game message*/) {
+            sendBroadCast(new EndGameMessage("We are sorry, but for connecting problems the game is ended!"));
+            throw new GameEndedException();
         }
         else return null;
     }
 
-    public void sendEndingMessage(EndGameMessage message, ArrayList<String> nicksExcluded) throws IOException, ClassNotFoundException {
-        EndGameMessage messageForTheWinner = new EndGameMessage("Congratulations! You have won the game!");
+    public void sendEndingMessage(EndGameMessage messageToLosers, EndGameMessage messageForTheWinner, ArrayList<String> nicksExcluded) throws IOException, ClassNotFoundException {
         for (String s : listenersHashMap.keySet()) {
             if (!nicksExcluded.contains(s)) {
-                listenersHashMap.get(s).sendMessage(message);
+                listenersHashMap.get(s).sendMessage(messageToLosers);
             }
         }
         listenersHashMap.get(nicksExcluded.get(0)).sendMessage(messageForTheWinner);

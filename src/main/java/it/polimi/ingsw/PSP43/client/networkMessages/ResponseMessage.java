@@ -8,6 +8,9 @@ public class ResponseMessage extends ClientMessage {
         this.response = response;
     }
 
+    public ResponseMessage() {
+    }
+
     public boolean isResponse() {
         return response;
     }

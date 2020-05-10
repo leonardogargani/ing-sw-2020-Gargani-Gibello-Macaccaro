@@ -9,6 +9,7 @@ import it.polimi.ingsw.PSP43.server.initialisers.GameInitialiser;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.NicknameAlreadyInUseException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import org.junit.Before;
@@ -55,7 +56,7 @@ public class ChooseWorkerStateTest {
     }
 
     @Test
-    public void executeState() throws InterruptedException, IOException, ClassNotFoundException, WinnerCaughtException {
+    public void executeState() throws InterruptedException, IOException, ClassNotFoundException, WinnerCaughtException, GameEndedException {
         Mockito.doReturn(new WorkersColorResponse(Color.ANSI_BLUE), new ActionResponse(new Coord(0, 0), new Coord(1, 1)),
                          new ActionResponse(new Coord(0, 0), new Coord(1, 3)),
                          new WorkersColorResponse(Color.ANSI_RED), new ActionResponse(new Coord(0,0), new Coord(4,2)),

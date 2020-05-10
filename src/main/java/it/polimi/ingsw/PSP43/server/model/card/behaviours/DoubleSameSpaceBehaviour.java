@@ -3,6 +3,7 @@ package it.polimi.ingsw.PSP43.server.model.card.behaviours;
 import it.polimi.ingsw.PSP43.client.networkMessages.ResponseMessage;
 import it.polimi.ingsw.PSP43.server.DataToAction;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
 
 import java.io.IOException;
@@ -15,9 +16,14 @@ public class DoubleSameSpaceBehaviour extends AbstractGodCard implements BuildBl
         RequestMessage requestMessage = new RequestMessage("Do you want to build another time on the same space?");
         ResponseMessage responseMessage;
         do {
-            responseMessage = dataToAction.getGameSession().sendRequest(  requestMessage,
-                                                                    dataToAction.getPlayer().getNickname(),
-                                                                    ResponseMessage.class);
+            try {
+                responseMessage = dataToAction.getGameSession().sendRequest(  requestMessage,
+                                                                        dataToAction.getPlayer().getNickname(),
+                                                                        new ResponseMessage());
+            } catch (GameEndedException e) {
+                dataToAction.getGameSession().setActive();
+                return;
+            }
         } while (responseMessage == null);
 
         boolean response = responseMessage.isResponse();

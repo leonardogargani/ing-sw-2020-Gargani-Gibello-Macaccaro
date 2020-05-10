@@ -10,6 +10,9 @@ public class WorkersColorResponse extends ClientMessage {
         this.color = color;
     }
 
+    public WorkersColorResponse() {
+    }
+
     public Color getColor() {
         return color;
     }

@@ -6,6 +6,7 @@ import it.polimi.ingsw.PSP43.server.BoardObserver;
 import it.polimi.ingsw.PSP43.server.initialisers.DOMCardsParser;
 import it.polimi.ingsw.PSP43.server.initialisers.GameInitialiser;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,7 +40,7 @@ public class ChooseCardStateTest {
     }
 
     @Test
-    public void initState() throws ClassNotFoundException, IOException, WinnerCaughtException, InterruptedException {
+    public void initState() throws ClassNotFoundException, IOException, WinnerCaughtException, InterruptedException, GameEndedException {
         ChosenCardsResponse response = new ChosenCardsResponse(deck);
 
         Mockito.doReturn(response).when(spyGame).sendRequest(any(), any(), any());
@@ -61,7 +62,7 @@ public class ChooseCardStateTest {
     }
 
     @Test
-    public void executeState() throws ClassNotFoundException, IOException, WinnerCaughtException, InterruptedException {
+    public void executeState() throws ClassNotFoundException, IOException, WinnerCaughtException, InterruptedException, GameEndedException {
         ArrayList<AbstractGodCard> initialAvailableCards = new ArrayList<>();
         ArrayList<AbstractGodCard> cardsToCheck = new ArrayList<>();
         initialAvailableCards.add(deck.get(0));

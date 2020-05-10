@@ -12,6 +12,9 @@ public class ActionResponse extends ClientMessage {
         this.position = position;
     }
 
+    public ActionResponse() {
+    }
+
     public Coord getWorkerPosition() {
         return workerPosition;
     }

@@ -83,8 +83,6 @@ public class ClientListener implements Runnable {
 
         else if (objectArrived instanceof LeaveGameMessage) {
             handleDisconnection();
-            stackMessages.add((ClientMessage) objectArrived);
-            notifyAll();
             return null;
         }
 
@@ -111,16 +109,12 @@ public class ClientListener implements Runnable {
             output = new ObjectOutputStream(clientSocket.getOutputStream());
             output.writeObject(message);
         }
-        input.close();
-        output.close();
-        clientSocket.close();
-        this.disconnected = true;
+        handleDisconnection();
     }
 
 
     public void handleMessage(ClientMessage message) throws IOException {
         if (message instanceof RegistrationMessage) {
-
             RegisterClientListener registrator = new RegisterClientListener(this, (RegistrationMessage) message);
             Thread newRegistratorThread = new Thread(registrator);
             newRegistratorThread.start();
@@ -141,13 +135,15 @@ public class ClientListener implements Runnable {
     }
 
     //TODO fix problems with this method
-    public void handleDisconnection() throws IOException {
-        this.disconnected = true;
-        input.close();
-        output.close();
-        clientSocket.close();
-        RegisterClientListener unregister = new RegisterClientListener(this,null);
-        unregister.notifyDisconnection(this.idGame);
+    public synchronized void handleDisconnection() throws IOException {
+        if (!this.disconnected) {
+            this.disconnected = true;
+            input.close();
+            output.close();
+            clientSocket.close();
+            stackMessages.add(new LeaveGameMessage());
+            notifyAll();
+        }
     }
 
     public void setIdGame(Integer idGame) {

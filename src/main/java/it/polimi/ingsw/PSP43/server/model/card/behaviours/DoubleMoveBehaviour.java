@@ -6,6 +6,7 @@ import it.polimi.ingsw.PSP43.server.DataToAction;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
@@ -22,9 +23,14 @@ public class DoubleMoveBehaviour extends AbstractGodCard implements MoveBehavior
         RequestMessage requestMessage = new RequestMessage("Do you want to move another time?");
         ResponseMessage responseMessage;
         do {
-            responseMessage = dataToAction.getGameSession().sendRequest(  requestMessage,
-                                                                    dataToAction.getPlayer().getNickname(),
-                                                                    ResponseMessage.class);
+            try {
+                responseMessage = dataToAction.getGameSession().sendRequest(  requestMessage,
+                                                                        dataToAction.getPlayer().getNickname(),
+                                                                        new ResponseMessage());
+            } catch (GameEndedException e) {
+                dataToAction.getGameSession().setActive();
+                return;
+            }
         } while (responseMessage == null);
 
         boolean response  = responseMessage.isResponse();
@@ -39,7 +45,12 @@ public class DoubleMoveBehaviour extends AbstractGodCard implements MoveBehavior
             ActionRequest request = new ActionRequest("Choose a cell where to move.", availablePositions);
             ActionResponse actionResponse;
             do {
-                actionResponse = dataToAction.getGameSession().sendRequest(request, dataToAction.getPlayer().getNickname(), ActionResponse.class);
+                try {
+                    actionResponse = dataToAction.getGameSession().sendRequest(request, dataToAction.getPlayer().getNickname(), new ActionResponse());
+                } catch (GameEndedException e) {
+                    dataToAction.getGameSession().setActive();
+                    return;
+                }
             } while (actionResponse == null);
 
             Coord coordChosen = actionResponse.getPosition();

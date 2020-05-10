@@ -12,6 +12,9 @@ public class ChosenCardsResponse extends ClientMessage {
         this.cards = cards;
     }
 
+    public ChosenCardsResponse() {
+    }
+
     public ArrayList<AbstractGodCard> getCardsName() {
         return cards;
     }

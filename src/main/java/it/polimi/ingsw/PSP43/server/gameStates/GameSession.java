@@ -1,7 +1,9 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
+import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.server.BoardObserver;
+import it.polimi.ingsw.PSP43.server.ClientListener;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
@@ -62,6 +64,7 @@ public class GameSession extends GameSessionObservable {
     }
 
     public void run() {
+        System.out.println("Started thread " + getIdGame());
         while (active) {
             try {
                 TimeUnit.SECONDS.sleep(1);
@@ -76,7 +79,7 @@ public class GameSession extends GameSessionObservable {
                 }
             }
         }
-
+        System.out.println("Ended thread " + getIdGame());
     }
 
     public Boolean getActive() {
@@ -209,8 +212,8 @@ public class GameSession extends GameSessionObservable {
     }
 
     @Override
-    public void sendEndingMessage(EndGameMessage message, ArrayList<String> nicksExcluded) throws IOException, ClassNotFoundException {
-        super.sendEndingMessage(message, nicksExcluded);
+    public synchronized void unregisterFromGame(LeaveGameMessage message, ClientListener player) throws IOException {
+        super.unregisterFromGame(message, player);
         this.active = Boolean.FALSE;
     }
 }

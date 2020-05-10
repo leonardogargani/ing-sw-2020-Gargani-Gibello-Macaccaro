@@ -9,6 +9,7 @@ import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
 
@@ -46,7 +47,12 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
             ActionRequest request = new ActionRequest("Choose a position where to force your opponent.", availablePositionsToForce);
             ActionResponse response;
             do {
-                response = gameSession.sendRequest(request, dataToAction.getPlayer().getNickname(), ActionResponse.class);
+                try {
+                    response = gameSession.sendRequest(request, dataToAction.getPlayer().getNickname(), new ActionResponse());
+                } catch (GameEndedException e) {
+                    gameSession.setActive();
+                    return;
+                }
             } while (response == null);
 
             Coord coordToForce = response.getPosition();

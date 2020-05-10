@@ -8,6 +8,9 @@ public class RegistrationMessage extends ClientMessage {
         this.nick = nick;
     }
 
+    public RegistrationMessage() {
+    }
+
     public String getNick() {
         return nick;
     }
