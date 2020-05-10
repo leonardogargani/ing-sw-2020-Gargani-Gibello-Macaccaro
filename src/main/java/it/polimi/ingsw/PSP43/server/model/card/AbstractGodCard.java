@@ -143,6 +143,9 @@ public abstract class AbstractGodCard implements Serializable {
                 neighbouringCoords.remove(c);
             }
         }
+        for (Coord c : neighbouringCoords.keySet()) {
+            if (neighbouringCoords.get(c).size() == 0) neighbouringCoords.remove(c);
+        }
         return neighbouringCoords;
     }
 

@@ -20,9 +20,23 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+/**
+ * This class is made to give run-time the possibility to a card
+ * to build a block before moving.
+ */
 public class BuildBeforeMoveBehaviour extends AbstractGodCard implements MoveBehavior {
     private static final long serialVersionUID = 2762718994928009618L;
 
+    /**
+     * This method handles the interaction with the client, asking him if does he want to
+     * build a block before moving, if the moves does not imply for the worker to move up
+     * to an upper level.
+     * @param dataToAction The necessary data to do the move made by the player.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws WinnerCaughtException
+     * @throws InterruptedException
+     */
     public void handleMove(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         GameSession gameSession = dataToAction.getGameSession();
         Player player = dataToAction.getPlayer();
@@ -49,6 +63,16 @@ public class BuildBeforeMoveBehaviour extends AbstractGodCard implements MoveBeh
         super.move(dataToAction);
     }
 
+    /**
+     * This method is called if the player decides that he wants to build a block before moving
+     * and it computes all the cells where it's possible to build, asks to the player the cell
+     * where to build and calls the build method.
+     * @param oldData The data used to recognise which worker is going to move (and so has the
+     *                right to build).
+     * @throws InterruptedException
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     private void buildBeforeMove(DataToAction oldData) throws InterruptedException, IOException, ClassNotFoundException {
         GameSession gameSession = oldData.getGameSession();
         Worker workerAllowedToBuild = oldData.getWorker();

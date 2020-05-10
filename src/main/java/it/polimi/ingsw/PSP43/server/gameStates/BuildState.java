@@ -37,20 +37,6 @@ public class BuildState extends TurnState {
         AbstractGodCard playerCard = currentPlayer.getAbstractGodCard();
         String nicknameCurrentPlayer = currentPlayer.getNickname();
 
-        HashMap<Coord, ArrayList<Coord>> availablePositions;
-
-        RequestMessage request = new RequestMessage("Do you want to build a dome or a block?");
-        ResponseMessage response = null;
-        do {
-            try {
-                response = game.sendRequest(request, nicknameCurrentPlayer, new ResponseMessage());
-            } catch (GameEndedException e) {
-                game.setActive();
-                return;
-            }
-        } while (response == null);
-
-        boolean buildBlock = response.isResponse();
 
         int[] workerIds = currentPlayer.getWorkersIdsArray();
         ArrayList<Worker> workersOfPlayer = new ArrayList<>();
@@ -58,11 +44,33 @@ public class BuildState extends TurnState {
             if (workersHandler.getWorker(id).isLatestMoved())
                 workersOfPlayer.add(workersHandler.getWorker(id));
         }
-        if (buildBlock) availablePositions = playerCard.findAvailablePositionsToBuildBlock(game.getCellsHandler(), workersOfPlayer);
-        else availablePositions = playerCard.findAvailablePositionsToBuildDome(game.getCellsHandler(), workersOfPlayer);
+        HashMap<Coord, ArrayList<Coord>> availablePositionsBuildBlock = playerCard.findAvailablePositionsToBuildBlock(game.getCellsHandler(), workersOfPlayer);
+        HashMap<Coord, ArrayList<Coord>> availablePositionsBuildDome = playerCard.findAvailablePositionsToBuildDome(game.getCellsHandler(), workersOfPlayer);
 
-        ActionRequest message = new ActionRequest("Choose where to build.", availablePositions);
+        boolean buildDome = false;
+        ResponseMessage response = null;
+
+        if (availablePositionsBuildDome.size() != 0) {
+            RequestMessage request = new RequestMessage("Do you want to build a dome? Otherwise you will " +
+                    "select a cell where to build a block.");
+            do {
+                try {
+                    response = game.sendRequest(request, nicknameCurrentPlayer, new ResponseMessage());
+                } catch (GameEndedException e) {
+                    game.setActive();
+                    return;
+                }
+            } while (response == null);
+        }
+
+
         ActionResponse actionResponse = null;
+        ActionRequest message;
+        if (response != null && response.isResponse()) {
+            message = new ActionRequest("Choose where to build a dome.", availablePositionsBuildDome);
+        } else {
+            message = new ActionRequest("Choose where to build.", availablePositionsBuildBlock);
+        }
         do {
             try {
                 actionResponse = game.sendRequest(message, nicknameCurrentPlayer, new ActionResponse());
@@ -75,8 +83,8 @@ public class BuildState extends TurnState {
         Coord coordToBuild = actionResponse.getPosition();
         Worker workerToBuild = workersHandler.getWorker(actionResponse.getWorkerPosition());
         // TODO : Is the worker necessary in the buildBlock method???
-        if (buildBlock) playerCard.buildBlock(new DataToAction(game, currentPlayer, workerToBuild, coordToBuild));
-        else playerCard.buildDome(new DataToAction(game, currentPlayer, workerToBuild, coordToBuild));
+        if (response != null && response.isResponse()) playerCard.buildDome(new DataToAction(game, currentPlayer, workerToBuild, coordToBuild));
+        else playerCard.buildBlock(new DataToAction(game, currentPlayer, workerToBuild, coordToBuild));
         findNextState();
     }
 
