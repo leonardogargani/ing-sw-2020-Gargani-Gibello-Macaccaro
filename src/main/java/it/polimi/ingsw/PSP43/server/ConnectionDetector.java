@@ -20,24 +20,19 @@ public class ConnectionDetector implements Runnable {
 
     @Override
     public void run() {
-        long time = System.currentTimeMillis();
         while (true) {
             try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if(clientListener.isDisconnected())
-                break;
-            if (System.currentTimeMillis() > time + timeout / 2) {
-                time = System.currentTimeMillis();
+                TimeUnit.SECONDS.sleep(10);
+                if(clientListener.isDisconnected())
+                    break;
                 try {
                     clientListener.sendMessage(new PingMessage());
                 } catch (IOException e) {
-                    System.out.println("Server:problems with ping messages");
+                    clientListener.handleDisconnection();
                 }
+            } catch (InterruptedException | IOException e) {
+                e.printStackTrace();
             }
         }
     }
-
 }

@@ -34,7 +34,7 @@ public class ClientMain {
             clientManagerThread.start();
 
         } catch (QuitPlayerException e) {
-            // TODO implement the handling of a QuitPlayerException when a player writes "quit" in the cli
+            System.exit(0);
         }
 
     }

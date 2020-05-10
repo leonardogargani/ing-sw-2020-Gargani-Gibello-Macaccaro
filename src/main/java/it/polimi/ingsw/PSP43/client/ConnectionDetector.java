@@ -18,22 +18,18 @@ public class ConnectionDetector implements Runnable {
 
     @Override
     public void run() {
-        long time = System.currentTimeMillis();
         while (true) {
             try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if (System.currentTimeMillis() > time + timeout / 2) {
-                time = System.currentTimeMillis();
+                TimeUnit.SECONDS.sleep(10);
+                if(clientBG.isDisconnect())
+                    break;
                 try {
-                    if(clientBG.isDisconnect())
-                        break;
                     clientBG.sendMessage(new PingMessage());
                 } catch (IOException e) {
-                    // TODO handle this exception
+                    clientBG.handleDisconnection();
                 }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }

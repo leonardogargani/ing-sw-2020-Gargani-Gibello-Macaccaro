@@ -69,6 +69,11 @@ public class ClientBG implements Runnable {
             messageArrived = input.readObject();
         }while (messageArrived instanceof PingMessage);
 
+        if(messageArrived instanceof EndGameMessage)
+        {
+            closer();
+            clientManager.getMessageBox().add((ServerMessage)messageArrived);
+        }
         clientManager.getMessageBox().add((ServerMessage)messageArrived);
 
     }
@@ -77,7 +82,7 @@ public class ClientBG implements Runnable {
     public void sendMessage(ClientMessage message) throws IOException {
         try{
             output = new ObjectOutputStream(serverSocket.getOutputStream());
-            output.writeObject(message);}catch (IOException e){
+            output.writeObject(message);}catch (IOException e){handleDisconnection();
         }
     }
 
@@ -88,9 +93,6 @@ public class ClientBG implements Runnable {
             output.writeObject(message);
         }catch (IOException e){handleDisconnection();}
         handleDisconnection();
-        input.close();
-        output.close();
-        serverSocket.close();
     }
 
 
@@ -103,7 +105,12 @@ public class ClientBG implements Runnable {
         this.disconnect = disconnect;
     }
 
-    public void handleDisconnection(){
+    public void closer() throws IOException {
+        input.close();
+        output.close();
+        serverSocket.close();}
+
+    public void handleDisconnection() {
         clientManager.getMessageBox().add(0,new EndGameMessage("end game!"));
     }
 }

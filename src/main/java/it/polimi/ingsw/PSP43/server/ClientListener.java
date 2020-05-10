@@ -81,6 +81,13 @@ public class ClientListener implements Runnable {
         if (objectArrived instanceof RegistrationMessage)
             return (ClientMessage) objectArrived;
 
+        else if (objectArrived instanceof LeaveGameMessage) {
+            handleDisconnection();
+            stackMessages.add((ClientMessage) objectArrived);
+            notifyAll();
+            return null;
+        }
+
         else {
             stackMessages.add((ClientMessage) objectArrived);
             notifyAll();
@@ -107,6 +114,7 @@ public class ClientListener implements Runnable {
         input.close();
         output.close();
         clientSocket.close();
+        this.disconnected = true;
     }
 
 
@@ -116,8 +124,6 @@ public class ClientListener implements Runnable {
             RegisterClientListener registrator = new RegisterClientListener(this, (RegistrationMessage) message);
             Thread newRegistratorThread = new Thread(registrator);
             newRegistratorThread.start();
-        } else if (message instanceof LeaveGameMessage) {
-            handleDisconnection();
         }
     }
 

@@ -5,6 +5,7 @@ import it.polimi.ingsw.PSP43.client.cli.InputHandler;
 import it.polimi.ingsw.PSP43.client.cli.QuitPlayerException;
 import it.polimi.ingsw.PSP43.client.cli.Screens;
 import it.polimi.ingsw.PSP43.client.gui.GuiGraphicHandler;
+import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.PlayersNumberResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.gameStates.PlayerRegistrationState;
@@ -44,15 +45,19 @@ public class ClientManager implements Runnable{
         while (isActive){
             try {
                 handleEvent();
-            } catch (QuitPlayerException e) {
+            } catch (QuitPlayerException | IOException e) {
                 // TODO implement the handling of a QuitPlayerException when a player writes "quit" in the cli
-                e.printStackTrace();
+                try {
+                    clientBG.sendMessage(new LeaveGameMessage());
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
         }
     }
 
 
-    public void handleEvent() throws QuitPlayerException {
+    public void handleEvent() throws QuitPlayerException, IOException {
         if( messageBox.size() >= 1)
         {
             if(messageBox.get(0) instanceof CellMessage)
@@ -70,6 +75,7 @@ public class ClientManager implements Runnable{
             else if(messageBox.get(0) instanceof EndGameMessage)
             {getGraphicHandler().updateMenuChange((EndGameMessage)messageBox.get(0));
                 clientBG.setDisconnect(true);
+                clientBG.closer();
                 this.isActive = false;
             }
 
