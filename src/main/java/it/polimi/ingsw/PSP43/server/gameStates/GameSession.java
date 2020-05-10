@@ -64,7 +64,6 @@ public class GameSession extends GameSessionObservable {
     }
 
     public void run() {
-        System.out.println("Started thread " + getIdGame());
         while (active) {
             try {
                 TimeUnit.SECONDS.sleep(1);
@@ -79,7 +78,6 @@ public class GameSession extends GameSessionObservable {
                 }
             }
         }
-        System.out.println("Ended thread " + getIdGame());
     }
 
     public Boolean getActive() {

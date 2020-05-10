@@ -143,6 +143,8 @@ public class ClientListener implements Runnable {
             clientSocket.close();
             stackMessages.add(new LeaveGameMessage());
             notifyAll();
+            RegisterClientListener notifier = new RegisterClientListener();
+            notifier.notifyDisconnection(this.idGame);
         }
     }
 

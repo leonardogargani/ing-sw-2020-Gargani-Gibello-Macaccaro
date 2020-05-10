@@ -69,13 +69,10 @@ public class ClientBG implements Runnable {
             messageArrived = input.readObject();
         }while (messageArrived instanceof PingMessage);
 
-        if(messageArrived instanceof EndGameMessage)
-        {
-            closer();
-            clientManager.getMessageBox().add((ServerMessage)messageArrived);
-        }
-        clientManager.getMessageBox().add((ServerMessage)messageArrived);
+        if(messageArrived instanceof EndGameMessage){
+            closer();}
 
+        clientManager.getMessageBox().add((ServerMessage)messageArrived);
     }
 
 

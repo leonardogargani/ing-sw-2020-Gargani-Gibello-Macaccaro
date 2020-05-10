@@ -137,8 +137,6 @@ public class ClientManager implements Runnable{
 
     }
 
-    public boolean isActive() {
-        return isActive;
-    }
+
 
 }

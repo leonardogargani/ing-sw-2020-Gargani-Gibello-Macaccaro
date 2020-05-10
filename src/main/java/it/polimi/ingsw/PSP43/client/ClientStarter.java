@@ -4,7 +4,7 @@ import it.polimi.ingsw.PSP43.client.cli.InputHandler;
 import it.polimi.ingsw.PSP43.client.cli.QuitPlayerException;
 
 
-public class ClientMain {
+public class ClientStarter {
 
     public static void main(String[] args) {
 
