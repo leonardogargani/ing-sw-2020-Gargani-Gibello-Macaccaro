@@ -33,9 +33,9 @@ public class CliTopMenuTest {
     public void testShowSetContentWithNick() {
         test.setContentWithNick("TestNick");
         test.show();
-        assertEquals(("          -------------------------------------          " + System.lineSeparator() +
-                              "                    It's TestNick's turn" + System.lineSeparator() +
-                              "          -------------------------------------          " + System.lineSeparator() + System.lineSeparator()),
+        assertEquals(("          -------------------------------------          " + "\n" +
+                              "                    It's TestNick's turn" + "\n" +
+                              "          -------------------------------------          " + "\n" + System.lineSeparator()),
                 outContent.toString());
     }
 }

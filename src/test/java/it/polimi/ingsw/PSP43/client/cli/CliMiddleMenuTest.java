@@ -33,8 +33,8 @@ public class CliMiddleMenuTest {
         infos.add(info3);
         test.setContentWithInfo(infos);
         test.show();
-        assertEquals(info1 + System.lineSeparator() + info2 + System.lineSeparator()
-                + info3 + System.lineSeparator() + System.lineSeparator(), outContent.toString());
+        assertEquals(info1 + "\n" + info2 + "\n"
+                + info3 + "\n" + System.lineSeparator(), outContent.toString());
     }
 
 }
