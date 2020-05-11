@@ -69,6 +69,11 @@ public class CellsHandler {
         return freeCells;
     }
 
+    /**
+     * This method selects all the free cells (no worker and no dome) within a bunch of coordinates supplied by the caller.
+     * @param positions The coordinates supplied by the caller within which the method has to identify the ones free.
+     * @return an ArrayList of free coordinates within all the supplied coordinates as parameter of the method.
+     */
     public ArrayList<Coord> selectAllFreeCoords(ArrayList<Coord> positions) {
         ArrayList<Coord> newPositions = new ArrayList<>();
         for (Coord c : positions) {
@@ -110,6 +115,11 @@ public class CellsHandler {
         return availablePositions;
     }
 
+    /**
+     * This method identifies a bunch of coordinates that are neighbours of the one supplied by the caller.
+     * @param coord The coordinates of which the method has to identify all the neighbouring coordinates.
+     * @return An ArrayList of coordinates representing all the neighbours of the coordinates supplied by the caller.
+     */
     private ArrayList<Coord> findNeighbouringCoords(Coord coord) {
         ArrayList<Coord> positions = new ArrayList<>();
 

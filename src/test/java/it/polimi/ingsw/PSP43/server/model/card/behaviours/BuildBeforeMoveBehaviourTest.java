@@ -52,10 +52,6 @@ public class BuildBeforeMoveBehaviourTest {
      * which is the one that has to give the opportunity at runtime to the player to build before moving,
      * respecting certain conditions. The method doesn't check if the move is successful because it is
      * already checked in the superclass method.
-     * @throws InterruptedException
-     * @throws IOException
-     * @throws ClassNotFoundException
-     * @throws WinnerCaughtException
      */
     @Test
     public void handleMove() throws InterruptedException, IOException, ClassNotFoundException, WinnerCaughtException, GameEndedException {

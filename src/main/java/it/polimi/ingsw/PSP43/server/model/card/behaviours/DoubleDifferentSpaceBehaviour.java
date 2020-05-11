@@ -25,9 +25,6 @@ public class DoubleDifferentSpaceBehaviour extends AbstractGodCard implements Bu
     /**
      * This method checks if the player wants to build another time
      * @param dataToAction The necessary data used to make a build and also to check the cell where it is not possible to build again.
-     * @throws IOException
-     * @throws ClassNotFoundException
-     * @throws InterruptedException
      */
     public void handleBuildBlock(DataToAction dataToAction) throws IOException, ClassNotFoundException, InterruptedException {
         super.buildBlock(dataToAction);
@@ -56,7 +53,6 @@ public class DoubleDifferentSpaceBehaviour extends AbstractGodCard implements Bu
      * This method is used to give the possibility to the player to build twice, but not on the same space.
      * @param oldDataToAction The data of the previous build, used to check and not to give the possibility to the player
      *                        to build in the same position of the previous one.
-     * @throws IOException
      */
     private void buildAnotherTime(DataToAction oldDataToAction) throws IOException, InterruptedException, ClassNotFoundException {
         GameSession game = oldDataToAction.getGameSession();
