@@ -1,0 +1,165 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DoubleDifferentSpaceBehaviour</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.model.card.behaviours</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DoubleDifferentSpaceBehaviour (it.polimi.ingsw.PSP43.server.model.card.behaviours)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DoubleDifferentSpaceBehaviour</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    81.8%
+  </span>
+  <span class="absValue">
+    (27/ 33)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.model.card.behaviours;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.ResponseMessage;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.DataToAction;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Worker;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+<i>11</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
+<i>12</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;import java.io.IOException;
+<i>15</i>&nbsp;import java.util.ArrayList;
+<i>16</i>&nbsp;import java.util.HashMap;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;/**
+<i>19</i>&nbsp; * This class is made to give run-time the possibility to a card
+<i>20</i>&nbsp; * to build another block, but not in the same position.
+<i>21</i>&nbsp; */
+<b class="fc"><i>22</i>&nbsp;public class DoubleDifferentSpaceBehaviour extends AbstractGodCard implements BuildBlockBehaviour {</b>
+<i>23</i>&nbsp;    private static final long serialVersionUID = 5472654096820247816L;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    /**
+<i>26</i>&nbsp;     * This method checks if the player wants to build another time
+<i>27</i>&nbsp;     * @param dataToAction The necessary data used to make a build and also to check the cell where it is not possible to build again.
+<i>28</i>&nbsp;     */
+<i>29</i>&nbsp;    public void handleBuildBlock(DataToAction dataToAction) throws IOException, ClassNotFoundException, InterruptedException {
+<b class="fc"><i>30</i>&nbsp;        super.buildBlock(dataToAction);</b>
+<b class="fc"><i>31</i>&nbsp;        RequestMessage requestMessage = new RequestMessage(&quot;Do you want to build another time on a different space?&quot;);</b>
+<i>32</i>&nbsp;        // TODO :   it should be possible to generify all the cards&#39; interaction method with the client in the superclass AbstractGodCard.
+<i>33</i>&nbsp;        //          In that way I shouldn&#39;t repeat all the same pattern in all the classes of the cards in which I have to interact with the client. :(
+<i>34</i>&nbsp;        ResponseMessage responseMessage;
+<i>35</i>&nbsp;        do {
+<i>36</i>&nbsp;            try {
+<b class="fc"><i>37</i>&nbsp;                responseMessage = dataToAction.getGameSession().sendRequest(  requestMessage,</b>
+<b class="fc"><i>38</i>&nbsp;                                                                        dataToAction.getPlayer().getNickname(),</b>
+<i>39</i>&nbsp;                                                                        new ResponseMessage());
+<b class="nc"><i>40</i>&nbsp;            } catch (GameEndedException e) {</b>
+<b class="nc"><i>41</i>&nbsp;                dataToAction.getGameSession().setActive();</b>
+<b class="nc"><i>42</i>&nbsp;                return;</b>
+<b class="fc"><i>43</i>&nbsp;            }</b>
+<b class="fc"><i>44</i>&nbsp;        } while (responseMessage == null);</b>
+<i>45</i>&nbsp;
+<b class="fc"><i>46</i>&nbsp;        boolean response = responseMessage.isResponse();</b>
+<b class="fc"><i>47</i>&nbsp;        if (response) {</b>
+<b class="fc"><i>48</i>&nbsp;            buildAnotherTime(dataToAction);</b>
+<i>49</i>&nbsp;        }
+<b class="fc"><i>50</i>&nbsp;    }</b>
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;    /**
+<i>53</i>&nbsp;     * This method is used to give the possibility to the player to build twice, but not on the same space.
+<i>54</i>&nbsp;     * @param oldDataToAction The data of the previous build, used to check and not to give the possibility to the player
+<i>55</i>&nbsp;     *                        to build in the same position of the previous one.
+<i>56</i>&nbsp;     */
+<i>57</i>&nbsp;    private void buildAnotherTime(DataToAction oldDataToAction) throws IOException, InterruptedException, ClassNotFoundException {
+<b class="fc"><i>58</i>&nbsp;        GameSession game = oldDataToAction.getGameSession();</b>
+<b class="fc"><i>59</i>&nbsp;        ArrayList&lt;Worker&gt; workersToMove = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>60</i>&nbsp;        workersToMove.add(oldDataToAction.getWorker());</b>
+<b class="fc"><i>61</i>&nbsp;        HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositions = this.findAvailablePositionsToBuildBlock(game.getCellsHandler(), workersToMove);</b>
+<b class="fc"><i>62</i>&nbsp;        Coord oldCoordsBuilt = oldDataToAction.getNewPosition();</b>
+<b class="fc"><i>63</i>&nbsp;        for (Coord c : availablePositions.keySet()) {</b>
+<b class="fc"><i>64</i>&nbsp;            availablePositions.get(c).removeIf(c1 -&gt; c1.getY() == oldCoordsBuilt.getY() &amp;&amp; c1.getX() == oldCoordsBuilt.getY());</b>
+<b class="fc"><i>65</i>&nbsp;        }</b>
+<b class="fc"><i>66</i>&nbsp;        ActionRequest request = new ActionRequest(&quot;Choose a position where to build a block.&quot;, availablePositions);</b>
+<i>67</i>&nbsp;        ActionResponse actionResponse;
+<i>68</i>&nbsp;        do {
+<i>69</i>&nbsp;            try {
+<b class="fc"><i>70</i>&nbsp;                actionResponse = oldDataToAction.getGameSession().sendRequest(  request,</b>
+<b class="fc"><i>71</i>&nbsp;                        oldDataToAction.getPlayer().getNickname(),</b>
+<i>72</i>&nbsp;                        new ActionResponse());
+<b class="nc"><i>73</i>&nbsp;            } catch (GameEndedException | IOException | ClassNotFoundException | InterruptedException e) {</b>
+<b class="nc"><i>74</i>&nbsp;                game.setActive();</b>
+<b class="nc"><i>75</i>&nbsp;                return;</b>
+<b class="fc"><i>76</i>&nbsp;            }</b>
+<b class="fc"><i>77</i>&nbsp;        } while (actionResponse == null);</b>
+<i>78</i>&nbsp;
+<b class="fc"><i>79</i>&nbsp;        Coord coordChosen = actionResponse.getPosition();</b>
+<b class="fc"><i>80</i>&nbsp;        super.buildBlock(new DataToAction(oldDataToAction.getGameSession(), oldDataToAction.getPlayer(), oldDataToAction.getWorker(), coordChosen));</b>
+<b class="fc"><i>81</i>&nbsp;    }</b>
+<i>82</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-12 15:12</div>
+</div>
+</body>
+</html>

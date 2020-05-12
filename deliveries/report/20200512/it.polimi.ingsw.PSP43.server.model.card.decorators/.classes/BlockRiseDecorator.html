@@ -1,0 +1,121 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BlockRiseDecorator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.model.card.decorators</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BlockRiseDecorator (it.polimi.ingsw.PSP43.server.model.card.decorators)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BlockRiseDecorator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (2/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    21.4%
+  </span>
+  <span class="absValue">
+    (3/ 14)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.model.card.decorators;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Cell;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Worker;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;import java.util.ArrayList;
+<i>10</i>&nbsp;import java.util.HashMap;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;public class BlockRiseDecorator extends PowerGodDecorator {
+<i>13</i>&nbsp;    private static final long serialVersionUID = -5029682300766417371L;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;    public BlockRiseDecorator() {
+<b class="nc"><i>16</i>&nbsp;        super();</b>
+<b class="nc"><i>17</i>&nbsp;    }</b>
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;    public BlockRiseDecorator(AbstractGodCard godComponent) {
+<b class="fc"><i>20</i>&nbsp;        super(godComponent);</b>
+<b class="fc"><i>21</i>&nbsp;    }</b>
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;    public HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; findAvailablePositionsToMove(CellsHandler handler, ArrayList&lt;Worker&gt; workers) {
+<b class="nc"><i>24</i>&nbsp;        HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; positions = super.findAvailablePositionsToMove(handler, workers);</b>
+<b class="nc"><i>25</i>&nbsp;        for (Coord c : positions.keySet()) {</b>
+<b class="nc"><i>26</i>&nbsp;            for (Coord c1 : positions.get(c)) {</b>
+<b class="nc"><i>27</i>&nbsp;                Cell newCell = handler.getCell(c1);</b>
+<b class="nc"><i>28</i>&nbsp;                Cell oldCell = handler.getCell(c);</b>
+<b class="nc"><i>29</i>&nbsp;                if (newCell.getHeight() &gt; oldCell.getHeight()) positions.get(c).remove(c1);</b>
+<b class="nc"><i>30</i>&nbsp;            }</b>
+<b class="nc"><i>31</i>&nbsp;        }</b>
+<b class="nc"><i>32</i>&nbsp;        return super.findAvailablePositionsToMove(handler, workers);</b>
+<i>33</i>&nbsp;    }
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    public AbstractGodCard cleanFromEffects(String nameOfEffect) throws ClassNotFoundException {
+<b class="fc"><i>36</i>&nbsp;        return super.getGodComponent().cleanFromEffects(nameOfEffect);</b>
+<i>37</i>&nbsp;    }
+<i>38</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-12 15:12</div>
+</div>
+</body>
+</html>

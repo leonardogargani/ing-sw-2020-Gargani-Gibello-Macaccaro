@@ -1,0 +1,216 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: PlayerRegistrationState</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.gameStates</a> ]
+</div>
+
+<h1>Coverage Summary for Class: PlayerRegistrationState (it.polimi.ingsw.PSP43.server.gameStates)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PlayerRegistrationState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    86.1%
+  </span>
+  <span class="absValue">
+    (31/ 36)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$1766034744</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$1766034744$auxiliary$3eCv7CXo</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$1766034744$auxiliary$DE1Dr9yQ</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$1766034744$auxiliary$fMI0j7EJ</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$1766034744$auxiliary$GulenMiV</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$1766034744$auxiliary$OC3qTlP5</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$1766034744$auxiliary$qDuVBj0B</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$1766034744$auxiliary$WdcrvPQI</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$1766034744$auxiliary$ZhZJSeGX</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    86.1%
+  </span>
+  <span class="absValue">
+    (31/ 36)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.gameStates;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.PlayersNumberResponse;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.NicknameAlreadyInUseException;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.ChangeNickRequest;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.PlayersNumberRequest;
+<i>11</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.StartGameMessage;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;import java.io.IOException;
+<i>14</i>&nbsp;import java.util.concurrent.locks.Lock;
+<i>15</i>&nbsp;import java.util.concurrent.locks.ReentrantLock;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;/**
+<i>18</i>&nbsp; * This is the initial state where the game accept new players and, for the first one,
+<i>19</i>&nbsp; * asks for the number of participants required.
+<i>20</i>&nbsp; */
+<i>21</i>&nbsp;public class PlayerRegistrationState extends TurnState {
+<i>22</i>&nbsp;    private Lock lock;
+<i>23</i>&nbsp;    Boolean first;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    public PlayerRegistrationState(GameSession gameSession) {
+<b class="fc"><i>26</i>&nbsp;        super(gameSession);</b>
+<b class="fc"><i>27</i>&nbsp;        lock = new ReentrantLock();</b>
+<b class="fc"><i>28</i>&nbsp;        first = Boolean.TRUE;</b>
+<b class="fc"><i>29</i>&nbsp;    }</b>
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    /**
+<i>32</i>&nbsp;     * This method is the one which has to initialise the data of the new player connected.
+<i>33</i>&nbsp;     * If the nickname chosen by the player is already used, it sends an error to the client
+<i>34</i>&nbsp;     * asking him to re-insert the username. In that case the player will be treated as a
+<i>35</i>&nbsp;     * new player connecting to the server.
+<i>36</i>&nbsp;     *
+<i>37</i>&nbsp;     * @param message This is the message sent from the client.
+<i>38</i>&nbsp;     */
+<i>39</i>&nbsp;    public void executeState(RegistrationMessage message) throws IOException {
+<b class="fc"><i>40</i>&nbsp;        GameSession game = super.getGameSession();</b>
+<b class="fc"><i>41</i>&nbsp;        PlayersHandler playersHandler = game.getPlayersHandler();</b>
+<i>42</i>&nbsp;        try {
+<b class="fc"><i>43</i>&nbsp;            playersHandler.createNewPlayer(message.getNick());</b>
+<b class="fc"><i>44</i>&nbsp;            int numberOfPlayers = game.getPlayersHandler().getNumOfPlayers();</b>
+<i>45</i>&nbsp;            int num;
+<b class="fc"><i>46</i>&nbsp;            if (first == Boolean.TRUE) {</b>
+<b class="fc"><i>47</i>&nbsp;                first = Boolean.FALSE;</b>
+<b class="fc"><i>48</i>&nbsp;                num = askNumberPlayers(game, message);</b>
+<b class="fc"><i>49</i>&nbsp;                game.maxNumPlayers = num;</b>
+<i>50</i>&nbsp;            }
+<i>51</i>&nbsp;
+<b class="fc"><i>52</i>&nbsp;            if (game.maxNumPlayers == numberOfPlayers) {</b>
+<b class="fc"><i>53</i>&nbsp;                this.findNextState();</b>
+<i>54</i>&nbsp;            } else {
+<b class="fc"><i>55</i>&nbsp;                StartGameMessage clientMessage = new StartGameMessage(&quot;We are connecting you with other players!&quot;);</b>
+<b class="fc"><i>56</i>&nbsp;                game.sendMessage(clientMessage, message.getNick());</b>
+<i>57</i>&nbsp;            }
+<b class="fc"><i>58</i>&nbsp;        } catch (NicknameAlreadyInUseException e) {</b>
+<b class="fc"><i>59</i>&nbsp;            ChangeNickRequest notifyChangeNick = new ChangeNickRequest(&quot;We are sorry, but &quot; + message.getNick() +</b>
+<i>60</i>&nbsp;                    &quot;is already in use.&quot;);
+<b class="fc"><i>61</i>&nbsp;            game.sendMessage(notifyChangeNick, message.getNick());</b>
+<b class="fc"><i>62</i>&nbsp;            game.getListenersHashMap().remove(message.getNick());</b>
+<b class="nc"><i>63</i>&nbsp;        } catch (IOException | ClassNotFoundException | InterruptedException e) {</b>
+<b class="nc"><i>64</i>&nbsp;            e.printStackTrace();</b>
+<b class="fc"><i>65</i>&nbsp;        }</b>
+<b class="fc"><i>66</i>&nbsp;    }</b>
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    /**
+<i>69</i>&nbsp;     * This method asks to the first player of the game how many opponents does he want.
+<i>70</i>&nbsp;     *
+<i>71</i>&nbsp;     * @param gameSession This is a reference to the center of the game database.
+<i>72</i>&nbsp;     * @param message     This is the message sent from the client.
+<i>73</i>&nbsp;     */
+<i>74</i>&nbsp;    protected int askNumberPlayers(GameSession gameSession, RegistrationMessage message) throws IOException, ClassNotFoundException, InterruptedException {
+<b class="fc"><i>75</i>&nbsp;        PlayersNumberRequest request = new PlayersNumberRequest(&quot;Choose between a 2 or 3 game play.&quot;);</b>
+<i>76</i>&nbsp;        PlayersNumberResponse response;
+<i>77</i>&nbsp;        do {
+<i>78</i>&nbsp;            try {
+<b class="fc"><i>79</i>&nbsp;                response = gameSession.sendRequest(request, message.getNick(), new PlayersNumberResponse());</b>
+<b class="nc"><i>80</i>&nbsp;            } catch (GameEndedException e) {</b>
+<b class="nc"><i>81</i>&nbsp;                gameSession.setActive();</b>
+<b class="nc"><i>82</i>&nbsp;                return 1;</b>
+<b class="fc"><i>83</i>&nbsp;            }</b>
+<b class="fc"><i>84</i>&nbsp;        } while (response == null);</b>
+<b class="fc"><i>85</i>&nbsp;        return response.getNumberOfPlayer();</b>
+<i>86</i>&nbsp;
+<i>87</i>&nbsp;    }
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;    /**
+<i>90</i>&nbsp;     * Finds the next state for the game, saving it in a variable in GameSession, and calls on the
+<i>91</i>&nbsp;     * instance of GameSession the method to transit to the next state of play.
+<i>92</i>&nbsp;     */
+<i>93</i>&nbsp;    public void findNextState() {
+<b class="fc"><i>94</i>&nbsp;        GameSession game = super.getGameSession();</b>
+<i>95</i>&nbsp;        int indexCurrentState;
+<b class="fc"><i>96</i>&nbsp;        indexCurrentState = game.getTurnMap().indexOf(game.getCurrentState());</b>
+<b class="fc"><i>97</i>&nbsp;        game.setNextState(game.getTurnMap().get(indexCurrentState + 1));</b>
+<b class="fc"><i>98</i>&nbsp;    }</b>
+<i>99</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-12 15:12</div>
+</div>
+</body>
+</html>

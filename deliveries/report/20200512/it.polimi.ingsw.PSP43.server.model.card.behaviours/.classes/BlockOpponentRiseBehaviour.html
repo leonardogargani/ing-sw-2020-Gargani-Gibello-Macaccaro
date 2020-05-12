@@ -1,0 +1,225 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BlockOpponentRiseBehaviour</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.model.card.behaviours</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BlockOpponentRiseBehaviour (it.polimi.ingsw.PSP43.server.model.card.behaviours)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BlockOpponentRiseBehaviour</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (27/ 27)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">BlockOpponentRiseBehaviour$MockitoMock$1873934276</td>
+  </tr>
+  <tr>
+    <td class="name">BlockOpponentRiseBehaviour$MockitoMock$1873934276$auxiliary$1ESh7BdP</td>
+  </tr>
+  <tr>
+    <td class="name">BlockOpponentRiseBehaviour$MockitoMock$1873934276$auxiliary$1ynA723X</td>
+  </tr>
+  <tr>
+    <td class="name">BlockOpponentRiseBehaviour$MockitoMock$1873934276$auxiliary$5euo5Csc</td>
+  </tr>
+  <tr>
+    <td class="name">BlockOpponentRiseBehaviour$MockitoMock$1873934276$auxiliary$78UVPE5B</td>
+  </tr>
+  <tr>
+    <td class="name">BlockOpponentRiseBehaviour$MockitoMock$1873934276$auxiliary$7MxZinag</td>
+  </tr>
+  <tr>
+    <td class="name">BlockOpponentRiseBehaviour$MockitoMock$1873934276$auxiliary$IKWqz0TB</td>
+  </tr>
+  <tr>
+    <td class="name">BlockOpponentRiseBehaviour$MockitoMock$1873934276$auxiliary$jV6FJp4z</td>
+  </tr>
+  <tr>
+    <td class="name">BlockOpponentRiseBehaviour$MockitoMock$1873934276$auxiliary$q1bJAout</td>
+  </tr>
+  <tr>
+    <td class="name">BlockOpponentRiseBehaviour$MockitoMock$1873934276$auxiliary$ryfh7C3V</td>
+  </tr>
+  <tr>
+    <td class="name">BlockOpponentRiseBehaviour$MockitoMock$1873934276$auxiliary$SD2dgbd0</td>
+  </tr>
+  <tr>
+    <td class="name">BlockOpponentRiseBehaviour$MockitoMock$1873934276$auxiliary$Trsg2bsZ</td>
+  </tr>
+  <tr>
+    <td class="name">BlockOpponentRiseBehaviour$MockitoMock$1873934276$auxiliary$u8EUaR8d</td>
+  </tr>
+  <tr>
+    <td class="name">BlockOpponentRiseBehaviour$MockitoMock$1873934276$auxiliary$UvTUX7xR</td>
+  </tr>
+  <tr>
+    <td class="name">BlockOpponentRiseBehaviour$MockitoMock$1873934276$auxiliary$X25MlIwV</td>
+  </tr>
+  <tr>
+    <td class="name">BlockOpponentRiseBehaviour$MockitoMock$1873934276$auxiliary$XYQKT7T9</td>
+  </tr>
+  <tr>
+    <td class="name">BlockOpponentRiseBehaviour$MockitoMock$1873934276$auxiliary$z9OFqKDc</td>
+  </tr>
+  <tr>
+    <td class="name">BlockOpponentRiseBehaviour$MockitoMock$1873934276$auxiliary$zToPJVY8</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (27/ 27)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.model.card.behaviours;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.server.DataToAction;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Cell;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.card.decorators.BlockRiseDecorator;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;import java.io.IOException;
+<i>13</i>&nbsp;import java.util.HashMap;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;/**
+<i>16</i>&nbsp; * This class is made to give run-time the possibility to a card
+<i>17</i>&nbsp; * to block the opponents to rise when the owner&#39;s worker rise
+<i>18</i>&nbsp; * in a turn.
+<i>19</i>&nbsp; */
+<i>20</i>&nbsp;public class BlockOpponentRiseBehaviour extends AbstractGodCard implements MoveBehavior {
+<i>21</i>&nbsp;    private static final long serialVersionUID = 409949207020680510L;
+<i>22</i>&nbsp;
+<b class="fc"><i>23</i>&nbsp;    public BlockOpponentRiseBehaviour() {</b>
+<b class="fc"><i>24</i>&nbsp;    }</b>
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    /**
+<i>27</i>&nbsp;     * Each turn, before the player moves his worker, this method is called to remove from all
+<i>28</i>&nbsp;     * the opponents&#39; cards the block to rise that was imposed the previous turn.
+<i>29</i>&nbsp;     * @param gameSession The reference to the active game database.
+<i>30</i>&nbsp;     */
+<i>31</i>&nbsp;    private void disablePowers(GameSession gameSession) throws ClassNotFoundException {
+<b class="fc"><i>32</i>&nbsp;        HashMap&lt;String, AbstractGodCard&gt; mapCardsOwned = gameSession.getCardsHandler().getMapOwnersCard();</b>
+<i>33</i>&nbsp;        String godName;
+<i>34</i>&nbsp;        AbstractGodCard card, newCard;
+<i>35</i>&nbsp;
+<b class="fc"><i>36</i>&nbsp;        for (String s : mapCardsOwned.keySet()) {</b>
+<b class="fc"><i>37</i>&nbsp;            godName = mapCardsOwned.get(s).getGodName();</b>
+<b class="fc"><i>38</i>&nbsp;            if (!godName.equals(&quot;Athena&quot;)) {</b>
+<b class="fc"><i>39</i>&nbsp;                card = mapCardsOwned.get(s);</b>
+<b class="fc"><i>40</i>&nbsp;                newCard = card.cleanFromEffects(&quot;it.polimi.ingsw.PSP43.server.model.card.decorators.BlockRiseDecorator&quot;);</b>
+<b class="fc"><i>41</i>&nbsp;                mapCardsOwned.put(s, newCard);</b>
+<i>42</i>&nbsp;            }
+<b class="fc"><i>43</i>&nbsp;        }</b>
+<i>44</i>&nbsp;
+<b class="fc"><i>45</i>&nbsp;    }</b>
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    /**
+<i>48</i>&nbsp;     * Each turn this method is called if the worker&#39;s player rises of one level to block
+<i>49</i>&nbsp;     * the opponents&#39; workers to rise to one higher level in their move.
+<i>50</i>&nbsp;     * @param gameSession The reference to the active game database.
+<i>51</i>&nbsp;     */
+<i>52</i>&nbsp;    private void enablePowers(GameSession gameSession) {
+<b class="fc"><i>53</i>&nbsp;        CardsHandler cardsHandler = gameSession.getCardsHandler();</b>
+<i>54</i>&nbsp;        AbstractGodCard cardOwned;
+<b class="fc"><i>55</i>&nbsp;        for (String s : cardsHandler.getMapOwnersCard().keySet()) {</b>
+<b class="fc"><i>56</i>&nbsp;            cardOwned = cardsHandler.getMapOwnersCard().get(s);</b>
+<b class="fc"><i>57</i>&nbsp;            if (!cardOwned.getGodName().equals(&quot;Athena&quot;)) {</b>
+<b class="fc"><i>58</i>&nbsp;                cardsHandler.getMapOwnersCard().put(s, new BlockRiseDecorator(cardOwned));</b>
+<i>59</i>&nbsp;            }
+<b class="fc"><i>60</i>&nbsp;        }</b>
+<b class="fc"><i>61</i>&nbsp;    }</b>
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    /**
+<i>64</i>&nbsp;     * This method handles the move of a worker and at the end, if he has risen of one level,
+<i>65</i>&nbsp;     * calls the method to block the other workers to move up in the next move.
+<i>66</i>&nbsp;     * @param dataToAction The data required to handle a move and to change properly the data stored in the model.
+<i>67</i>&nbsp;     * @throws WinnerCaughtException if a worker is moved on the third level.
+<i>68</i>&nbsp;     */
+<i>69</i>&nbsp;    public void handleMove(DataToAction dataToAction) throws ClassNotFoundException, IOException, WinnerCaughtException, InterruptedException {
+<b class="fc"><i>70</i>&nbsp;        disablePowers(dataToAction.getGameSession());</b>
+<b class="fc"><i>71</i>&nbsp;        move(dataToAction);</b>
+<b class="fc"><i>72</i>&nbsp;        Coord newCoord = dataToAction.getWorker().getCurrentPosition();</b>
+<b class="fc"><i>73</i>&nbsp;        Cell newCell = dataToAction.getGameSession().getCellsHandler().getCell(newCoord);</b>
+<b class="fc"><i>74</i>&nbsp;        Coord oldCoord = dataToAction.getWorker().getPreviousPosition();</b>
+<b class="fc"><i>75</i>&nbsp;        Cell oldCell = dataToAction.getGameSession().getCellsHandler().getCell(oldCoord);</b>
+<i>76</i>&nbsp;
+<b class="fc"><i>77</i>&nbsp;        if (newCell.getHeight() - oldCell.getHeight() &gt; 0) {</b>
+<b class="fc"><i>78</i>&nbsp;            enablePowers(dataToAction.getGameSession());</b>
+<i>79</i>&nbsp;        }
+<b class="fc"><i>80</i>&nbsp;    }</b>
+<i>81</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-12 15:12</div>
+</div>
+</body>
+</html>
