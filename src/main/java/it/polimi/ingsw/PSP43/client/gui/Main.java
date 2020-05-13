@@ -9,6 +9,11 @@ import java.io.IOException;
 
 public class Main extends Application {
 
+
+    /**
+     * First method to be executed, it loads the FXML file with the choice between cli and gui.
+     * @param primaryStage stage automatically generated from JavaFX
+     */
     @Override
     public void start(Stage primaryStage) {
 
@@ -23,8 +28,10 @@ public class Main extends Application {
             e.printStackTrace();
         }
 
+        // set the minimum height and width so that the window cannot be resized to lower values
         primaryStage.setMinHeight(400);
         primaryStage.setMinWidth(600);
+
         primaryStage.show();
 
     }
