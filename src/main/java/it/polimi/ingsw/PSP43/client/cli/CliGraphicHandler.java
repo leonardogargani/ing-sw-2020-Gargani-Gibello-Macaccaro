@@ -75,11 +75,7 @@ public class CliGraphicHandler extends GraphicHandler {
         } while (chosenNumber != 2 && chosenNumber != 3);
         bottomMenu.clear();
         PlayersNumberResponse response = new PlayersNumberResponse(chosenNumber);
-        try {
-            super.getClientBG().sendMessage(response);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        super.getClientBG().sendMessage(response);
     }
 
 
@@ -130,11 +126,7 @@ public class CliGraphicHandler extends GraphicHandler {
 
             bottomMenu.clear();
             ChosenCardsResponse response = new ChosenCardsResponse(chosenCards);
-        try {
-            super.getClientBG().sendMessage(response);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        super.getClientBG().sendMessage(response);
     }
 
 
@@ -173,11 +165,7 @@ public class CliGraphicHandler extends GraphicHandler {
         bottomMenu.clear();
         ChosenCardResponse response = new ChosenCardResponse(availableCards.get(chosenIndex));
 
-        try {
-            super.getClientBG().sendMessage(response);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        super.getClientBG().sendMessage(response);
 
     }
 
@@ -214,11 +202,7 @@ public class CliGraphicHandler extends GraphicHandler {
 
         bottomMenu.clear();
         WorkersColorResponse response = new WorkersColorResponse(availableColors.get(chosenIndex));
-        try {
-            super.getClientBG().sendMessage(response);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        super.getClientBG().sendMessage(response);
 
     }
 
@@ -317,11 +301,7 @@ public class CliGraphicHandler extends GraphicHandler {
                 }
             }
             bottomMenu.clear();
-        try {
-            super.getClientBG().sendMessage(response);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        super.getClientBG().sendMessage(response);
 
     }
 
@@ -363,11 +343,7 @@ public class CliGraphicHandler extends GraphicHandler {
         bottomMenu.clear();
         ResponseMessage response = new ResponseMessage(booleanChoice);
 
-        try {
-            super.getClientBG().sendMessage(response);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        super.getClientBG().sendMessage(response);
 
     }
 
@@ -397,11 +373,7 @@ public class CliGraphicHandler extends GraphicHandler {
         System.out.print("Choose another nickname:\n");
         nickname = inputHandler.requestInput();
         RegistrationMessage message = new RegistrationMessage(nickname);
-        try {
-            super.getClientBG().sendMessage(message);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        super.getClientBG().sendMessage(message);
     }
 
 

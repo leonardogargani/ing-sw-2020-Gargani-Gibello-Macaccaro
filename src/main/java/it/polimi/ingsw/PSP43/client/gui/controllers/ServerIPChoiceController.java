@@ -28,8 +28,7 @@ public class ServerIPChoiceController {
 
         String serverIP = serverIPField.getText();
 
-        // TODO create a connection to the chosen IP address
-
+        // TODO establish a connection between the client and the chosen IP address
 
         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
 

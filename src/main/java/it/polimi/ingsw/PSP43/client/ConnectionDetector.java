@@ -34,16 +34,13 @@ public class ConnectionDetector implements Runnable {
         while (true) {
             try {
                 TimeUnit.SECONDS.sleep(10);
-                if(clientBG.isDisconnect())
+                if (clientBG.isDisconnect())
                     break;
-                try {
-                    clientBG.sendMessage(new PingMessage());
-                } catch (IOException e) {
-                    clientBG.handleDisconnection();
-                }
+                clientBG.sendMessage(new PingMessage());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
+
 }
