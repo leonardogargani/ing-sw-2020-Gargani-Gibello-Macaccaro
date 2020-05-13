@@ -3,6 +3,9 @@ package it.polimi.ingsw.PSP43.client;
 import it.polimi.ingsw.PSP43.client.cli.InputHandler;
 import it.polimi.ingsw.PSP43.client.cli.QuitPlayerException;
 
+/**
+ * This is the starter class, here a player chooses CLI or GUI
+ */
 
 public class ClientStarter {
 

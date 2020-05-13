@@ -10,21 +10,38 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
 
+/**
+ * This class implements Runnable and it put new players in a match(gameSession), it is also used for the removal of a
+ * ended gameSession
+ */
 public class RegisterClientListener implements Runnable {
     private static ArrayList<GameSessionObservable> gameSessions = new ArrayList<>();
     private ClientListener player;
     private RegistrationMessage message;
 
+    /**
+     * Not default constructor for RegisterClientListener class
+     *
+     * @param player  that is creating this RegisterClientListener
+     * @param message is the registration message with the nick inside
+     */
     public RegisterClientListener(ClientListener player, RegistrationMessage message) {
         this.player = player;
         this.message = message;
     }
 
+    /**
+     * Constructor without parameters
+     */
     public RegisterClientListener() {
     }
 
+    /**
+     * Override of the run method, it contains the algorithms that checks if there is a game that hasn't started yet or if
+     * a new game session is needed
+     */
     @Override
     public void run() {
         try {
@@ -35,7 +52,9 @@ public class RegisterClientListener implements Runnable {
                 GameSessionObservable gameSession = gameSessions.get(counter);
 
                 // if the gameSession is in registration phase for the first player, I wait
-                while (gameSession.getMaxNumPlayers() == 1) { }
+                while (gameSession.getMaxNumPlayers() == 1) {
+                    TimeUnit.SECONDS.sleep(1);
+                }
 
                 if (gameSession.getMaxNumPlayers() > gameSession.getNumOfPlayers()) {
                     idGame = gameSession.registerToTheGame(message, player);
@@ -60,15 +79,26 @@ public class RegisterClientListener implements Runnable {
         }
     }
 
-    public synchronized void removeGameSession(int idGameSession){
+    /**
+     * Synchronized method to remove a gameSession
+     *
+     * @param idGameSession is the id of the gameSession we are going to remove
+     */
+    public synchronized void removeGameSession(int idGameSession) {
         gameSessions.removeIf(gameSessionObservable -> gameSessionObservable.getIdGame() == idGameSession);
     }
 
+    /**
+     * This method notifies to the gameSession that a player left the game, other players must be notified and
+     * after that gameSession must be deleted
+     *
+     * @param idGameSession is the id of the match that will be deleted
+     * @throws IOException signals that an I/O exception of some sort has occurred
+     */
     public void notifyDisconnection(int idGameSession) throws IOException {
-        for (int i = 0; i < gameSessions.size(); i++)
-        {
-            if(gameSessions.get(i).getIdGame() == idGameSession)
-                gameSessions.get(i).unregisterFromGame(new LeaveGameMessage(),player);
+        for (int i = 0; i < gameSessions.size(); i++) {
+            if (gameSessions.get(i).getIdGame() == idGameSession)
+                gameSessions.get(i).unregisterFromGame(new LeaveGameMessage(), player);
         }
 
     }
