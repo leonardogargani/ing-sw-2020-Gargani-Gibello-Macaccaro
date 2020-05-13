@@ -3,9 +3,14 @@ package it.polimi.ingsw.PSP43.server;
 import java.io.IOException;
 import java.net.Socket;
 
+
 public class ServerSocket {
     public final static int SERVER_PORT = 50000;
 
+    /**
+     * Main method of the server it listens for new players(client) who want to open connection with the server
+     * @param args
+     */
     public static void main(String[] args)
     {
         java.net.ServerSocket socket;
