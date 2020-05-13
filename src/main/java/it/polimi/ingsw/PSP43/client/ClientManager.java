@@ -44,7 +44,7 @@ public class ClientManager implements Runnable {
         Thread clientBGThread = new Thread(clientBG);
         clientBGThread.start();
 
-        if (this.chosenInterface == 1)
+        if (chosenInterface == 1)
             graphicHandler = new CliGraphicHandler(clientBG);
         else
             graphicHandler = new GuiGraphicHandler(clientBG);
@@ -53,11 +53,7 @@ public class ClientManager implements Runnable {
             try {
                 handleEvent();
             } catch (QuitPlayerException | IOException e) {
-                try {
-                    clientBG.sendMessage(new LeaveGameMessage());
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+                clientBG.sendMessage(new LeaveGameMessage());
             }
         }
     }
@@ -71,42 +67,42 @@ public class ClientManager implements Runnable {
     public void handleEvent() throws QuitPlayerException, IOException {
         if (messageBox.size() >= 1) {
             if (messageBox.get(0) instanceof CellMessage) {
-                getGraphicHandler().updateBoardChange((CellMessage) messageBox.get(0));
+                graphicHandler.updateBoardChange((CellMessage) messageBox.get(0));
                 messageBox.remove(0);
             } else if (messageBox.get(0) instanceof ActionRequest) {
-                getGraphicHandler().updateMenuChange((ActionRequest) messageBox.get(0));
+                graphicHandler.updateMenuChange((ActionRequest) messageBox.get(0));
                 messageBox.remove(0);
             } else if (messageBox.get(0) instanceof CardRequest) {
-                getGraphicHandler().updateMenuChange((CardRequest) messageBox.get(0));
+                graphicHandler.updateMenuChange((CardRequest) messageBox.get(0));
                 messageBox.remove(0);
             } else if (messageBox.get(0) instanceof ChangeNickRequest) {
-                getGraphicHandler().updateMenuChange((ChangeNickRequest) messageBox.get(0));
+                graphicHandler.updateMenuChange((ChangeNickRequest) messageBox.get(0));
                 messageBox.remove(0);
             } else if (messageBox.get(0) instanceof EndGameMessage) {
-                getGraphicHandler().updateMenuChange((EndGameMessage) messageBox.get(0));
+                graphicHandler.updateMenuChange((EndGameMessage) messageBox.get(0));
                 clientBG.setDisconnect(true);
                 clientBG.closer();
                 this.isActive = false;
             } else if (messageBox.get(0) instanceof InitialCardsRequest) {
-                getGraphicHandler().updateMenuChange((InitialCardsRequest) messageBox.get(0));
+                graphicHandler.updateMenuChange((InitialCardsRequest) messageBox.get(0));
                 messageBox.remove(0);
             } else if (messageBox.get(0) instanceof PlayersNumberRequest) {
-                getGraphicHandler().updateMenuChange((PlayersNumberRequest) messageBox.get(0));
+                graphicHandler.updateMenuChange((PlayersNumberRequest) messageBox.get(0));
                 messageBox.remove(0);
             } else if (messageBox.get(0) instanceof PlayersListMessage) {
-                getGraphicHandler().updateMenuChange((PlayersListMessage) messageBox.get(0));
+                graphicHandler.updateMenuChange((PlayersListMessage) messageBox.get(0));
                 messageBox.remove(0);
             } else if (messageBox.get(0) instanceof RequestMessage) {
-                getGraphicHandler().updateMenuChange((RequestMessage) messageBox.get(0));
+                graphicHandler.updateMenuChange((RequestMessage) messageBox.get(0));
                 messageBox.remove(0);
             } else if (messageBox.get(0) instanceof StartGameMessage) {
-                getGraphicHandler().updateMenuChange((StartGameMessage) messageBox.get(0));
+                graphicHandler.updateMenuChange((StartGameMessage) messageBox.get(0));
                 messageBox.remove(0);
             } else if (messageBox.get(0) instanceof WorkersColorRequest) {
-                getGraphicHandler().updateMenuChange((WorkersColorRequest) messageBox.get(0));
+                graphicHandler.updateMenuChange((WorkersColorRequest) messageBox.get(0));
                 messageBox.remove(0);
             } else if (messageBox.get(0) instanceof TextMessage) {
-                getGraphicHandler().updateMenuChange((TextMessage) messageBox.get(0));
+                graphicHandler.updateMenuChange((TextMessage) messageBox.get(0));
                 messageBox.remove(0);
             }
         }
@@ -142,7 +138,6 @@ public class ClientManager implements Runnable {
      */
     public void execute() {
         System.out.println(Screens.WELCOME);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         try {
             System.out.print("Choose a nickname:\n");
@@ -150,14 +145,8 @@ public class ClientManager implements Runnable {
             String nickname = inputHandler.requestInput();
             RegistrationMessage message = new RegistrationMessage(nickname);
             clientBG.sendMessage(message);
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (QuitPlayerException e) {
-            try {
-                clientBG.sendMessage(new LeaveGameMessage());
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            clientBG.sendMessage(new LeaveGameMessage());
         }
 
     }

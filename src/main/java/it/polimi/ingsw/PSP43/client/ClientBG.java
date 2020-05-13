@@ -16,24 +16,26 @@ import java.util.Scanner;
  * ClientBG(client background) is the client network handler
  */
 public class ClientBG implements Runnable {
+
     private Socket serverSocket;
     private final ClientManager clientManager;
     private static final int SERVER_PORT = 50000;
-    private String SERVER_IP = "127.0.0.1";
+    private final String SERVER_IP = "127.0.0.1";
     public Object messageArrived;
     private boolean disconnect = false;
-    ObjectInputStream input;
-    ObjectOutputStream output;
+    private ObjectInputStream input;
+    private ObjectOutputStream output;
+
 
     /**
      * Not default constructor for the client background
-     *
      * @param clientManager is the reference to the client manager thread
      */
     public ClientBG(ClientManager clientManager) {
         this.clientManager = clientManager;
         this.messageArrived = new Object();
     }
+
 
     /**
      * Override of run method, here the connection with the server starts, after that clientBG starts the connection
@@ -42,10 +44,10 @@ public class ClientBG implements Runnable {
     @Override
     public void run() {
 
-        System.out.println("Insert the ip of the server or press enter for the default ip(127.0.0.1)");
+        System.out.println("Insert the ip of the server or press enter for the default one (127.0.0.1)");
         Scanner scanner = new Scanner(System.in);
 
-        SERVER_IP = scanner.nextLine();
+        String SERVER_IP = scanner.nextLine();
         if (SERVER_IP.toLowerCase().equals("quit"))
             System.exit(0);
         try {
@@ -66,10 +68,7 @@ public class ClientBG implements Runnable {
             System.out.println("Problems starting connection detector");
         }
 
-
-        while (true) {
-            if (disconnect)
-                break;
+        while (!disconnect) {
             try {
                 receive();
             } catch (IOException | ClassNotFoundException e) {
@@ -101,13 +100,12 @@ public class ClientBG implements Runnable {
         clientManager.getMessageBox().add((ServerMessage) messageArrived);
     }
 
+
     /**
      * Method used to send messages to the server
-     *
      * @param message that will be sent
-     * @throws IOException exception thrown if for some reason the socket is closed and we are trying to send a message
-     */
-    public void sendMessage(ClientMessage message) throws IOException {
+     * */
+    public void sendMessage(ClientMessage message) {
         try {
             output = new ObjectOutputStream(serverSocket.getOutputStream());
             output.writeObject(message);
@@ -116,14 +114,13 @@ public class ClientBG implements Runnable {
         }
     }
 
+
     /**
      * Method used to send only LeaveGameMessages, after the sending it calls the handleDisconnection method
      *
      * @param message that will be sent
-     * @throws IOException exception thrown if for some reason the socket is closed and we are trying to send an
-     *                     LeaveGameMessage
      */
-    public void sendMessage(LeaveGameMessage message) throws IOException {
+    public void sendMessage(LeaveGameMessage message) {
         try {
             output = new ObjectOutputStream(serverSocket.getOutputStream());
             output.writeObject(message);
@@ -132,6 +129,7 @@ public class ClientBG implements Runnable {
         }
         handleDisconnection();
     }
+
 
     /**
      * Getter method for the boolean variable disconnected, that controls the exit from the while in the run at the end
@@ -143,6 +141,7 @@ public class ClientBG implements Runnable {
         return disconnect;
     }
 
+
     /**
      * Setter method for the boolean variable disconnected
      *
@@ -151,6 +150,7 @@ public class ClientBG implements Runnable {
     public void setDisconnect(boolean disconnect) {
         this.disconnect = disconnect;
     }
+
 
     /**
      * Method that close input and output streams and the socket at the end of the match
@@ -163,10 +163,13 @@ public class ClientBG implements Runnable {
         serverSocket.close();
     }
 
+
     /**
      * This method put an EndGameMessage in the ClientManager's messageBox when you quit the match
      */
     public void handleDisconnection() {
         clientManager.getMessageBox().add(0, new EndGameMessage("end game!"));
     }
+
+
 }

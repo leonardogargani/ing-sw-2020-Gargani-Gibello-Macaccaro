@@ -12,7 +12,8 @@ import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 import java.io.IOException;
 
-
+// probably there will be no choice to take, cli and gui will be in two different jars
+/*
 public class ModalityChoiceController {
 
     public RadioButton cliButton;
@@ -37,8 +38,6 @@ public class ModalityChoiceController {
 
             // TODO look at the initialization as done in the cli (e.g.: create a CliGraphicHandler)
 
-            //TODO start the cli
-
         } else if (guiButton.equals(selectedButton)) {
 
             // TODO look at the initialization as done in the cli (e.g.: create a GuiGraphicHandler)
@@ -60,7 +59,8 @@ public class ModalityChoiceController {
 
         }
 
-
     }
 
 }
+
+ */

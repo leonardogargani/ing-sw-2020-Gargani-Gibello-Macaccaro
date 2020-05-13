@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 
-public class Main extends Application {
+public class GuiStarter extends Application {
 
 
     /**
@@ -18,7 +18,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/FXML/modalityChoice.fxml"));
+        loader.setLocation(getClass().getResource("/FXML/serverIPChoice.fxml"));
 
         try {
             Scene scene = new Scene(loader.load());
