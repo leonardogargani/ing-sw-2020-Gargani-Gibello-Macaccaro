@@ -16,7 +16,9 @@ public class Main extends Application {
         loader.setLocation(getClass().getResource("/FXML/modalityChoice.fxml"));
 
         try {
-            primaryStage.setScene(new Scene(loader.load()));
+            Scene scene = new Scene(loader.load());
+            //scene.getStylesheets().add(getClass().getResource("/CSS/style.css").toExternalForm());
+            primaryStage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
         }

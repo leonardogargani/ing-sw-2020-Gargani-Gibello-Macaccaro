@@ -37,6 +37,8 @@ public class ModalityChoiceController {
 
             // TODO look at the initialization as done in the cli (e.g.: create a CliGraphicHandler)
 
+            //TODO start the cli
+
         } else if (guiButton.equals(selectedButton)) {
 
             // TODO look at the initialization as done in the cli (e.g.: create a GuiGraphicHandler)

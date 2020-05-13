@@ -21,6 +21,7 @@ public class NicknameChoiceController {
             return;
         }
 
+        String nickname = nicknameField.getText();
 
         buttonPressedLabel.setText("ok");
 
