@@ -74,7 +74,7 @@ public class ChooseWorkerStateTest {
         // the instantiation of each player
         ArrayList<Integer> idsWorkers =  new ArrayList<>();
         for (int i=0; i<gameSession.getPlayersHandler().getNumOfPlayers(); i++) {
-            int[] workers = gameSession.getPlayersHandler().getPlayer(i).getWorkersIdsArray();
+            Integer[] workers = gameSession.getPlayersHandler().getPlayer(i).getWorkersIdsArray();
             for (int j = 0; j<workers.length; j++) {
                 idsWorkers.add(workers[j]);
             }

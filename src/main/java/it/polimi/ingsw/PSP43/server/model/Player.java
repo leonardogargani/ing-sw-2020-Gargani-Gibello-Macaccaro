@@ -13,7 +13,7 @@ public class Player implements Serializable {
     private static final long serialVersionUID = -5073826840767054806L;
 
     private final String nickname;
-    private final int[] workersIdsArray;
+    private final Integer[] workersIdsArray;
     private AbstractGodCard abstractGodCard;
 
 
@@ -23,7 +23,7 @@ public class Player implements Serializable {
      */
     public Player(String nickname) {
         this.nickname = nickname;
-        this.workersIdsArray = new int[]{0, 1};
+        this.workersIdsArray = new Integer[]{0, 1};
         this.abstractGodCard = null;
     }
 
@@ -41,7 +41,7 @@ public class Player implements Serializable {
      * This method returns both the workers in an array of two elements.
      * @return copy of the array with the two workers of the player
      */
-    public int[] getWorkersIdsArray() {
+    public Integer[] getWorkersIdsArray() {
         return workersIdsArray.clone();
     }
 

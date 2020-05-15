@@ -1,10 +1,13 @@
 package it.polimi.ingsw.PSP43.server.model.card;
 
-import it.polimi.ingsw.PSP43.server.DataToAction;
+import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
+import it.polimi.ingsw.PSP43.server.DataToBuild;
+import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.*;
-import it.polimi.ingsw.PSP43.server.model.card.behaviours.BuildBlockBehaviour;
-import it.polimi.ingsw.PSP43.server.model.card.behaviours.MoveBehavior;
-import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
+import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.BasicBuildBehaviour;
+import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.BuildBehaviour;
+import it.polimi.ingsw.PSP43.server.model.card.behaviours.moveBehaviours.BasicMoveBehaviour;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
 import java.io.IOException;
@@ -19,8 +22,8 @@ import java.util.HashMap;
 public class BasicGodCard extends AbstractGodCard {
     private static final long serialVersionUID = 6236626696645439491L;
 
-    private MoveBehavior moveBehavior;
-    private BuildBlockBehaviour buildBlockBehaviour;
+    private BasicMoveBehaviour moveBehavior;
+    private BasicBuildBehaviour buildBehaviour;
 
     public BasicGodCard() {
     }
@@ -30,10 +33,10 @@ public class BasicGodCard extends AbstractGodCard {
      * @param godName name of the god whose power has been chosen by the player
      * @param description description of the ability of the god
      */
-    public BasicGodCard(String godName, String description, String power, MoveBehavior moveBehaviour, BuildBlockBehaviour buildBlockBehaviour) {
+    public BasicGodCard(String godName, String description, String power, BasicMoveBehaviour moveBehaviour, BasicBuildBehaviour buildBehaviour) {
         super(godName, description, power);
         this.moveBehavior = moveBehaviour;
-        this.buildBlockBehaviour = buildBlockBehaviour;
+        this.buildBehaviour = buildBehaviour;
     }
 
     public void setGodName(String godName) {
@@ -72,41 +75,41 @@ public class BasicGodCard extends AbstractGodCard {
         return super.getPower();
     }
 
-    public BuildBlockBehaviour getBuildBlockBehaviour() {
-        return buildBlockBehaviour;
-    }
-
-    public void move(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
-        if (moveBehavior == null) {
-            super.move(dataToAction);
-        }
-        else moveBehavior.handleMove(dataToAction);
-    }
-
-    public void buildBlock(DataToAction dataToAction) throws IOException, ClassNotFoundException, InterruptedException {
-        if (buildBlockBehaviour == null) {
-            super.buildBlock(dataToAction);
-        }
-        else buildBlockBehaviour.handleBuildBlock(dataToAction);
-    }
-
-    public void buildDome(DataToAction dataToAction) throws IOException {
-        super.buildDome(dataToAction);
-    }
-
-    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(CellsHandler handler, ArrayList<Worker> workers) {
-        return super.findAvailablePositionsToMove(handler, workers);
-    }
-
-    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildBlock(CellsHandler handler, ArrayList<Worker> workers) {
-        return super.findAvailablePositionsToBuildBlock(handler, workers);
-    }
-
-    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildDome(CellsHandler handler, ArrayList<Worker> workers) {
-        return super.findAvailablePositionsToBuildDome(handler, workers);
+    public BasicBuildBehaviour getBuildBehaviour() {
+        return buildBehaviour;
     }
 
     public AbstractGodCard cleanFromEffects(String nameOfEffect) {
-        return new BasicGodCard(super.getGodName(), super.getDescription(), super.getPower(), moveBehavior, buildBlockBehaviour);
+        return new BasicGodCard(super.getGodName(), super.getDescription(), super.getPower(), moveBehavior, buildBehaviour);
     }
+
+    public void initMove(GameSession gameSession) throws GameEndedException, ClassNotFoundException, WinnerCaughtException, InterruptedException, IOException {
+        moveBehavior.handleInitMove(gameSession);
+    }
+
+    public void initBuild(GameSession gameSession) throws GameEndedException, IOException, InterruptedException, ClassNotFoundException {
+        buildBehaviour.handleInitBuild(gameSession);
+    }
+
+    public <T extends ClientMessage> T askForMove(GameSession gameSession) throws GameEndedException {
+        return moveBehavior.askForMove(gameSession);
+    }
+
+    public <T extends ClientMessage> T askForMove(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositions) throws GameEndedException {
+        return moveBehavior.askForMove(gameSession, availablePositions);
+    }
+
+    public DataToBuild genericAskForBuild(GameSession gameSession) throws GameEndedException, InterruptedException, IOException, ClassNotFoundException {
+        return buildBehaviour.genericAskForBuild(gameSession);
+    }
+
+    public <T extends ClientMessage> T askForBuild(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositionsBuildBlock, String message) throws GameEndedException, InterruptedException, IOException, ClassNotFoundException {
+        return buildBehaviour.askForBuild(gameSession, availablePositionsBuildBlock, message);
+    }
+
+    public BasicMoveBehaviour getMoveBehavior() {
+        return moveBehavior;
+    }
+
+
 }

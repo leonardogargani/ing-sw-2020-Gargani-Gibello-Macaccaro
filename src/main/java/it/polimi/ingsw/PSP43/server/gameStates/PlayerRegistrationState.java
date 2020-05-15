@@ -74,14 +74,12 @@ public class PlayerRegistrationState extends TurnState {
     protected int askNumberPlayers(GameSession gameSession, RegistrationMessage message) throws IOException, ClassNotFoundException, InterruptedException {
         PlayersNumberRequest request = new PlayersNumberRequest("Choose between a 2 or 3 game play.");
         PlayersNumberResponse response;
-        do {
-            try {
-                response = gameSession.sendRequest(request, message.getNick(), new PlayersNumberResponse());
-            } catch (GameEndedException e) {
-                gameSession.setActive();
-                return 1;
-            }
-        } while (response == null);
+        try {
+            response = gameSession.sendRequest(request, message.getNick(), new PlayersNumberResponse());
+        } catch (GameEndedException e) {
+            gameSession.setActive();
+            return -1;
+        }
         return response.getNumberOfPlayer();
 
     }

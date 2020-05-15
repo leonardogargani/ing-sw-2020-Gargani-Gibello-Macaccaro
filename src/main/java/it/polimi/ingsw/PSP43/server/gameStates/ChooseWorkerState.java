@@ -39,7 +39,7 @@ public class ChooseWorkerState extends TurnState {
      * This method initialises the first player of the game, the god-like one (and for this reason the first logged into the
      * game in our conception of the game).
      */
-    public void initState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+    public void initState() throws IOException, ClassNotFoundException, InterruptedException {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
         game.setCurrentPlayer(playersHandler.getPlayer(FIRSTPOSITION));
@@ -54,7 +54,7 @@ public class ChooseWorkerState extends TurnState {
     /**
      * This method asks, one at a time, to the players the color chosen for their workers and also where they want to place them.
      */
-    public void executeState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+    public void executeState() throws IOException, ClassNotFoundException, InterruptedException {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
         WorkersHandler workersHandler = game.getWorkersHandler();
@@ -122,7 +122,7 @@ public class ChooseWorkerState extends TurnState {
     /**
      * This method has to find the next state and also to send all the infos to the client to display name of players, gods chosen and the color of every player.
      */
-    public void findNextState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+    public void findNextState() throws IOException, ClassNotFoundException, InterruptedException {
         GameSession game = super.getGameSession();
         int indexCurrentState;
         indexCurrentState = game.getTurnMap().indexOf(game.getCurrentState());

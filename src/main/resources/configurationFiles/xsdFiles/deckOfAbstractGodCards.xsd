@@ -22,21 +22,23 @@
             <xs:element name="godDescription" type="xs:string"/>
             <xs:element name="godPower" type="xs:string"/>
             <xs:element name="moveBehaviour" type="MoveBehaviour" minOccurs="0"/>
-            <xs:element name="buildBlockBehaviour" type="BuildBlockBehaviour" minOccurs="0"/>
+            <xs:element name="buildBehaviour" type="BuildBehaviour" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 
 
     <xs:complexType name="MoveBehaviour">
         <xs:choice>
+            <xs:element name="basicMoveBehaviour"/>
             <xs:element name="blockOpponentRiseBehaviour"/>
             <xs:element name="buildBeforeMoveBehaviour"/>
             <xs:element name="doubleMoveBehaviour"/>
         </xs:choice>
     </xs:complexType>
 
-    <xs:complexType name="BuildBlockBehaviour">
+    <xs:complexType name="BuildBehaviour">
         <xs:choice>
+            <xs:element name="basicBuildBehaviour"/>
             <xs:element name="doubleDifferentSpaceBehaviour"/>
             <xs:element name="doubleSameSpaceBehaviour"/>
         </xs:choice>

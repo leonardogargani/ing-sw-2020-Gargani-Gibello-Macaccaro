@@ -17,7 +17,6 @@ public class CardsHandler {
     public CardsHandler() throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException {
         this.mapOwnersCard = new HashMap<>();
         this.deckOfAbstractGodCards = new ArrayList<>();
-        DOMCardsParser parser = new DOMCardsParser();
         deckOfAbstractGodCards = DOMCardsParser.buildDeck();
     }
 

@@ -52,8 +52,8 @@ public class GameSessionObservable implements Runnable {
         ArrayList<String> listExcluded = new ArrayList<>();
         listExcluded.add(nicknameLeft);
         sendBroadCast(endGameMessage, listExcluded);
-        RegisterClientListener ending = new RegisterClientListener();
-        ending.removeGameSession(this.idGame);
+        //RegisterClientListener ending = new RegisterClientListener();
+        //ending.removeGameSession(this.idGame);
     }
 
     public void eliminatePlayer(Player playerEliminated) throws IOException, ClassNotFoundException {
@@ -87,16 +87,16 @@ public class GameSessionObservable implements Runnable {
 
         Sender newSender = new Sender(listenerAddressee, message);
 
-        ClientMessage messageArrived = newSender.call();
-
-        if (typeExpected.getClass().isInstance(messageArrived)) {
-            return (T)messageArrived;
+        while (true) {
+            ClientMessage messageArrived = newSender.call();
+            if (typeExpected.getClass().isInstance(messageArrived)) {
+                return (T)messageArrived;
+            }
+            else if (messageArrived instanceof LeaveGameMessage /* tipo end game message*/) {
+                sendBroadCast(new EndGameMessage("We are sorry, but for connecting problems the game is ended!"));
+                throw new GameEndedException();
+            }
         }
-        else if (messageArrived instanceof LeaveGameMessage /* tipo end game message*/) {
-            sendBroadCast(new EndGameMessage("We are sorry, but for connecting problems the game is ended!"));
-            throw new GameEndedException();
-        }
-        else return null;
     }
 
     public void sendEndingMessage(EndGameMessage messageToLosers, EndGameMessage messageForTheWinner, ArrayList<String> nicksExcluded) throws IOException, ClassNotFoundException {
@@ -106,8 +106,8 @@ public class GameSessionObservable implements Runnable {
             }
         }
         listenersHashMap.get(nicksExcluded.get(0)).sendMessage(messageForTheWinner);
-        RegisterClientListener ending = new RegisterClientListener();
-        ending.removeGameSession(this.idGame);
+        //RegisterClientListener ending = new RegisterClientListener();
+        //ending.removeGameSession(this.idGame);
     }
 
     /**

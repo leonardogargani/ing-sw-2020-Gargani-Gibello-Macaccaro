@@ -1,8 +1,5 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
-import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
-import it.polimi.ingsw.PSP43.server.DataToAction;
-import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
@@ -10,12 +7,10 @@ import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
-import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.TextMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MoveState extends TurnState {
     private static final int FIRSTPOSITION = 0;
@@ -25,7 +20,7 @@ public class MoveState extends TurnState {
         super(gameSession);
     }
 
-    public void initState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+    public void initState() throws IOException, ClassNotFoundException, InterruptedException {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
         WorkersHandler handler = game.getWorkersHandler();
@@ -35,8 +30,7 @@ public class MoveState extends TurnState {
         if (initFirst == -1) {
             game.setCurrentPlayer(playersHandler.getPlayer(FIRSTPOSITION));
             initFirst = FIRSTPOSITION;
-        }
-        else {
+        } else {
             currentPlayer = game.getCurrentPlayer();
             nextPlayer = playersHandler.getNextPlayer(currentPlayer.getNickname());
             game.setCurrentPlayer(nextPlayer);
@@ -52,50 +46,28 @@ public class MoveState extends TurnState {
             w.setLatestMoved(false);
         }
 
+        executeState();
+    }
+
+    public void executeState() throws InterruptedException, IOException, ClassNotFoundException {
+        GameSession game = super.getGameSession();
+        Player currentPlayer = game.getCurrentPlayer();
+        AbstractGodCard playerCard = currentPlayer.getAbstractGodCard();
+
         try {
-            executeState();
-        } catch (IOException | ClassNotFoundException e) {
+            playerCard.initMove(game);
+        } catch (ClassNotFoundException | InterruptedException | IOException e) {
             e.printStackTrace();
-        }
-        catch (WinnerCaughtException e) {
+        } catch (WinnerCaughtException e) {
             int winnerStateIndex = game.getTurnMap().size() - 1;
             WinState nextState = (WinState) game.getTurnMap().get(winnerStateIndex);
             nextState.setWinner(e.getWinner());
             game.setNextState(nextState);
             game.transitToNextState();
+        } catch (GameEndedException e) {
+            game.setActive();
+            return;
         }
-    }
-
-    public void executeState() throws WinnerCaughtException, IOException, ClassNotFoundException, InterruptedException {
-        GameSession game = super.getGameSession();
-        WorkersHandler workersHandler = game.getWorkersHandler();
-        Player currentPlayer = game.getCurrentPlayer();
-        AbstractGodCard playerCard = currentPlayer.getAbstractGodCard();
-        String nicknameCurrentPlayer = currentPlayer.getNickname();
-
-        HashMap<Coord, ArrayList<Coord>> availablePositions;
-
-        int[] workerIds = currentPlayer.getWorkersIdsArray();
-        ArrayList<Worker> workers = new ArrayList<>();
-        for (int id : workerIds) {
-            workers.add(workersHandler.getWorker(id));
-        }
-        availablePositions = playerCard.findAvailablePositionsToMove(game.getCellsHandler(), workers);
-        ActionRequest message = new ActionRequest("Choose a position where to place your worker next.", availablePositions);
-        ActionResponse response = null;
-        do {
-            try {
-                response = game.sendRequest(message, nicknameCurrentPlayer, new ActionResponse());
-            } catch (GameEndedException e) {
-                game.setActive();
-                return;
-            }
-        } while (response == null);
-
-        Coord nextPositionChosen = response.getPosition();
-        Worker workerMoved = workersHandler.getWorker(response.getWorkerPosition());
-
-        playerCard.move(new DataToAction(game, currentPlayer, workerMoved, nextPositionChosen));
 
         findNextState();
     }

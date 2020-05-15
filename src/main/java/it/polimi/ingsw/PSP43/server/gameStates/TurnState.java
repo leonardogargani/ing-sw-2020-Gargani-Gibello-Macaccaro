@@ -18,18 +18,18 @@ public abstract class TurnState {
         return gameSession;
     }
 
-    public void initState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+    public void initState() throws IOException, ClassNotFoundException, InterruptedException {
         executeState();
     }
 
-    public void executeState(RegistrationMessage message) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+    public void executeState(RegistrationMessage message) throws IOException, ClassNotFoundException, InterruptedException {
         findNextState();
     }
 
-    public void executeState() throws WinnerCaughtException, IOException, ClassNotFoundException, InterruptedException {
+    public void executeState() throws IOException, ClassNotFoundException, InterruptedException {
         findNextState();
     }
 
-    public void findNextState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+    public void findNextState() throws IOException, ClassNotFoundException, InterruptedException {
     }
 }

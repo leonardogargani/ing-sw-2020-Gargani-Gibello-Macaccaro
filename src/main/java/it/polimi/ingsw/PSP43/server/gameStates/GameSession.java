@@ -4,6 +4,7 @@ import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.server.BoardObserver;
 import it.polimi.ingsw.PSP43.server.ClientListener;
+import it.polimi.ingsw.PSP43.server.RegisterClientListener;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
@@ -27,12 +28,12 @@ public class GameSession extends GameSessionObservable {
     private TurnState nextState;
     private ArrayList<TurnState> turnMap;
 
-    private CellsHandler cellsHandler;
-    private PlayersHandler playersHandler;
-    private WorkersHandler workersHandler;
-    private CardsHandler cardsHandler;
+    private final CellsHandler cellsHandler;
+    private final PlayersHandler playersHandler;
+    private final WorkersHandler workersHandler;
+    private final CardsHandler cardsHandler;
 
-    private BoardObserver boardObserver;
+    private final BoardObserver boardObserver;
 
     /**
      * Not default constructor to inizialize a GameSession
@@ -73,11 +74,14 @@ public class GameSession extends GameSessionObservable {
             if (!(currentState.getClass().isInstance(nextState))) {
                 try {
                     this.transitToNextState();
-                } catch (IOException | ClassNotFoundException | WinnerCaughtException | InterruptedException e) {
+                } catch (IOException | ClassNotFoundException | InterruptedException e) {
                     e.printStackTrace();
                 }
             }
         }
+
+        RegisterClientListener ending = new RegisterClientListener();
+        ending.removeGameSession(super.getIdGame());
     }
 
     public Boolean getActive() {
@@ -96,7 +100,7 @@ public class GameSession extends GameSessionObservable {
         else return false;
     }
 
-    protected void transitToNextState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+    protected void transitToNextState() throws IOException, ClassNotFoundException, InterruptedException {
         int indexNextState = turnMap.indexOf(nextState);
         currentState = turnMap.get(indexNextState);
         super.currentState = turnMap.get(indexNextState);
@@ -107,7 +111,7 @@ public class GameSession extends GameSessionObservable {
         cardsHandler.removeCardToPlayer(playerEliminated.getNickname());
         Player playerToRemove = playersHandler.getPlayer(playerEliminated.getNickname());
 
-        int[] workersToRemove = playerToRemove.getWorkersIdsArray();
+        Integer[] workersToRemove = playerToRemove.getWorkersIdsArray();
         workersHandler.removeWorkers(workersToRemove);
 
         super.eliminatePlayer(playerEliminated);
@@ -212,6 +216,12 @@ public class GameSession extends GameSessionObservable {
     @Override
     public synchronized void unregisterFromGame(LeaveGameMessage message, ClientListener player) throws IOException {
         super.unregisterFromGame(message, player);
+        this.active = Boolean.FALSE;
+    }
+
+    @Override
+    public void sendEndingMessage(EndGameMessage messageToLosers, EndGameMessage messageForTheWinner, ArrayList<String> nicksExcluded) throws IOException, ClassNotFoundException {
+        super.sendEndingMessage(messageToLosers, messageForTheWinner, nicksExcluded);
         this.active = Boolean.FALSE;
     }
 }

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP43.server.model.card.decorators;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
-import it.polimi.ingsw.PSP43.server.DataToAction;
+import it.polimi.ingsw.PSP43.server.DataToMove;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
@@ -28,47 +28,56 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
         super(godComponent);
     }
 
-    @Override
-    public void move(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
-        GameSession gameSession = dataToAction.getGameSession();
-        Coord coordToMove = dataToAction.getNewPosition();
-        Cell cellToMove = gameSession.getCellsHandler().getCell(coordToMove);
-        if (!cellToMove.getOccupiedByWorker()) super.move(dataToAction);
-        else {
-            Coord currentWorkerPosition = dataToAction.getWorker().getCurrentPosition();
+    public void initMove(GameSession gameSession) throws ClassNotFoundException, WinnerCaughtException, InterruptedException, IOException, GameEndedException {
+        ActionResponse actionResponse = askForMove(gameSession, findAvailablePositionsToMove(gameSession));
+
+        Worker workerMoved = gameSession.getWorkersHandler().getWorker(actionResponse.getWorkerPosition());
+
+        Cell cellToMove = gameSession.getCellsHandler().getCell(actionResponse.getPosition());
+
+        ActionResponse response = new ActionResponse();
+        if (cellToMove.getOccupiedByWorker()) {
             CellsHandler cellsHandler = gameSession.getCellsHandler();
-            WorkersHandler workersHandler = gameSession.getWorkersHandler();
-            Worker playerWorker = dataToAction.getWorker();
-            Worker opponentWorker = workersHandler.getWorker(dataToAction.getNewPosition());
+
+            Coord currentWorkerPosition = workerMoved.getCurrentPosition();
 
             HashMap<Coord, ArrayList<Coord>> availablePositionsToForce = new HashMap<>();
             availablePositionsToForce.put(new Coord(0, 0),
-                    directionAvailableCoords(cellsHandler, currentWorkerPosition, dataToAction.getNewPosition()));
+                    directionAvailableCoords(cellsHandler, currentWorkerPosition, actionResponse.getPosition()));
             ActionRequest request = new ActionRequest("Choose a position where to force your opponent.", availablePositionsToForce);
-            ActionResponse response;
-            do {
-                try {
-                    response = gameSession.sendRequest(request, dataToAction.getPlayer().getNickname(), new ActionResponse());
-                } catch (GameEndedException e) {
-                    gameSession.setActive();
-                    return;
-                }
-            } while (response == null);
+            response = gameSession.sendRequest(request, gameSession.getCurrentPlayer().getNickname(), new ActionResponse());
+        }
 
-            Coord coordToForce = response.getPosition();
+        Coord coordToForce = response.getPosition();
 
-            workersHandler.changePosition(playerWorker, coordToMove);
+        move(new DataToMove(gameSession, gameSession.getCurrentPlayer(), workerMoved, actionResponse.getPosition()), coordToForce);
+    }
+
+    public void move(DataToMove dataToMove, Coord coordToForce) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+        GameSession gameSession = dataToMove.getGameSession();
+
+        Coord coordToMove = dataToMove.getNewPosition();
+        Cell cellToMove = gameSession.getCellsHandler().getCell(coordToMove);
+
+        if (!cellToMove.getOccupiedByWorker()) super.move(dataToMove);
+        else {
+            WorkersHandler workersHandler = gameSession.getWorkersHandler();
+            Worker playerWorker = dataToMove.getWorker();
+            Worker opponentWorker = workersHandler.getWorker(coordToForce);
+
+            workersHandler.changePosition(playerWorker, coordToForce);
             workersHandler.changePosition(opponentWorker, coordToForce);
         }
     }
 
-    @Override
-    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(CellsHandler handler, ArrayList<Worker> workers) {
-        HashMap<Coord, ArrayList<Coord>> availablePositions = super.findAvailablePositionsToMove(handler, workers);
+    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(GameSession gameSession) {
+        CellsHandler cellsHandler = gameSession.getCellsHandler();
+        HashMap<Coord, ArrayList<Coord>> availablePositions = super.findAvailablePositionsToMove(gameSession);
+
         for (Coord actualCell : availablePositions.keySet()) {
             for (Coord cellToMove : availablePositions.get(actualCell)) {
-                if (handler.getCell(cellToMove).getOccupiedByWorker()) {
-                    ArrayList<Cell> availablePositionsOnDirection = directionAvailableCells(handler, actualCell, cellToMove);
+                if (cellsHandler.getCell(cellToMove).getOccupiedByWorker()) {
+                    ArrayList<Cell> availablePositionsOnDirection = directionAvailableCells(cellsHandler, actualCell, cellToMove);
                     if (availablePositionsOnDirection.size() == 0) availablePositions.get(actualCell).remove(cellToMove);
                 }
             }
