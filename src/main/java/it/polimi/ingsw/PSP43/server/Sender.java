@@ -3,7 +3,6 @@ package it.polimi.ingsw.PSP43.server;
 import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.ServerMessage;
 
-import java.io.IOException;
 import java.util.concurrent.Callable;
 
 /**
@@ -27,13 +26,11 @@ public class Sender implements Callable<ClientMessage> {
 
     /**
      * Override of the call method, that sends a request and after that it takes the response from the clientListener
+     *
      * @return response
-     * @throws IOException signals that an I/O exception of some sort has occurred
-     * @throws InterruptedException when a thread is waiting, sleeping, or otherwise occupied, and the thread is
-     * interrupted, either before or during the activity.
      */
     @Override
-    public ClientMessage call() throws IOException, InterruptedException {
+    public ClientMessage call() {
         clientListener.sendMessage(messageToSend);
         ClientMessage response;
 

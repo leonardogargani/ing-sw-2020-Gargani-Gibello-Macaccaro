@@ -5,9 +5,11 @@ import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.PingMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
-import java.io.*;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.ArrayList;
 
 /**
@@ -27,11 +29,10 @@ public class ClientListener implements Runnable {
      *
      * @param clientSocket is the socket that is opened between a client and this ClientListener
      */
-    ClientListener(Socket clientSocket) throws SocketException {
+    ClientListener(Socket clientSocket) {
         this.clientSocket = clientSocket;
         this.lockOut = new Object();
         this.stackMessages = new ArrayList<>();
-        clientSocket.setSoTimeout(20000);
     }
 
     /**
@@ -41,7 +42,6 @@ public class ClientListener implements Runnable {
     @Override
     public void run() {
 
-        //Start ping sender thread
         try {
             ConnectionDetector connectionDetector = new ConnectionDetector(clientSocket, this);
             Thread connectionThread = new Thread(connectionDetector);
@@ -58,13 +58,10 @@ public class ClientListener implements Runnable {
                 if (message != null) {
                     handleMessage(message);
                 }
-            } catch (IOException | ClassNotFoundException | InterruptedException e) {
-                //a player left the game
-                try {
-                    handleDisconnection();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+            } catch (IOException e) {
+                handleDisconnection();
+            } catch (ClassNotFoundException | InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -80,49 +77,53 @@ public class ClientListener implements Runnable {
      */
     public synchronized ClientMessage receive() throws IOException, ClassNotFoundException, InterruptedException {
         Object objectArrived;
-        do {
-            input = new ObjectInputStream(clientSocket.getInputStream());
-            objectArrived = input.readObject();
-        } while (objectArrived instanceof PingMessage);
 
-        if (objectArrived instanceof RegistrationMessage)
-            return (ClientMessage) objectArrived;
+            do {
+                input = new ObjectInputStream(clientSocket.getInputStream());
+                objectArrived = input.readObject();
+            } while (objectArrived instanceof PingMessage);
 
-        else if (objectArrived instanceof LeaveGameMessage) {
-            handleDisconnection();
-            return null;
-        }
+            if (objectArrived instanceof RegistrationMessage)
+                return (ClientMessage) objectArrived;
 
-        else {
-            stackMessages.add((ClientMessage) objectArrived);
-            notifyAll();
-            wait();
-            return null;
-        }
+            else if (objectArrived instanceof LeaveGameMessage) {
+                handleDisconnection();
+                return null;
+            } else {
+                stackMessages.add((ClientMessage) objectArrived);
+                notifyAll();
+                wait();
+                return null;
+            }
     }
 
     /**
      * Method used to send messages to the client
      * @param message that will be sent
-     * @throws IOException signals that an I/O exception of some sort has occurred.
      */
-    public void sendMessage(Object message) throws IOException {
-        try{
+    public void sendMessage(Object message) {
+        try {
             synchronized (lockOut) {
                 output = new ObjectOutputStream(clientSocket.getOutputStream());
                 output.writeObject(message);
-            }}catch (IOException e){handleDisconnection();}
+            }
+        } catch (IOException e) {
+            handleDisconnection();
+        }
     }
 
     /**
      * Method used to send EndGameMessages, after the  delivery it calls the handleDisconnection method
      * @param message is the EndGameMessage that will be sent
-     * @throws IOException signals that an I/O exception of some sort has occurred.
      */
-    public void sendMessage(EndGameMessage message) throws IOException {
-        synchronized (lockOut) {
-            output = new ObjectOutputStream(clientSocket.getOutputStream());
-            output.writeObject(message);
+    public void sendMessage(EndGameMessage message) {
+        try {
+            synchronized (lockOut) {
+                output = new ObjectOutputStream(clientSocket.getOutputStream());
+                output.writeObject(message);
+            }
+        } catch (IOException e) {
+            handleDisconnection();
         }
         handleDisconnection();
     }
@@ -131,25 +132,26 @@ public class ClientListener implements Runnable {
      * This method checks the kind of message and then if it is a RegistrationMessage it creates and starts a
      * RegisterClientListener, that is a thread for the registration in a match
      * @param message is received from the receive method and then handleMessage takes it
-     * @throws IOException signals that an I/O exception of some sort has occurred.
      */
-    public void handleMessage(ClientMessage message) throws IOException {
+    public void handleMessage(ClientMessage message) {
         if (message instanceof RegistrationMessage) {
-            RegisterClientListener registrator = new RegisterClientListener(this, (RegistrationMessage) message);
-            Thread newRegistratorThread = new Thread(registrator);
-            newRegistratorThread.start();
+            RegisterClientListener register = new RegisterClientListener(this, (RegistrationMessage) message);
+            Thread newRegisterThread = new Thread(register);
+            newRegisterThread.start();
         }
     }
 
     /**
      * Getter method for a single message in the stackMessages ArrayList
      * @return the first message in the stackMessages
-     * @throws InterruptedException when a thread is waiting, sleeping, or otherwise occupied, and the thread is
-     * interrupted, either before or during the activity.
      */
-    public synchronized ClientMessage getMessage() throws InterruptedException {
+    public synchronized ClientMessage getMessage() {
         while (stackMessages.size() == 0) {
-            wait();
+            try{
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         return stackMessages.get(0);
     }
@@ -167,22 +169,26 @@ public class ClientListener implements Runnable {
      * This method is called when for some reason(ex. connection problem) the match has to end, so it closes input
      * and output streams, the socket and then it creates a RegisterClientListener to call the unregister method on
      * this GameSession
-     * @throws IOException signals that an I/O exception of some sort has occurred.
      */
-    public synchronized void handleDisconnection() throws IOException {
-        if (!this.disconnected) {
-            this.disconnected = true;
-            clientSocket.close();
+    public synchronized void handleDisconnection() {
+        try {
+            if (!this.disconnected) {
+                this.disconnected = true;
+
+                clientSocket.close();
 
 
-            if(this.idGame != -1){
-                output.close();
-                input.close();
-                stackMessages.add(new LeaveGameMessage());
-                notifyAll();
-                RegisterClientListener notifier = new RegisterClientListener();
-                notifier.notifyDisconnection(this.idGame);
+                if (this.idGame != -1) {
+                    output.close();
+                    input.close();
+                    stackMessages.add(new LeaveGameMessage());
+                    notifyAll();
+                    RegisterClientListener notifier = new RegisterClientListener();
+                    notifier.notifyDisconnection(this.idGame);
+                }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

@@ -20,7 +20,7 @@ public class ClientBG implements Runnable {
     private Socket serverSocket;
     private final ClientManager clientManager;
     private static final int SERVER_PORT = 50000;
-    private final String SERVER_IP = "127.0.0.1";
+    private String SERVER_IP = "127.0.0.1";
     public Object messageArrived;
     private boolean disconnect = false;
     private ObjectInputStream input;
@@ -47,7 +47,7 @@ public class ClientBG implements Runnable {
         System.out.println("Insert the ip of the server or press enter for the default one (127.0.0.1)");
         Scanner scanner = new Scanner(System.in);
 
-        String SERVER_IP = scanner.nextLine();
+        SERVER_IP = scanner.nextLine();
         if (SERVER_IP.toLowerCase().equals("quit"))
             System.exit(0);
         try {
@@ -71,8 +71,10 @@ public class ClientBG implements Runnable {
         while (!disconnect) {
             try {
                 receive();
-            } catch (IOException | ClassNotFoundException e) {
+            } catch (IOException e) {
                 handleDisconnection();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -157,10 +159,12 @@ public class ClientBG implements Runnable {
      *
      * @throws IOException signals that an I/O exception of some sort has occurred.
      */
-    public void closer() throws IOException {
+    public void closer() {
+       try{
         input.close();
         output.close();
         serverSocket.close();
+       } catch (IOException ignored){ }
     }
 
 
