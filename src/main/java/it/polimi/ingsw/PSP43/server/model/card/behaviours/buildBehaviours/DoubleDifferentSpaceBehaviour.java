@@ -6,7 +6,7 @@ import it.polimi.ingsw.PSP43.server.DataToBuild;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
-import it.polimi.ingsw.PSP43.server.model.card.BasicGodCard;
+import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
 
@@ -29,24 +29,26 @@ public class DoubleDifferentSpaceBehaviour extends BasicBuildBehaviour {
      */
     public void handleInitBuild(GameSession gameSession) throws IOException, ClassNotFoundException, InterruptedException, GameEndedException {
         Player currentPlayer = gameSession.getCurrentPlayer();
+        CellsHandler cellsHandler = gameSession.getCellsHandler();
         DataToBuild dataToBuild = genericAskForBuild(gameSession);
 
         if (dataToBuild.getBuildDome()) buildDome(dataToBuild);
         else buildBlock(dataToBuild);
 
+        if (cellsHandler.getCell(dataToBuild.getNewPosition()).getHeight() <= 3) {
+            RequestMessage requestMessage = new RequestMessage("Do you want to build another time on a different space?");
+            ResponseMessage responseMessage = gameSession.sendRequest(requestMessage, currentPlayer.getNickname(), new ResponseMessage());
 
-        RequestMessage requestMessage = new RequestMessage("Do you want to build another time on a different space?");
-        ResponseMessage responseMessage = gameSession.sendRequest(requestMessage, currentPlayer.getNickname(), new ResponseMessage());
-
-        if (responseMessage.isResponse()) {
-            buildAnotherTime(dataToBuild);
+            if (responseMessage.isResponse()) {
+                buildAnotherTime(dataToBuild);
+            }
         }
     }
 
     /**
      * This method is used to give the possibility to the player to build twice, but not on the same space.
      * @param oldDataToBuild The data of the previous build, used to check and not to give the possibility to the player
-     *                        to build in the same position of the previous one.
+     *                       to build in the same position of the previous one.
      */
     private void buildAnotherTime(DataToBuild oldDataToBuild) throws IOException, InterruptedException, ClassNotFoundException, GameEndedException {
         GameSession game = oldDataToBuild.getGameSession();
@@ -60,7 +62,7 @@ public class DoubleDifferentSpaceBehaviour extends BasicBuildBehaviour {
 
         ResponseMessage responseMessage = new ResponseMessage(false);
         if (availablePositionsToBuildDome.size() != 0) {
-            RequestMessage requestMessage = new RequestMessage("Do you want to build another time on a different space?");
+            RequestMessage requestMessage = new RequestMessage("Do you want to build a dome? Otherwise you will build a block.");
             responseMessage = game.sendRequest(requestMessage, currentPlayer.getNickname(), new ResponseMessage());
         }
 
@@ -72,9 +74,11 @@ public class DoubleDifferentSpaceBehaviour extends BasicBuildBehaviour {
             buildDome(new DataToBuild(game, currentPlayer, oldDataToBuild.getWorker(), actionResponse.getPosition(), Boolean.TRUE));
         }
         else {
-            message = "Choose where to build a block.";
-            actionResponse = askForBuild(game, availablePositionsToBuildBlock, message);
-            buildBlock(new DataToBuild(game, currentPlayer, oldDataToBuild.getWorker(), actionResponse.getPosition(), Boolean.FALSE));
+            if (availablePositionsToBuildBlock.size() != 0) {
+                message = "Choose where to build a block.";
+                actionResponse = askForBuild(game, availablePositionsToBuildBlock, message);
+                buildBlock(new DataToBuild(game, currentPlayer, oldDataToBuild.getWorker(), actionResponse.getPosition(), Boolean.FALSE));
+            }
         }
     }
 

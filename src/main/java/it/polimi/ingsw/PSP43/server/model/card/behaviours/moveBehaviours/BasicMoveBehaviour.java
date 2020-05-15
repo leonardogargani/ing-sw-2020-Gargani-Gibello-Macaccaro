@@ -50,8 +50,4 @@ public class BasicMoveBehaviour extends BasicGodCard implements MoveBehavior {
 
         move(new DataToMove(gameSession, gameSession.getCurrentPlayer(), workerMoved, nextPositionChosen));
     }
-
-    public BasicBuildBehaviour getBuildBehaviour() {
-        return super.getBuildBehaviour();
-    }
 }

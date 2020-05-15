@@ -4,6 +4,7 @@ import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.ResponseMessage;
 import it.polimi.ingsw.PSP43.server.DataToBuild;
+import it.polimi.ingsw.PSP43.server.DataToMove;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
@@ -34,9 +35,7 @@ public class BasicBuildBehaviour extends BasicGodCard implements BuildBehaviour 
                     "select a cell where to build a block.");
             try {
                 response = gameSession.sendRequest(request, currentPlayer.getNickname(), new ResponseMessage());
-            } catch (InterruptedException | IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+            } catch (InterruptedException | IOException | ClassNotFoundException e) { e.printStackTrace(); }
         }
 
         ActionResponse actionResponse;
@@ -46,8 +45,7 @@ public class BasicBuildBehaviour extends BasicGodCard implements BuildBehaviour 
             actionResponse = askForBuild(gameSession, availablePositionsBuildBlock, message);
             workerToBuild = workersHandler.getWorker(actionResponse.getWorkerPosition());
             return new DataToBuild(gameSession, currentPlayer, workerToBuild, actionResponse.getPosition(), Boolean.TRUE);
-        }
-        else {
+        } else {
             String message = "Choose a position where to build your block.";
             actionResponse = askForBuild(gameSession, availablePositionsBuildBlock, message);
             workerToBuild = workersHandler.getWorker(actionResponse.getWorkerPosition());
@@ -64,8 +62,15 @@ public class BasicBuildBehaviour extends BasicGodCard implements BuildBehaviour 
         return (T) actionResponse;
     }
 
-    @Override
     public void handleInitBuild(GameSession gameSession) throws IOException, ClassNotFoundException, InterruptedException, GameEndedException {
+        DataToBuild dataToBuild = genericAskForBuild(gameSession);
 
+        Coord nextPositionChosen = dataToBuild.getNewPosition();
+        Worker workerMoved = dataToBuild.getWorker();
+
+        if (dataToBuild.getBuildDome())
+            buildDome(new DataToBuild(gameSession, gameSession.getCurrentPlayer(), workerMoved, nextPositionChosen, Boolean.TRUE));
+        else
+            buildBlock(new DataToBuild(gameSession, gameSession.getCurrentPlayer(), workerMoved, nextPositionChosen, Boolean.FALSE));
     }
 }

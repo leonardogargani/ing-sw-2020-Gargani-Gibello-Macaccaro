@@ -75,10 +75,6 @@ public class BasicGodCard extends AbstractGodCard {
         return super.getPower();
     }
 
-    public BasicBuildBehaviour getBuildBehaviour() {
-        return buildBehaviour;
-    }
-
     public AbstractGodCard cleanFromEffects(String nameOfEffect) {
         return new BasicGodCard(super.getGodName(), super.getDescription(), super.getPower(), moveBehavior, buildBehaviour);
     }

@@ -80,7 +80,10 @@ public class Cell extends Observable {
      */
     public void setOccupiedByDome(boolean occupiedByDome) throws IOException {
         this.occupiedByDome = occupiedByDome;
-        notifyBoardChange();
+        if (occupiedByDome) {
+            setHeight(4);
+        }
+        else notifyBoardChange();
     }
 
 
