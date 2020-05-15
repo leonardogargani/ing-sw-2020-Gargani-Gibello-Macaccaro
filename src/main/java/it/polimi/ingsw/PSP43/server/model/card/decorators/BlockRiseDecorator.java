@@ -14,6 +14,8 @@ import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class BlockRiseDecorator extends PowerGodDecorator {
     private static final long serialVersionUID = -5029682300766417371L;
@@ -29,12 +31,16 @@ public class BlockRiseDecorator extends PowerGodDecorator {
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(GameSession gameSession) {
         CellsHandler cellsHandler = gameSession.getCellsHandler();
         HashMap<Coord, ArrayList<Coord>> availablePositionsToMove = super.findAvailablePositionsToMove(gameSession);
-        for (Coord c : availablePositionsToMove.keySet()) {
-            for (Coord c1 : availablePositionsToMove.get(c)) {
-                Cell newCell = cellsHandler.getCell(c1);
-                Cell oldCell = cellsHandler.getCell(c);
-                if (newCell.getHeight() > oldCell.getHeight()) availablePositionsToMove.get(c).remove(c1);
+        Iterator<Map.Entry<Coord,ArrayList<Coord>>> iter = availablePositionsToMove.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry<Coord,ArrayList<Coord>> entry = iter.next();
+            ArrayList<Coord> currentPositions = entry.getValue();
+            for(Iterator<Coord> coordIterator = currentPositions.iterator(); coordIterator.hasNext(); ) {
+                Cell newCell = cellsHandler.getCell(coordIterator.next());
+                Cell oldCell = cellsHandler.getCell(entry.getKey());
+                if (newCell.getHeight() > oldCell.getHeight()) coordIterator.remove();
             }
+            if (currentPositions.size() == 0) iter.remove();
         }
         return availablePositionsToMove;
     }
