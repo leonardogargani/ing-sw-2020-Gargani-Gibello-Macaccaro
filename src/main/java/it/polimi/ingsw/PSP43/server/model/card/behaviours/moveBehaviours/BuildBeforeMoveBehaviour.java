@@ -2,8 +2,8 @@ package it.polimi.ingsw.PSP43.server.model.card.behaviours.moveBehaviours;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.ResponseMessage;
-import it.polimi.ingsw.PSP43.server.DataToBuild;
-import it.polimi.ingsw.PSP43.server.DataToMove;
+import it.polimi.ingsw.PSP43.server.model.DataToBuild;
+import it.polimi.ingsw.PSP43.server.model.DataToMove;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
@@ -91,13 +91,13 @@ public class BuildBeforeMoveBehaviour extends BasicMoveBehaviour {
             message = "Choose a position where to build a dome.";
             AbstractGodCard currentCard = gameSession.getCurrentPlayer().getAbstractGodCard();
             ActionResponse actionResponse = currentCard.askForBuild(gameSession, hashMapPositionsToBuildDome, message);
-            buildDome(new DataToBuild(gameSession, gameSession.getCurrentPlayer(), oldData.getWorker(), actionResponse.getPosition(), Boolean.TRUE));
+            build(new DataToBuild(gameSession, gameSession.getCurrentPlayer(), oldData.getWorker(), actionResponse.getPosition(), Boolean.TRUE));
         }
         else {
             message = "Choose a position where to build a block.";
             AbstractGodCard currentCard = gameSession.getCurrentPlayer().getAbstractGodCard();
             ActionResponse actionResponse = currentCard.askForBuild(gameSession, hashMapPositionsToBuildBlock, message);
-            buildBlock(new DataToBuild(gameSession, gameSession.getCurrentPlayer(), oldData.getWorker(), actionResponse.getPosition(), Boolean.FALSE));
+            build(new DataToBuild(gameSession, gameSession.getCurrentPlayer(), oldData.getWorker(), actionResponse.getPosition(), Boolean.FALSE));
         }
     }
 

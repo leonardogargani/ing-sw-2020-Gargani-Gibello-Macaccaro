@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP43.server.model.card.decorators;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
-import it.polimi.ingsw.PSP43.server.DataToMove;
+import it.polimi.ingsw.PSP43.server.model.DataToMove;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
@@ -16,6 +16,8 @@ import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class SwapIfPossibleDecorator extends PowerGodDecorator {
     private static final long serialVersionUID = 8250965157977039866L;
@@ -35,7 +37,8 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
 
         Cell cellToMove = gameSession.getCellsHandler().getCell(actionResponse.getPosition());
 
-        ActionResponse response = new ActionResponse();
+        ActionResponse response;
+        Coord coordToForce = null;
         if (cellToMove.getOccupiedByWorker()) {
             CellsHandler cellsHandler = gameSession.getCellsHandler();
 
@@ -46,9 +49,8 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
                     directionAvailableCoords(cellsHandler, currentWorkerPosition, actionResponse.getPosition()));
             ActionRequest request = new ActionRequest("Choose a position where to force your opponent.", availablePositionsToForce);
             response = gameSession.sendRequest(request, gameSession.getCurrentPlayer().getNickname(), new ActionResponse());
+            coordToForce = response.getPosition();
         }
-
-        Coord coordToForce = response.getPosition();
 
         move(new DataToMove(gameSession, gameSession.getCurrentPlayer(), workerMoved, actionResponse.getPosition()), coordToForce);
     }
@@ -63,9 +65,9 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
         else {
             WorkersHandler workersHandler = gameSession.getWorkersHandler();
             Worker playerWorker = dataToMove.getWorker();
-            Worker opponentWorker = workersHandler.getWorker(coordToForce);
+            Worker opponentWorker = workersHandler.getWorker(dataToMove.getNewPosition());
 
-            workersHandler.changePosition(playerWorker, coordToForce);
+            workersHandler.changePosition(playerWorker, coordToMove);
             workersHandler.changePosition(opponentWorker, coordToForce);
         }
     }
@@ -74,11 +76,14 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
         CellsHandler cellsHandler = gameSession.getCellsHandler();
         HashMap<Coord, ArrayList<Coord>> availablePositions = super.findAvailablePositionsToMove(gameSession);
 
-        for (Coord actualCell : availablePositions.keySet()) {
-            for (Coord cellToMove : availablePositions.get(actualCell)) {
-                if (cellsHandler.getCell(cellToMove).getOccupiedByWorker()) {
-                    ArrayList<Cell> availablePositionsOnDirection = directionAvailableCells(cellsHandler, actualCell, cellToMove);
-                    if (availablePositionsOnDirection.size() == 0) availablePositions.get(actualCell).remove(cellToMove);
+        for (Iterator<Map.Entry<Coord, ArrayList<Coord>>> keyIterator = availablePositions.entrySet().iterator(); keyIterator.hasNext(); ) {
+            Map.Entry<Coord, ArrayList<Coord>> currentKey = keyIterator.next();
+            ArrayList<Coord> availableCurrentPositions = currentKey.getValue();
+            for (Iterator<Coord> coordIterator = availableCurrentPositions.iterator(); coordIterator.hasNext(); ) {
+                Coord arrivalCoord = coordIterator.next();
+                if (cellsHandler.getCell(arrivalCoord).getOccupiedByWorker()) {
+                    ArrayList<Cell> availablePositionsOnDirection = directionAvailableCells(cellsHandler, currentKey.getKey(), arrivalCoord);
+                    if (availablePositionsOnDirection.size() == 0) keyIterator.remove();
                 }
             }
         }
@@ -99,7 +104,7 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
         ArrayList<Coord> coordsInDirection = handler.findSameDirectionCoords(oldPosition, newPosition);
         int heightOpponent = handler.getCell(newPosition).getHeight();
 
-        coordsInDirection.removeIf(coord -> handler.getCell(coord).getHeight() == heightOpponent);
+        coordsInDirection.removeIf(coord -> handler.getCell(coord).getHeight() != heightOpponent);
 
         return coordsInDirection;
     }

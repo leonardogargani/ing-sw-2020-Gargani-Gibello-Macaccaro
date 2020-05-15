@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP43.server.model.card.decorators;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
-import it.polimi.ingsw.PSP43.server.DataToMove;
+import it.polimi.ingsw.PSP43.server.model.DataToMove;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;

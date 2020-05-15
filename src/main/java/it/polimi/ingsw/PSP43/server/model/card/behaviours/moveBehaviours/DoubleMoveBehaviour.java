@@ -2,7 +2,7 @@ package it.polimi.ingsw.PSP43.server.model.card.behaviours.moveBehaviours;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.ResponseMessage;
-import it.polimi.ingsw.PSP43.server.DataToMove;
+import it.polimi.ingsw.PSP43.server.model.DataToMove;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;

@@ -12,9 +12,9 @@ import java.util.HashMap;
 
 public class CardsHandler {
     private ArrayList<AbstractGodCard> deckOfAbstractGodCards;
-    private HashMap<String, AbstractGodCard> mapOwnersCard;
+    private final HashMap<String, AbstractGodCard> mapOwnersCard;
 
-    public CardsHandler() throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException {
+    public CardsHandler() throws ParserConfigurationException, SAXException, IOException {
         this.mapOwnersCard = new HashMap<>();
         this.deckOfAbstractGodCards = new ArrayList<>();
         deckOfAbstractGodCards = DOMCardsParser.buildDeck();
@@ -22,14 +22,6 @@ public class CardsHandler {
 
     public ArrayList<AbstractGodCard> getDeckOfAbstractGodCards() {
         return deckOfAbstractGodCards;
-    }
-
-    private void setDeckOfAbstractGodCards(ArrayList<AbstractGodCard> deckOfAbstractGodCards) {
-        this.deckOfAbstractGodCards = deckOfAbstractGodCards;
-    }
-
-    private void setMapOwnersCard(HashMap<String, AbstractGodCard> mapOwnersCard) {
-        this.mapOwnersCard = mapOwnersCard;
     }
 
     public HashMap<String, AbstractGodCard> getMapOwnersCard() {
@@ -40,7 +32,6 @@ public class CardsHandler {
      *
      * @param nickOwner The data stored about a player into the list of players
      * @param godName The data of the card chosen by a player during the game
-     * @throws CardAlreadyInUseException
      */
     public void setCardToPlayer(String nickOwner, String godName) {
         AbstractGodCard abstractGodCardToSet = null;
@@ -56,10 +47,6 @@ public class CardsHandler {
         for (String key : mapOwnersCard.keySet()) {
             if (nickOwner.equals(key)) mapOwnersCard.remove(nickOwner);
         }
-    }
-
-    public AbstractGodCard getCardOwned(String name) {
-        return mapOwnersCard.get(name);
     }
 
     public void print() {

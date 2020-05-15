@@ -123,6 +123,15 @@ public class Cell extends Observable {
 
     @Override
     public Cell clone() {
-        return new Cell(coord.clone(), super.getBoardObserver());
+        Cell clone = new Cell(coord.clone(), super.getBoardObserver());
+        try {
+            clone.setHeight(this.getHeight());
+            clone.setOccupiedByDome(this.getOccupiedByDome());
+            clone.setOccupiedByWorker(this.getOccupiedByWorker());
+            clone.setColor(this.getColor());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return clone;
     }
 }

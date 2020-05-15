@@ -1,11 +1,10 @@
 package it.polimi.ingsw.PSP43.server.model.card;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
-import it.polimi.ingsw.PSP43.server.DataToBuild;
+import it.polimi.ingsw.PSP43.server.model.DataToBuild;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.*;
 import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.BasicBuildBehaviour;
-import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.BuildBehaviour;
 import it.polimi.ingsw.PSP43.server.model.card.behaviours.moveBehaviours.BasicMoveBehaviour;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
@@ -101,10 +100,6 @@ public class BasicGodCard extends AbstractGodCard {
 
     public <T extends ClientMessage> T askForBuild(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositionsBuildBlock, String message) throws GameEndedException, InterruptedException, IOException, ClassNotFoundException {
         return buildBehaviour.askForBuild(gameSession, availablePositionsBuildBlock, message);
-    }
-
-    public BasicMoveBehaviour getMoveBehavior() {
-        return moveBehavior;
     }
 
 

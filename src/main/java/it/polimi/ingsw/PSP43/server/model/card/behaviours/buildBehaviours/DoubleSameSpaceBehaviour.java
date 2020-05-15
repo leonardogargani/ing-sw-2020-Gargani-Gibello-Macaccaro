@@ -1,11 +1,10 @@
 package it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.ResponseMessage;
-import it.polimi.ingsw.PSP43.server.DataToBuild;
+import it.polimi.ingsw.PSP43.server.model.DataToBuild;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Player;
-import it.polimi.ingsw.PSP43.server.model.card.BasicGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
 
@@ -18,9 +17,9 @@ public class DoubleSameSpaceBehaviour extends BasicBuildBehaviour {
         Player currentPlayer = gameSession.getCurrentPlayer();
         DataToBuild dataToBuild = genericAskForBuild(gameSession);
 
-        if (dataToBuild.getBuildDome()) buildDome(dataToBuild);
+        if (dataToBuild.getBuildDome()) build(dataToBuild);
         else {
-            buildBlock(dataToBuild);
+            build(dataToBuild);
 
             Cell cellBuilt = gameSession.getCellsHandler().getCell(dataToBuild.getNewPosition());
             if (cellBuilt.getHeight() < 3) {
@@ -28,7 +27,7 @@ public class DoubleSameSpaceBehaviour extends BasicBuildBehaviour {
                 ResponseMessage responseMessage = gameSession.sendRequest(requestMessage, currentPlayer.getNickname(), new ResponseMessage());
 
                 if (responseMessage.isResponse()) {
-                    buildBlock(dataToBuild);
+                    build(dataToBuild);
                 }
             }
         }

@@ -2,7 +2,7 @@ package it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.ResponseMessage;
-import it.polimi.ingsw.PSP43.server.DataToBuild;
+import it.polimi.ingsw.PSP43.server.model.DataToBuild;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.initialisers.DOMCardsParser;
 import it.polimi.ingsw.PSP43.server.initialisers.GameInitialiser;
@@ -94,7 +94,7 @@ public class BasicBuildBehaviourTest {
 
         basicBuildBehaviour.handleInitBuild(spyGame);
 
-        assertEquals(3, spyGame.getCellsHandler().getCell(coordWhereToBuild).getHeight());
+        assertEquals(4, spyGame.getCellsHandler().getCell(coordWhereToBuild).getHeight());
     }
 
     @Test

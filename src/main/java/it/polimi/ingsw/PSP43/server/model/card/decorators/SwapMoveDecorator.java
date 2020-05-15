@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP43.server.model.card.decorators;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
-import it.polimi.ingsw.PSP43.server.DataToMove;
+import it.polimi.ingsw.PSP43.server.model.DataToMove;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
@@ -52,10 +52,8 @@ public class SwapMoveDecorator extends PowerGodDecorator {
 
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(GameSession gameSession) {
         CellsHandler cellsHandler = gameSession.getCellsHandler();
-        Player currentPlayer = gameSession.getCurrentPlayer();
-        ArrayList<Worker> workers = gameSession.getWorkersHandler().getWorkers(currentPlayer.getWorkersIdsArray());
 
-        HashMap<Coord, ArrayList<Coord>> availablePositions = cellsHandler.findWorkersNeighbouringCoords(workers);
+        HashMap<Coord, ArrayList<Coord>> availablePositions = cellsHandler.findWorkersNeighbouringCoords(gameSession.getCurrentPlayer());
 
         for (Coord actualCoord : availablePositions.keySet()) {
             Cell actualCell = cellsHandler.getCell(actualCoord);

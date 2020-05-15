@@ -2,7 +2,7 @@ package it.polimi.ingsw.PSP43.server.model.card.decorators;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.ResponseMessage;
-import it.polimi.ingsw.PSP43.server.DataToBuild;
+import it.polimi.ingsw.PSP43.server.model.DataToBuild;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
@@ -16,6 +16,7 @@ import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class UnconditionedDomeBuildDecorator extends PowerGodDecorator {
     private static final long serialVersionUID = 8289108530021462717L;
@@ -44,28 +45,26 @@ public class UnconditionedDomeBuildDecorator extends PowerGodDecorator {
             message = "Choose a position where to place a dome.";
             ActionResponse actionResponse = askForBuild(gameSession, availablePositionsToBuildDome, message);
             Worker workerToBuild = gameSession.getWorkersHandler().getWorker(actionResponse.getWorkerPosition());
-            buildDome(new DataToBuild(gameSession, currentPlayer, workerToBuild, actionResponse.getPosition(), Boolean.TRUE));
+            build(new DataToBuild(gameSession, currentPlayer, workerToBuild, actionResponse.getPosition(), Boolean.TRUE));
         }
         else {
             message = "Choose a position where to place a block.";
             ActionResponse actionResponse = askForBuild(gameSession, availablePositionsToBuildBlock, message);
             Worker workerToBuild = gameSession.getWorkersHandler().getWorker(actionResponse.getWorkerPosition());
-            buildBlock(new DataToBuild(gameSession, currentPlayer, workerToBuild, actionResponse.getPosition(), Boolean.FALSE));
+            build(new DataToBuild(gameSession, currentPlayer, workerToBuild, actionResponse.getPosition(), Boolean.FALSE));
         }
     }
 
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildDome(GameSession gameSession) {
         CellsHandler cellsHandler = gameSession.getCellsHandler();
 
-        Integer[] workersIds = gameSession.getCurrentPlayer().getWorkersIdsArray();
-        ArrayList<Worker> workers = gameSession.getWorkersHandler().getWorkers(workersIds);
-
-        HashMap<Coord, ArrayList<Coord>> availablePositions = cellsHandler.findWorkersNeighbouringCoords(workers);
+        HashMap<Coord, ArrayList<Coord>> availablePositions = cellsHandler.findWorkersNeighbouringCoords(gameSession.getCurrentPlayer());
         for (Coord c : availablePositions.keySet()) {
-            for (Coord c1 : availablePositions.get(c)) {
-                Cell cellToBuild = cellsHandler.getCell(c1);
+            for (Iterator<Coord> coordIterator = availablePositions.get(c).iterator(); coordIterator.hasNext(); ) {
+                Coord actualCoord = coordIterator.next();
+                Cell cellToBuild = cellsHandler.getCell(actualCoord);
                 if (cellToBuild.getOccupiedByDome() || cellToBuild.getOccupiedByWorker()) {
-                    availablePositions.get(c).remove(c1);
+                    coordIterator.remove();
                 }
             }
         }

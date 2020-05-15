@@ -1,9 +1,6 @@
-package it.polimi.ingsw.PSP43.server;
+package it.polimi.ingsw.PSP43.server.model;
 
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
-import it.polimi.ingsw.PSP43.server.model.Coord;
-import it.polimi.ingsw.PSP43.server.model.Player;
-import it.polimi.ingsw.PSP43.server.model.Worker;
 
 public class DataToBuild extends DataToMove {
     private Boolean buildDome;

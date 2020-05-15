@@ -1,13 +1,12 @@
 package it.polimi.ingsw.PSP43.server.model.card.behaviours.moveBehaviours;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
-import it.polimi.ingsw.PSP43.server.DataToMove;
+import it.polimi.ingsw.PSP43.server.model.DataToMove;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
-import it.polimi.ingsw.PSP43.server.model.card.BasicGodCard;
 import it.polimi.ingsw.PSP43.server.model.card.decorators.BlockRiseDecorator;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
@@ -66,7 +65,7 @@ public class BlockOpponentRiseBehaviour extends BasicMoveBehaviour {
     /**
      * This method handles the move of a worker and at the end, if he has risen of one level,
      * calls the method to block the other workers to move up in the next move.
-     * @param gameSession
+     * @param gameSession The main access to the database of the game.
      * @throws WinnerCaughtException if a worker is moved on the third level.
      */
     public void handleInitMove(GameSession gameSession) throws ClassNotFoundException, IOException, WinnerCaughtException, InterruptedException, GameEndedException {

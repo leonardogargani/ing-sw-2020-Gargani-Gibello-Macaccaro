@@ -1,8 +1,8 @@
 package it.polimi.ingsw.PSP43.server.model.card.decorators;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
-import it.polimi.ingsw.PSP43.server.DataToBuild;
-import it.polimi.ingsw.PSP43.server.DataToMove;
+import it.polimi.ingsw.PSP43.server.model.DataToBuild;
+import it.polimi.ingsw.PSP43.server.model.DataToMove;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
@@ -39,12 +39,8 @@ public abstract class PowerGodDecorator extends AbstractGodCard {
         godComponent.move(dataToMove);
     }
 
-    public void buildBlock(DataToBuild dataToBuild) throws IOException, ClassNotFoundException, InterruptedException {
-        godComponent.buildBlock(dataToBuild);
-    }
-
-    public void buildDome(DataToBuild dataToBuild) throws IOException {
-        godComponent.buildDome(dataToBuild);
+    public void build(DataToBuild dataToBuild) throws IOException, ClassNotFoundException, InterruptedException {
+        godComponent.build(dataToBuild);
     }
 
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(GameSession gameSession) {

@@ -3,8 +3,7 @@ package it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours;
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.ResponseMessage;
-import it.polimi.ingsw.PSP43.server.DataToBuild;
-import it.polimi.ingsw.PSP43.server.DataToMove;
+import it.polimi.ingsw.PSP43.server.model.DataToBuild;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
@@ -35,7 +34,9 @@ public class BasicBuildBehaviour extends BasicGodCard implements BuildBehaviour 
                     "select a cell where to build a block.");
             try {
                 response = gameSession.sendRequest(request, currentPlayer.getNickname(), new ResponseMessage());
-            } catch (InterruptedException | IOException | ClassNotFoundException e) { e.printStackTrace(); }
+            } catch (InterruptedException | IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         }
 
         ActionResponse actionResponse;
@@ -69,8 +70,8 @@ public class BasicBuildBehaviour extends BasicGodCard implements BuildBehaviour 
         Worker workerMoved = dataToBuild.getWorker();
 
         if (dataToBuild.getBuildDome())
-            buildDome(new DataToBuild(gameSession, gameSession.getCurrentPlayer(), workerMoved, nextPositionChosen, Boolean.TRUE));
+            build(new DataToBuild(gameSession, gameSession.getCurrentPlayer(), workerMoved, nextPositionChosen, Boolean.TRUE));
         else
-            buildBlock(new DataToBuild(gameSession, gameSession.getCurrentPlayer(), workerMoved, nextPositionChosen, Boolean.FALSE));
+            build(new DataToBuild(gameSession, gameSession.getCurrentPlayer(), workerMoved, nextPositionChosen, Boolean.FALSE));
     }
 }

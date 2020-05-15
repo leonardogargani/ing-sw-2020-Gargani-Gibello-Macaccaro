@@ -1,13 +1,9 @@
 package it.polimi.ingsw.PSP43.server.model.card.decorators;
 
-import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
-import it.polimi.ingsw.PSP43.server.DataToMove;
-import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
+import it.polimi.ingsw.PSP43.server.model.DataToMove;
 import it.polimi.ingsw.PSP43.server.model.Coord;
-import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
 import java.io.IOException;
@@ -18,19 +14,10 @@ import java.io.IOException;
 public class WinConditionDecorator extends PowerGodDecorator {
     private static final long serialVersionUID = -9171126719022096338L;
 
-    public WinConditionDecorator() {
-    }
+    public WinConditionDecorator() {}
 
     public WinConditionDecorator(AbstractGodCard godComponent) {
         super(godComponent);
-    }
-
-    @Override
-    public void initMove(GameSession gameSession) throws ClassNotFoundException, WinnerCaughtException, InterruptedException, IOException, GameEndedException {
-        ActionResponse responseMessage = askForMove(gameSession);
-
-        Worker workerMoved = gameSession.getWorkersHandler().getWorker(responseMessage.getWorkerPosition());
-        move(new DataToMove(gameSession, gameSession.getCurrentPlayer(), workerMoved, responseMessage.getPosition()));
     }
 
     public void move(DataToMove dataToMove) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {

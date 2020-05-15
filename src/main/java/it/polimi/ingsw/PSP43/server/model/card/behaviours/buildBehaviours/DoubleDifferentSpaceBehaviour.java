@@ -2,7 +2,7 @@ package it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.ResponseMessage;
-import it.polimi.ingsw.PSP43.server.DataToBuild;
+import it.polimi.ingsw.PSP43.server.model.DataToBuild;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
@@ -25,6 +25,7 @@ public class DoubleDifferentSpaceBehaviour extends BasicBuildBehaviour {
 
     /**
      * This method checks if the player wants to build another time
+     *
      * @param gameSession
      */
     public void handleInitBuild(GameSession gameSession) throws IOException, ClassNotFoundException, InterruptedException, GameEndedException {
@@ -32,8 +33,8 @@ public class DoubleDifferentSpaceBehaviour extends BasicBuildBehaviour {
         CellsHandler cellsHandler = gameSession.getCellsHandler();
         DataToBuild dataToBuild = genericAskForBuild(gameSession);
 
-        if (dataToBuild.getBuildDome()) buildDome(dataToBuild);
-        else buildBlock(dataToBuild);
+        if (dataToBuild.getBuildDome()) build(dataToBuild);
+        else build(dataToBuild);
 
         if (cellsHandler.getCell(dataToBuild.getNewPosition()).getHeight() <= 3) {
             RequestMessage requestMessage = new RequestMessage("Do you want to build another time on a different space?");
@@ -47,6 +48,7 @@ public class DoubleDifferentSpaceBehaviour extends BasicBuildBehaviour {
 
     /**
      * This method is used to give the possibility to the player to build twice, but not on the same space.
+     *
      * @param oldDataToBuild The data of the previous build, used to check and not to give the possibility to the player
      *                       to build in the same position of the previous one.
      */
@@ -71,25 +73,24 @@ public class DoubleDifferentSpaceBehaviour extends BasicBuildBehaviour {
         if (responseMessage.isResponse()) {
             message = "Choose where to build a dome.";
             actionResponse = askForBuild(game, availablePositionsToBuildBlock, message);
-            buildDome(new DataToBuild(game, currentPlayer, oldDataToBuild.getWorker(), actionResponse.getPosition(), Boolean.TRUE));
-        }
-        else {
+            build(new DataToBuild(game, currentPlayer, oldDataToBuild.getWorker(), actionResponse.getPosition(), Boolean.TRUE));
+        } else {
             if (availablePositionsToBuildBlock.size() != 0) {
                 message = "Choose where to build a block.";
                 actionResponse = askForBuild(game, availablePositionsToBuildBlock, message);
-                buildBlock(new DataToBuild(game, currentPlayer, oldDataToBuild.getWorker(), actionResponse.getPosition(), Boolean.FALSE));
+                build(new DataToBuild(game, currentPlayer, oldDataToBuild.getWorker(), actionResponse.getPosition(), Boolean.FALSE));
             }
         }
     }
 
     private void filterAllowedPositions(HashMap<Coord, ArrayList<Coord>> availablePositions, DataToBuild oldData) {
-        Iterator<Map.Entry<Coord,ArrayList<Coord>>> iter = availablePositions.entrySet().iterator();
+        Iterator<Map.Entry<Coord, ArrayList<Coord>>> iter = availablePositions.entrySet().iterator();
         Coord coordWorkerAllowedToBuild = oldData.getWorker().getCurrentPosition();
 
         while (iter.hasNext()) {
-            Map.Entry<Coord,ArrayList<Coord>> currentEntry = iter.next();
+            Map.Entry<Coord, ArrayList<Coord>> currentEntry = iter.next();
 
-            if(!(coordWorkerAllowedToBuild.equals(currentEntry.getKey()))){
+            if (!(coordWorkerAllowedToBuild.equals(currentEntry.getKey()))) {
                 iter.remove();
             }
 

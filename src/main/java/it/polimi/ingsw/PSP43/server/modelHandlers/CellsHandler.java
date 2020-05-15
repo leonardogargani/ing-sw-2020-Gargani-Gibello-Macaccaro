@@ -3,6 +3,7 @@ package it.polimi.ingsw.PSP43.server.modelHandlers;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
+import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 
 import java.io.IOException;
@@ -85,11 +86,13 @@ public class CellsHandler {
 
     /**
      * This method finds all the neighbouring cells for the workers provided from the caller
-     * @param workers references of the workers of which the method has to find the neighbouring cells
      * @return an HashMap in which the key value are the coordinates of the workers supplied by the caller and the values are all the neighbouring
      * cells of that worker
      */
-    public HashMap<Coord, ArrayList<Coord>> findWorkersNeighbouringCoords(ArrayList<Worker> workers) {
+    public HashMap<Coord, ArrayList<Coord>> findWorkersNeighbouringCoords(Player player) {
+        Integer[] workerIds = player.getWorkersIdsArray();
+        ArrayList<Worker> workers = gameSession.getWorkersHandler().getWorkers(workerIds);
+
         HashMap<Coord, ArrayList<Coord>> availablePositions = new HashMap<>();
         ArrayList<Coord> positions;
 
