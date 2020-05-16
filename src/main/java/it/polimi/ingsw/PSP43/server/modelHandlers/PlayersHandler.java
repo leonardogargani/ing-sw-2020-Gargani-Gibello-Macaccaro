@@ -23,9 +23,7 @@ public class PlayersHandler {
      * @param nick The identification of a player during the game
      * @throws NicknameAlreadyInUseException if the nickname chosen by the player is already in use
      */
-    public void createNewPlayer(String nick) throws NicknameAlreadyInUseException {
-        for (Player p : gamePlayers)
-            if (p.getNickname().equals(nick)) throw new NicknameAlreadyInUseException("We are sorry, " + nick + " is already in use.");
+    public void createNewPlayer(String nick) {
         gamePlayers.add(new Player(nick));
     }
 

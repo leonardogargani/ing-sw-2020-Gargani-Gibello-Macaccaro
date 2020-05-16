@@ -67,8 +67,8 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
             Worker playerWorker = dataToMove.getWorker();
             Worker opponentWorker = workersHandler.getWorker(dataToMove.getNewPosition());
 
-            workersHandler.changePosition(playerWorker, coordToMove);
             workersHandler.changePosition(opponentWorker, coordToForce);
+            workersHandler.changePosition(playerWorker, coordToMove);
         }
     }
 
@@ -83,7 +83,7 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
                 Coord arrivalCoord = coordIterator.next();
                 if (cellsHandler.getCell(arrivalCoord).getOccupiedByWorker()) {
                     ArrayList<Cell> availablePositionsOnDirection = directionAvailableCells(cellsHandler, currentKey.getKey(), arrivalCoord);
-                    if (availablePositionsOnDirection.size() == 0) keyIterator.remove();
+                    if (availablePositionsOnDirection.size() == 0) coordIterator.remove();
                 }
             }
         }

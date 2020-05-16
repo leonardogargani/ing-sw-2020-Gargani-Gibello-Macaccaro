@@ -31,8 +31,8 @@ public class UnconditionedDomeBuildDecorator extends PowerGodDecorator {
     public void initBuild(GameSession gameSession) throws GameEndedException, IOException, InterruptedException, ClassNotFoundException {
         Player currentPlayer = gameSession.getCurrentPlayer();
 
-        HashMap<Coord, ArrayList<Coord>> availablePositionsToBuildDome = findAvailablePositionsToBuildDome(gameSession);
-        HashMap<Coord, ArrayList<Coord>> availablePositionsToBuildBlock = findAvailablePositionsToBuildBlock(gameSession);
+        HashMap<Coord, ArrayList<Coord>> availablePositionsToBuildDome = this.findAvailablePositionsToBuildDome(gameSession);
+        HashMap<Coord, ArrayList<Coord>> availablePositionsToBuildBlock = this.findAvailablePositionsToBuildBlock(gameSession);
 
         ResponseMessage responseMessage = new ResponseMessage(false);
         if (availablePositionsToBuildDome.size() != 0) {
@@ -67,6 +67,7 @@ public class UnconditionedDomeBuildDecorator extends PowerGodDecorator {
                     coordIterator.remove();
                 }
             }
+
         }
         return availablePositions;
     }

@@ -115,13 +115,11 @@ public class Cell extends Observable {
 
     /**
      * This method notifies the related observer that a change occurred and the client has to be advised of that
-     * @throws IOException
      */
     public void notifyBoardChange() throws IOException {
         super.getBoardObserver().notifyBoardChange(this);
     }
 
-    @Override
     public Cell clone() {
         Cell clone = new Cell(coord.clone(), super.getBoardObserver());
         try {

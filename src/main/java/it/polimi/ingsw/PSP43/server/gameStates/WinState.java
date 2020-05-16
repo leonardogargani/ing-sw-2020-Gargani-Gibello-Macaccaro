@@ -9,7 +9,7 @@ public class WinState extends TurnState {
     String winner;
 
     public WinState(GameSession gameSession) {
-        super(gameSession);
+        super(gameSession, TurnName.WIN_STATE);
     }
 
     public void setWinner(String winner) {

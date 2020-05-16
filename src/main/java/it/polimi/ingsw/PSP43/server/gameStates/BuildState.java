@@ -3,7 +3,6 @@ package it.polimi.ingsw.PSP43.server.gameStates;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
 import java.io.IOException;
 
@@ -11,7 +10,7 @@ public class BuildState extends TurnState {
     private static final int FIRSTPOSITION = 0;
 
     public BuildState(GameSession gameSession) {
-        super(gameSession);
+        super(gameSession, TurnName.BUILD_STATE);
     }
 
     public void initState() throws IOException, ClassNotFoundException, InterruptedException {

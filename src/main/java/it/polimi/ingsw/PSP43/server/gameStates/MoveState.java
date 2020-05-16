@@ -17,7 +17,7 @@ public class MoveState extends TurnState {
     protected int initFirst = -1;
 
     public MoveState(GameSession gameSession) {
-        super(gameSession);
+        super(gameSession, TurnName.MOVE_STATE);
     }
 
     public void initState() throws IOException, ClassNotFoundException, InterruptedException {

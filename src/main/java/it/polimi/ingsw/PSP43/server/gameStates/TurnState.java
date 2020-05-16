@@ -1,17 +1,17 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
-import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
 import java.io.IOException;
 
 
 public abstract class TurnState {
-    private GameSession gameSession;
+    private final GameSession gameSession;
+    private final TurnName turnName;
 
-    public TurnState(GameSession gameSession) {
+    public TurnState(GameSession gameSession, TurnName turnName) {
         this.gameSession = gameSession;
+        this.turnName = turnName;
     }
 
     public GameSession getGameSession() {
@@ -31,5 +31,9 @@ public abstract class TurnState {
     }
 
     public void findNextState() throws IOException, ClassNotFoundException, InterruptedException {
+    }
+
+    public TurnName getTurnName() {
+        return turnName;
     }
 }

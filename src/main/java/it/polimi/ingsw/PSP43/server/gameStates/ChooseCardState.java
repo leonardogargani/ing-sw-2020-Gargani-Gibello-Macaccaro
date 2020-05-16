@@ -7,7 +7,6 @@ import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.CardRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.InitialCardsRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.StartGameMessage;
@@ -25,7 +24,7 @@ public class ChooseCardState extends TurnState {
     private static final int FIRSTPOSITION = 0;
 
     public ChooseCardState(GameSession gameSession) {
-        super(gameSession);
+        super(gameSession, TurnName.CHOOSE_CARD_STATE);
     }
 
     /**

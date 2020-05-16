@@ -3,14 +3,12 @@ package it.polimi.ingsw.PSP43.server.gameStates;
 import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.WorkersColorResponse;
-import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
 
 import java.io.IOException;
@@ -27,7 +25,7 @@ public class ChooseWorkerState extends TurnState {
     private final HashMap<Player, Color> colorsChosen;
 
     public ChooseWorkerState(GameSession gameSession) {
-        super(gameSession);
+        super(gameSession, TurnName.CHOOSE_WORKER_STATE);
         availableColors = new ArrayList<>();
         availableColors.add(Color.ANSI_RED);
         availableColors.add(Color.ANSI_BLUE);

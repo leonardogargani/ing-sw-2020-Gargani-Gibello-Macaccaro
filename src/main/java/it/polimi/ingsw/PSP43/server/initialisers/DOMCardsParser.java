@@ -101,7 +101,7 @@ public class DOMCardsParser {
                     return new SwapIfPossibleDecorator(component);
                 case "SwapMoveDecorator":
                     return new SwapMoveDecorator(component);
-                case "UnconditionedDomeBuildDecorator":
+                case "UnconditionedBuildDomeDecorator":
                     return new UnconditionedDomeBuildDecorator(component);
                 default:
                     return new WinConditionDecorator(component);
