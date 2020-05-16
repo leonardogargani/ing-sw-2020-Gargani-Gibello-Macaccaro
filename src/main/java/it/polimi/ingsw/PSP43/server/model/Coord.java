@@ -31,7 +31,6 @@ public class Coord implements Serializable {
      */
     public int getY(){return yPosition;}
 
-    @Override
     public boolean equals(Object obj) {
         if (obj instanceof Coord) {
             Coord coordCheckEquality = (Coord) obj;
@@ -43,7 +42,6 @@ public class Coord implements Serializable {
         }
     }
 
-    @Override
     public Coord clone() {
         return new Coord(this.getX(), this.getY());
     }

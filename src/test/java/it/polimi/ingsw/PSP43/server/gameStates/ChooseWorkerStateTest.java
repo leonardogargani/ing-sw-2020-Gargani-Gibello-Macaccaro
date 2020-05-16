@@ -7,7 +7,6 @@ import it.polimi.ingsw.PSP43.server.BoardObserver;
 import it.polimi.ingsw.PSP43.server.initialisers.DOMCardsParser;
 import it.polimi.ingsw.PSP43.server.initialisers.GameInitialiser;
 import it.polimi.ingsw.PSP43.server.model.Coord;
-import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.NicknameAlreadyInUseException;
@@ -74,7 +73,7 @@ public class ChooseWorkerStateTest {
         // the instantiation of each player
         ArrayList<Integer> idsWorkers =  new ArrayList<>();
         for (int i=0; i<gameSession.getPlayersHandler().getNumOfPlayers(); i++) {
-            int[] workers = gameSession.getPlayersHandler().getPlayer(i).getWorkersIdsArray();
+            Integer[] workers = gameSession.getPlayersHandler().getPlayer(i).getWorkersIdsArray();
             for (int j = 0; j<workers.length; j++) {
                 idsWorkers.add(workers[j]);
             }

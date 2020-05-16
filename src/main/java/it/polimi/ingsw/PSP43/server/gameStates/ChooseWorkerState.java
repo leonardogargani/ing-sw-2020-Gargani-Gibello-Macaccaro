@@ -3,14 +3,12 @@ package it.polimi.ingsw.PSP43.server.gameStates;
 import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.WorkersColorResponse;
-import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
 
 import java.io.IOException;
@@ -27,7 +25,7 @@ public class ChooseWorkerState extends TurnState {
     private final HashMap<Player, Color> colorsChosen;
 
     public ChooseWorkerState(GameSession gameSession) {
-        super(gameSession);
+        super(gameSession, TurnName.CHOOSE_WORKER_STATE);
         availableColors = new ArrayList<>();
         availableColors.add(Color.ANSI_RED);
         availableColors.add(Color.ANSI_BLUE);
@@ -39,7 +37,7 @@ public class ChooseWorkerState extends TurnState {
      * This method initialises the first player of the game, the god-like one (and for this reason the first logged into the
      * game in our conception of the game).
      */
-    public void initState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+    public void initState() throws IOException, ClassNotFoundException, InterruptedException {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
         game.setCurrentPlayer(playersHandler.getPlayer(FIRSTPOSITION));
@@ -54,7 +52,7 @@ public class ChooseWorkerState extends TurnState {
     /**
      * This method asks, one at a time, to the players the color chosen for their workers and also where they want to place them.
      */
-    public void executeState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+    public void executeState() throws IOException, ClassNotFoundException, InterruptedException {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
         WorkersHandler workersHandler = game.getWorkersHandler();
@@ -122,7 +120,7 @@ public class ChooseWorkerState extends TurnState {
     /**
      * This method has to find the next state and also to send all the infos to the client to display name of players, gods chosen and the color of every player.
      */
-    public void findNextState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+    public void findNextState() throws IOException, ClassNotFoundException, InterruptedException {
         GameSession game = super.getGameSession();
         int indexCurrentState;
         indexCurrentState = game.getTurnMap().indexOf(game.getCurrentState());

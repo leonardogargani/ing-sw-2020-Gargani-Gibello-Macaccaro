@@ -5,7 +5,6 @@ import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.NicknameAlreadyInUseException;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.ChangeNickRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.PlayersNumberRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.StartGameMessage;
@@ -23,7 +22,7 @@ public class PlayerRegistrationState extends TurnState {
     Boolean first;
 
     public PlayerRegistrationState(GameSession gameSession) {
-        super(gameSession);
+        super(gameSession, TurnName.PLAYER_REGISTRATION_STATE);
         lock = new ReentrantLock();
         first = Boolean.TRUE;
     }
@@ -55,11 +54,6 @@ public class PlayerRegistrationState extends TurnState {
                 StartGameMessage clientMessage = new StartGameMessage("We are connecting you with other players!");
                 game.sendMessage(clientMessage, message.getNick());
             }
-        } catch (NicknameAlreadyInUseException e) {
-            ChangeNickRequest notifyChangeNick = new ChangeNickRequest("We are sorry, but " + message.getNick() +
-                    "is already in use.");
-            game.sendMessage(notifyChangeNick, message.getNick());
-            game.getListenersHashMap().remove(message.getNick());
         } catch (IOException | ClassNotFoundException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -74,14 +68,12 @@ public class PlayerRegistrationState extends TurnState {
     protected int askNumberPlayers(GameSession gameSession, RegistrationMessage message) throws IOException, ClassNotFoundException, InterruptedException {
         PlayersNumberRequest request = new PlayersNumberRequest("Choose between a 2 or 3 game play.");
         PlayersNumberResponse response;
-        do {
-            try {
-                response = gameSession.sendRequest(request, message.getNick(), new PlayersNumberResponse());
-            } catch (GameEndedException e) {
-                gameSession.setActive();
-                return 1;
-            }
-        } while (response == null);
+        try {
+            response = gameSession.sendRequest(request, message.getNick(), new PlayersNumberResponse());
+        } catch (GameEndedException e) {
+            gameSession.setActive();
+            return -1;
+        }
         return response.getNumberOfPlayer();
 
     }

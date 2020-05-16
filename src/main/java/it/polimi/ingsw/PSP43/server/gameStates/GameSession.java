@@ -1,57 +1,54 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
-import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.server.BoardObserver;
 import it.polimi.ingsw.PSP43.server.ClientListener;
+import it.polimi.ingsw.PSP43.server.RegisterClientListener;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class GameSession extends GameSessionObservable {
+    private static final int FIRSTPOSITION = 0;
     private Boolean active;
 
     private Player currentPlayer;
 
     private TurnState currentState;
     private TurnState nextState;
-    private ArrayList<TurnState> turnMap;
+    private final List<TurnState> turnMap;
 
-    private CellsHandler cellsHandler;
-    private PlayersHandler playersHandler;
-    private WorkersHandler workersHandler;
-    private CardsHandler cardsHandler;
+    private final CellsHandler cellsHandler;
+    private final PlayersHandler playersHandler;
+    private final WorkersHandler workersHandler;
+    private final CardsHandler cardsHandler;
 
-    private BoardObserver boardObserver;
+    private final BoardObserver boardObserver;
 
-    /**
-     * Not default constructor to inizialize a GameSession
-     * @param idgame refers to the id of the game
-     */
-    public GameSession(int idgame) throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException {
+    public GameSession(int idgame) throws ParserConfigurationException, SAXException, IOException {
         super(idgame);
         this.maxNumPlayers = 1;
 
-        this.turnMap = new ArrayList<>();
-        this.turnMap.add(0, new PlayerRegistrationState(this));
-        this.currentState = turnMap.get(0);
-        super.currentState = turnMap.get(0);
-        this.nextState = turnMap.get(0);
-        this.turnMap.add(1, new ChooseCardState(this));
-        this.turnMap.add(2, new ChooseWorkerState(this));
-        this.turnMap.add(3, new MoveState(this));
-        this.turnMap.add(4, new BuildState(this));
-        this.turnMap.add(5, new WinState(this));
+        ArrayList<TurnState> turnMap = new ArrayList<>(Arrays.asList(   new PlayerRegistrationState(this),
+                                                                        new ChooseCardState(this),
+                                                                        new ChooseWorkerState(this),
+                                                                        new MoveState(this),
+                                                                        new BuildState(this),
+                                                                        new WinState(this)));
+        this.turnMap = Collections.unmodifiableList(turnMap);
+
+        this.currentState = turnMap.get(FIRSTPOSITION);
+        super.currentState = turnMap.get(FIRSTPOSITION);
+        this.nextState = turnMap.get(FIRSTPOSITION);
 
         this.boardObserver = new BoardObserver(this);
 
@@ -73,65 +70,83 @@ public class GameSession extends GameSessionObservable {
             if (!(currentState.getClass().isInstance(nextState))) {
                 try {
                     this.transitToNextState();
-                } catch (IOException | ClassNotFoundException | WinnerCaughtException | InterruptedException e) {
+                } catch (IOException | ClassNotFoundException | InterruptedException e) {
                     e.printStackTrace();
                 }
             }
         }
+
+        RegisterClientListener ending = new RegisterClientListener();
+        ending.removeGameSession(super.getIdGame());
     }
 
+    /**
+     * This method returns true if the thread is running, false otherwise.
+     * @return a boolean that represents the state of the thread (true = running, false = stopped).
+     */
     public Boolean getActive() {
         return active;
     }
 
+    /**
+     * This method sets the state of the thread (true = running, false = stopped).
+     */
     public void setActive() {
         this.active = Boolean.FALSE;
     }
 
+    /**
+     * This method does the transition during the game to one state of the play to the following.
+     */
+    protected void transitToNextState() throws IOException, ClassNotFoundException, InterruptedException {
+        TurnState nextState = this.getNextState();
 
-    public boolean validateMessage(ClientMessage messageArrived, Class<?> typeMessageRequested) {
-        if (messageArrived.getClass().isInstance(typeMessageRequested)) {
-            return true;
+        for (TurnState t : turnMap) {
+            if (nextState.getTurnName() == t.getTurnName()) {
+                this.setCurrentState(nextState);
+                super.currentState = nextState;
+            }
         }
-        else return false;
-    }
 
-    protected void transitToNextState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
-        int indexNextState = turnMap.indexOf(nextState);
-        currentState = turnMap.get(indexNextState);
-        super.currentState = turnMap.get(indexNextState);
         currentState.initState();
     }
 
+    /**
+     * This method eliminates a player from the game when he looses the match.
+     * @param playerEliminated This represents the data of the player who's lost the game and has to be
+     *                         removed from the database.
+     */
     public void eliminatePlayer(Player playerEliminated) throws IOException, ClassNotFoundException {
         cardsHandler.removeCardToPlayer(playerEliminated.getNickname());
         Player playerToRemove = playersHandler.getPlayer(playerEliminated.getNickname());
 
-        int[] workersToRemove = playerToRemove.getWorkersIdsArray();
+        Integer[] workersToRemove = playerToRemove.getWorkersIdsArray();
         workersHandler.removeWorkers(workersToRemove);
 
         super.eliminatePlayer(playerEliminated);
     }
 
-    // FROM HERE ARE ALL SETTERS AND GETTERS \\
-
     /**
-     * Method to know the kind of turn state the current player is in
-     * @return currentState ,that is the state
+     * This method is given to know the turn state in which the game is.
+     * @return the state in which the game is.
      */
     public TurnState getCurrentState() {
         return currentState;
     }
 
     /**
-     * Method to set the kind of turn state
-     * @param currentState, refers to the kind of turn state
+     * This method sets the current turn in which the game is.
+     * @param currentState The state in which the game is.
      */
     public void setCurrentState(TurnState currentState) {
         super.currentState = currentState;
         this.currentState = currentState;
     }
 
+    /**
+     * This method returns the following state in which the game will be.
+     * @return the next state in which the game will be.
+     */
     public TurnState getNextState() {
         return this.nextState;
     }
@@ -141,60 +156,56 @@ public class GameSession extends GameSessionObservable {
     }
 
     /**
-     * This method returns the HashMap representing the correspondence between players and the related game turns
-     * @return The HashMap representing the correspondence between players and the related game turns
+     * This method returns the List representing all the states in a game.
+     * @return a List representing all the states in a game.
      */
-    public ArrayList<TurnState> getTurnMap() {
+    public List<TurnState> getTurnMap() {
         return turnMap;
     }
 
-    public void setTurnMap(ArrayList<TurnState> turnMap) {
-        this.turnMap = turnMap;
-    }
-
     /**
-     * Methods to get the current player of that turn
-     * @return currentPlayer is the player that is joining his turn at the moment
+     * This method returns the current player of the game.
+     * @return the current player of the game.
      */
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
     /**
-     * Method that sets the current player of that turn
-     * @param currentPlayer is the player that is joining his turn at the moment
+     * This method sets the current player of the game.
+     * @param currentPlayer The player that represents the current player of the game.
      */
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
 
     /**
-     * Method that returns the class who is going to handle cells in this game session
-     * @return cellHandler is the class that handles cells in the game
+     * This method returns the class which handles the cells during the game.
+     * @return the cells handler of the game.
      */
     public CellsHandler getCellsHandler() {
         return cellsHandler;
     }
 
     /**
-     * Method that returns the class who is going to handle players in this game session
-     * @return playerHandler is the class that handles players in the game
+     * This method returns the class which handles players' data during the game.
+     * @return the players handler of the game.
      */
     public PlayersHandler getPlayersHandler() {
         return playersHandler;
     }
 
     /**
-     * Method that returns the class who is going to handle workers in this game session
-     * @return workersHandler is the class that handles workers in the game
+     * This method returns the class which handles workers data during the game.
+     * @returns the workers handler of the game.
      */
     public WorkersHandler getWorkersHandler() {
         return workersHandler;
     }
 
     /**
-     * Method that returns the class who is going to handle cards in this game session
-     * @return cardsHandler is the class that handles cards in the game
+     * This method returns the class which handles cards data during the game.
+     * @return the cards handler of the game.
      */
     public CardsHandler getCardsHandler() {
         return cardsHandler;
@@ -202,16 +213,33 @@ public class GameSession extends GameSessionObservable {
 
     /**
      * This method returns the observer of the graphical part of the game, so that every
-     * change to a cell or a worker is notified to the client.
-     * @return observer of the graphical part of the game
+     * cell or worker change is notified to the client.
+     * @return the observer of the graphical part of the game.
      */
     public BoardObserver getBoardObserver() {
         return boardObserver;
     }
 
+    /**
+     * This method calls the super method and then sets to false the boolean "active" to stop the thread.
+     * @param message The message from the client to unsubscribe himself from the game.
+     * @param player The reference to the listener of the client who left the game.
+     */
     @Override
     public synchronized void unregisterFromGame(LeaveGameMessage message, ClientListener player) throws IOException {
         super.unregisterFromGame(message, player);
+        this.active = Boolean.FALSE;
+    }
+
+    /**
+     * This method calls the super method and then switches to false the boolean "active" to stop the thread.
+     * @param messageToLosers The message that has to be delivered to all the losers of the game.
+     * @param messageForTheWinner The message that has to be delivered to the winner of the game.
+     * @param nicksExcluded All the nicknames of the players excluded from receiving the "messageForTheLosers".
+     */
+    @Override
+    public void sendEndingMessage(EndGameMessage messageToLosers, EndGameMessage messageForTheWinner, ArrayList<String> nicksExcluded) throws IOException, ClassNotFoundException {
+        super.sendEndingMessage(messageToLosers, messageForTheWinner, nicksExcluded);
         this.active = Boolean.FALSE;
     }
 }

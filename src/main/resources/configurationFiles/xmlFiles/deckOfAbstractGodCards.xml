@@ -5,6 +5,12 @@
             <godName>Apollo</godName>
             <godDescription>God Of Music</godDescription>
             <godPower>"Your Move: Your Worker may move into an opponent Worker’s space by forcing their Worker to the space yours just vacated."</godPower>
+            <moveBehaviour>
+                <basicMoveBehaviour/>
+            </moveBehaviour>
+            <buildBehaviour>
+                <basicBuildBehaviour/>
+            </buildBehaviour>
         </basicGodCard>
     </swapMoveDecorator>
     <basicGodCard>
@@ -14,6 +20,9 @@
         <moveBehaviour>
             <buildBeforeMoveBehaviour/>
         </moveBehaviour>
+        <buildBehaviour>
+            <basicBuildBehaviour/>
+        </buildBehaviour>
     </basicGodCard>
     <basicGodCard>
         <godName>Artemis</godName>
@@ -22,6 +31,9 @@
         <moveBehaviour>
             <doubleMoveBehaviour/>
         </moveBehaviour>
+        <buildBehaviour>
+            <basicBuildBehaviour/>
+        </buildBehaviour>
     </basicGodCard>
     <basicGodCard>
         <godName>Athena</godName>
@@ -30,28 +42,43 @@
         <moveBehaviour>
             <blockOpponentRiseBehaviour/>
         </moveBehaviour>
+        <buildBehaviour>
+            <basicBuildBehaviour/>
+        </buildBehaviour>
     </basicGodCard>
     <basicGodCard>
         <godName>Hephaestus</godName>
         <godDescription>God of Blacksmiths</godDescription>
         <godPower>"Your Build: Your Worker may build one additional block (not dome) on top of your first block."</godPower>
-        <buildBlockBehaviour>
+        <moveBehaviour>
+            <basicMoveBehaviour/>
+        </moveBehaviour>
+        <buildBehaviour>
             <doubleSameSpaceBehaviour/>
-        </buildBlockBehaviour>
+        </buildBehaviour>
     </basicGodCard>
     <basicGodCard>
         <godName>Demeter</godName>
         <godDescription>Goddess of the Harvest</godDescription>
         <godPower>"Your Build: Your Worker may build one additional time, but not on the same space."</godPower>
-        <buildBlockBehaviour>
+        <moveBehaviour>
+            <basicMoveBehaviour/>
+        </moveBehaviour>
+        <buildBehaviour>
             <doubleDifferentSpaceBehaviour/>
-        </buildBlockBehaviour>
+        </buildBehaviour>
     </basicGodCard>
     <unconditionedBuildDomeDecorator>
         <basicGodCard>
             <godName>Atlas</godName>
             <godDescription>Titan Shouldering the Heavens</godDescription>
             <godPower>"Your Build: Your Worker may build a dome at any level. "</godPower>
+            <moveBehaviour>
+                <basicMoveBehaviour/>
+            </moveBehaviour>
+            <buildBehaviour>
+                <basicBuildBehaviour/>
+            </buildBehaviour>
         </basicGodCard>
     </unconditionedBuildDomeDecorator>
     <swapIfPossibleDecorator>
@@ -60,6 +87,12 @@
                 <godName>Minotaur</godName>
                 <godDescription>Bull-headed Monster</godDescription>
                 <godPower>"Your Move: Your Worker may move into an opponent Worker’s space, if their Worker can be forced one space straight backwards to an unoccupied space at any level."</godPower>
+            <moveBehaviour>
+                <basicMoveBehaviour/>
+            </moveBehaviour>
+            <buildBehaviour>
+                <basicBuildBehaviour/>
+            </buildBehaviour>
             </basicGodCard>
         </swapMoveDecorator>
     </swapIfPossibleDecorator>
@@ -68,6 +101,12 @@
             <godName>Pan</godName>
             <godDescription>God of the Wild</godDescription>
             <godPower>"Win Condition: You also win if your Worker moves down two or more levels."</godPower>
+            <moveBehaviour>
+                <basicMoveBehaviour/>
+            </moveBehaviour>
+            <buildBehaviour>
+                <basicBuildBehaviour/>
+            </buildBehaviour>
         </basicGodCard>
     </winConditionDecorator>
 </deckOfAbstractGodCards>

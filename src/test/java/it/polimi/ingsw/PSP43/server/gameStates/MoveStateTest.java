@@ -109,7 +109,7 @@ public class MoveStateTest {
         spyGame.setCurrentPlayer(currentPlayer);
 
         WorkersHandler workersHandler = spyGame.getWorkersHandler();
-        int[] playerWorkers = spyGame.getPlayersHandler().getPlayer(currentPlayer.getNickname()).getWorkersIdsArray();
+        Integer[] playerWorkers = spyGame.getPlayersHandler().getPlayer(currentPlayer.getNickname()).getWorkersIdsArray();
 
         Coord coordWorkerMoved = workersHandler.getWorker(playerWorkers[0]).getCurrentPosition();
 

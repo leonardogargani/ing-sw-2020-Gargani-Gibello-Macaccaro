@@ -7,7 +7,6 @@ import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.CardRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.InitialCardsRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.StartGameMessage;
@@ -25,7 +24,7 @@ public class ChooseCardState extends TurnState {
     private static final int FIRSTPOSITION = 0;
 
     public ChooseCardState(GameSession gameSession) {
-        super(gameSession);
+        super(gameSession, TurnName.CHOOSE_CARD_STATE);
     }
 
     /**
@@ -33,7 +32,7 @@ public class ChooseCardState extends TurnState {
      * to use during the game and sends a message to all the other players telling them to wait
      * several minutes to choose the card they will own.
      */
-    public void initState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+    public void initState() throws IOException, ClassNotFoundException, InterruptedException {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
 
@@ -66,7 +65,7 @@ public class ChooseCardState extends TurnState {
      * and calls a method that, one at a time, asks to all the players which card they want to
      * use during the game. The latest card will be assigned to the god-like player.
      */
-    public void executeState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+    public void executeState() throws IOException, ClassNotFoundException, InterruptedException {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
 
@@ -119,7 +118,7 @@ public class ChooseCardState extends TurnState {
      * Finds the next state for the game, saving it in a variable in GameSession, and calls on the
      * instance of GameSession the method to transit to the next state of play.
      */
-    public void findNextState() throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+    public void findNextState() throws IOException, ClassNotFoundException, InterruptedException {
         GameSession game = super.getGameSession();
         int indexCurrentState;
         indexCurrentState = game.getTurnMap().indexOf(game.getCurrentState());

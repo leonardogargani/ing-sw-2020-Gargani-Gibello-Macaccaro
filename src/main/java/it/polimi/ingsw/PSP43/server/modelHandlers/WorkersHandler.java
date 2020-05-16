@@ -33,7 +33,7 @@ public class WorkersHandler {
     }
 
 
-    public void removeWorkers(int[] workersIds) throws IOException {
+    public void removeWorkers(Integer[] workersIds) throws IOException {
         CellsHandler cellsHandler = gameSession.getCellsHandler();
         Worker workerToRemove;
         Cell cellOccupiedByWorker;
@@ -113,6 +113,16 @@ public class WorkersHandler {
      * @return ArrayList containing all the workers
      */
     public ArrayList<Worker> getWorkers()  {
+        return workers;
+    }
+
+    public ArrayList<Worker> getWorkers(Integer[] ids) {
+        ArrayList<Worker> workers = new ArrayList<>();
+
+        for (Integer i : ids) {
+            workers.add(getWorker(i));
+        }
+
         return workers;
     }
 

@@ -9,6 +9,7 @@ import it.polimi.ingsw.PSP43.server.Sender;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
+import it.polimi.ingsw.PSP43.server.networkMessages.ChangeNickRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.ServerMessage;
 
@@ -17,13 +18,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameSessionObservable implements Runnable {
-    private int idGame;
+    private final int idGame;
     protected int maxNumPlayers;
     private int numOfPlayers;
 
     protected TurnState currentState;
 
-    private HashMap<String, ClientListener> listenersHashMap;
+    private final HashMap<String, ClientListener> listenersHashMap;
 
     public GameSessionObservable(int idGame) {
         this.idGame = idGame;
@@ -34,10 +35,17 @@ public class GameSessionObservable implements Runnable {
 
     public synchronized int registerToTheGame(RegistrationMessage message, ClientListener player) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
         if (numOfPlayers < maxNumPlayers) {
+            for (String s : listenersHashMap.keySet()) {
+                if (s.equals(message.getNick())) {
+                    ChangeNickRequest notifyChangeNick = new ChangeNickRequest("We are sorry, but " + message.getNick() +
+                            "is already in use.");
+                    player.sendMessage(notifyChangeNick);
+                    return -2;
+                }
+            }
             listenersHashMap.put(message.getNick(), player);
             numOfPlayers++;
             currentState.executeState(message);
-            //player.setIdGame(idGame);
             return idGame;
         }
         return -1;
@@ -87,16 +95,16 @@ public class GameSessionObservable implements Runnable {
 
         Sender newSender = new Sender(listenerAddressee, message);
 
-        ClientMessage messageArrived = newSender.call();
-
-        if (typeExpected.getClass().isInstance(messageArrived)) {
-            return (T)messageArrived;
+        while (true) {
+            ClientMessage messageArrived = newSender.call();
+            if (typeExpected.getClass().isInstance(messageArrived)) {
+                return (T)messageArrived;
+            }
+            else if (messageArrived instanceof LeaveGameMessage /* tipo end game message*/) {
+                sendBroadCast(new EndGameMessage("We are sorry, but for connecting problems the game is ended!"));
+                throw new GameEndedException();
+            }
         }
-        else if (messageArrived instanceof LeaveGameMessage /* tipo end game message*/) {
-            sendBroadCast(new EndGameMessage("We are sorry, but for connecting problems the game is ended!"));
-            throw new GameEndedException();
-        }
-        else return null;
     }
 
     public void sendEndingMessage(EndGameMessage messageToLosers, EndGameMessage messageForTheWinner, ArrayList<String> nicksExcluded) throws IOException, ClassNotFoundException {
@@ -132,6 +140,8 @@ public class GameSessionObservable implements Runnable {
     public int getNumOfPlayers() {
         return numOfPlayers;
     }
+
+    public void setNumOfPlayers(int numOfPlayers) { this.numOfPlayers = numOfPlayers; }
 
     @Override
     public void run() {

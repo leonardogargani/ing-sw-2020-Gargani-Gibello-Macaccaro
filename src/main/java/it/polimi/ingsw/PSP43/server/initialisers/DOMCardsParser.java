@@ -2,7 +2,10 @@ package it.polimi.ingsw.PSP43.server.initialisers;
 
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.model.card.BasicGodCard;
-import it.polimi.ingsw.PSP43.server.model.card.behaviours.*;
+import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.BasicBuildBehaviour;
+import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.DoubleDifferentSpaceBehaviour;
+import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.DoubleSameSpaceBehaviour;
+import it.polimi.ingsw.PSP43.server.model.card.behaviours.moveBehaviours.*;
 import it.polimi.ingsw.PSP43.server.model.card.decorators.SwapIfPossibleDecorator;
 import it.polimi.ingsw.PSP43.server.model.card.decorators.SwapMoveDecorator;
 import it.polimi.ingsw.PSP43.server.model.card.decorators.UnconditionedDomeBuildDecorator;
@@ -62,10 +65,10 @@ public class DOMCardsParser {
             String godDescription = element.getElementsByTagName("godDescription").item(0).getTextContent();
             String godPower = element.getElementsByTagName("godPower").item(0).getTextContent();
 
-            MoveBehavior moveBehavior = null;
-            BuildBlockBehaviour buildBlockBehaviour = null;
+            BasicMoveBehaviour moveBehavior = null;
+            BasicBuildBehaviour buildBehaviour = null;
             NodeList nodeListMoveBehaviour = element.getElementsByTagName("moveBehaviour");
-            NodeList nodeListBuildBlockBehaviour = element.getElementsByTagName("buildBlockBehaviour");
+            NodeList nodeListBuildBlockBehaviour = element.getElementsByTagName("buildBehaviour");
 
             for (int i=0; i<nodeListMoveBehaviour.getLength(); i++) {
                 if (nodeListMoveBehaviour.item(i).getNodeType() == Node.ELEMENT_NODE) {
@@ -81,12 +84,12 @@ public class DOMCardsParser {
                     NodeList effectiveNodeListBuildBlockBehaviour = nodeListBuildBlockBehaviour.item(i).getChildNodes();
                     for (int j=0; j<effectiveNodeListBuildBlockBehaviour.getLength(); j++) {
                         if (effectiveNodeListBuildBlockBehaviour.item(j).getNodeType() == Node.ELEMENT_NODE)
-                            buildBlockBehaviour = buildBuildBlockBehaviour(((Element) effectiveNodeListBuildBlockBehaviour.item(j)).getTagName());
+                            buildBehaviour = buildBuildBlockBehaviour(((Element) effectiveNodeListBuildBlockBehaviour.item(j)).getTagName());
                     }
                 }
             }
 
-            return new BasicGodCard(godName, godDescription, godPower, moveBehavior, buildBlockBehaviour);
+            return new BasicGodCard(godName, godDescription, godPower, moveBehavior, buildBehaviour);
         } else {
             AbstractGodCard component = null;
             for (int i = 0; i<element.getChildNodes().getLength(); i++) {
@@ -98,7 +101,7 @@ public class DOMCardsParser {
                     return new SwapIfPossibleDecorator(component);
                 case "SwapMoveDecorator":
                     return new SwapMoveDecorator(component);
-                case "UnconditionedDomeBuildDecorator":
+                case "UnconditionedBuildDomeDecorator":
                     return new UnconditionedDomeBuildDecorator(component);
                 default:
                     return new WinConditionDecorator(component);
@@ -106,9 +109,11 @@ public class DOMCardsParser {
         }
     }
 
-    public static MoveBehavior buildMoveBehaviour(String nameMoveBehaviour) {
+    public static BasicMoveBehaviour buildMoveBehaviour(String nameMoveBehaviour) {
         String moveBehavior = nameMoveBehaviour.substring(0,1).toUpperCase() + nameMoveBehaviour.substring(1);
         switch (moveBehavior) {
+            case "BasicMoveBehaviour":
+                return new BasicMoveBehaviour();
             case "BlockOpponentRiseBehaviour":
                 return new BlockOpponentRiseBehaviour();
             case "BuildBeforeMoveBehaviour":
@@ -120,14 +125,17 @@ public class DOMCardsParser {
         }
     }
 
-    public static BuildBlockBehaviour buildBuildBlockBehaviour(String nameBlockBehaviour) {
+    public static BasicBuildBehaviour buildBuildBlockBehaviour(String nameBlockBehaviour) {
         String buildBlockBehaviour = nameBlockBehaviour.substring(0,1).toUpperCase() + nameBlockBehaviour.substring(1);
-        if (buildBlockBehaviour.equals("DoubleSameSpaceBehaviour")) {
-            return new DoubleSameSpaceBehaviour();
+        switch (buildBlockBehaviour) {
+            case "BasicBuildBehaviour":
+                return new BasicBuildBehaviour();
+            case "DoubleSameSpaceBehaviour":
+                return new DoubleSameSpaceBehaviour();
+            case "DoubleDifferentSpaceBehaviour":
+                return new DoubleDifferentSpaceBehaviour();
+            default:
+                return null;
         }
-        else if (buildBlockBehaviour.equals("DoubleDifferentSpaceBehaviour")) {
-            return new DoubleDifferentSpaceBehaviour();
-        }
-        else return null;
     }
 }

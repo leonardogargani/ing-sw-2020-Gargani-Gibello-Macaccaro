@@ -80,7 +80,10 @@ public class Cell extends Observable {
      */
     public void setOccupiedByDome(boolean occupiedByDome) throws IOException {
         this.occupiedByDome = occupiedByDome;
-        notifyBoardChange();
+        if (occupiedByDome) {
+            setHeight(4);
+        }
+        else notifyBoardChange();
     }
 
 
@@ -112,14 +115,21 @@ public class Cell extends Observable {
 
     /**
      * This method notifies the related observer that a change occurred and the client has to be advised of that
-     * @throws IOException
      */
     public void notifyBoardChange() throws IOException {
         super.getBoardObserver().notifyBoardChange(this);
     }
 
-    @Override
     public Cell clone() {
-        return new Cell(coord.clone(), super.getBoardObserver());
+        Cell clone = new Cell(coord.clone(), super.getBoardObserver());
+        try {
+            clone.setHeight(this.getHeight());
+            clone.setOccupiedByDome(this.getOccupiedByDome());
+            clone.setOccupiedByWorker(this.getOccupiedByWorker());
+            clone.setColor(this.getColor());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return clone;
     }
 }

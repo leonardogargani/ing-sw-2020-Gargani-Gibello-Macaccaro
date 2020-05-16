@@ -1,10 +1,12 @@
 package it.polimi.ingsw.PSP43.server.model.card.decorators;
 
-import it.polimi.ingsw.PSP43.server.DataToAction;
+import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
+import it.polimi.ingsw.PSP43.server.model.DataToBuild;
+import it.polimi.ingsw.PSP43.server.model.DataToMove;
+import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Coord;
-import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
-import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
 import java.io.IOException;
@@ -33,28 +35,24 @@ public abstract class PowerGodDecorator extends AbstractGodCard {
         this.godComponent = godComponent;
     }
 
-    public void move(DataToAction dataToAction) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
-        godComponent.move(dataToAction);
+    public void move(DataToMove dataToMove) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+        godComponent.move(dataToMove);
     }
 
-    public void buildBlock(DataToAction dataToAction) throws IOException, ClassNotFoundException, InterruptedException {
-        godComponent.buildBlock(dataToAction);
+    public void build(DataToBuild dataToBuild) throws IOException, ClassNotFoundException, InterruptedException {
+        godComponent.build(dataToBuild);
     }
 
-    public void buildDome(DataToAction dataToAction) throws IOException {
-        godComponent.buildDome(dataToAction);
+    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(GameSession gameSession) {
+        return godComponent.findAvailablePositionsToMove(gameSession);
     }
 
-    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(CellsHandler handler, ArrayList<Worker> workers) {
-        return godComponent.findAvailablePositionsToMove(handler, workers);
+    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildBlock(GameSession gameSession) {
+        return godComponent.findAvailablePositionsToBuildBlock(gameSession);
     }
 
-    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildBlock(CellsHandler handler, ArrayList<Worker> workers) {
-        return godComponent.findAvailablePositionsToBuildBlock(handler, workers);
-    }
-
-    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildDome(CellsHandler handler, ArrayList<Worker> workers) {
-        return godComponent.findAvailablePositionsToBuildDome(handler, workers);
+    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildDome(GameSession gameSession) {
+        return godComponent.findAvailablePositionsToBuildDome(gameSession);
     }
 
     public String getGodName() {
@@ -67,6 +65,30 @@ public abstract class PowerGodDecorator extends AbstractGodCard {
 
     public String getPower() {
         return godComponent.getPower();
+    }
+
+    public void initMove(GameSession gameSession) throws ClassNotFoundException, WinnerCaughtException, InterruptedException, IOException, GameEndedException {
+        godComponent.initMove(gameSession);
+    }
+
+    public void initBuild(GameSession gameSession) throws GameEndedException, IOException, InterruptedException, ClassNotFoundException {
+        godComponent.initBuild(gameSession);
+    }
+
+    public <T extends ClientMessage> T askForMove(GameSession gameSession) throws GameEndedException {
+        return godComponent.askForMove(gameSession);
+    }
+
+    public <T extends ClientMessage> T askForMove(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositions) throws GameEndedException {
+        return godComponent.askForMove(gameSession, availablePositions);
+    }
+
+    public DataToBuild genericAskForBuild(GameSession gameSession) throws GameEndedException, InterruptedException, IOException, ClassNotFoundException {
+        return godComponent.genericAskForBuild(gameSession);
+    }
+
+    public <T extends ClientMessage> T askForBuild(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositionsBuildBlock, String message) throws GameEndedException, InterruptedException, IOException, ClassNotFoundException {
+        return godComponent.askForBuild(gameSession, availablePositionsBuildBlock, message);
     }
 
     public void print() {
