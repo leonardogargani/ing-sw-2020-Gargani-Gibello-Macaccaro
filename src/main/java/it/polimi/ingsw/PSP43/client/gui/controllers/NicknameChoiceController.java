@@ -15,7 +15,7 @@ public class NicknameChoiceController {
     public Button confirmButton;
     public Label buttonPressedLabel;
 
-    private ClientBG clientBG;
+    private static ClientBG clientBG;
 
 
     /**
@@ -25,10 +25,14 @@ public class NicknameChoiceController {
      * @param clientBG clientBG of the current client
      */
     public void setClientBG(ClientBG clientBG) {
-        this.clientBG = clientBG;
+        NicknameChoiceController.clientBG = clientBG;
     }
 
 
+    /**
+     * Method that handles an event performed on the button to confirm the nickname.
+     * @param event event performed on the button
+     */
     @FXML
     private void handleConfirmButton(ActionEvent event) {
 
@@ -41,7 +45,7 @@ public class NicknameChoiceController {
 
         buttonPressedLabel.setText("work in progress");
 
-        // TODO insert here:    clientBG.sendMessage(new RegistrationMessage(nickname));
+        clientBG.sendMessage(new RegistrationMessage(nickname));
 
 
 

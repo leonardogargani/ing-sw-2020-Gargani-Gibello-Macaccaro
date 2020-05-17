@@ -23,11 +23,16 @@ public class ClientBG implements Runnable {
     private Socket serverSocket;
     private final ClientManager clientManager;
     private static final int SERVER_PORT = 50000;
-    private String SERVER_IP = null;
+    private String serverIP = null;
     public Object messageArrived;
     private boolean disconnect = true;
     private ObjectInputStream input;
     private ObjectOutputStream output;
+
+
+    public void setServerIP(String serverIP) {
+        this.serverIP = serverIP;
+    }
 
 
     /**
@@ -50,12 +55,12 @@ public class ClientBG implements Runnable {
         if (clientManager.getGraphicHandler() instanceof CliGraphicHandler) {
             CliInputHandler ip = new CliInputHandler();
             try {
-                this.SERVER_IP = ip.requestServerIP();
+                this.serverIP = ip.requestServerIP();
             } catch (QuitPlayerException e) {
                 System.exit(0);
             }
         } else {
-            while (this.SERVER_IP == null) {
+            while (this.serverIP == null) {
                 try {
                     TimeUnit.SECONDS.sleep(1);
                 } catch (InterruptedException e) {
@@ -65,7 +70,7 @@ public class ClientBG implements Runnable {
         }
         try {
             this.disconnect = false;
-            serverSocket = new Socket(this.SERVER_IP, SERVER_PORT);
+            serverSocket = new Socket(this.serverIP, SERVER_PORT);
         } catch (IOException e) {
             System.out.println("server unreachable");
             this.disconnect = true;

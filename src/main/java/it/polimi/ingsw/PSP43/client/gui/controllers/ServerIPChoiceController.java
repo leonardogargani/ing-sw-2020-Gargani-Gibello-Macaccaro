@@ -19,7 +19,7 @@ public class ServerIPChoiceController {
     public Label buttonPressedLabel;
     public TextField serverIPField;
 
-    private ClientBG clientBG;
+    private static ClientBG clientBG;
 
 
     /**
@@ -29,7 +29,7 @@ public class ServerIPChoiceController {
      * @param clientBG clientBG of the current client
      */
     public void setClientBG(ClientBG clientBG) {
-        this.clientBG = clientBG;
+        ServerIPChoiceController.clientBG = clientBG;
     }
 
 
@@ -47,7 +47,7 @@ public class ServerIPChoiceController {
 
         String serverIP = serverIPField.getText();
 
-        // TODO insert here:    clientBG.setServerIP(serverIP);
+        clientBG.setServerIP(serverIP);
 
         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
 

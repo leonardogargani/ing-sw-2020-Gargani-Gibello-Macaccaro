@@ -2,8 +2,10 @@ package it.polimi.ingsw.PSP43.client.gui;
 
 import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.GraphicHandler;
+import it.polimi.ingsw.PSP43.client.gui.controllers.NicknameChoiceController;
 import it.polimi.ingsw.PSP43.client.gui.controllers.ServerIPChoiceController;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import java.io.IOException;
 
@@ -17,24 +19,34 @@ public class GuiGraphicHandler extends GraphicHandler {
      */
     public GuiGraphicHandler(ClientBG clientBG) {
         super(clientBG);
-        try {
-            FXMLLoader loader = new FXMLLoader();
 
-            // setting ClientBG attribute in the ServerIPChoiceController
-            loader.setLocation(getClass().getResource("/FXML/serverIPChoice.fxml"));
-            loader.load();
-            ServerIPChoiceController controller = loader.getController();
-            controller.setClientBG(clientBG);
+        // Platform.startup(()->{}) starts the JavaFX runtime as soon as the GuiGraphicHandler constructor is invoked:
+        // I need that runtime to be running before the GuiStarter class (which extends Application) is launched
+        // (and the GuiGraphicHandler constructor is invoked before the Application.launch(GuiStarter.class))
+        Platform.startup(() ->
+        {
+            try {
 
-            // setting ClientBG attribute in the NicknameChoiceController
-            loader.setLocation(getClass().getResource("/FXML/nicknameChoice.fxml"));
-            loader.load();
-            controller = loader.getController();
-            controller.setClientBG(clientBG);
+                // setting ClientBG attribute in the ServerIPChoiceController
+                FXMLLoader loader1 = new FXMLLoader();
+                loader1.setLocation(getClass().getResource("/FXML/serverIPChoice.fxml"));
+                loader1.load();
+                ServerIPChoiceController controller1 = loader1.getController();
+                controller1.setClientBG(clientBG);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+                // setting ClientBG attribute in the NicknameChoiceController
+                FXMLLoader loader2 = new FXMLLoader();
+                loader2.setLocation(getClass().getResource("/FXML/nicknameChoice.fxml"));
+                loader2.load();
+                NicknameChoiceController controller2 = loader2.getController();
+                controller2.setClientBG(clientBG);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        });
+
     }
 
 
