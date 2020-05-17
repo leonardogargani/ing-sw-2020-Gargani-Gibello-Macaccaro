@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP43.client;
 
-import it.polimi.ingsw.PSP43.client.cli.InputHandler;
+import it.polimi.ingsw.PSP43.client.cli.CliInputHandler;
 import it.polimi.ingsw.PSP43.client.cli.QuitPlayerException;
 
 /**
@@ -13,7 +13,7 @@ public class ClientStarter {
 
         int chosenMode;
         System.out.println("Choose a mode:\n [1] CLI\n [2] GUI");
-        InputHandler inputHandler = new InputHandler();
+        CliInputHandler inputHandler = new CliInputHandler();
         String line;
         try {
             do {

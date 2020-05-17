@@ -9,7 +9,6 @@ import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -20,7 +19,8 @@ public class CliGraphicHandler extends GraphicHandler {
     private final CliTopMenu topMenu = new CliTopMenu();
     private final CliMiddleMenu middleMenu = new CliMiddleMenu();
     private final CliBottomMenu bottomMenu = new CliBottomMenu();
-    private final InputHandler inputHandler = new InputHandler();
+    private final CliInputHandler inputHandler = new CliInputHandler();
+
 
     /**
      * Non default constructor that sets the clientGB attribute.
@@ -342,7 +342,6 @@ public class CliGraphicHandler extends GraphicHandler {
 
         bottomMenu.clear();
         ResponseMessage response = new ResponseMessage(booleanChoice);
-
         super.getClientBG().sendMessage(response);
 
     }
@@ -414,6 +413,7 @@ public class CliGraphicHandler extends GraphicHandler {
 
     }
 
+
     /**
      * This method updates the graphics of the client displaying, at the beginning of
      * the game, some useful information about the state of the game preparation.
@@ -430,7 +430,6 @@ public class CliGraphicHandler extends GraphicHandler {
     /**
      * This method renders all the graphic aspects of the cli.
      */
-    @Override
     public void render() {
         // the cli is made of these four graphical components, printed to the screen in the right order
         topMenu.show();

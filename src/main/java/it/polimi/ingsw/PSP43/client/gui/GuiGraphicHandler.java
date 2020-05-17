@@ -2,15 +2,41 @@ package it.polimi.ingsw.PSP43.client.gui;
 
 import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.GraphicHandler;
+import it.polimi.ingsw.PSP43.client.gui.controllers.ServerIPChoiceController;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
+import javafx.fxml.FXMLLoader;
+import java.io.IOException;
 
 
 public class GuiGraphicHandler extends GraphicHandler {
 
-
+    /**
+     * Non default constructor that sets the ClientBG attribute both in this class and
+     * in the ServerIPChoiceController class.
+     * @param clientBG clientBG of the current client
+     */
     public GuiGraphicHandler(ClientBG clientBG) {
         super(clientBG);
+        try {
+            FXMLLoader loader = new FXMLLoader();
+
+            // setting ClientBG attribute in the ServerIPChoiceController
+            loader.setLocation(getClass().getResource("/FXML/serverIPChoice.fxml"));
+            loader.load();
+            ServerIPChoiceController controller = loader.getController();
+            controller.setClientBG(clientBG);
+
+            // setting ClientBG attribute in the NicknameChoiceController
+            loader.setLocation(getClass().getResource("/FXML/nicknameChoice.fxml"));
+            loader.load();
+            controller = loader.getController();
+            controller.setClientBG(clientBG);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     /**
      * This method updates the cli board changing the symbol of a cell, based
@@ -151,15 +177,6 @@ public class GuiGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(StartGameMessage message) {
-        // TODO implementation with JavaFX
-    }
-
-
-    /**
-     * This method renders all the graphic aspects of the cli or the gui.
-     */
-    @Override
-    public void render() {
         // TODO implementation with JavaFX
     }
 

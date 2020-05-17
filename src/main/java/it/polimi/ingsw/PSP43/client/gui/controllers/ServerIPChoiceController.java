@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP43.client.gui.controllers;
 
+import it.polimi.ingsw.PSP43.client.ClientBG;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +19,24 @@ public class ServerIPChoiceController {
     public Label buttonPressedLabel;
     public TextField serverIPField;
 
+    private ClientBG clientBG;
+
+
+    /**
+     * Method that sets the ClientBG attribute of the controller, it will be invoked inside
+     * the GuiGraphicHandler constructor so that the controller will have already the attribute set
+     * once it will be utilized.
+     * @param clientBG clientBG of the current client
+     */
+    public void setClientBG(ClientBG clientBG) {
+        this.clientBG = clientBG;
+    }
+
+
+    /**
+     * Method that handles an event performed on the button to confirm the server IP.
+     * @param event event performed on the button
+     */
     @FXML
     private void handleConfirmButton(ActionEvent event) {
 
@@ -28,7 +47,7 @@ public class ServerIPChoiceController {
 
         String serverIP = serverIPField.getText();
 
-        // TODO establish a connection between the client and the chosen IP address
+        // TODO insert here:    clientBG.setServerIP(serverIP);
 
         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
 

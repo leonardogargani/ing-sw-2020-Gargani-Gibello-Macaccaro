@@ -140,10 +140,4 @@ public abstract class GraphicHandler {
     public abstract void updateMenuChange(StartGameMessage message);
 
 
-    /**
-     * This method renders all the graphic aspects of the cli or the gui.
-     */
-    public abstract void render();
-
-
 }

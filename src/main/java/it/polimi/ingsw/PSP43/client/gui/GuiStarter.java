@@ -5,9 +5,27 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.List;
 
 
 public class GuiStarter extends Application {
+
+    private Stage primaryStage;
+
+
+    // method to test how params in Application.launch(GuiStarter, params) are handled
+    // [used only in development, to be removed]
+    @Override
+    public void init() {
+        Parameters parameters = getParameters();
+        List<String> parametersList = parameters.getRaw();
+        System.out.println(parametersList);
+    }
+
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
 
 
     /**
@@ -17,11 +35,14 @@ public class GuiStarter extends Application {
     @Override
     public void start(Stage primaryStage) {
 
+        this.primaryStage = primaryStage;
+
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/FXML/serverIPChoice.fxml"));
 
         try {
             Scene scene = new Scene(loader.load());
+
             //scene.getStylesheets().add(getClass().getResource("/CSS/style.css").toExternalForm());
             primaryStage.setScene(scene);
         } catch (IOException e) {
@@ -37,6 +58,8 @@ public class GuiStarter extends Application {
     }
 
 
+    // method to permit the execution of the gui without calling Application.launch(GuiStarter.class)
+    // [used only in development, to be removed]
     public static void main(String[] args) {
         launch(args);
     }

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP43.client;
 
 import it.polimi.ingsw.PSP43.client.cli.CliGraphicHandler;
-import it.polimi.ingsw.PSP43.client.cli.InputHandler;
+import it.polimi.ingsw.PSP43.client.cli.CliInputHandler;
 import it.polimi.ingsw.PSP43.client.cli.QuitPlayerException;
 import it.polimi.ingsw.PSP43.client.cli.Screens;
 import it.polimi.ingsw.PSP43.client.gui.GuiGraphicHandler;
@@ -9,9 +9,7 @@ import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 /**
@@ -45,7 +43,7 @@ public class ClientManager implements Runnable {
         clientBGThread.start();
 
         if (chosenInterface == 1)
-            graphicHandler = new CliGraphicHandler(clientBG);
+            graphicHandler =  new CliGraphicHandler(clientBG);
         else
             graphicHandler = new GuiGraphicHandler(clientBG);
 
@@ -141,7 +139,7 @@ public class ClientManager implements Runnable {
 
         try {
             System.out.print("Choose a nickname:\n");
-            InputHandler inputHandler = new InputHandler();
+            CliInputHandler inputHandler = new CliInputHandler();
             String nickname = inputHandler.requestInput();
             RegistrationMessage message = new RegistrationMessage(nickname);
             clientBG.sendMessage(message);
