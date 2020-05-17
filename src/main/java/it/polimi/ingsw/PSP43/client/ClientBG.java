@@ -1,5 +1,8 @@
 package it.polimi.ingsw.PSP43.client;
 
+import it.polimi.ingsw.PSP43.client.cli.CliGraphicHandler;
+import it.polimi.ingsw.PSP43.client.cli.CliInputHandler;
+import it.polimi.ingsw.PSP43.client.cli.QuitPlayerException;
 import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.PingMessage;
@@ -10,7 +13,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 /**
  * ClientBG(client background) is the client network handler
@@ -20,9 +23,9 @@ public class ClientBG implements Runnable {
     private Socket serverSocket;
     private final ClientManager clientManager;
     private static final int SERVER_PORT = 50000;
-    private String SERVER_IP = "127.0.0.1";
+    private String SERVER_IP = null;
     public Object messageArrived;
-    private boolean disconnect = false;
+    private boolean disconnect = true;
     private ObjectInputStream input;
     private ObjectOutputStream output;
 
@@ -43,22 +46,35 @@ public class ClientBG implements Runnable {
      */
     @Override
     public void run() {
-
-        System.out.println("Insert the ip of the server or press enter for the default one (127.0.0.1)");
-        Scanner scanner = new Scanner(System.in);
-
-        SERVER_IP = scanner.nextLine();
-        if (SERVER_IP.toLowerCase().equals("quit"))
-            System.exit(0);
+        while(this.disconnect){
+        if (clientManager.getGraphicHandler() instanceof CliGraphicHandler) {
+            CliInputHandler ip = new CliInputHandler();
+            try {
+                this.SERVER_IP = ip.requestServerIP();
+            } catch (QuitPlayerException e) {
+                System.exit(0);
+            }
+        } else {
+            while (this.SERVER_IP == null) {
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         try {
-            serverSocket = new Socket(SERVER_IP, SERVER_PORT);
+            this.disconnect = false;
+            serverSocket = new Socket(this.SERVER_IP, SERVER_PORT);
         } catch (IOException e) {
             System.out.println("server unreachable");
-            System.exit(0);
+            this.disconnect = true;
         }
+    }
         System.out.println("Connected");
 
-        clientManager.execute();
+        if(clientManager.getGraphicHandler() instanceof CliGraphicHandler)
+            clientManager.execute();
 
         try {
             ConnectionDetector connectionDetector = new ConnectionDetector(this.serverSocket, this);

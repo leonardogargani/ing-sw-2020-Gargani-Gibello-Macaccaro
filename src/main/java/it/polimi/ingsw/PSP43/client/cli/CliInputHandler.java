@@ -70,14 +70,20 @@ public class CliInputHandler {
 
     /**
      * Method that asks a player for the IP address of the server.
-     * @return String containing the IP address of the server chosen by the player
+     * @return line containing the IP address of the server chosen by the player
      * @throws QuitPlayerException exception thrown if a player writes "quit" (ignore capitalization) in the cli
      */
     public String requestServerIP() throws QuitPlayerException {
 
         System.out.println("Insert the server IP:");
-        return requestInputString();
-
+        System.out.print("> ");
+        try {
+            line = reader.readLine();
+            if (line.toLowerCase().equals("quit")) {
+                throw new QuitPlayerException("A player has decided to quit the game.");
+            }
+        }catch (IOException e){e.printStackTrace();}
+        return line;
     }
 
 

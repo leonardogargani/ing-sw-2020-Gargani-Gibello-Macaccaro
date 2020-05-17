@@ -5,9 +5,11 @@ import it.polimi.ingsw.PSP43.client.cli.CliInputHandler;
 import it.polimi.ingsw.PSP43.client.cli.QuitPlayerException;
 import it.polimi.ingsw.PSP43.client.cli.Screens;
 import it.polimi.ingsw.PSP43.client.gui.GuiGraphicHandler;
+import it.polimi.ingsw.PSP43.client.gui.GuiStarter;
 import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
+import javafx.application.Application;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,19 +40,22 @@ public class ClientManager implements Runnable {
      */
     @Override
     public void run() {
+
         clientBG = new ClientBG(this);
         Thread clientBGThread = new Thread(clientBG);
-        clientBGThread.start();
 
         if (chosenInterface == 1)
             graphicHandler =  new CliGraphicHandler(clientBG);
-        else
+        else {
             graphicHandler = new GuiGraphicHandler(clientBG);
+            Application.launch(GuiStarter.class);
+        }
+        clientBGThread.start();
 
         while (isActive) {
             try {
                 handleEvent();
-            } catch (QuitPlayerException | IOException e) {
+            } catch (QuitPlayerException e) {
                 clientBG.sendMessage(new LeaveGameMessage());
             }
         }
@@ -62,7 +67,7 @@ public class ClientManager implements Runnable {
      * @throws QuitPlayerException if a player in the input writes quit to leave the game
      * @throws IOException signals that an I/O exception of some sort has occurred.
      */
-    public void handleEvent() throws QuitPlayerException, IOException {
+    public void handleEvent() throws QuitPlayerException {
         if (messageBox.size() >= 1) {
             if (messageBox.get(0) instanceof CellMessage) {
                 graphicHandler.updateBoardChange((CellMessage) messageBox.get(0));
