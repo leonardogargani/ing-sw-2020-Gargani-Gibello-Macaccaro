@@ -176,13 +176,15 @@ public class ClientListener implements Runnable {
                 this.disconnected = true;
 
                 clientSocket.close();
+                if(input != null)
+                    input.close();
+                if(output != null)
+                    output.close();
 
+                stackMessages.add(new LeaveGameMessage());
+                notifyAll();
 
                 if (this.idGame != -1) {
-                    output.close();
-                    input.close();
-                    stackMessages.add(new LeaveGameMessage());
-                    notifyAll();
                     RegisterClientListener notifier = new RegisterClientListener();
                     notifier.notifyDisconnection(this.idGame);
                 }

@@ -51,10 +51,14 @@ public class RegisterClientListener implements Runnable {
             while (idGame == -1 && gameSessions.size() > counter) {
                 GameSessionObservable gameSession = gameSessions.get(counter);
 
+
                 // if the gameSession is in registration phase for the first player, I wait
                 while (gameSession.getMaxNumPlayers() == 1) {
                     TimeUnit.SECONDS.sleep(1);
                 }
+
+                if (player.isDisconnected())
+                    break;
 
                 if (gameSession.getMaxNumPlayers() > gameSession.getNumOfPlayers()) {
                     idGame = gameSession.registerToTheGame(message, player);
@@ -64,7 +68,7 @@ public class RegisterClientListener implements Runnable {
             }
 
             // if there is not a gameSession available, I create a new one
-            if (idGame == -1) {
+            if (idGame == -1 & !player.isDisconnected()) {
                 GameSession game = new GameSession(gameSessions.size());
                 gameSessions.add(game);
                 Thread gameThread = new Thread(game);

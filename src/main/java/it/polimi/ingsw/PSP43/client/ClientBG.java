@@ -160,11 +160,15 @@ public class ClientBG implements Runnable {
      * @throws IOException signals that an I/O exception of some sort has occurred.
      */
     public void closer() {
-       try{
-        input.close();
-        output.close();
-        serverSocket.close();
-       } catch (IOException ignored){ }
+        try {
+            if (input != null)
+                input.close();
+            if (output != null)
+                output.close();
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
