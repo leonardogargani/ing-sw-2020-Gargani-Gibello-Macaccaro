@@ -14,11 +14,9 @@ public class ClientStarter {
         int chosenMode;
         System.out.println("Choose a mode:\n [1] CLI\n [2] GUI");
         CliInputHandler inputHandler = new CliInputHandler();
-        String line;
         try {
             do {
-                line = inputHandler.requestInput();
-                chosenMode = Integer.parseInt(line);
+                chosenMode = inputHandler.requestInputInt();
                 switch (chosenMode) {
                     case 1:
                         System.out.println("CLI chosen. Starting the game...");

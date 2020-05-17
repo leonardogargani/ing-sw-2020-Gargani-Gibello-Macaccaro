@@ -66,12 +66,10 @@ public class CliGraphicHandler extends GraphicHandler {
 
         bottomMenu.setContent(request.getMessage());
         int chosenNumber;
-        String line;
         do {
             // I need to show() only the CliTopMenu, containing the request
             bottomMenu.show();
-            line = inputHandler.requestInput();
-            chosenNumber = Integer.parseInt(line);
+            chosenNumber = inputHandler.requestInputInt();
         } while (chosenNumber != 2 && chosenNumber != 3);
         bottomMenu.clear();
         PlayersNumberResponse response = new PlayersNumberResponse(chosenNumber);
@@ -103,12 +101,10 @@ public class CliGraphicHandler extends GraphicHandler {
 
             ArrayList<Integer> chosenIndexes = new ArrayList<>();
             int chosenIndex;
-            String line;
             for (int i = 0; i < playersNumber; i++) {
                 bottomMenu.show();
                 System.out.printf("Write a single number and press Enter (%d remaining):\n", playersNumber - i);
-                line = inputHandler.requestInput();
-                chosenIndex = Integer.parseInt(line);
+                chosenIndex = inputHandler.requestInputInt();
                 // avoid repetition of the same Gods
                 if (!chosenIndexes.contains(chosenIndex)) {
                     chosenIndexes.add(chosenIndex);
@@ -148,11 +144,9 @@ public class CliGraphicHandler extends GraphicHandler {
         }
 
         int chosenIndex;
-        String line;
         while (true) {
             bottomMenu.show();
-            line = inputHandler.requestInput();
-            chosenIndex = Integer.parseInt(line);
+            chosenIndex = inputHandler.requestInputInt();
             if (0 <= chosenIndex && chosenIndex < availableCards.size()) {
                 // in this case the chosen index is valid, I want to keep its value
                 break;
@@ -188,11 +182,9 @@ public class CliGraphicHandler extends GraphicHandler {
         }
 
         int chosenIndex;
-        String line;
         while (true) {
             bottomMenu.show();
-            line = inputHandler.requestInput();
-            chosenIndex = Integer.parseInt(line);
+            chosenIndex = inputHandler.requestInputInt();
             if (0 <= chosenIndex && chosenIndex < availableColors.size()) {
                 // in this case the chosen index is valid, I want to keep its value
                 break;
@@ -241,15 +233,12 @@ public class CliGraphicHandler extends GraphicHandler {
             int chosenX;
             int chosenY;
             Coord chosenCoord;
-            String line;
             // obtain the second coordinate of the requested couple
             loop: while (true) {
                 System.out.print("x: ");
-                line = inputHandler.requestInput();
-                chosenX = Integer.parseInt(line);
+                chosenX = inputHandler.requestInputInt();
                 System.out.print("y: ");
-                line = inputHandler.requestInput();
-                chosenY = Integer.parseInt(line);
+                chosenY = inputHandler.requestInputInt();
                 for (Coord startCoord : hashMap.keySet()) {
                     for (Coord endCoord : hashMap.get(startCoord)) {
                         if (chosenX == endCoord.getX() && chosenY == endCoord.getY()) {
@@ -284,8 +273,7 @@ public class CliGraphicHandler extends GraphicHandler {
                 }
                 int chosenIndex;
                 while (true) {
-                    line = inputHandler.requestInput();
-                    chosenIndex = Integer.parseInt(line);
+                    chosenIndex = inputHandler.requestInputInt();
                     if (0 <= chosenIndex && chosenIndex < possibleStartCoords.size()) {
                         break;
                     }
@@ -319,12 +307,10 @@ public class CliGraphicHandler extends GraphicHandler {
 
         int intChoice;
         boolean booleanChoice = false;
-        String line;
 
         while (true) {
             System.out.println(" [0] YES \n [1] NO ");
-            line = inputHandler.requestInput();
-            intChoice = Integer.parseInt(line);
+            intChoice = inputHandler.requestInputInt();
             if (intChoice == 0 || intChoice == 1) {
                 break;
             }
@@ -370,7 +356,7 @@ public class CliGraphicHandler extends GraphicHandler {
         bottomMenu.show();
         String nickname;
         System.out.print("Choose another nickname:\n");
-        nickname = inputHandler.requestInput();
+        nickname = inputHandler.requestInputString();
         RegistrationMessage message = new RegistrationMessage(nickname);
         super.getClientBG().sendMessage(message);
     }

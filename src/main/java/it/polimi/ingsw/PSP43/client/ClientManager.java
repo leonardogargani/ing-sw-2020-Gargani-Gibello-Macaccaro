@@ -140,7 +140,7 @@ public class ClientManager implements Runnable {
         try {
             System.out.print("Choose a nickname:\n");
             CliInputHandler inputHandler = new CliInputHandler();
-            String nickname = inputHandler.requestInput();
+            String nickname = inputHandler.requestInputString();
             RegistrationMessage message = new RegistrationMessage(nickname);
             clientBG.sendMessage(message);
         } catch (QuitPlayerException e) {

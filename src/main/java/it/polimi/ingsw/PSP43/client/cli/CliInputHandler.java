@@ -16,7 +16,7 @@ public class CliInputHandler {
      * @return generic String written by the player
      * @throws QuitPlayerException exception thrown if a player writes "quit" (ignore capitalization) in the cli
      */
-    public String requestInput() throws QuitPlayerException {
+    public String requestInputString() throws QuitPlayerException {
         try {
             do {
                 System.out.print("> ");
@@ -33,6 +33,29 @@ public class CliInputHandler {
 
 
     /**
+     * Method that request an integer input from the player through a BufferedReader.
+     * @return int written by the player
+     * @throws QuitPlayerException exception thrown if a player writes "quit" (ignore capitalization) in the cli
+     */
+    public int requestInputInt() throws QuitPlayerException {
+
+        int inputInt = 0;
+        boolean inputIsCorrect = false;
+        
+        do {
+            try {
+                inputInt = Integer.parseInt(requestInputString());
+                inputIsCorrect = true;
+            } catch (NumberFormatException e) {
+                System.out.println("Input not valid, try again");
+            }
+        } while(!inputIsCorrect);
+
+        return inputInt;
+    }
+
+
+    /**
      * Method that asks a player for a nickname.
      * @return String containing the nickname chosen by the player
      * @throws QuitPlayerException exception thrown if a player writes "quit" (ignore capitalization) in the cli
@@ -40,7 +63,7 @@ public class CliInputHandler {
     public String requestNickname() throws QuitPlayerException {
 
         System.out.println("Choose a nickname:");
-        return requestInput();
+        return requestInputString();
 
     }
 
@@ -53,7 +76,7 @@ public class CliInputHandler {
     public String requestServerIP() throws QuitPlayerException {
 
         System.out.println("Insert the server IP:");
-        return requestInput();
+        return requestInputString();
 
     }
 
