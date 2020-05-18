@@ -4,8 +4,6 @@ import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
-import java.io.IOException;
-
 public interface MoveBehavior {
-    void handleInitMove(GameSession gameSession) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException, GameEndedException;
+    void handleInitMove(GameSession gameSession) throws GameEndedException, WinnerCaughtException;
 }

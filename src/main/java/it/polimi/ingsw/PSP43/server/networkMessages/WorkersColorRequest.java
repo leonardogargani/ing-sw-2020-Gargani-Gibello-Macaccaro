@@ -2,18 +2,18 @@ package it.polimi.ingsw.PSP43.server.networkMessages;
 
 import it.polimi.ingsw.PSP43.Color;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class WorkersColorRequest extends TextMessage {
-    private static final long SerialVersionUID=112345678901234567L;
-    private ArrayList<Color> colorsAvailable;
+    private static final long serialVersionUID = -1959452039599220074L;
+    private final List<Color> colorsAvailable;
 
     /**
      * Not default constructor for WorkersColorRequest message
      * @param message is the string that will be shown to the recipient
      * @param colorsAvailable is an ArrayList of available colors
      */
-    public WorkersColorRequest(String message, ArrayList<Color> colorsAvailable){
+    public WorkersColorRequest(String message, List<Color> colorsAvailable){
         super(message);
         this.colorsAvailable = colorsAvailable;
     }
@@ -31,7 +31,7 @@ public class WorkersColorRequest extends TextMessage {
      * Getter method for the ArrayList colorsAvailable
      * @return colorsAvailable
      */
-    public ArrayList<Color> getColorsAvailable() {
+    public List<Color> getColorsAvailable() {
         return colorsAvailable;
     }
 }

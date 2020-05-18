@@ -12,6 +12,7 @@ import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.model.card.BasicGodCard;
 import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.BasicBuildBehaviour;
 import it.polimi.ingsw.PSP43.server.model.card.decorators.BlockRiseDecorator;
+import it.polimi.ingsw.PSP43.server.model.card.BlockRiseFactory;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.NicknameAlreadyInUseException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
@@ -23,7 +24,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -49,7 +50,7 @@ public class BlockOpponentRiseBehaviourTest {
 
     @Test
     public void handleInitMoveWithNoBlocking() throws IOException, WinnerCaughtException, InterruptedException, ClassNotFoundException, GameEndedException {
-        HashMap<String, AbstractGodCard> map = gameSession.getCardsHandler().getMapOwnersCard();
+        Map<String, AbstractGodCard> map = gameSession.getCardsHandler().getMapOwnersCard();
 
         spyGame.setCurrentPlayer(currentPlayer);
 
@@ -65,7 +66,7 @@ public class BlockOpponentRiseBehaviourTest {
         for (String s : map.keySet()) {
             AbstractGodCard c = map.get(s);
             if (!(c.getGodName().equals("Athena"))) {
-                map.put(s, new BlockRiseDecorator(c));
+                gameSession.getCardsHandler().addDecorator("Athena", new BlockRiseFactory());
             }
         }
 
@@ -85,7 +86,7 @@ public class BlockOpponentRiseBehaviourTest {
 
     @Test
     public void handleMoveWithBlocking() throws IOException, WinnerCaughtException, InterruptedException, ClassNotFoundException, GameEndedException {
-        HashMap<String, AbstractGodCard> map = gameSession.getCardsHandler().getMapOwnersCard();
+        Map<String, AbstractGodCard> map = gameSession.getCardsHandler().getMapOwnersCard();
 
         spyGame.setCurrentPlayer(currentPlayer);
 

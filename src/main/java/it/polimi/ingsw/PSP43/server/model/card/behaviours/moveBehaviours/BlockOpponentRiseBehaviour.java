@@ -6,15 +6,11 @@ import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Worker;
-import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
-import it.polimi.ingsw.PSP43.server.model.card.decorators.BlockRiseDecorator;
+import it.polimi.ingsw.PSP43.server.model.card.BlockRiseFactory;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
-
-import java.io.IOException;
-import java.util.HashMap;
 
 /**
  * This class is made to give run-time the possibility to a card
@@ -30,20 +26,8 @@ public class BlockOpponentRiseBehaviour extends BasicMoveBehaviour {
      * the opponents' cards the block to rise that was imposed the previous turn.
      * @param gameSession The reference to the active game database.
      */
-    private void disablePowers(GameSession gameSession) throws ClassNotFoundException {
-        HashMap<String, AbstractGodCard> mapCardsOwned = gameSession.getCardsHandler().getMapOwnersCard();
-        String godName;
-        AbstractGodCard card, newCard;
-
-        for (String s : mapCardsOwned.keySet()) {
-            godName = mapCardsOwned.get(s).getGodName();
-            if (!godName.equals("Athena")) {
-                card = mapCardsOwned.get(s);
-                newCard = card.cleanFromEffects("it.polimi.ingsw.PSP43.server.model.card.decorators.BlockRiseDecorator");
-                mapCardsOwned.put(s, newCard);
-            }
-        }
-
+    private void disablePowers(GameSession gameSession) {
+        gameSession.getCardsHandler().removeDecorator(this.getGodName(), "it.polimi.ingsw.PSP43.server.model.card.decorators.BlockRiseDecorator");
     }
 
     /**
@@ -53,13 +37,7 @@ public class BlockOpponentRiseBehaviour extends BasicMoveBehaviour {
      */
     private void enablePowers(GameSession gameSession) {
         CardsHandler cardsHandler = gameSession.getCardsHandler();
-        AbstractGodCard cardOwned;
-        for (String s : cardsHandler.getMapOwnersCard().keySet()) {
-            cardOwned = cardsHandler.getMapOwnersCard().get(s);
-            if (!cardOwned.getGodName().equals("Athena")) {
-                cardsHandler.getMapOwnersCard().put(s, new BlockRiseDecorator(cardOwned));
-            }
-        }
+        cardsHandler.addDecorator(this.getGodName(), new BlockRiseFactory());
     }
 
     /**
@@ -68,7 +46,7 @@ public class BlockOpponentRiseBehaviour extends BasicMoveBehaviour {
      * @param gameSession The main access to the database of the game.
      * @throws WinnerCaughtException if a worker is moved on the third level.
      */
-    public void handleInitMove(GameSession gameSession) throws ClassNotFoundException, IOException, WinnerCaughtException, InterruptedException, GameEndedException {
+    public void handleInitMove(GameSession gameSession) throws WinnerCaughtException, GameEndedException {
         disablePowers(gameSession);
 
         WorkersHandler workersHandler = gameSession.getWorkersHandler();

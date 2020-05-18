@@ -11,7 +11,6 @@ import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -45,11 +44,11 @@ public class BlockRiseDecorator extends PowerGodDecorator {
         return availablePositionsToMove;
     }
 
-    public AbstractGodCard cleanFromEffects(String nameOfEffect) throws ClassNotFoundException {
+    public AbstractGodCard cleanFromEffects(String nameOfEffect) {
         return super.getGodComponent().cleanFromEffects(nameOfEffect);
     }
 
-    public void initMove(GameSession gameSession) throws ClassNotFoundException, WinnerCaughtException, InterruptedException, IOException, GameEndedException {
+    public void initMove(GameSession gameSession) throws WinnerCaughtException, GameEndedException {
         HashMap<Coord, ArrayList<Coord>> availablePositionsAfterBlocked = findAvailablePositionsToMove(gameSession);
 
         ActionResponse actionResponse = askForMove(gameSession, availablePositionsAfterBlocked);

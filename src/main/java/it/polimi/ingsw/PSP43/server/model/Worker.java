@@ -46,7 +46,7 @@ public class Worker {
      * This method sets the position the worker is in at this moment.
      * @param currentPosition the position the worker is in at this moment
      */
-    public void setCurrentPosition(Coord currentPosition) throws IOException {
+    public void setCurrentPosition(Coord currentPosition) {
         this.previousPosition = this.currentPosition;
         this.currentPosition = currentPosition;
     }

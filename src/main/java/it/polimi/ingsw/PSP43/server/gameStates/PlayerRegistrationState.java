@@ -4,8 +4,6 @@ import it.polimi.ingsw.PSP43.client.networkMessages.PlayersNumberResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.NicknameAlreadyInUseException;
-import it.polimi.ingsw.PSP43.server.networkMessages.ChangeNickRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.PlayersNumberRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.StartGameMessage;
 
@@ -35,7 +33,7 @@ public class PlayerRegistrationState extends TurnState {
      *
      * @param message This is the message sent from the client.
      */
-    public void executeState(RegistrationMessage message) throws IOException {
+    public void executeState(RegistrationMessage message) {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
         try {
@@ -69,7 +67,7 @@ public class PlayerRegistrationState extends TurnState {
         PlayersNumberRequest request = new PlayersNumberRequest("Choose between a 2 or 3 game play.");
         PlayersNumberResponse response;
         try {
-            response = gameSession.sendRequest(request, message.getNick(), new PlayersNumberResponse());
+            response = gameSession.sendRequest(request, message.getNick(), PlayersNumberResponse.class);
         } catch (GameEndedException e) {
             gameSession.setActive();
             return -1;

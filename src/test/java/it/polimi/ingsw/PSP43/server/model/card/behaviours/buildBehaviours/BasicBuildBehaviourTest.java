@@ -15,7 +15,6 @@ import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
@@ -43,7 +42,7 @@ public class BasicBuildBehaviourTest {
     }
 
     @Test
-    public void genericAskForBuildWithBlockOption() throws InterruptedException, ClassNotFoundException, GameEndedException, IOException {
+    public void genericAskForBuildWithBlockOption() throws GameEndedException {
         BasicBuildBehaviour basicBuildBehaviour = new BasicBuildBehaviour();
 
         Worker workerToBuild = spyGame.getWorkersHandler().getWorker(new Coord(4, 3));
@@ -59,7 +58,7 @@ public class BasicBuildBehaviourTest {
     }
 
     @Test
-    public void genericAskForBuildWithDomeOption() throws InterruptedException, ClassNotFoundException, GameEndedException, IOException {
+    public void genericAskForBuildWithDomeOption() throws GameEndedException {
         Coord coordWhereToBuild = new Coord(3, 3);
         Cell cellWhereToBuild = spyGame.getCellsHandler().getCell(coordWhereToBuild);
         cellWhereToBuild.setHeight(3);
@@ -80,7 +79,7 @@ public class BasicBuildBehaviourTest {
     }
 
     @Test
-    public void handleInitBuildWithDome() throws IOException, InterruptedException, GameEndedException, ClassNotFoundException {
+    public void handleInitBuildWithDome() throws GameEndedException {
         Coord coordWhereToBuild = new Coord(3, 3);
         Cell cellWhereToBuild = spyGame.getCellsHandler().getCell(coordWhereToBuild);
         cellWhereToBuild.setHeight(3);
@@ -98,7 +97,7 @@ public class BasicBuildBehaviourTest {
     }
 
     @Test
-    public void handleInitBuildWithBlock() throws ClassNotFoundException, GameEndedException, InterruptedException, IOException {
+    public void handleInitBuildWithBlock() throws GameEndedException {
         Coord coordWhereToBuild = new Coord(3, 3);
 
         BasicBuildBehaviour basicBuildBehaviour = new BasicBuildBehaviour();

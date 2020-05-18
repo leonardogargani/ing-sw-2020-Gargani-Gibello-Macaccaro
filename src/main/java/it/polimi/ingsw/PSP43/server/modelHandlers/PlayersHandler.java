@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * (such as nickname) and the cards they own during the game;
  */
 public class PlayersHandler {
-    private ArrayList<Player> gamePlayers;
+    private final ArrayList<Player> gamePlayers;
 
     public PlayersHandler() {
         this.gamePlayers = new ArrayList<>();
@@ -74,7 +74,7 @@ public class PlayersHandler {
      */
     public void deletePlayer(String nick) {
         gamePlayers.removeIf(p -> p.getNickname().equals(nick));
-        // TODO call here notifyMenuChange() once it is implemented
+        // TODO: call here notifyMenuChange() once it is implemented
     }
 
     /**

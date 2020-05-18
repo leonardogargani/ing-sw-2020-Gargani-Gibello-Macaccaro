@@ -13,7 +13,6 @@ import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,7 +27,7 @@ public class UnconditionedDomeBuildDecorator extends PowerGodDecorator {
         super(godComponent);
     }
 
-    public void initBuild(GameSession gameSession) throws GameEndedException, IOException, InterruptedException, ClassNotFoundException {
+    public void initBuild(GameSession gameSession) throws GameEndedException {
         Player currentPlayer = gameSession.getCurrentPlayer();
 
         HashMap<Coord, ArrayList<Coord>> availablePositionsToBuildDome = this.findAvailablePositionsToBuildDome(gameSession);
@@ -37,7 +36,7 @@ public class UnconditionedDomeBuildDecorator extends PowerGodDecorator {
         ResponseMessage responseMessage = new ResponseMessage(false);
         if (availablePositionsToBuildDome.size() != 0) {
             RequestMessage requestMessage = new RequestMessage("Do you want to build a dome? Otherwise you will build a block.");
-            responseMessage = gameSession.sendRequest(requestMessage, currentPlayer.getNickname(), new ResponseMessage());
+            responseMessage = gameSession.sendRequest(requestMessage, currentPlayer.getNickname(), ResponseMessage.class);
         }
 
         String message;
@@ -72,9 +71,14 @@ public class UnconditionedDomeBuildDecorator extends PowerGodDecorator {
         return availablePositions;
     }
 
-    public AbstractGodCard cleanFromEffects(String nameOfEffect) throws ClassNotFoundException {
+    public AbstractGodCard cleanFromEffects(String nameOfEffect) {
         AbstractGodCard component = super.getGodComponent().cleanFromEffects(nameOfEffect);
-        Class<?> c = Class.forName(nameOfEffect);
+        Class<?> c = null;
+        try {
+            c = Class.forName(nameOfEffect);
+        } catch (ClassNotFoundException e) { e.printStackTrace(); }
+
+        assert c != null;
         if (!c.isInstance(this))
             return new UnconditionedDomeBuildDecorator(component);
         else return component;

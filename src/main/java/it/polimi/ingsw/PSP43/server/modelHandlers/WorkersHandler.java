@@ -6,8 +6,7 @@ import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.*;
 
 
 /**
@@ -16,10 +15,9 @@ import java.util.ArrayList;
  * Their methods are called from the GameSession object, which has a workersHandler attribute.
  */
 public class WorkersHandler {
-
-    private ArrayList<Worker> workers = new ArrayList<>();
-    private GameSession gameSession;
-    private CellsHandler cellsHandler;
+    private final List<Worker> workers = new ArrayList<>();
+    private final GameSession gameSession;
+    private final CellsHandler cellsHandler;
 
 
     /**
@@ -33,21 +31,18 @@ public class WorkersHandler {
     }
 
 
-    public void removeWorkers(Integer[] workersIds) throws IOException {
+    public void removeWorkers(Integer[] workersIds) {
         CellsHandler cellsHandler = gameSession.getCellsHandler();
-        Worker workerToRemove;
-        Cell cellOccupiedByWorker;
-        Coord workerPosition;
 
         for (int i : workersIds) {
-            for (Worker w : workers) {
-                if (w.getId() == i) {
-                    workerToRemove = w;
-                    workerPosition = workerToRemove.getCurrentPosition();
-                    cellOccupiedByWorker = cellsHandler.getCell(workerPosition);
+            for (Iterator<Worker> workerIterator = workers.iterator(); workerIterator.hasNext(); ) {
+                Worker currentWorker = workerIterator.next();
+                if (currentWorker.getId() == i) {
+                    Coord workerPosition = currentWorker.getCurrentPosition();
+                    Cell cellOccupiedByWorker = cellsHandler.getCell(workerPosition);
                     cellOccupiedByWorker.setOccupiedByWorker(false);
                     cellsHandler.changeStateOfCell(cellOccupiedByWorker, workerPosition);
-                    workers.remove(w);
+                    workerIterator.remove();
                 }
             }
         }
@@ -74,7 +69,7 @@ public class WorkersHandler {
      * @param worker worker whose coordAfterMove is wanted to be changed
      * @param coordAfterMove coordAfterMove the player wants to move the worker to
      */
-    public void changePosition(Worker worker, Coord coordAfterMove) throws IOException {
+    public void changePosition(Worker worker, Coord coordAfterMove) {
         Coord coordBeforeMove = worker.getCurrentPosition();
         Cell cellBeforeMove = gameSession.getCellsHandler().getCell(coordBeforeMove);
         Cell cellAfterMove = gameSession.getCellsHandler().getCell(coordAfterMove);
@@ -91,7 +86,7 @@ public class WorkersHandler {
         worker.setLatestMoved(true);
     }
 
-    public void swapPositions(Worker currentPlayerWorker, Worker opponentWorker) throws IOException {
+    public void swapPositions(Worker currentPlayerWorker, Worker opponentWorker) {
         currentPlayerWorker.setCurrentPosition(opponentWorker.getCurrentPosition());
         currentPlayerWorker.setLatestMoved(true);
         opponentWorker.setCurrentPosition(currentPlayerWorker.getPreviousPosition());
@@ -112,8 +107,8 @@ public class WorkersHandler {
      * This method returns the ArrayList containing all the workers.
      * @return ArrayList containing all the workers
      */
-    public ArrayList<Worker> getWorkers()  {
-        return workers;
+    public List<Worker> getWorkers()  {
+        return Collections.unmodifiableList(workers);
     }
 
     public ArrayList<Worker> getWorkers(Integer[] ids) {
@@ -144,7 +139,7 @@ public class WorkersHandler {
         return null;
     }
 
-    public void setInitialPosition(int idWorker, Coord initialCoord) throws IOException {
+    public void setInitialPosition(int idWorker, Coord initialCoord) {
         for (Worker w : workers) {
             if (w.getId() == idWorker) {
                 Cell initialCell = cellsHandler.getCell(initialCoord);

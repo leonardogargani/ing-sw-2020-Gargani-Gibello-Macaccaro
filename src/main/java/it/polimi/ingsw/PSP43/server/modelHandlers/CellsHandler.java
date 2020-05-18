@@ -6,10 +6,8 @@ import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  * CellsHandler has the task to handle all the cells of the board of the game. It has to make consistent the state of the cells
@@ -47,7 +45,7 @@ public class CellsHandler {
      * @param newDescriptionCell is a cell received from a client that specifies the new state of a cell, identified by the coordinates supplied
      * @param c includes the coordinates of the cell that are going to be modified
      */
-    public void changeStateOfCell (Cell newDescriptionCell, Coord c) throws IOException {
+    public void changeStateOfCell (Cell newDescriptionCell, Coord c) {
         Cell cellToChange = board[c.getX()][c.getY()];
         cellToChange.setOccupiedByDome(newDescriptionCell.getOccupiedByDome());
         cellToChange.setOccupiedByWorker(newDescriptionCell.getOccupiedByWorker());

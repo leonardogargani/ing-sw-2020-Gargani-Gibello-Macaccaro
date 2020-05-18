@@ -15,7 +15,6 @@ import static org.junit.Assert.*;
 
 
 public class WorkerTest {
-
     private Worker test;
 
     @Before
@@ -27,18 +26,18 @@ public class WorkerTest {
     // getter and setter are tested both at the same time
     @Test
     public void testGetSetCurrentPosition() throws IOException {
-        Coord coord1 = new Coord(1, 2);
-        test.setCurrentPosition(coord1);
-        assertEquals(coord1, test.getCurrentPosition());
+        Coord coord = new Coord(1, 2);
+        test.setCurrentPosition(coord);
+        assertEquals(coord, test.getCurrentPosition());
     }
 
     @Test
     public void testGetPreviousPosition() throws IOException {
-        Coord coord1 = new Coord(1, 2);
-        Coord coord2 = new Coord(2, 2);
-        test.setCurrentPosition(coord1);
-        test.setCurrentPosition(coord2);
-        assertEquals(coord1, test.getPreviousPosition());
+        Coord firstCoord = new Coord(1, 2);
+        Coord secondCoord = new Coord(2, 2);
+        test.setCurrentPosition(firstCoord);
+        test.setCurrentPosition(secondCoord);
+        assertEquals(firstCoord, test.getPreviousPosition());
     }
 
     @Test
@@ -50,5 +49,4 @@ public class WorkerTest {
     public void testGetId() {
         assertEquals(5, test.getId());
     }
-
 }

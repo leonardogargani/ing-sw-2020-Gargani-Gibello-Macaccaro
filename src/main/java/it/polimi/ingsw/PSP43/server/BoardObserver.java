@@ -21,7 +21,7 @@ public class BoardObserver {
      * and notifies the client in order to represent the graphical change.
      * @param cellObserved cellObserved object of the board
      */
-    public void notifyBoardChange(Cell cellObserved) throws IOException {
+    public void notifyBoardChange(Cell cellObserved) {
         CellMessage message = new CellMessage(cellObserved);
         gameSessionObservable.sendBroadCast(message);
     }

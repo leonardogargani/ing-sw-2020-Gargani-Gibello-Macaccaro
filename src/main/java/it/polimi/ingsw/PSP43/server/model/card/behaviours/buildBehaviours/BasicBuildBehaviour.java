@@ -1,7 +1,6 @@
 package it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
-import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.ResponseMessage;
 import it.polimi.ingsw.PSP43.server.model.DataToBuild;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
@@ -14,14 +13,14 @@ import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class BasicBuildBehaviour extends BasicGodCard implements BuildBehaviour {
     private static final long serialVersionUID = 4158958110907103295L;
 
-    public DataToBuild genericAskForBuild(GameSession gameSession) throws GameEndedException, InterruptedException, IOException, ClassNotFoundException {
+    public DataToBuild genericAskForBuild(GameSession gameSession) throws GameEndedException {
         Player currentPlayer = gameSession.getCurrentPlayer();
         WorkersHandler workersHandler = gameSession.getWorkersHandler();
 
@@ -32,11 +31,7 @@ public class BasicBuildBehaviour extends BasicGodCard implements BuildBehaviour 
         if (availablePositionsBuildDome.size() != 0) {
             RequestMessage request = new RequestMessage("Do you want to build a dome? Otherwise you will " +
                     "select a cell where to build a block.");
-            try {
-                response = gameSession.sendRequest(request, currentPlayer.getNickname(), new ResponseMessage());
-            } catch (InterruptedException | IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+            response = gameSession.sendRequest(request, currentPlayer.getNickname(), ResponseMessage.class);
         }
 
         ActionResponse actionResponse;
@@ -54,16 +49,15 @@ public class BasicBuildBehaviour extends BasicGodCard implements BuildBehaviour 
         }
     }
 
-    public <T extends ClientMessage> T askForBuild(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositionsBuildBlock, String message) throws GameEndedException, InterruptedException, IOException, ClassNotFoundException {
+    public ActionResponse askForBuild(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositionsBuildBlock, String message) throws GameEndedException {
         Player currentPlayer = gameSession.getCurrentPlayer();
 
-        ActionRequest actionRequest = new ActionRequest(message, availablePositionsBuildBlock);
-        ActionResponse actionResponse = gameSession.sendRequest(actionRequest, currentPlayer.getNickname(), new ActionResponse());
+        ActionRequest actionRequest = new ActionRequest(message, Collections.unmodifiableMap(availablePositionsBuildBlock));
 
-        return (T) actionResponse;
+        return gameSession.sendRequest(actionRequest, currentPlayer.getNickname(), ActionResponse.class);
     }
 
-    public void handleInitBuild(GameSession gameSession) throws IOException, ClassNotFoundException, InterruptedException, GameEndedException {
+    public void handleInitBuild(GameSession gameSession) throws GameEndedException {
         DataToBuild dataToBuild = genericAskForBuild(gameSession);
 
         Coord nextPositionChosen = dataToBuild.getNewPosition();

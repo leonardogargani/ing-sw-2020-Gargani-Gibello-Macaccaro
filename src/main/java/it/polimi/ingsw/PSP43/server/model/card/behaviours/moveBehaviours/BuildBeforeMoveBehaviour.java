@@ -16,7 +16,6 @@ import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -36,7 +35,7 @@ public class BuildBeforeMoveBehaviour extends BasicMoveBehaviour {
      *
      * @param gameSession The necessary data to do the move made by the player.
      */
-    public void handleInitMove(GameSession gameSession) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException, GameEndedException {
+    public void handleInitMove(GameSession gameSession) throws WinnerCaughtException, GameEndedException {
         Player currentPlayer = gameSession.getCurrentPlayer();
 
         WorkersHandler workersHandler = gameSession.getWorkersHandler();
@@ -53,7 +52,7 @@ public class BuildBeforeMoveBehaviour extends BasicMoveBehaviour {
 
         if (nextCellChosen.getHeight() - currentCell.getHeight() == 0) {
             RequestMessage requestMessage = new RequestMessage("Do you want to build before moving?");
-            ResponseMessage responseMessage = gameSession.sendRequest(requestMessage, currentPlayer.getNickname(), new ResponseMessage());
+            ResponseMessage responseMessage = gameSession.sendRequest(requestMessage, currentPlayer.getNickname(), ResponseMessage.class);
 
             if (responseMessage.isResponse()) {
                 buildBeforeMove(dataToMove);
@@ -70,11 +69,8 @@ public class BuildBeforeMoveBehaviour extends BasicMoveBehaviour {
      *
      * @param oldData The data used to recognise which worker is going to move (and so has the
      *                right to build).
-     * @throws InterruptedException
-     * @throws IOException
-     * @throws ClassNotFoundException
      */
-    private void buildBeforeMove(DataToMove oldData) throws InterruptedException, IOException, ClassNotFoundException, GameEndedException {
+    private void buildBeforeMove(DataToMove oldData) throws GameEndedException {
         GameSession gameSession = oldData.getGameSession();
 
         HashMap<Coord, ArrayList<Coord>> hashMapPositionsToBuildBlock = findAvailablePositionsToBuildBlock(gameSession, oldData);
@@ -83,7 +79,7 @@ public class BuildBeforeMoveBehaviour extends BasicMoveBehaviour {
         ResponseMessage responseMessage = new ResponseMessage(false);
         if (hashMapPositionsToBuildDome.size() != 0) {
             RequestMessage requestMessage = new RequestMessage("Do you want to build a dome? Otherwise you will build a block.");
-            responseMessage = gameSession.sendRequest(requestMessage, gameSession.getCurrentPlayer().getNickname(), new ResponseMessage());
+            responseMessage = gameSession.sendRequest(requestMessage, gameSession.getCurrentPlayer().getNickname(), ResponseMessage.class);
         }
 
         String message;

@@ -11,8 +11,8 @@ import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -37,7 +37,7 @@ public class ChooseWorkerState extends TurnState {
      * This method initialises the first player of the game, the god-like one (and for this reason the first logged into the
      * game in our conception of the game).
      */
-    public void initState() throws IOException, ClassNotFoundException, InterruptedException {
+    public void initState() {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
         game.setCurrentPlayer(playersHandler.getPlayer(FIRSTPOSITION));
@@ -52,7 +52,7 @@ public class ChooseWorkerState extends TurnState {
     /**
      * This method asks, one at a time, to the players the color chosen for their workers and also where they want to place them.
      */
-    public void executeState() throws IOException, ClassNotFoundException, InterruptedException {
+    public void executeState() {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
         WorkersHandler workersHandler = game.getWorkersHandler();
@@ -62,11 +62,11 @@ public class ChooseWorkerState extends TurnState {
         do {
             currentPlayer = game.getCurrentPlayer();
             String nicknameCurrentPlayer = currentPlayer.getNickname();
-            WorkersColorRequest colorRequest = new WorkersColorRequest("Choose a color of the worker you will own.", availableColors);
-            WorkersColorResponse colorResponse = null;
+            WorkersColorRequest colorRequest = new WorkersColorRequest("Choose a color of the worker you will own.", Collections.unmodifiableList(availableColors));
+            WorkersColorResponse colorResponse;
             do {
                 try {
-                    colorResponse = game.sendRequest(colorRequest, nicknameCurrentPlayer, new WorkersColorResponse());
+                    colorResponse = game.sendRequest(colorRequest, nicknameCurrentPlayer, WorkersColorResponse.class);
                 } catch (GameEndedException e) {
                     game.setActive();
                     return;
@@ -90,15 +90,15 @@ public class ChooseWorkerState extends TurnState {
 
             // here I ask to the player where he wants to place his workers (one at a time I ask him)
             for (int i = 0; i<workersIds.length; i++) {
-                ActionResponse response = null;
+                ActionResponse response;
                 ArrayList<Coord> availablePositions = game.getCellsHandler().findAllFreeCoords();
                 hashAvailablePositions = new HashMap<>();
                 hashAvailablePositions.put(new Coord(0, 0), availablePositions);
                 placementRequest = new ActionRequest("Choose where to place your worker " + i + " .",
-                        hashAvailablePositions);
+                        Collections.unmodifiableMap(hashAvailablePositions));
                 do {
                     try {
-                        response = game.sendRequest(placementRequest, nicknameCurrentPlayer, new ActionResponse());
+                        response = game.sendRequest(placementRequest, nicknameCurrentPlayer, ActionResponse.class);
                     } catch (GameEndedException e) {
                         game.setActive();
                         return;
@@ -120,7 +120,7 @@ public class ChooseWorkerState extends TurnState {
     /**
      * This method has to find the next state and also to send all the infos to the client to display name of players, gods chosen and the color of every player.
      */
-    public void findNextState() throws IOException, ClassNotFoundException, InterruptedException {
+    public void findNextState() {
         GameSession game = super.getGameSession();
         int indexCurrentState;
         indexCurrentState = game.getTurnMap().indexOf(game.getCurrentState());

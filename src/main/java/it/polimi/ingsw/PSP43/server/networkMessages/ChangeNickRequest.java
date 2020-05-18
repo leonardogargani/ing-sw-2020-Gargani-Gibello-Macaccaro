@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP43.server.networkMessages;
 
 public class ChangeNickRequest extends TextMessage {
-    private static final long SerialVersionUID=789789789789789789L;
+    private static final long serialVersionUID = -4651206715194765707L;
 
     /**
      * Not default constructor for ChangeNickRequest message

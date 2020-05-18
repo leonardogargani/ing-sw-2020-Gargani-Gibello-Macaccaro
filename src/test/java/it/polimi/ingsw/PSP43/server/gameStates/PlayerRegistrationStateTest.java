@@ -34,7 +34,7 @@ public class PlayerRegistrationStateTest {
     public void setUp() throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException, NicknameAlreadyInUseException {
         gameSession = GameInitialiser.initialiseGame();
         spyGame = Mockito.spy(gameSession);
-        obs = new BoardObserver(gameSession);
+        obs = new BoardObserver(spyGame);
         spyObs = Mockito.spy(obs);
         deck = DOMCardsParser.buildDeck();
         state = new PlayerRegistrationState(spyGame);
@@ -42,22 +42,20 @@ public class PlayerRegistrationStateTest {
     }
 
     @Test
-    public void executeState() throws InterruptedException, IOException, ClassNotFoundException, WinnerCaughtException, GameEndedException {
+    public void executeStateTest() throws GameEndedException {
         Mockito.doReturn(new PlayersNumberResponse(2)).when(spyGame).sendRequest(any(), any(), any());
         Mockito.doNothing().when(spyGame).sendMessage(any(), any());
         Mockito.doNothing().when(spyState).findNextState();
 
-        assertTrue(spyGame.maxNumPlayers == 1);
+        assertEquals(1, spyGame.maxNumPlayers);
         spyState.executeState(new RegistrationMessage("Gibi"));
-        assertTrue(spyGame.maxNumPlayers == 2);
-        spyState.executeState(new RegistrationMessage("Gibi"));
-        assertTrue(spyGame.getPlayersHandler().getNumOfPlayers() == 1 && spyGame.getPlayersHandler().getPlayer("Gibi")!=null);
+        assertEquals(2, spyGame.maxNumPlayers);
         spyState.executeState(new RegistrationMessage("Rob"));
         assertTrue(spyGame.getPlayersHandler().getNumOfPlayers() == 2 && spyGame.getPlayersHandler().getPlayer("Rob")!=null);
     }
 
     @Test
-    public void findNextState() throws ClassNotFoundException, WinnerCaughtException, InterruptedException, IOException {
+    public void findNextState() {
         Mockito.doNothing().when(spyGame).transitToNextState();
 
         spyState.findNextState();

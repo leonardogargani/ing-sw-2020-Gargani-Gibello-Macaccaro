@@ -40,7 +40,7 @@ public class Cell extends Observable {
      * This method sets the height (number of blocks) of the tower built on the cell.
      * @param height the height (number of blocks) of the tower built on the cell
      */
-    public void setHeight(int height) throws IOException {
+    public void setHeight(int height) {
         this.height = height;
         notifyBoardChange();
     }
@@ -59,7 +59,7 @@ public class Cell extends Observable {
      * This method sets if the cell is occupied by a worker or not.
      * @param occupiedByWorker boolean representing if the cell is occupied by a worker or not
      */
-    public void setOccupiedByWorker(boolean occupiedByWorker) throws IOException {
+    public void setOccupiedByWorker(boolean occupiedByWorker) {
         this.occupiedByWorker = occupiedByWorker;
         super.getBoardObserver().notifyBoardChange(this);
     }
@@ -78,7 +78,7 @@ public class Cell extends Observable {
      * This method sets if the cell is occupied by a dome or not.
      * @param occupiedByDome boolean representing if the cell is occupied by a dome or not
      */
-    public void setOccupiedByDome(boolean occupiedByDome) throws IOException {
+    public void setOccupiedByDome(boolean occupiedByDome) {
         this.occupiedByDome = occupiedByDome;
         if (occupiedByDome) {
             setHeight(4);
@@ -108,7 +108,7 @@ public class Cell extends Observable {
         return color;
     }
 
-    public void setColor(Color color) throws IOException {
+    public void setColor(Color color) {
         this.color = color;
         super.getBoardObserver().notifyBoardChange(this);
     }
@@ -116,20 +116,16 @@ public class Cell extends Observable {
     /**
      * This method notifies the related observer that a change occurred and the client has to be advised of that
      */
-    public void notifyBoardChange() throws IOException {
+    public void notifyBoardChange() {
         super.getBoardObserver().notifyBoardChange(this);
     }
 
     public Cell clone() {
         Cell clone = new Cell(coord.clone(), super.getBoardObserver());
-        try {
-            clone.setHeight(this.getHeight());
-            clone.setOccupiedByDome(this.getOccupiedByDome());
-            clone.setOccupiedByWorker(this.getOccupiedByWorker());
-            clone.setColor(this.getColor());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        clone.setHeight(this.getHeight());
+        clone.setOccupiedByDome(this.getOccupiedByDome());
+        clone.setOccupiedByWorker(this.getOccupiedByWorker());
+        clone.setColor(this.getColor());
         return clone;
     }
 }

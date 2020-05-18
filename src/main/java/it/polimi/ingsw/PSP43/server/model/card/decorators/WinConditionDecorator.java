@@ -6,8 +6,6 @@ import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
-import java.io.IOException;
-
 /**
  * This decorator is used to give to the player the opportunity to win if his worker moves down two or more levels in a move
  */
@@ -20,7 +18,7 @@ public class WinConditionDecorator extends PowerGodDecorator {
         super(godComponent);
     }
 
-    public void move(DataToMove dataToMove) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+    public void move(DataToMove dataToMove) throws WinnerCaughtException {
         super.move(dataToMove);
         CellsHandler handler = dataToMove.getGameSession().getCellsHandler();
         Coord oldPosition = dataToMove.getWorker().getPreviousPosition();
@@ -31,9 +29,14 @@ public class WinConditionDecorator extends PowerGodDecorator {
         }
     }
 
-    public AbstractGodCard cleanFromEffects(String nameOfEffect) throws ClassNotFoundException {
+    public AbstractGodCard cleanFromEffects(String nameOfEffect) {
         AbstractGodCard component = super.getGodComponent().cleanFromEffects(nameOfEffect);
-        Class<?> c = Class.forName(nameOfEffect);
+        Class<?> c = null;
+        try {
+            c = Class.forName(nameOfEffect);
+        } catch (ClassNotFoundException e) { e.printStackTrace(); }
+
+        assert c != null;
         if (!c.isInstance(this))
             return new WinConditionDecorator(component);
         else return component;

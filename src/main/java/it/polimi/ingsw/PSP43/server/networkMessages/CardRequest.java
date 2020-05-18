@@ -2,18 +2,18 @@ package it.polimi.ingsw.PSP43.server.networkMessages;
 
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class CardRequest extends TextMessage {
-    private static final long SerialVersionUID=123456789012345678L;
-    private ArrayList<AbstractGodCard> cards;
+    private static final long serialVersionUID = -1627227471394889344L;
+    private final List<AbstractGodCard> cards;
 
     /**
      * Not default constructor for CardRequest message
      * @param message is the string that will be shown to the recipient
      * @param cards is an ArrayList of AbstractGodCard among which the recipient will have to choose
      */
-    public CardRequest(String message, ArrayList<AbstractGodCard> cards){
+    public CardRequest(String message, List<AbstractGodCard> cards){
         super(message);
         this.cards=cards;
     }
@@ -31,7 +31,7 @@ public class CardRequest extends TextMessage {
      * Getter method for the ArrayList cards
      * @return cards
      */
-    public ArrayList<AbstractGodCard> getCards() {
+    public List<AbstractGodCard> getCards() {
         return cards;
     }
 }

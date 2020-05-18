@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP43.server.model.card;
 
-import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
+import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
 import it.polimi.ingsw.PSP43.server.model.DataToBuild;
 import it.polimi.ingsw.PSP43.server.model.DataToMove;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
@@ -11,7 +11,6 @@ import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -85,7 +84,7 @@ public abstract class AbstractGodCard implements Serializable {
         return power;
     }
 
-    public void move(DataToMove dataToMove) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+    public void move(DataToMove dataToMove) throws WinnerCaughtException {
         GameSession gameSession = dataToMove.getGameSession();
         Coord newPosition = dataToMove.getNewPosition();
         Worker workerToMove = dataToMove.getWorker();
@@ -122,7 +121,7 @@ public abstract class AbstractGodCard implements Serializable {
         return neighbouringCoords;
     }
 
-    public void build(DataToBuild dataToBuild) throws IOException, ClassNotFoundException, InterruptedException {
+    public void build(DataToBuild dataToBuild) {
         CellsHandler handler = dataToBuild.getGameSession().getCellsHandler();
         Cell newCell = handler.getCell(dataToBuild.getNewPosition());
 
@@ -169,19 +168,19 @@ public abstract class AbstractGodCard implements Serializable {
         return neighbouringCoords;
     }
 
-    public AbstractGodCard cleanFromEffects(String nameOfEffect) throws ClassNotFoundException { return null; }
+    public AbstractGodCard cleanFromEffects(String nameOfEffect) { return null; }
 
-    public void initMove(GameSession gameSession) throws ClassNotFoundException, WinnerCaughtException, InterruptedException, IOException, GameEndedException {}
+    public void initMove(GameSession gameSession) throws WinnerCaughtException, GameEndedException {}
 
-    public void initBuild(GameSession gameSession) throws GameEndedException, IOException, InterruptedException, ClassNotFoundException {}
+    public void initBuild(GameSession gameSession) throws GameEndedException {}
 
-    public <T extends ClientMessage> T askForMove(GameSession gameSession) throws GameEndedException { return null; }
+    public ActionResponse askForMove(GameSession gameSession) throws GameEndedException { return null; }
 
-    public <T extends ClientMessage> T askForMove(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositions) throws GameEndedException { return null; }
+    public ActionResponse askForMove(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositions) throws GameEndedException { return null; }
 
-    public DataToBuild genericAskForBuild(GameSession gameSession) throws GameEndedException, InterruptedException, IOException, ClassNotFoundException { return null; }
+    public DataToBuild genericAskForBuild(GameSession gameSession) throws GameEndedException { return null; }
 
-    public <T extends ClientMessage> T askForBuild(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositionsBuildBlock, String message) throws GameEndedException, InterruptedException, IOException, ClassNotFoundException { return null; }
+    public ActionResponse askForBuild(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositionsBuildBlock, String message) throws GameEndedException { return null; }
 
     public void print() {
         System.out.println("    Godname : " + godName);

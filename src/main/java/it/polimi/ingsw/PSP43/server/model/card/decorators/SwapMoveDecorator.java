@@ -5,7 +5,6 @@ import it.polimi.ingsw.PSP43.server.model.DataToMove;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
-import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
@@ -13,7 +12,6 @@ import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -30,14 +28,14 @@ public class SwapMoveDecorator extends PowerGodDecorator {
     }
 
     @Override
-    public void initMove(GameSession gameSession) throws ClassNotFoundException, WinnerCaughtException, InterruptedException, IOException, GameEndedException {
+    public void initMove(GameSession gameSession) throws WinnerCaughtException, GameEndedException {
         ActionResponse actionResponse = askForMove(gameSession, findAvailablePositionsToMove(gameSession));
 
         Worker workerMoved = gameSession.getWorkersHandler().getWorker(actionResponse.getWorkerPosition());
         move(new DataToMove(gameSession, gameSession.getCurrentPlayer(), workerMoved, actionResponse.getPosition()));
     }
 
-    public void move(DataToMove dataToMove) throws IOException, WinnerCaughtException, InterruptedException, ClassNotFoundException {
+    public void move(DataToMove dataToMove) throws WinnerCaughtException {
         CellsHandler cellsHandler = dataToMove.getGameSession().getCellsHandler();
         Coord newCoord = dataToMove.getNewPosition();
 
@@ -68,13 +66,18 @@ public class SwapMoveDecorator extends PowerGodDecorator {
         return availablePositions;
     }
 
-    private void swapWorkers(WorkersHandler workersHandler, Worker worker1, Worker worker2) throws IOException {
+    private void swapWorkers(WorkersHandler workersHandler, Worker worker1, Worker worker2) {
         workersHandler.swapPositions(worker1, worker2);
     }
 
-    public AbstractGodCard cleanFromEffects(String nameOfEffect) throws ClassNotFoundException {
+    public AbstractGodCard cleanFromEffects(String nameOfEffect) {
         AbstractGodCard component = super.getGodComponent().cleanFromEffects(nameOfEffect);
-        Class<?> c = Class.forName(nameOfEffect);
+        Class<?> c = null;
+        try {
+            c = Class.forName(nameOfEffect);
+        } catch (ClassNotFoundException e) { e.printStackTrace(); }
+
+        assert c != null;
         if (!c.isInstance(this))
             return new SwapMoveDecorator(component);
         else return component;

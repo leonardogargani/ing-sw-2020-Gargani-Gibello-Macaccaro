@@ -14,7 +14,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 public class GameInitialiser {
 
@@ -74,7 +74,7 @@ public class GameInitialiser {
     public static void initialiseCards(GameSession gameSession) {
         PlayersHandler playersHandler = gameSession.getPlayersHandler();
         CardsHandler cardsHandler = gameSession.getCardsHandler();
-        ArrayList<AbstractGodCard> cards = gameSession.getCardsHandler().getDeckOfAbstractGodCards();
+        List<AbstractGodCard> cards = gameSession.getCardsHandler().getDeckOfAbstractGodCards();
 
         for (int i=0; i<playersHandler.getNumOfPlayers(); i++) {
             cardsHandler.setCardToPlayer(playersHandler.getPlayer(i).getNickname(), cards.get(i).getGodName());

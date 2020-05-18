@@ -10,7 +10,8 @@ import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class CliGraphicHandler extends GraphicHandler {
@@ -86,7 +87,7 @@ public class CliGraphicHandler extends GraphicHandler {
     public void updateMenuChange(InitialCardsRequest request) throws QuitPlayerException {
 
         // display all the cards before making the request
-        ArrayList<AbstractGodCard> cards = request.getCards();
+        List<AbstractGodCard> cards = request.getCards();
         for (AbstractGodCard card : cards) {
             // the name of every God is preceded by its index in the ArrayList
             System.out.printf(" %d - ", cards.indexOf(card));
@@ -133,7 +134,7 @@ public class CliGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(CardRequest request) throws QuitPlayerException {
-        ArrayList<AbstractGodCard> availableCards = request.getCards();
+        List<AbstractGodCard> availableCards = request.getCards();
 
         bottomMenu.setContent(request.getMessage());
 
@@ -171,7 +172,7 @@ public class CliGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(WorkersColorRequest request) throws QuitPlayerException {
-        ArrayList<Color> availableColors = request.getColorsAvailable();
+        List<Color> availableColors = request.getColorsAvailable();
 
         bottomMenu.setContent(request.getMessage());
 
@@ -219,7 +220,7 @@ public class CliGraphicHandler extends GraphicHandler {
         the iteration since the method is shared with other scenarios)
          */
 
-        HashMap<Coord,ArrayList<Coord>> hashMap = request.getCellsAvailable();
+        Map<Coord, ArrayList<Coord>> hashMap = request.getCellsAvailable();
         bottomMenu.setContent(request.getMessage());
 
             // graphically render all the received coordinates as free (yellow background)
@@ -382,8 +383,8 @@ public class CliGraphicHandler extends GraphicHandler {
     @Override
     public void updateMenuChange(PlayersListMessage message) {
 
-        HashMap<Player, AbstractGodCard> godsHashMap = message.getPlayers();
-        HashMap<Player, Color> colorsHashmap = message.getColor();
+        Map<Player, AbstractGodCard> godsHashMap = message.getPlayers();
+        Map<Player, Color> colorsHashmap = message.getColor();
 
         ArrayList<String> playersInfo = new ArrayList<>();
 

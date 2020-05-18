@@ -1,8 +1,8 @@
 package it.polimi.ingsw.PSP43.server.networkMessages;
 
 public class TextMessage extends ServerMessage {
-    private static final long SerialVersionUID=111234567890123456L;
-    private String message;
+    private static final long serialVersionUID = -1927471145939939970L;
+    private final String message;
 
     /**
      * Not default constructor for TextMessage

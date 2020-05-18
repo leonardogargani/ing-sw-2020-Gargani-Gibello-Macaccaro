@@ -2,12 +2,12 @@ package it.polimi.ingsw.PSP43.server.networkMessages;
 
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class InitialCardsRequest extends TextMessage {
-    private static final long SerialVersionUID=757473757473737473L;
-    private ArrayList<AbstractGodCard> cards;
-    private int numberOfCard;
+    private static final long serialVersionUID = 300298265202994722L;
+    private final List<AbstractGodCard> cards;
+    private final int numberOfCard;
 
     /**
      * Not default constructor for InitialCardsRequest message
@@ -16,7 +16,7 @@ public class InitialCardsRequest extends TextMessage {
      * these chosen cards will be those present in the game
      * @param numberOfCard is the number of cards that the first player must choose
      */
-    public InitialCardsRequest(String message,ArrayList<AbstractGodCard> cards,int numberOfCard){
+    public InitialCardsRequest(String message, List<AbstractGodCard> cards, int numberOfCard){
         super(message);
         this.cards = cards;
         this.numberOfCard = numberOfCard;
@@ -43,7 +43,7 @@ public class InitialCardsRequest extends TextMessage {
      * Getter method for the ArrayList cards
      * @return cards
      */
-    public ArrayList<AbstractGodCard> getCards() {
+    public List<AbstractGodCard> getCards() {
         return cards;
     }
 }

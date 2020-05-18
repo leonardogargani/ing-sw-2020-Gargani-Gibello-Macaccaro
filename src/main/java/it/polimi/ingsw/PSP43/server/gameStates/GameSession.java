@@ -68,11 +68,7 @@ public class GameSession extends GameSessionObservable {
                 e.printStackTrace();
             }
             if (!(currentState.getClass().isInstance(nextState))) {
-                try {
-                    this.transitToNextState();
-                } catch (IOException | ClassNotFoundException | InterruptedException e) {
-                    e.printStackTrace();
-                }
+                this.transitToNextState();
             }
         }
 
@@ -98,7 +94,7 @@ public class GameSession extends GameSessionObservable {
     /**
      * This method does the transition during the game to one state of the play to the following.
      */
-    protected void transitToNextState() throws IOException, ClassNotFoundException, InterruptedException {
+    protected void transitToNextState() {
         TurnState nextState = this.getNextState();
 
         for (TurnState t : turnMap) {
@@ -116,9 +112,10 @@ public class GameSession extends GameSessionObservable {
      * @param playerEliminated This represents the data of the player who's lost the game and has to be
      *                         removed from the database.
      */
-    public void eliminatePlayer(Player playerEliminated) throws IOException, ClassNotFoundException {
+    public void eliminatePlayer(Player playerEliminated) {
         cardsHandler.removeCardToPlayer(playerEliminated.getNickname());
         Player playerToRemove = playersHandler.getPlayer(playerEliminated.getNickname());
+        playersHandler.deletePlayer(playerEliminated.getNickname());
 
         Integer[] workersToRemove = playerToRemove.getWorkersIdsArray();
         workersHandler.removeWorkers(workersToRemove);
@@ -197,7 +194,7 @@ public class GameSession extends GameSessionObservable {
 
     /**
      * This method returns the class which handles workers data during the game.
-     * @returns the workers handler of the game.
+     * @return the workers handler of the game.
      */
     public WorkersHandler getWorkersHandler() {
         return workersHandler;
@@ -226,7 +223,7 @@ public class GameSession extends GameSessionObservable {
      * @param player The reference to the listener of the client who left the game.
      */
     @Override
-    public synchronized void unregisterFromGame(LeaveGameMessage message, ClientListener player) throws IOException {
+    public synchronized void unregisterFromGame(LeaveGameMessage message, ClientListener player) {
         super.unregisterFromGame(message, player);
         this.active = Boolean.FALSE;
     }
@@ -238,7 +235,7 @@ public class GameSession extends GameSessionObservable {
      * @param nicksExcluded All the nicknames of the players excluded from receiving the "messageForTheLosers".
      */
     @Override
-    public void sendEndingMessage(EndGameMessage messageToLosers, EndGameMessage messageForTheWinner, ArrayList<String> nicksExcluded) throws IOException, ClassNotFoundException {
+    public void sendEndingMessage(EndGameMessage messageToLosers, EndGameMessage messageForTheWinner, ArrayList<String> nicksExcluded) {
         super.sendEndingMessage(messageToLosers, messageForTheWinner, nicksExcluded);
         this.active = Boolean.FALSE;
     }

@@ -5,11 +5,12 @@ import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class PlayersListMessage extends TextMessage {
-    private static final long SerialVersionUID=776776776776776776L;
-    private HashMap<Player, AbstractGodCard> players;
-    private HashMap<Player, Color> color;
+    private static final long serialVersionUID = 5488819383659184710L;
+    private final Map<Player, AbstractGodCard> players;
+    private final Map<Player, Color> color;
 
     /**
      * Not default constructor for PlayersListMessage
@@ -36,7 +37,7 @@ public class PlayersListMessage extends TextMessage {
      * Getter method for the HashMap players
      * @return players
      */
-    public HashMap<Player, AbstractGodCard> getPlayers() {
+    public Map<Player, AbstractGodCard> getPlayers() {
         return players;
     }
 
@@ -44,7 +45,7 @@ public class PlayersListMessage extends TextMessage {
      * Getter method for the HashMap color
      * @return color
      */
-    public HashMap<Player, Color> getColor() {
+    public Map<Player, Color> getColor() {
         return color;
     }
 }

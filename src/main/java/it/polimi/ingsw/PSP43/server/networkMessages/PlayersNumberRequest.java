@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP43.server.networkMessages;
 
 public class PlayersNumberRequest extends TextMessage {
-    private static final long SerialVersionUID=897897897897897897L;
+    private static final long serialVersionUID = 1781439982170387947L;
 
     /**
      * Not default constructor for PlayerNumberRequest message

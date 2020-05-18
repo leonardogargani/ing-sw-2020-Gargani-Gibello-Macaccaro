@@ -13,11 +13,11 @@ public class BuildState extends TurnState {
         super(gameSession, TurnName.BUILD_STATE);
     }
 
-    public void initState() throws IOException, ClassNotFoundException, InterruptedException {
+    public void initState() {
         super.initState();
     }
 
-    public void executeState() throws IOException, ClassNotFoundException, InterruptedException {
+    public void executeState() {
         GameSession game = super.getGameSession();
         Player currentPlayer = game.getCurrentPlayer();
         AbstractGodCard playerCard = currentPlayer.getAbstractGodCard();
@@ -32,7 +32,7 @@ public class BuildState extends TurnState {
         findNextState();
     }
 
-    public void findNextState() throws IOException, ClassNotFoundException, InterruptedException {
+    public void findNextState() {
         GameSession game = super.getGameSession();
         TurnState currentState = game.getCurrentState();
         int indexCurrentState = game.getTurnMap().indexOf(currentState);

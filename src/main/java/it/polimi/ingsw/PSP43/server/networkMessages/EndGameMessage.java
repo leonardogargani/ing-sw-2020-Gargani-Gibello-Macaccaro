@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP43.server.networkMessages;
 
 public class EndGameMessage extends TextMessage {
-    private static final long SerialVersionUID=464464464464464464L;
+    private static final long serialVersionUID = 8430836759594606501L;
 
     /**
      * Not default constructor for EndGameMessage

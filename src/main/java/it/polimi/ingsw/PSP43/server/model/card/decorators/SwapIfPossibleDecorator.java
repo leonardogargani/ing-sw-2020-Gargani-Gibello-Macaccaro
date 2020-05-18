@@ -13,11 +13,7 @@ import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 public class SwapIfPossibleDecorator extends PowerGodDecorator {
     private static final long serialVersionUID = 8250965157977039866L;
@@ -30,7 +26,7 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
         super(godComponent);
     }
 
-    public void initMove(GameSession gameSession) throws ClassNotFoundException, WinnerCaughtException, InterruptedException, IOException, GameEndedException {
+    public void initMove(GameSession gameSession) throws WinnerCaughtException, GameEndedException {
         ActionResponse actionResponse = askForMove(gameSession, findAvailablePositionsToMove(gameSession));
 
         Worker workerMoved = gameSession.getWorkersHandler().getWorker(actionResponse.getWorkerPosition());
@@ -44,18 +40,16 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
 
             Coord currentWorkerPosition = workerMoved.getCurrentPosition();
 
-            HashMap<Coord, ArrayList<Coord>> availablePositionsToForce = new HashMap<>();
-            availablePositionsToForce.put(new Coord(0, 0),
-                    directionAvailableCoords(cellsHandler, currentWorkerPosition, actionResponse.getPosition()));
-            ActionRequest request = new ActionRequest("Choose a position where to force your opponent.", availablePositionsToForce);
-            response = gameSession.sendRequest(request, gameSession.getCurrentPlayer().getNickname(), new ActionResponse());
+            ActionRequest request = new ActionRequest("Choose a position where to force your opponent.",
+                    Map.of(new Coord(0, 0), directionAvailableCoords(cellsHandler, currentWorkerPosition, actionResponse.getPosition())));
+            response = gameSession.sendRequest(request, gameSession.getCurrentPlayer().getNickname(), ActionResponse.class);
             coordToForce = response.getPosition();
         }
 
         move(new DataToMove(gameSession, gameSession.getCurrentPlayer(), workerMoved, actionResponse.getPosition()), coordToForce);
     }
 
-    public void move(DataToMove dataToMove, Coord coordToForce) throws IOException, ClassNotFoundException, WinnerCaughtException, InterruptedException {
+    public void move(DataToMove dataToMove, Coord coordToForce) throws WinnerCaughtException {
         GameSession gameSession = dataToMove.getGameSession();
 
         Coord coordToMove = dataToMove.getNewPosition();
@@ -86,6 +80,7 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
                     if (availablePositionsOnDirection.size() == 0) coordIterator.remove();
                 }
             }
+            if (availableCurrentPositions.size() == 0) keyIterator.remove();
         }
         return availablePositions;
     }
@@ -109,9 +104,14 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
         return coordsInDirection;
     }
 
-    public AbstractGodCard cleanFromEffects(String nameOfEffect) throws ClassNotFoundException {
+    public AbstractGodCard cleanFromEffects(String nameOfEffect) {
         AbstractGodCard component = super.getGodComponent().cleanFromEffects(nameOfEffect);
-        Class<?> c = Class.forName(nameOfEffect);
+        Class<?> c = null;
+        try {
+            c = Class.forName(nameOfEffect);
+        } catch (ClassNotFoundException e) { e.printStackTrace(); }
+
+        assert c != null;
         if (!c.isInstance(this))
             return new SwapIfPossibleDecorator(component);
         else return component;

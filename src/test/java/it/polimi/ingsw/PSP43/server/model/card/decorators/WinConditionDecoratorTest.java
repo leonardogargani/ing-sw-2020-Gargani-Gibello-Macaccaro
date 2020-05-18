@@ -59,8 +59,6 @@ public class WinConditionDecoratorTest {
 
         try {
             abstractGodCard.move(new DataToMove(spyGame, currentPlayer, workerToMove, coordToMove));
-        } catch (ClassNotFoundException | InterruptedException e) {
-            e.printStackTrace();
         } catch (WinnerCaughtException e) {
             catched = true;
         }

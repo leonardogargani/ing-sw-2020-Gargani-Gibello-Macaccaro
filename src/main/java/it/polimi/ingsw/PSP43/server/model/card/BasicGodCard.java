@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP43.server.model.card;
 
-import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
+import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
 import it.polimi.ingsw.PSP43.server.model.DataToBuild;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.*;
@@ -9,7 +9,6 @@ import it.polimi.ingsw.PSP43.server.model.card.behaviours.moveBehaviours.BasicMo
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -78,27 +77,27 @@ public class BasicGodCard extends AbstractGodCard {
         return new BasicGodCard(super.getGodName(), super.getDescription(), super.getPower(), moveBehavior, buildBehaviour);
     }
 
-    public void initMove(GameSession gameSession) throws GameEndedException, ClassNotFoundException, WinnerCaughtException, InterruptedException, IOException {
+    public void initMove(GameSession gameSession) throws GameEndedException, WinnerCaughtException {
         moveBehavior.handleInitMove(gameSession);
     }
 
-    public void initBuild(GameSession gameSession) throws GameEndedException, IOException, InterruptedException, ClassNotFoundException {
+    public void initBuild(GameSession gameSession) throws GameEndedException {
         buildBehaviour.handleInitBuild(gameSession);
     }
 
-    public <T extends ClientMessage> T askForMove(GameSession gameSession) throws GameEndedException {
+    public ActionResponse askForMove(GameSession gameSession) throws GameEndedException {
         return moveBehavior.askForMove(gameSession);
     }
 
-    public <T extends ClientMessage> T askForMove(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositions) throws GameEndedException {
+    public ActionResponse askForMove(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositions) throws GameEndedException {
         return moveBehavior.askForMove(gameSession, availablePositions);
     }
 
-    public DataToBuild genericAskForBuild(GameSession gameSession) throws GameEndedException, InterruptedException, IOException, ClassNotFoundException {
+    public DataToBuild genericAskForBuild(GameSession gameSession) throws GameEndedException {
         return buildBehaviour.genericAskForBuild(gameSession);
     }
 
-    public <T extends ClientMessage> T askForBuild(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositionsBuildBlock, String message) throws GameEndedException, InterruptedException, IOException, ClassNotFoundException {
+    public ActionResponse askForBuild(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositionsBuildBlock, String message) throws GameEndedException {
         return buildBehaviour.askForBuild(gameSession, availablePositionsBuildBlock, message);
     }
 

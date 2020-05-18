@@ -10,6 +10,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -78,7 +79,7 @@ public class RegisterClientListener implements Runnable {
             }
 
             player.setIdGame(idGame);
-        } catch (IOException | WinnerCaughtException | InterruptedException | ClassNotFoundException | SAXException | ParserConfigurationException e) {
+        } catch (IOException | InterruptedException | SAXException | ParserConfigurationException e) {
             e.printStackTrace();
         }
     }
@@ -97,12 +98,13 @@ public class RegisterClientListener implements Runnable {
      * after that gameSession must be deleted
      *
      * @param idGameSession is the id of the match that will be deleted
-     * @throws IOException signals that an I/O exception of some sort has occurred
      */
-    public void notifyDisconnection(int idGameSession) throws IOException {
-        for (int i = 0; i < gameSessions.size(); i++) {
-            if (gameSessions.get(i).getIdGame() == idGameSession)
-                gameSessions.get(i).unregisterFromGame(new LeaveGameMessage(), player);
+    public void notifyDisconnection(int idGameSession) {
+        for (Iterator<GameSessionObservable> gameSessionIterator = gameSessions.iterator(); gameSessionIterator.hasNext(); ) {
+            GameSessionObservable gameSession = gameSessionIterator.next();
+            if (gameSession.getIdGame() == idGameSession)
+                gameSession.unregisterFromGame(new LeaveGameMessage(), player);
+                gameSessionIterator.remove();
         }
 
     }

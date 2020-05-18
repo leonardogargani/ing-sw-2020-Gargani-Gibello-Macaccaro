@@ -10,7 +10,6 @@ import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -26,19 +25,18 @@ public class DoubleDifferentSpaceBehaviour extends BasicBuildBehaviour {
     /**
      * This method checks if the player wants to build another time
      *
-     * @param gameSession
+     * @param gameSession This is a reference to the center of the game database.
      */
-    public void handleInitBuild(GameSession gameSession) throws IOException, ClassNotFoundException, InterruptedException, GameEndedException {
+    public void handleInitBuild(GameSession gameSession) throws GameEndedException {
         Player currentPlayer = gameSession.getCurrentPlayer();
         CellsHandler cellsHandler = gameSession.getCellsHandler();
         DataToBuild dataToBuild = genericAskForBuild(gameSession);
 
-        if (dataToBuild.getBuildDome()) build(dataToBuild);
-        else build(dataToBuild);
+        build(dataToBuild);
 
         if (cellsHandler.getCell(dataToBuild.getNewPosition()).getHeight() <= 3) {
             RequestMessage requestMessage = new RequestMessage("Do you want to build another time on a different space?");
-            ResponseMessage responseMessage = gameSession.sendRequest(requestMessage, currentPlayer.getNickname(), new ResponseMessage());
+            ResponseMessage responseMessage = gameSession.sendRequest(requestMessage, currentPlayer.getNickname(), ResponseMessage.class);
 
             if (responseMessage.isResponse()) {
                 buildAnotherTime(dataToBuild);
@@ -52,7 +50,7 @@ public class DoubleDifferentSpaceBehaviour extends BasicBuildBehaviour {
      * @param oldDataToBuild The data of the previous build, used to check and not to give the possibility to the player
      *                       to build in the same position of the previous one.
      */
-    private void buildAnotherTime(DataToBuild oldDataToBuild) throws IOException, InterruptedException, ClassNotFoundException, GameEndedException {
+    private void buildAnotherTime(DataToBuild oldDataToBuild) throws GameEndedException {
         GameSession game = oldDataToBuild.getGameSession();
         Player currentPlayer = game.getCurrentPlayer();
 
@@ -65,7 +63,7 @@ public class DoubleDifferentSpaceBehaviour extends BasicBuildBehaviour {
         ResponseMessage responseMessage = new ResponseMessage(false);
         if (availablePositionsToBuildDome.size() != 0) {
             RequestMessage requestMessage = new RequestMessage("Do you want to build a dome? Otherwise you will build a block.");
-            responseMessage = game.sendRequest(requestMessage, currentPlayer.getNickname(), new ResponseMessage());
+            responseMessage = game.sendRequest(requestMessage, currentPlayer.getNickname(), ResponseMessage.class);
         }
 
         ActionResponse actionResponse;
@@ -83,7 +81,7 @@ public class DoubleDifferentSpaceBehaviour extends BasicBuildBehaviour {
         }
     }
 
-    private void filterAllowedPositions(HashMap<Coord, ArrayList<Coord>> availablePositions, DataToBuild oldData) {
+    protected void filterAllowedPositions(HashMap<Coord, ArrayList<Coord>> availablePositions, DataToBuild oldData) {
         Iterator<Map.Entry<Coord, ArrayList<Coord>>> iter = availablePositions.entrySet().iterator();
         Coord coordWorkerAllowedToBuild = oldData.getWorker().getCurrentPosition();
 
@@ -97,7 +95,7 @@ public class DoubleDifferentSpaceBehaviour extends BasicBuildBehaviour {
             ArrayList<Coord> coordsWhereToBuild = currentEntry.getValue();
             Coord oldCoordBuilt = oldData.getNewPosition();
 
-            coordsWhereToBuild.removeIf(actualCoord -> actualCoord.getY() == oldCoordBuilt.getY() && actualCoord.getX() == oldCoordBuilt.getY());
+            coordsWhereToBuild.removeIf(actualCoord -> actualCoord.getY() == oldCoordBuilt.getY() && actualCoord.getX() == oldCoordBuilt.getX());
         }
 
     }

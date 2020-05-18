@@ -20,7 +20,7 @@ public class MoveState extends TurnState {
         super(gameSession, TurnName.MOVE_STATE);
     }
 
-    public void initState() throws IOException, ClassNotFoundException, InterruptedException {
+    public void initState() {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
         WorkersHandler handler = game.getWorkersHandler();
@@ -49,15 +49,13 @@ public class MoveState extends TurnState {
         executeState();
     }
 
-    public void executeState() throws InterruptedException, IOException, ClassNotFoundException {
+    public void executeState() {
         GameSession game = super.getGameSession();
         Player currentPlayer = game.getCurrentPlayer();
         AbstractGodCard playerCard = currentPlayer.getAbstractGodCard();
 
         try {
             playerCard.initMove(game);
-        } catch (ClassNotFoundException | InterruptedException | IOException e) {
-            e.printStackTrace();
         } catch (WinnerCaughtException e) {
             int winnerStateIndex = game.getTurnMap().size() - 1;
             WinState nextState = (WinState) game.getTurnMap().get(winnerStateIndex);

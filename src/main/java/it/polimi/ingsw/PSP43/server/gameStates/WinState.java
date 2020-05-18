@@ -16,7 +16,7 @@ public class WinState extends TurnState {
         this.winner = winner;
     }
 
-    public void executeState() throws IOException, ClassNotFoundException {
+    public void executeState() {
         EndGameMessage messageForLosers = new EndGameMessage(winner + " win the play!");
         EndGameMessage messageForTheWinner = new EndGameMessage("Congratulations! You have won the game!");
 

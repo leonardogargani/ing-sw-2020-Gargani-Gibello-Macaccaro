@@ -29,7 +29,7 @@ public class ClientListener implements Runnable {
      *
      * @param clientSocket is the socket that is opened between a client and this ClientListener
      */
-    ClientListener(Socket clientSocket) {
+    public ClientListener(Socket clientSocket) {
         this.clientSocket = clientSocket;
         this.lockOut = new Object();
         this.stackMessages = new ArrayList<>();

@@ -17,7 +17,6 @@ import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException
 import org.junit.Before;
 import org.junit.Test;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,8 +71,9 @@ public class SwapIfPossibleDecoratorTest {
 
     @Test
     public void findAvailablePositionsToMove() throws IOException {
-        Worker workerForced = spyGame.getWorkersHandler().getWorker(new Coord(0, 0));
-        spyGame.getWorkersHandler().changePosition(workerForced, new Coord(2, 2));
+        Worker secondWorker = spyGame.getWorkersHandler().getWorker(new Coord(4, 2));
+        Worker firstWorker = spyGame.getWorkersHandler().getWorker(new Coord(0, 0));
+        spyGame.getWorkersHandler().changePosition(firstWorker, new Coord(2, 2));
 
         Coord coordWithBlock = new Coord(4, 4);
         Cell cellWithBlock = spyGame.getCellsHandler().getCell(coordWithBlock);
@@ -85,19 +85,16 @@ public class SwapIfPossibleDecoratorTest {
         cellWithBlock1.setHeight(2);
         spyGame.getCellsHandler().changeStateOfCell(cellWithBlock1, coordWithBlock1);
 
-        ArrayList<Coord> expectedFirst = new ArrayList<>();
-        expectedFirst.add(new Coord(4, 2));
-        expectedFirst.add(new Coord(3, 2));
-        expectedFirst.add(new Coord(3, 4));
-
         HashMap<Coord, ArrayList<Coord>> availablePositions = abstractGodCard.findAvailablePositionsToMove(spyGame);
 
         boolean equals = true;
         for (Coord key : availablePositions.keySet()) {
             ArrayList<Coord> actual = availablePositions.get(key);
-            if (key.equals(new Coord(1, 1))) equals = false;
+            if (key.equals(new Coord(1, 1))) {
+                if (actual.contains(firstWorker.getCurrentPosition())) equals = false;
+            }
             if (key.equals(new Coord(4, 3))) {
-                if (expectedFirst.size() != actual.size() || !(expectedFirst.containsAll(actual))) equals = false;
+                if (!(actual.contains(secondWorker.getCurrentPosition()))) equals = false;
             }
         }
 
