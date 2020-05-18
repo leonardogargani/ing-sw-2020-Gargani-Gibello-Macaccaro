@@ -51,7 +51,7 @@ public class ClientBG implements Runnable {
      */
     @Override
     public void run() {
-        while(this.disconnect){
+        do{
         if (clientManager.getGraphicHandler() instanceof CliGraphicHandler) {
             CliInputHandler ip = new CliInputHandler();
             try {
@@ -75,11 +75,8 @@ public class ClientBG implements Runnable {
             System.out.println("server unreachable");
             this.disconnect = true;
         }
-    }
+    } while (this.disconnect);
         System.out.println("Connected");
-
-        if(clientManager.getGraphicHandler() instanceof CliGraphicHandler)
-            clientManager.execute();
 
         try {
             ConnectionDetector connectionDetector = new ConnectionDetector(this.serverSocket, this);
@@ -88,6 +85,9 @@ public class ClientBG implements Runnable {
         } catch (IOException e) {
             System.out.println("Problems starting connection detector");
         }
+
+        if(clientManager.getGraphicHandler() instanceof CliGraphicHandler)
+            clientManager.execute();
 
         while (!disconnect) {
             try {

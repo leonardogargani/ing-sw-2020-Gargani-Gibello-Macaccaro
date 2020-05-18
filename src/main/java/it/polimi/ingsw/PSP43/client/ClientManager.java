@@ -44,13 +44,15 @@ public class ClientManager implements Runnable {
         clientBG = new ClientBG(this);
         Thread clientBGThread = new Thread(clientBG);
 
-        if (chosenInterface == 1)
-            graphicHandler =  new CliGraphicHandler(clientBG);
-        else {
+        if (chosenInterface == 1) {
+            graphicHandler = new CliGraphicHandler(clientBG);
+            clientBGThread.start();
+        } else {
+            clientBGThread.start();
             graphicHandler = new GuiGraphicHandler(clientBG);
             Application.launch(GuiStarter.class);
         }
-        clientBGThread.start();
+
 
         while (isActive) {
             try {
