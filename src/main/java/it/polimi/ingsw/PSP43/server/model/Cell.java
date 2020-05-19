@@ -3,7 +3,6 @@ package it.polimi.ingsw.PSP43.server.model;
 import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.server.BoardObserver;
 
-import java.io.IOException;
 
 /**
  * Cell is the class that represents a single board square. It can be occupied either by a worker or a dome.
@@ -104,22 +103,38 @@ public class Cell extends Observable {
         this.coord = coord;
     }
 
+
+    /**
+     * This method returns the color of the worker on the cell.
+     * @return color of the worker on the cell
+     */
     public Color getColor() {
         return color;
     }
 
+
+    /**
+     * This method sets the color of the cell.
+     * @param color color of the worker that has just occupied the cell
+     */
     public void setColor(Color color) {
         this.color = color;
         super.getBoardObserver().notifyBoardChange(this);
     }
 
+
     /**
-     * This method notifies the related observer that a change occurred and the client has to be advised of that
+     * This method notifies the related observer that a change occurred and the client needs to be advised.
      */
     public void notifyBoardChange() {
         super.getBoardObserver().notifyBoardChange(this);
     }
 
+
+    /**
+     * This method clones a cell so that it can be used instead of the real one.
+     * @return copy of the cell
+     */
     public Cell clone() {
         Cell clone = new Cell(coord.clone(), super.getBoardObserver());
         clone.setHeight(this.getHeight());

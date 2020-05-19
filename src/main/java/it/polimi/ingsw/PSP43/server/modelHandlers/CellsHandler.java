@@ -5,9 +5,9 @@ import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
-
 import java.util.ArrayList;
 import java.util.HashMap;
+
 
 /**
  * CellsHandler has the task to handle all the cells of the board of the game. It has to make consistent the state of the cells
@@ -15,30 +15,51 @@ import java.util.HashMap;
  * of cells.
  */
 public class CellsHandler {
+
     private static final int DIM = 5;
     private final Cell[][] board;
     private GameSession gameSession;
 
-    public CellsHandler(GameSession gameSession) {
-        this.gameSession = gameSession;
-        board = new Cell[DIM][DIM];
-        for(int i = 0;i < DIM;i++)
-            for (int j = 0;j < DIM;j++) {
-                board[i][j] = new Cell(new Coord(i, j), gameSession.getBoardObserver());
-            }
-    }
-
-    public GameSession getGameSession() { return gameSession; }
-
-    public void setGameSession(GameSession gameSession) { this.gameSession = gameSession; }
 
     /**
-     * Method to get a cell from the coordinates supplied
+     * Non default constructor that initializes all the cells in the board with their coordinates and with the BoardObserver.
+     * @param gameSession gameSession attribute to be set for the current object
+     */
+    public CellsHandler(GameSession gameSession) {
+
+        this.gameSession = gameSession;
+        board = new Cell[DIM][DIM];
+
+        for(int i = 0; i < DIM; i++)
+            for (int j = 0; j < DIM; j++) {
+                board[i][j] = new Cell(new Coord(i, j), gameSession.getBoardObserver());
+            }
+
+    }
+
+
+    /**
+     * Method that returns the gameSession attribute.
+     * @return gameSession attribute
+     */
+    public GameSession getGameSession() { return gameSession; }
+
+
+    /**
+     * Method that sets the gameSession attribute.
+     * @param gameSession gameSession attribute
+     */
+    public void setGameSession(GameSession gameSession) { this.gameSession = gameSession; }
+
+
+    /**
+     * Method to get a cell from the coordinates supplied.
      * @return the cell for which the caller was looking for
      */
     public Cell getCell(Coord c) {
             return board[c.getX()][c.getY()];
     }
+
 
     /**
      * Method to update cell's attributes and make them consistent to the game.
@@ -53,12 +74,15 @@ public class CellsHandler {
         cellToChange.setColor(newDescriptionCell.getColor());
     }
 
+
     /**
-     * This method finds all the free cells of a board and returns their coordinates
+     * This method finds all the free cells of a board and returns their coordinates.
      * @return an ArrayList containing all the coordinates of the free cells
      */
     public ArrayList<Coord> findAllFreeCoords() {
+
         ArrayList<Coord> freeCells = new ArrayList<>();
+
         for (int i=0; i<board.length; i++) {
             for (int j=0; j<board.length; j++) {
                 if (!board[i][j].getOccupiedByWorker() && !board[i][j].getOccupiedByDome())
@@ -66,7 +90,9 @@ public class CellsHandler {
             }
         }
         return freeCells;
+
     }
+
 
     /**
      * This method selects all the free cells (no worker and no dome) within a bunch of coordinates supplied by the caller.
@@ -74,20 +100,25 @@ public class CellsHandler {
      * @return an ArrayList of free coordinates within all the supplied coordinates as parameter of the method.
      */
     public ArrayList<Coord> selectAllFreeCoords(ArrayList<Coord> positions) {
+
         ArrayList<Coord> newPositions = new ArrayList<>();
+
         for (Coord c : positions) {
             if (!board[c.getX()][c.getY()].getOccupiedByWorker() && !board[c.getX()][c.getY()].getOccupiedByDome())
                 newPositions.add(c.clone());
         }
         return newPositions;
+
     }
 
+
     /**
-     * This method finds all the neighbouring cells for the workers provided from the caller
+     * This method finds all the neighbouring cells for the workers provided from the caller.
      * @return an HashMap in which the key value are the coordinates of the workers supplied by the caller and the values are all the neighbouring
      * cells of that worker
      */
     public HashMap<Coord, ArrayList<Coord>> findWorkersNeighbouringCoords(Player player) {
+
         Integer[] workerIds = player.getWorkersIdsArray();
         ArrayList<Worker> workers = gameSession.getWorkersHandler().getWorkers(workerIds);
 
@@ -99,22 +130,27 @@ public class CellsHandler {
             availablePositions.put(w.getCurrentPosition(), positions);
         }
         return availablePositions;
+
     }
 
+
     /**
-     * This method finds all the neighbouring cells for the worker provided from the caller
+     * This method finds all the neighbouring cells for the worker provided from the caller.
      * @param worker reference of the worker of which the method has to find the neighbouring cells
      * @return an HashMap in which the key value are the coordinates of the worker supplied by the caller and the values are all the neighbouring
      * cells of that worker
      */
     public HashMap<Coord, ArrayList<Coord>> findWorkerNeighbouringCoords(Worker worker) {
+
         HashMap<Coord, ArrayList<Coord>> availablePositions = new HashMap<>();
         ArrayList<Coord> positions;
 
         positions = findNeighbouringCoords(worker.getCurrentPosition());
         availablePositions.put(worker.getCurrentPosition(), positions);
+
         return availablePositions;
     }
+
 
     /**
      * This method identifies a bunch of coordinates that are neighbours of the one supplied by the caller.
@@ -122,6 +158,7 @@ public class CellsHandler {
      * @return An ArrayList of coordinates representing all the neighbours of the coordinates supplied by the caller.
      */
     private ArrayList<Coord> findNeighbouringCoords(Coord coord) {
+
         ArrayList<Coord> positions = new ArrayList<>();
 
         for (int i=-1; i<2 ; i++) {
@@ -138,6 +175,7 @@ public class CellsHandler {
         return positions;
     }
 
+
     /**
      * This method finds all the coordinates of the board that are included in the same direction defined from the supplied coordinates.
      * (e.g init = 0,1, final = 0,2, returnValue = (0,3),(0,4))
@@ -147,6 +185,7 @@ public class CellsHandler {
      * following them
      */
     public ArrayList<Coord> findSameDirectionCoords(Coord initialPosition, Coord finalPosition) {
+
         int xIncrement = finalPosition.getX() - initialPosition.getX();
         int yIncrement = finalPosition.getY() - initialPosition.getY();
         ArrayList<Coord> coords = new ArrayList<>();
@@ -162,18 +201,19 @@ public class CellsHandler {
         return coords;
     }
 
+
     /**
-     * This method gets all the cells that are related to the coordinates supplied by the caller
+     * This method gets all the cells that are related to the coordinates supplied by the caller.
      * @param coordsToMatch the coordinates for which the method has to find all related cells
      * @return an ArrayList containing all the related cells to the coordinates contained into the ArrayList supplied
      */
     public ArrayList<Cell> getCells(ArrayList<Coord> coordsToMatch) {
-        ArrayList<Cell> clonedCellsRequired = new ArrayList<>();
 
+        ArrayList<Cell> clonedCellsRequired = new ArrayList<>();
         for (Coord c : coordsToMatch) {
             clonedCellsRequired.add((board[c.getX()][c.getY()]).clone());
         }
-
         return clonedCellsRequired;
     }
+
 }

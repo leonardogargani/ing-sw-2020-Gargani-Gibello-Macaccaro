@@ -4,13 +4,16 @@ import it.polimi.ingsw.PSP43.server.gameStates.GameSessionObservable;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.networkMessages.CellMessage;
 
-import java.io.IOException;
 
 public class BoardObserver {
 
     private final GameSessionObservable gameSessionObservable;
 
 
+    /**
+     * Non default constructor that initializes the gameSessionObservable attribute.
+     * @param gameSessionObservable gameSessionObservable attribute
+     */
     public BoardObserver(GameSessionObservable gameSessionObservable) {
         this.gameSessionObservable = gameSessionObservable;
     }

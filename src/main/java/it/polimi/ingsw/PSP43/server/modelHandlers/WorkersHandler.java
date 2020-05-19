@@ -5,7 +5,6 @@ import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Worker;
-
 import java.util.*;
 
 
@@ -15,6 +14,7 @@ import java.util.*;
  * Their methods are called from the GameSession object, which has a workersHandler attribute.
  */
 public class WorkersHandler {
+
     private final List<Worker> workers = new ArrayList<>();
     private final GameSession gameSession;
     private final CellsHandler cellsHandler;
@@ -31,12 +31,19 @@ public class WorkersHandler {
     }
 
 
+    /**
+     * Method that removes the workers (identified by their id) from the list of all the workers.
+     * @param workersIds array containing the ids of the workers to be removed
+     */
     public void removeWorkers(Integer[] workersIds) {
+
         CellsHandler cellsHandler = gameSession.getCellsHandler();
 
         for (int i : workersIds) {
+
             for (Iterator<Worker> workerIterator = workers.iterator(); workerIterator.hasNext(); ) {
                 Worker currentWorker = workerIterator.next();
+
                 if (currentWorker.getId() == i) {
                     Coord workerPosition = currentWorker.getCurrentPosition();
                     Cell cellOccupiedByWorker = cellsHandler.getCell(workerPosition);
@@ -47,6 +54,7 @@ public class WorkersHandler {
             }
         }
     }
+
 
     /**
      * This method adds a new worker to the existing ones.
@@ -86,6 +94,12 @@ public class WorkersHandler {
         worker.setLatestMoved(true);
     }
 
+
+    /**
+     * Method that swap the position of two workers.
+     * @param currentPlayerWorker worker owned by the player who is making the move
+     * @param opponentWorker worker owned by an opponent and that will be used for the swap
+     */
     public void swapPositions(Worker currentPlayerWorker, Worker opponentWorker) {
         currentPlayerWorker.setCurrentPosition(opponentWorker.getCurrentPosition());
         currentPlayerWorker.setLatestMoved(true);
@@ -103,6 +117,7 @@ public class WorkersHandler {
         cellsHandler.changeStateOfCell(cellSecondWorker, coordSecondWorker);
     }
 
+
     /**
      * This method returns the ArrayList containing all the workers.
      * @return ArrayList containing all the workers
@@ -111,16 +126,26 @@ public class WorkersHandler {
         return Collections.unmodifiableList(workers);
     }
 
+
+    /**
+     * Method that return the workers given by their ids.
+     * @param ids ids of the worker that are wanted to be returned
+     * @return ArrayList of requested workers
+     */
     public ArrayList<Worker> getWorkers(Integer[] ids) {
         ArrayList<Worker> workers = new ArrayList<>();
-
         for (Integer i : ids) {
             workers.add(getWorker(i));
         }
-
         return workers;
     }
 
+
+    /**
+     * Method that returns a worker given its coordinate.
+     * @param c coordinate of the worker
+     * @return worker at the given coordinate (null if the cell at that coordinate is empty)
+     */
     public Worker getWorker(Coord c) {
         Coord position;
         for (Worker w : workers) {
@@ -130,6 +155,12 @@ public class WorkersHandler {
         return null;
     }
 
+
+    /**
+     * Method that returns a worker given its id.
+     * @param id id of the worker
+     * @return worker with the given id (null if there is no worker with the given id)
+     */
     public Worker getWorker(int id) {
         int currentId;
         for (Worker w : workers) {
@@ -139,6 +170,12 @@ public class WorkersHandler {
         return null;
     }
 
+
+    /**
+     * Method that sets the initial position of a worker.
+     * @param idWorker id of the worker that needs to be placed on the board
+     * @param initialCoord initial coordinate of the worker on the board
+     */
     public void setInitialPosition(int idWorker, Coord initialCoord) {
         for (Worker w : workers) {
             if (w.getId() == idWorker) {

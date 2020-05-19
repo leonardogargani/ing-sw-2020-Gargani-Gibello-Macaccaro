@@ -3,8 +3,6 @@ package it.polimi.ingsw.PSP43.server.model;
 import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.server.BoardObserver;
 
-import java.io.IOException;
-
 
 /**
  * Worker is the class that represents a worker, which is the piece players can control.
@@ -22,7 +20,9 @@ public class Worker {
 
     /**
      * Non-default constructor, it initializes a worker with its color, chosen by the owner.
+     * @param id id of the worker
      * @param color color of the worker
+     * @param boardObserver boardObserver of the game
      */
     public Worker(int id, Color color, BoardObserver boardObserver) {
         this.id = id;
@@ -80,7 +80,7 @@ public class Worker {
 
 
     /**
-     * This method returns if the worker has been moved in the latest turn by the player
+     * This method returns if the worker has been moved in the latest turn by the player.
      * @return if the worker has been moved in the latest turn by the player
      */
     public boolean isLatestMoved() {
@@ -89,10 +89,11 @@ public class Worker {
 
 
     /**
-     * This method sets the boolean representing if a worker was moved in the last turn by the player
+     * This method sets the boolean representing if a worker was moved in the last turn by the player.
      * @param latestMoved sets the boolean representing if a worker was moved in the last turn by the player
      */
     public void setLatestMoved(boolean latestMoved) {
         this.latestMoved = latestMoved;
     }
+
 }
