@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP43.client.gui;
 
+import it.polimi.ingsw.PSP43.client.cli.QuitPlayerException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -58,10 +59,13 @@ public class GuiStarter extends Application {
     }
 
 
-    // method to permit the execution of the gui without calling Application.launch(GuiStarter.class)
-    // [used only in development, to be removed]
-    public static void main(String[] args) {
-        launch(args);
+    /**
+     * Method executed when the window is closed.
+     * @throws QuitPlayerException exception thrown if a player closes the window
+     */
+    @Override
+    public void stop() throws QuitPlayerException {
+        throw new QuitPlayerException("A player has decided to quit the game.");
     }
 
 }
