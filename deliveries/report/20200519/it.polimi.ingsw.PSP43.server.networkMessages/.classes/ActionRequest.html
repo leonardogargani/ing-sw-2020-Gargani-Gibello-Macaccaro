@@ -1,0 +1,121 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ActionRequest</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.networkMessages</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ActionRequest (it.polimi.ingsw.PSP43.server.networkMessages)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ActionRequest</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (1/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60%
+  </span>
+  <span class="absValue">
+    (3/ 5)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.networkMessages;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;import java.util.ArrayList;
+<i>6</i>&nbsp;import java.util.Map;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;public class ActionRequest extends TextMessage {
+<i>9</i>&nbsp;    private static final long serialVersionUID = 2976456483098828593L;
+<i>10</i>&nbsp;    private final Map&lt;Coord, ArrayList&lt;Coord&gt;&gt; cellsAvailable;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;    /**
+<i>13</i>&nbsp;     * Not default constructor for ActionRequest message
+<i>14</i>&nbsp;     * @param message is the string that will be shown to the recipient
+<i>15</i>&nbsp;     * @param cellsAvailable represents the cells where workers can go in
+<i>16</i>&nbsp;     */
+<i>17</i>&nbsp;    public ActionRequest(String message, Map&lt;Coord, ArrayList&lt;Coord&gt;&gt; cellsAvailable){
+<b class="fc"><i>18</i>&nbsp;        super(message);</b>
+<b class="fc"><i>19</i>&nbsp;        this.cellsAvailable = cellsAvailable;</b>
+<b class="fc"><i>20</i>&nbsp;    }</b>
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    /**
+<i>23</i>&nbsp;     * Getter method for the string message
+<i>24</i>&nbsp;     * @return message
+<i>25</i>&nbsp;     */
+<i>26</i>&nbsp;    @Override
+<i>27</i>&nbsp;    public String getMessage() {
+<b class="nc"><i>28</i>&nbsp;        return super.getMessage();</b>
+<i>29</i>&nbsp;    }
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    /**
+<i>32</i>&nbsp;     * Getter method for the HashMap cellsAvailable, that contains the coordinates available for a player&#39;s workers
+<i>33</i>&nbsp;     * @return the HashMap cellsAvailable
+<i>34</i>&nbsp;     */
+<i>35</i>&nbsp;    public Map&lt;Coord, ArrayList&lt;Coord&gt;&gt; getCellsAvailable() {
+<b class="nc"><i>36</i>&nbsp;        return cellsAvailable;</b>
+<i>37</i>&nbsp;    }
+<i>38</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 13:06</div>
+</div>
+</body>
+</html>

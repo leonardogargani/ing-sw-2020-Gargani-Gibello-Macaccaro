@@ -1,0 +1,126 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ClientStarter</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.client</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ClientStarter (it.polimi.ingsw.PSP43.client)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ClientStarter</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 17)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.client;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.cli.CliInputHandler;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.cli.QuitPlayerException;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;/**
+<i>7</i>&nbsp; * This is the starter class, here a player chooses CLI or GUI
+<i>8</i>&nbsp; */
+<i>9</i>&nbsp;
+<b class="nc"><i>10</i>&nbsp;public class ClientStarter {</b>
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;    public static void main(String[] args) {
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;        int chosenMode;
+<b class="nc"><i>15</i>&nbsp;        System.out.println(&quot;Choose a mode:\n [1] CLI\n [2] GUI&quot;);</b>
+<b class="nc"><i>16</i>&nbsp;        CliInputHandler inputHandler = new CliInputHandler();</b>
+<i>17</i>&nbsp;        try {
+<i>18</i>&nbsp;            do {
+<b class="nc"><i>19</i>&nbsp;                chosenMode = inputHandler.requestInputInt();</b>
+<b class="nc"><i>20</i>&nbsp;                switch (chosenMode) {</b>
+<i>21</i>&nbsp;                    case 1:
+<b class="nc"><i>22</i>&nbsp;                        System.out.println(&quot;CLI chosen. Starting the game...&quot;);</b>
+<b class="nc"><i>23</i>&nbsp;                        break;</b>
+<i>24</i>&nbsp;                    case 2:
+<b class="nc"><i>25</i>&nbsp;                        System.out.println(&quot;GUI chosen. Starting the game...&quot;);</b>
+<b class="nc"><i>26</i>&nbsp;                        break;</b>
+<i>27</i>&nbsp;                    default:
+<b class="nc"><i>28</i>&nbsp;                        System.out.println(&quot;Choice not valid, try again:&quot;);</b>
+<i>29</i>&nbsp;                        break;
+<i>30</i>&nbsp;                }
+<b class="nc"><i>31</i>&nbsp;            } while (chosenMode != 1 &amp;&amp; chosenMode != 2);</b>
+<i>32</i>&nbsp;
+<b class="nc"><i>33</i>&nbsp;            ClientManager clientManager = new ClientManager(chosenMode);</b>
+<b class="nc"><i>34</i>&nbsp;            Thread clientManagerThread = new Thread(clientManager);</b>
+<b class="nc"><i>35</i>&nbsp;            clientManagerThread.start();</b>
+<i>36</i>&nbsp;
+<b class="nc"><i>37</i>&nbsp;        } catch (QuitPlayerException e) {</b>
+<b class="nc"><i>38</i>&nbsp;            System.exit(0);</b>
+<b class="nc"><i>39</i>&nbsp;        }</b>
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    }
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 13:06</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,169 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: UnconditionedDomeBuildDecorator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.model.card.decorators</a> ]
+</div>
+
+<h1>Coverage Summary for Class: UnconditionedDomeBuildDecorator (it.polimi.ingsw.PSP43.server.model.card.decorators)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UnconditionedDomeBuildDecorator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (5/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.9%
+  </span>
+  <span class="absValue">
+    (39/ 42)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.model.card.decorators;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.ResponseMessage;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.DataToBuild;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Cell;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Player;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Worker;
+<i>11</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+<i>12</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
+<i>13</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+<i>14</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;import java.util.ArrayList;
+<i>17</i>&nbsp;import java.util.HashMap;
+<i>18</i>&nbsp;import java.util.Iterator;
+<i>19</i>&nbsp;
+<b class="fc"><i>20</i>&nbsp;public class UnconditionedDomeBuildDecorator extends PowerGodDecorator {</b>
+<i>21</i>&nbsp;    private static final long serialVersionUID = 8289108530021462717L;
+<i>22</i>&nbsp;
+<b class="nc"><i>23</i>&nbsp;    public UnconditionedDomeBuildDecorator() {</b>
+<b class="nc"><i>24</i>&nbsp;    }</b>
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    public UnconditionedDomeBuildDecorator(AbstractGodCard godComponent) {
+<b class="fc"><i>27</i>&nbsp;        super(godComponent);</b>
+<b class="fc"><i>28</i>&nbsp;    }</b>
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    public void initBuild(GameSession gameSession) throws GameEndedException {
+<b class="fc"><i>31</i>&nbsp;        Player currentPlayer = gameSession.getCurrentPlayer();</b>
+<i>32</i>&nbsp;
+<b class="fc"><i>33</i>&nbsp;        HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositionsToBuildDome = this.findAvailablePositionsToBuildDome(gameSession);</b>
+<b class="fc"><i>34</i>&nbsp;        HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositionsToBuildBlock = this.findAvailablePositionsToBuildBlock(gameSession);</b>
+<i>35</i>&nbsp;
+<b class="fc"><i>36</i>&nbsp;        ResponseMessage responseMessage = new ResponseMessage(false);</b>
+<b class="fc"><i>37</i>&nbsp;        if (availablePositionsToBuildDome.size() != 0) {</b>
+<b class="fc"><i>38</i>&nbsp;            RequestMessage requestMessage = new RequestMessage(&quot;Do you want to build a dome? Otherwise you will build a block.&quot;);</b>
+<b class="fc"><i>39</i>&nbsp;            responseMessage = gameSession.sendRequest(requestMessage, currentPlayer.getNickname(), ResponseMessage.class);</b>
+<i>40</i>&nbsp;        }
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;        String message;
+<b class="fc"><i>43</i>&nbsp;        if (responseMessage.isResponse()) {</b>
+<b class="fc"><i>44</i>&nbsp;            message = &quot;Choose a position where to place a dome.&quot;;</b>
+<b class="fc"><i>45</i>&nbsp;            ActionResponse actionResponse = askForBuild(gameSession, availablePositionsToBuildDome, message);</b>
+<b class="fc"><i>46</i>&nbsp;            Worker workerToBuild = gameSession.getWorkersHandler().getWorker(actionResponse.getWorkerPosition());</b>
+<b class="fc"><i>47</i>&nbsp;            build(new DataToBuild(gameSession, currentPlayer, workerToBuild, actionResponse.getPosition(), Boolean.TRUE));</b>
+<b class="fc"><i>48</i>&nbsp;        }</b>
+<i>49</i>&nbsp;        else {
+<b class="fc"><i>50</i>&nbsp;            message = &quot;Choose a position where to place a block.&quot;;</b>
+<b class="fc"><i>51</i>&nbsp;            ActionResponse actionResponse = askForBuild(gameSession, availablePositionsToBuildBlock, message);</b>
+<b class="fc"><i>52</i>&nbsp;            Worker workerToBuild = gameSession.getWorkersHandler().getWorker(actionResponse.getWorkerPosition());</b>
+<b class="fc"><i>53</i>&nbsp;            build(new DataToBuild(gameSession, currentPlayer, workerToBuild, actionResponse.getPosition(), Boolean.FALSE));</b>
+<i>54</i>&nbsp;        }
+<b class="fc"><i>55</i>&nbsp;    }</b>
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    public HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; findAvailablePositionsToBuildDome(GameSession gameSession) {
+<b class="fc"><i>58</i>&nbsp;        CellsHandler cellsHandler = gameSession.getCellsHandler();</b>
+<i>59</i>&nbsp;
+<b class="fc"><i>60</i>&nbsp;        HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositions = cellsHandler.findWorkersNeighbouringCoords(gameSession.getCurrentPlayer());</b>
+<b class="fc"><i>61</i>&nbsp;        for (Coord c : availablePositions.keySet()) {</b>
+<b class="fc"><i>62</i>&nbsp;            for (Iterator&lt;Coord&gt; coordIterator = availablePositions.get(c).iterator(); coordIterator.hasNext(); ) {</b>
+<b class="fc"><i>63</i>&nbsp;                Coord actualCoord = coordIterator.next();</b>
+<b class="fc"><i>64</i>&nbsp;                Cell cellToBuild = cellsHandler.getCell(actualCoord);</b>
+<b class="fc"><i>65</i>&nbsp;                if (cellToBuild.getOccupiedByDome() || cellToBuild.getOccupiedByWorker()) {</b>
+<b class="fc"><i>66</i>&nbsp;                    coordIterator.remove();</b>
+<i>67</i>&nbsp;                }
+<b class="fc"><i>68</i>&nbsp;            }</b>
+<i>69</i>&nbsp;
+<b class="fc"><i>70</i>&nbsp;        }</b>
+<b class="fc"><i>71</i>&nbsp;        return availablePositions;</b>
+<i>72</i>&nbsp;    }
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;    public AbstractGodCard cleanFromEffects(String nameOfEffect) {
+<b class="fc"><i>75</i>&nbsp;        AbstractGodCard component = super.getGodComponent().cleanFromEffects(nameOfEffect);</b>
+<b class="fc"><i>76</i>&nbsp;        Class&lt;?&gt; c = null;</b>
+<i>77</i>&nbsp;        try {
+<b class="fc"><i>78</i>&nbsp;            c = Class.forName(nameOfEffect);</b>
+<b class="fc"><i>79</i>&nbsp;        } catch (ClassNotFoundException e) { e.printStackTrace(); }</b>
+<i>80</i>&nbsp;
+<b class="fc"><i>81</i>&nbsp;        assert c != null;</b>
+<b class="fc"><i>82</i>&nbsp;        if (!c.isInstance(this))</b>
+<b class="fc"><i>83</i>&nbsp;            return new UnconditionedDomeBuildDecorator(component);</b>
+<b class="nc"><i>84</i>&nbsp;        else return component;</b>
+<i>85</i>&nbsp;    }
+<i>86</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 13:06</div>
+</div>
+</body>
+</html>

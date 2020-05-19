@@ -1,0 +1,255 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ChooseWorkerState</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.gameStates</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ChooseWorkerState (it.polimi.ingsw.PSP43.server.gameStates)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ChooseWorkerState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.7%
+  </span>
+  <span class="absValue">
+    (55/ 62)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ChooseWorkerState$MockitoMock$726266459</td>
+  </tr>
+  <tr>
+    <td class="name">ChooseWorkerState$MockitoMock$726266459$auxiliary$g6Q7AJa2</td>
+  </tr>
+  <tr>
+    <td class="name">ChooseWorkerState$MockitoMock$726266459$auxiliary$Hu3YZlgN</td>
+  </tr>
+  <tr>
+    <td class="name">ChooseWorkerState$MockitoMock$726266459$auxiliary$Kktu7z5X</td>
+  </tr>
+  <tr>
+    <td class="name">ChooseWorkerState$MockitoMock$726266459$auxiliary$LcuxVV0T</td>
+  </tr>
+  <tr>
+    <td class="name">ChooseWorkerState$MockitoMock$726266459$auxiliary$lMkBssoi</td>
+  </tr>
+  <tr>
+    <td class="name">ChooseWorkerState$MockitoMock$726266459$auxiliary$LR4bG528</td>
+  </tr>
+  <tr>
+    <td class="name">ChooseWorkerState$MockitoMock$726266459$auxiliary$U6wDGHQX</td>
+  </tr>
+  <tr>
+    <td class="name">ChooseWorkerState$MockitoMock$726266459$auxiliary$XSwJO0vW</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.7%
+  </span>
+  <span class="absValue">
+    (55/ 62)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.gameStates;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.Color;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.WorkersColorResponse;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Player;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
+<i>11</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+<i>12</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.*;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;import java.util.ArrayList;
+<i>15</i>&nbsp;import java.util.Collections;
+<i>16</i>&nbsp;import java.util.HashMap;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;/**
+<i>19</i>&nbsp; * This is the method where the players are asked to choose a color to assign to thei workers
+<i>20</i>&nbsp; * and to choose the initial positions of those workers.
+<i>21</i>&nbsp; */
+<i>22</i>&nbsp;public class ChooseWorkerState extends TurnState {
+<i>23</i>&nbsp;    private static final int FIRSTPOSITION = 0;
+<i>24</i>&nbsp;    private final ArrayList&lt;Color&gt; availableColors;
+<i>25</i>&nbsp;    private final HashMap&lt;Player, Color&gt; colorsChosen;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    public ChooseWorkerState(GameSession gameSession) {
+<b class="fc"><i>28</i>&nbsp;        super(gameSession, TurnName.CHOOSE_WORKER_STATE);</b>
+<b class="fc"><i>29</i>&nbsp;        availableColors = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>30</i>&nbsp;        availableColors.add(Color.ANSI_RED);</b>
+<b class="fc"><i>31</i>&nbsp;        availableColors.add(Color.ANSI_BLUE);</b>
+<b class="fc"><i>32</i>&nbsp;        availableColors.add(Color.ANSI_GREEN);</b>
+<b class="fc"><i>33</i>&nbsp;        colorsChosen = new HashMap&lt;&gt;();</b>
+<b class="fc"><i>34</i>&nbsp;    }</b>
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;    /**
+<i>37</i>&nbsp;     * This method initialises the first player of the game, the god-like one (and for this reason the first logged into the
+<i>38</i>&nbsp;     * game in our conception of the game).
+<i>39</i>&nbsp;     */
+<i>40</i>&nbsp;    public void initState() {
+<b class="fc"><i>41</i>&nbsp;        GameSession game = super.getGameSession();</b>
+<b class="fc"><i>42</i>&nbsp;        PlayersHandler playersHandler = game.getPlayersHandler();</b>
+<b class="fc"><i>43</i>&nbsp;        game.setCurrentPlayer(playersHandler.getPlayer(FIRSTPOSITION));</b>
+<i>44</i>&nbsp;
+<b class="fc"><i>45</i>&nbsp;        StartGameMessage openingMessage = new StartGameMessage(&quot;You are going to choose the color and the initial position for your workers!&quot;);</b>
+<b class="fc"><i>46</i>&nbsp;        game.sendBroadCast(openingMessage);</b>
+<i>47</i>&nbsp;
+<b class="fc"><i>48</i>&nbsp;        executeState();</b>
+<b class="fc"><i>49</i>&nbsp;    }</b>
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;    /**
+<i>53</i>&nbsp;     * This method asks, one at a time, to the players the color chosen for their workers and also where they want to place them.
+<i>54</i>&nbsp;     */
+<i>55</i>&nbsp;    public void executeState() {
+<b class="fc"><i>56</i>&nbsp;        GameSession game = super.getGameSession();</b>
+<b class="fc"><i>57</i>&nbsp;        PlayersHandler playersHandler = game.getPlayersHandler();</b>
+<b class="fc"><i>58</i>&nbsp;        WorkersHandler workersHandler = game.getWorkersHandler();</b>
+<i>59</i>&nbsp;        String latestPlayer;
+<i>60</i>&nbsp;        Player currentPlayer;
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;        do {
+<b class="fc"><i>63</i>&nbsp;            currentPlayer = game.getCurrentPlayer();</b>
+<b class="fc"><i>64</i>&nbsp;            String nicknameCurrentPlayer = currentPlayer.getNickname();</b>
+<b class="fc"><i>65</i>&nbsp;            WorkersColorRequest colorRequest = new WorkersColorRequest(&quot;Choose a color of the worker you will own.&quot;, Collections.unmodifiableList(availableColors));</b>
+<i>66</i>&nbsp;            WorkersColorResponse colorResponse;
+<i>67</i>&nbsp;            do {
+<i>68</i>&nbsp;                try {
+<b class="fc"><i>69</i>&nbsp;                    colorResponse = game.sendRequest(colorRequest, nicknameCurrentPlayer, WorkersColorResponse.class);</b>
+<b class="nc"><i>70</i>&nbsp;                } catch (GameEndedException e) {</b>
+<b class="nc"><i>71</i>&nbsp;                    game.setActive();</b>
+<b class="nc"><i>72</i>&nbsp;                    return;</b>
+<b class="fc"><i>73</i>&nbsp;                }</b>
+<b class="fc"><i>74</i>&nbsp;            } while (colorResponse == null);</b>
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;            // here all the new workers of the player are added into the workersHandler with the color chosen, then the color
+<i>77</i>&nbsp;            // is removed from available colors
+<b class="fc"><i>78</i>&nbsp;            int[] workersIds = new int[2];</b>
+<b class="fc"><i>79</i>&nbsp;            for (int i=0; i&lt;2; i++) {</b>
+<b class="fc"><i>80</i>&nbsp;                workersIds[i] = workersHandler.addNewWorker(colorResponse.getColor());</b>
+<i>81</i>&nbsp;            }
+<b class="fc"><i>82</i>&nbsp;            availableColors.remove(colorResponse.getColor());</b>
+<b class="fc"><i>83</i>&nbsp;            colorsChosen.put(currentPlayer, colorResponse.getColor());</b>
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;            // then the ids of the workers are set into the related owner
+<b class="fc"><i>86</i>&nbsp;            currentPlayer.setWorkersIdsArray(workersIds);</b>
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;            HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; hashAvailablePositions;
+<i>89</i>&nbsp;            ActionRequest placementRequest;
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;            // here I ask to the player where he wants to place his workers (one at a time I ask him)
+<b class="fc"><i>92</i>&nbsp;            for (int i = 0; i&lt;workersIds.length; i++) {</b>
+<i>93</i>&nbsp;                ActionResponse response;
+<b class="fc"><i>94</i>&nbsp;                ArrayList&lt;Coord&gt; availablePositions = game.getCellsHandler().findAllFreeCoords();</b>
+<b class="fc"><i>95</i>&nbsp;                hashAvailablePositions = new HashMap&lt;&gt;();</b>
+<b class="fc"><i>96</i>&nbsp;                hashAvailablePositions.put(new Coord(0, 0), availablePositions);</b>
+<b class="fc"><i>97</i>&nbsp;                placementRequest = new ActionRequest(&quot;Choose where to place your worker &quot; + i + &quot; .&quot;,</b>
+<b class="fc"><i>98</i>&nbsp;                        Collections.unmodifiableMap(hashAvailablePositions));</b>
+<i>99</i>&nbsp;                do {
+<i>100</i>&nbsp;                    try {
+<b class="fc"><i>101</i>&nbsp;                        response = game.sendRequest(placementRequest, nicknameCurrentPlayer, ActionResponse.class);</b>
+<b class="nc"><i>102</i>&nbsp;                    } catch (GameEndedException e) {</b>
+<b class="nc"><i>103</i>&nbsp;                        game.setActive();</b>
+<b class="nc"><i>104</i>&nbsp;                        return;</b>
+<b class="fc"><i>105</i>&nbsp;                    }</b>
+<b class="fc"><i>106</i>&nbsp;                } while(response==null);</b>
+<b class="fc"><i>107</i>&nbsp;                Coord coordChosen = response.getPosition();</b>
+<i>108</i>&nbsp;
+<b class="fc"><i>109</i>&nbsp;                game.getWorkersHandler().setInitialPosition(workersIds[i], coordChosen);</b>
+<i>110</i>&nbsp;            }
+<i>111</i>&nbsp;
+<b class="fc"><i>112</i>&nbsp;            int latestPosition = playersHandler.getNumOfPlayers()-1;</b>
+<b class="fc"><i>113</i>&nbsp;            latestPlayer = playersHandler.getPlayer(latestPosition).getNickname();</b>
+<b class="fc"><i>114</i>&nbsp;            game.setCurrentPlayer(playersHandler.getNextPlayer(currentPlayer.getNickname()));</b>
+<b class="fc"><i>115</i>&nbsp;        } while (!latestPlayer.equals(currentPlayer.getNickname()));</b>
+<i>116</i>&nbsp;
+<b class="fc"><i>117</i>&nbsp;        findNextState();</b>
+<b class="fc"><i>118</i>&nbsp;    }</b>
+<i>119</i>&nbsp;
+<i>120</i>&nbsp;    /**
+<i>121</i>&nbsp;     * This method has to find the next state and also to send all the infos to the client to display name of players, gods chosen and the color of every player.
+<i>122</i>&nbsp;     */
+<i>123</i>&nbsp;    public void findNextState() {
+<b class="fc"><i>124</i>&nbsp;        GameSession game = super.getGameSession();</b>
+<i>125</i>&nbsp;        int indexCurrentState;
+<b class="fc"><i>126</i>&nbsp;        indexCurrentState = game.getTurnMap().indexOf(game.getCurrentState());</b>
+<b class="fc"><i>127</i>&nbsp;        game.setNextState(game.getTurnMap().get(indexCurrentState + 1));</b>
+<i>128</i>&nbsp;
+<i>129</i>&nbsp;        // here I send all the infos to the client to display name of players, gods chosen and the color of every player
+<b class="fc"><i>130</i>&nbsp;        HashMap&lt;Player, AbstractGodCard&gt; cardsChosen = new HashMap&lt;&gt;();</b>
+<b class="fc"><i>131</i>&nbsp;        for (String s : game.getCardsHandler().getMapOwnersCard().keySet())</b>
+<b class="nc"><i>132</i>&nbsp;            cardsChosen.put(game.getPlayersHandler().getPlayer(s), game.getPlayersHandler().getPlayer(s).getAbstractGodCard());</b>
+<b class="fc"><i>133</i>&nbsp;        PlayersListMessage listOfPlayers = new PlayersListMessage(null, cardsChosen, colorsChosen);</b>
+<b class="fc"><i>134</i>&nbsp;        game.sendBroadCast(listOfPlayers);</b>
+<i>135</i>&nbsp;
+<b class="fc"><i>136</i>&nbsp;        game.transitToNextState();</b>
+<b class="fc"><i>137</i>&nbsp;    }</b>
+<i>138</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 13:06</div>
+</div>
+</body>
+</html>

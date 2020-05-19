@@ -1,0 +1,135 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CliBoard</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.client.cli</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CliBoard (it.polimi.ingsw.PSP43.client.cli)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CliBoard</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    46.7%
+  </span>
+  <span class="absValue">
+    (7/ 15)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.client.cli;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;public class CliBoard {
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;    private static final int DIM = 5;
+<b class="fc"><i>9</i>&nbsp;    CliCell[][] cells = new CliCell[DIM][DIM];</b>
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;    /**
+<i>13</i>&nbsp;     * Non default constructor that initialises all the cell
+<i>14</i>&nbsp;     * to empty cells (white colored and with a height of zero).
+<i>15</i>&nbsp;     */
+<b class="fc"><i>16</i>&nbsp;    public CliBoard() {</b>
+<b class="fc"><i>17</i>&nbsp;        for (int y = 0; y &lt; DIM; y++) {</b>
+<b class="fc"><i>18</i>&nbsp;            for (int x = 0; x &lt; DIM; x++) {</b>
+<b class="fc"><i>19</i>&nbsp;                cells[y][x] = new CliCell();</b>
+<i>20</i>&nbsp;            }
+<i>21</i>&nbsp;        }
+<b class="fc"><i>22</i>&nbsp;    }</b>
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    /**
+<i>26</i>&nbsp;     * This method displays the board on the cli, so it will be called
+<i>27</i>&nbsp;     * every time a visual change occurs.
+<i>28</i>&nbsp;     */
+<i>29</i>&nbsp;    public void show() {
+<b class="nc"><i>30</i>&nbsp;        System.out.print(&quot;\n\n\t\t\t0\t\t1\t\t2\t\t3\t\t4\n\n\n&quot;);</b>
+<b class="nc"><i>31</i>&nbsp;        for (int y = 0; y &lt; DIM; y++) {</b>
+<b class="nc"><i>32</i>&nbsp;            System.out.print(&quot;\t&quot; + y + &quot;\t\t&quot;);</b>
+<b class="nc"><i>33</i>&nbsp;            for (int x = 0; x &lt; DIM; x++) {</b>
+<b class="nc"><i>34</i>&nbsp;                System.out.print(cells[y][x] + &quot;\t\t&quot;);</b>
+<i>35</i>&nbsp;            }
+<b class="nc"><i>36</i>&nbsp;            System.out.print(&quot;\n\n\n&quot;);</b>
+<i>37</i>&nbsp;        }
+<b class="nc"><i>38</i>&nbsp;        System.out.print(&quot;\n\n&quot;);</b>
+<b class="nc"><i>39</i>&nbsp;    }</b>
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    /**
+<i>43</i>&nbsp;     * This method returns a single cell of the cli given its coordinate.
+<i>44</i>&nbsp;     * @param coord coordinate of the cell
+<i>45</i>&nbsp;     * @return cell at the given coordinate
+<i>46</i>&nbsp;     */
+<i>47</i>&nbsp;    public CliCell getCell(Coord coord) {
+<b class="fc"><i>48</i>&nbsp;        return cells[coord.getY()][coord.getX()];</b>
+<i>49</i>&nbsp;    }
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 13:06</div>
+</div>
+</body>
+</html>

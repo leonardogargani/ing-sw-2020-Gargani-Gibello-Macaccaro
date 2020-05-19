@@ -1,0 +1,185 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DoubleDifferentSpaceBehaviour</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DoubleDifferentSpaceBehaviour (it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DoubleDifferentSpaceBehaviour</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (41/ 41)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.ResponseMessage;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.DataToBuild;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Player;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+<i>11</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;import java.util.ArrayList;
+<i>14</i>&nbsp;import java.util.HashMap;
+<i>15</i>&nbsp;import java.util.Iterator;
+<i>16</i>&nbsp;import java.util.Map;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;/**
+<i>19</i>&nbsp; * This class is made to give run-time the possibility to a card
+<i>20</i>&nbsp; * to build another block, but not in the same position.
+<i>21</i>&nbsp; */
+<b class="fc"><i>22</i>&nbsp;public class DoubleDifferentSpaceBehaviour extends BasicBuildBehaviour {</b>
+<i>23</i>&nbsp;    private static final long serialVersionUID = 5472654096820247816L;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    /**
+<i>26</i>&nbsp;     * This method checks if the player wants to build another time
+<i>27</i>&nbsp;     *
+<i>28</i>&nbsp;     * @param gameSession This is a reference to the center of the game database.
+<i>29</i>&nbsp;     */
+<i>30</i>&nbsp;    public void handleInitBuild(GameSession gameSession) throws GameEndedException {
+<b class="fc"><i>31</i>&nbsp;        Player currentPlayer = gameSession.getCurrentPlayer();</b>
+<b class="fc"><i>32</i>&nbsp;        CellsHandler cellsHandler = gameSession.getCellsHandler();</b>
+<b class="fc"><i>33</i>&nbsp;        DataToBuild dataToBuild = genericAskForBuild(gameSession);</b>
+<i>34</i>&nbsp;
+<b class="fc"><i>35</i>&nbsp;        build(dataToBuild);</b>
+<i>36</i>&nbsp;
+<b class="fc"><i>37</i>&nbsp;        if (cellsHandler.getCell(dataToBuild.getNewPosition()).getHeight() &lt;= 3) {</b>
+<b class="fc"><i>38</i>&nbsp;            RequestMessage requestMessage = new RequestMessage(&quot;Do you want to build another time on a different space?&quot;);</b>
+<b class="fc"><i>39</i>&nbsp;            ResponseMessage responseMessage = gameSession.sendRequest(requestMessage, currentPlayer.getNickname(), ResponseMessage.class);</b>
+<i>40</i>&nbsp;
+<b class="fc"><i>41</i>&nbsp;            if (responseMessage.isResponse()) {</b>
+<b class="fc"><i>42</i>&nbsp;                buildAnotherTime(dataToBuild);</b>
+<i>43</i>&nbsp;            }
+<i>44</i>&nbsp;        }
+<b class="fc"><i>45</i>&nbsp;    }</b>
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    /**
+<i>48</i>&nbsp;     * This method is used to give the possibility to the player to build twice, but not on the same space.
+<i>49</i>&nbsp;     *
+<i>50</i>&nbsp;     * @param oldDataToBuild The data of the previous build, used to check and not to give the possibility to the player
+<i>51</i>&nbsp;     *                       to build in the same position of the previous one.
+<i>52</i>&nbsp;     */
+<i>53</i>&nbsp;    private void buildAnotherTime(DataToBuild oldDataToBuild) throws GameEndedException {
+<b class="fc"><i>54</i>&nbsp;        GameSession game = oldDataToBuild.getGameSession();</b>
+<b class="fc"><i>55</i>&nbsp;        Player currentPlayer = game.getCurrentPlayer();</b>
+<i>56</i>&nbsp;
+<b class="fc"><i>57</i>&nbsp;        HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositionsToBuildBlock = findAvailablePositionsToBuildBlock(game);</b>
+<b class="fc"><i>58</i>&nbsp;        filterAllowedPositions(availablePositionsToBuildBlock, oldDataToBuild);</b>
+<i>59</i>&nbsp;
+<b class="fc"><i>60</i>&nbsp;        HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositionsToBuildDome = findAvailablePositionsToBuildDome(game);</b>
+<b class="fc"><i>61</i>&nbsp;        filterAllowedPositions(availablePositionsToBuildDome, oldDataToBuild);</b>
+<i>62</i>&nbsp;
+<b class="fc"><i>63</i>&nbsp;        ResponseMessage responseMessage = new ResponseMessage(false);</b>
+<b class="fc"><i>64</i>&nbsp;        if (availablePositionsToBuildDome.size() != 0) {</b>
+<b class="fc"><i>65</i>&nbsp;            RequestMessage requestMessage = new RequestMessage(&quot;Do you want to build a dome? Otherwise you will build a block.&quot;);</b>
+<b class="fc"><i>66</i>&nbsp;            responseMessage = game.sendRequest(requestMessage, currentPlayer.getNickname(), ResponseMessage.class);</b>
+<i>67</i>&nbsp;        }
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;        ActionResponse actionResponse;
+<i>70</i>&nbsp;        String message;
+<b class="fc"><i>71</i>&nbsp;        if (responseMessage.isResponse()) {</b>
+<b class="fc"><i>72</i>&nbsp;            message = &quot;Choose where to build a dome.&quot;;</b>
+<b class="fc"><i>73</i>&nbsp;            actionResponse = askForBuild(game, availablePositionsToBuildBlock, message);</b>
+<b class="fc"><i>74</i>&nbsp;            build(new DataToBuild(game, currentPlayer, oldDataToBuild.getWorker(), actionResponse.getPosition(), Boolean.TRUE));</b>
+<i>75</i>&nbsp;        } else {
+<b class="fc"><i>76</i>&nbsp;            if (availablePositionsToBuildBlock.size() != 0) {</b>
+<b class="fc"><i>77</i>&nbsp;                message = &quot;Choose where to build a block.&quot;;</b>
+<b class="fc"><i>78</i>&nbsp;                actionResponse = askForBuild(game, availablePositionsToBuildBlock, message);</b>
+<b class="fc"><i>79</i>&nbsp;                build(new DataToBuild(game, currentPlayer, oldDataToBuild.getWorker(), actionResponse.getPosition(), Boolean.FALSE));</b>
+<i>80</i>&nbsp;            }
+<i>81</i>&nbsp;        }
+<b class="fc"><i>82</i>&nbsp;    }</b>
+<i>83</i>&nbsp;
+<i>84</i>&nbsp;    protected void filterAllowedPositions(HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositions, DataToBuild oldData) {
+<b class="fc"><i>85</i>&nbsp;        Iterator&lt;Map.Entry&lt;Coord, ArrayList&lt;Coord&gt;&gt;&gt; iter = availablePositions.entrySet().iterator();</b>
+<b class="fc"><i>86</i>&nbsp;        Coord coordWorkerAllowedToBuild = oldData.getWorker().getCurrentPosition();</b>
+<i>87</i>&nbsp;
+<b class="fc"><i>88</i>&nbsp;        while (iter.hasNext()) {</b>
+<b class="fc"><i>89</i>&nbsp;            Map.Entry&lt;Coord, ArrayList&lt;Coord&gt;&gt; currentEntry = iter.next();</b>
+<i>90</i>&nbsp;
+<b class="fc"><i>91</i>&nbsp;            if (!(coordWorkerAllowedToBuild.equals(currentEntry.getKey()))) {</b>
+<b class="fc"><i>92</i>&nbsp;                iter.remove();</b>
+<i>93</i>&nbsp;            }
+<i>94</i>&nbsp;
+<b class="fc"><i>95</i>&nbsp;            ArrayList&lt;Coord&gt; coordsWhereToBuild = currentEntry.getValue();</b>
+<b class="fc"><i>96</i>&nbsp;            Coord oldCoordBuilt = oldData.getNewPosition();</b>
+<i>97</i>&nbsp;
+<b class="fc"><i>98</i>&nbsp;            coordsWhereToBuild.removeIf(actualCoord -&gt; actualCoord.getY() == oldCoordBuilt.getY() &amp;&amp; actualCoord.getX() == oldCoordBuilt.getX());</b>
+<b class="fc"><i>99</i>&nbsp;        }</b>
+<i>100</i>&nbsp;
+<b class="fc"><i>101</i>&nbsp;    }</b>
+<i>102</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 13:06</div>
+</div>
+</body>
+</html>

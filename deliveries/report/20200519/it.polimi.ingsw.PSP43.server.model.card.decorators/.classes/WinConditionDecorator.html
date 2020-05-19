@@ -1,0 +1,127 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: WinConditionDecorator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.model.card.decorators</a> ]
+</div>
+
+<h1>Coverage Summary for Class: WinConditionDecorator (it.polimi.ingsw.PSP43.server.model.card.decorators)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">WinConditionDecorator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (4/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85%
+  </span>
+  <span class="absValue">
+    (17/ 20)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.model.card.decorators;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.DataToMove;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;/**
+<i>10</i>&nbsp; * This decorator is used to give to the player the opportunity to win if his worker moves down two or more levels in a move
+<i>11</i>&nbsp; */
+<b class="fc"><i>12</i>&nbsp;public class WinConditionDecorator extends PowerGodDecorator {</b>
+<i>13</i>&nbsp;    private static final long serialVersionUID = -9171126719022096338L;
+<i>14</i>&nbsp;
+<b class="nc"><i>15</i>&nbsp;    public WinConditionDecorator() {}</b>
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    public WinConditionDecorator(AbstractGodCard godComponent) {
+<b class="fc"><i>18</i>&nbsp;        super(godComponent);</b>
+<b class="fc"><i>19</i>&nbsp;    }</b>
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    public void move(DataToMove dataToMove) throws WinnerCaughtException {
+<b class="fc"><i>22</i>&nbsp;        super.move(dataToMove);</b>
+<b class="fc"><i>23</i>&nbsp;        CellsHandler handler = dataToMove.getGameSession().getCellsHandler();</b>
+<b class="fc"><i>24</i>&nbsp;        Coord oldPosition = dataToMove.getWorker().getPreviousPosition();</b>
+<b class="fc"><i>25</i>&nbsp;        int heightOldPosition = handler.getCell(oldPosition).getHeight();</b>
+<b class="fc"><i>26</i>&nbsp;        int heightNewPosition = handler.getCell(dataToMove.getNewPosition()).getHeight();</b>
+<b class="fc"><i>27</i>&nbsp;        if (heightOldPosition - heightNewPosition &gt;= 2) {</b>
+<b class="fc"><i>28</i>&nbsp;            throw new WinnerCaughtException(dataToMove.getPlayer().getNickname());</b>
+<i>29</i>&nbsp;        }
+<b class="nc"><i>30</i>&nbsp;    }</b>
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    public AbstractGodCard cleanFromEffects(String nameOfEffect) {
+<b class="fc"><i>33</i>&nbsp;        AbstractGodCard component = super.getGodComponent().cleanFromEffects(nameOfEffect);</b>
+<b class="fc"><i>34</i>&nbsp;        Class&lt;?&gt; c = null;</b>
+<i>35</i>&nbsp;        try {
+<b class="fc"><i>36</i>&nbsp;            c = Class.forName(nameOfEffect);</b>
+<b class="fc"><i>37</i>&nbsp;        } catch (ClassNotFoundException e) { e.printStackTrace(); }</b>
+<i>38</i>&nbsp;
+<b class="fc"><i>39</i>&nbsp;        assert c != null;</b>
+<b class="fc"><i>40</i>&nbsp;        if (!c.isInstance(this))</b>
+<b class="fc"><i>41</i>&nbsp;            return new WinConditionDecorator(component);</b>
+<b class="nc"><i>42</i>&nbsp;        else return component;</b>
+<i>43</i>&nbsp;    }
+<i>44</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 13:06</div>
+</div>
+</body>
+</html>

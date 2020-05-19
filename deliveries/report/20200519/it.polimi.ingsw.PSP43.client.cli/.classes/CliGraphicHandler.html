@@ -1,0 +1,512 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CliGraphicHandler</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.client.cli</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CliGraphicHandler (it.polimi.ingsw.PSP43.client.cli)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CliGraphicHandler</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 160)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.client.cli;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.Color;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.ClientBG;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.client.GraphicHandler;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.*;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Cell;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Player;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+<i>11</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.*;
+<i>12</i>&nbsp;import java.util.ArrayList;
+<i>13</i>&nbsp;import java.util.List;
+<i>14</i>&nbsp;import java.util.Map;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;public class CliGraphicHandler extends GraphicHandler {
+<i>18</i>&nbsp;
+<b class="nc"><i>19</i>&nbsp;    private final CliBoard board = new CliBoard();</b>
+<b class="nc"><i>20</i>&nbsp;    private final CliTopMenu topMenu = new CliTopMenu();</b>
+<b class="nc"><i>21</i>&nbsp;    private final CliMiddleMenu middleMenu = new CliMiddleMenu();</b>
+<b class="nc"><i>22</i>&nbsp;    private final CliBottomMenu bottomMenu = new CliBottomMenu();</b>
+<b class="nc"><i>23</i>&nbsp;    private final CliInputHandler inputHandler = new CliInputHandler();</b>
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    /**
+<i>27</i>&nbsp;     * Non default constructor that sets the clientGB attribute.
+<i>28</i>&nbsp;     * @param clientBG clientBG attribute of the client
+<i>29</i>&nbsp;     */
+<i>30</i>&nbsp;    public CliGraphicHandler(ClientBG clientBG) {
+<b class="nc"><i>31</i>&nbsp;        super(clientBG);</b>
+<i>32</i>&nbsp;    }
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    /**
+<i>36</i>&nbsp;     * This method returns the whole board of the cli.
+<i>37</i>&nbsp;     * @return whole board of the cli
+<i>38</i>&nbsp;     */
+<i>39</i>&nbsp;    public CliBoard getBoard() {
+<b class="nc"><i>40</i>&nbsp;        return board;</b>
+<i>41</i>&nbsp;    }
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    /**
+<i>45</i>&nbsp;     * This method updates the cli board changing the symbol of a cell, based
+<i>46</i>&nbsp;     * on the fact that a worker can build on a cell.
+<i>47</i>&nbsp;     * @param cellMessage message containing the cell that has changed (a worker has built on it)
+<i>48</i>&nbsp;     */
+<i>49</i>&nbsp;    @Override
+<i>50</i>&nbsp;    public void updateBoardChange(CellMessage cellMessage) {
+<b class="nc"><i>51</i>&nbsp;        Cell serverCell = cellMessage.getCell();</b>
+<b class="nc"><i>52</i>&nbsp;        CliCell cell = board.getCell(serverCell.getCoord());</b>
+<b class="nc"><i>53</i>&nbsp;        cell.setSymbol(CliCell.SYMBOLS[serverCell.getHeight()]);</b>
+<b class="nc"><i>54</i>&nbsp;        cell.setColor(cellMessage.getCell().getColor());</b>
+<b class="nc"><i>55</i>&nbsp;        this.render();</b>
+<i>56</i>&nbsp;    }
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    /**
+<i>60</i>&nbsp;     * This method updates the graphics of the client displaying the message of the players number
+<i>61</i>&nbsp;     * request, waiting and sending the response through the ClientBG object.
+<i>62</i>&nbsp;     * @param request message containing the request for the number of the players
+<i>63</i>&nbsp;     * @throws QuitPlayerException exception thrown if a player writes &quot;quit&quot; (ignore capitalization) in the cli
+<i>64</i>&nbsp;     */
+<i>65</i>&nbsp;    @Override
+<i>66</i>&nbsp;    public void updateMenuChange(PlayersNumberRequest request) throws QuitPlayerException {
+<i>67</i>&nbsp;
+<b class="nc"><i>68</i>&nbsp;        bottomMenu.setContent(request.getMessage());</b>
+<i>69</i>&nbsp;        int chosenNumber;
+<i>70</i>&nbsp;        do {
+<i>71</i>&nbsp;            // I need to show() only the CliTopMenu, containing the request
+<b class="nc"><i>72</i>&nbsp;            bottomMenu.show();</b>
+<b class="nc"><i>73</i>&nbsp;            chosenNumber = inputHandler.requestInputInt();</b>
+<b class="nc"><i>74</i>&nbsp;        } while (chosenNumber != 2 &amp;&amp; chosenNumber != 3);</b>
+<b class="nc"><i>75</i>&nbsp;        bottomMenu.clear();</b>
+<b class="nc"><i>76</i>&nbsp;        PlayersNumberResponse response = new PlayersNumberResponse(chosenNumber);</b>
+<b class="nc"><i>77</i>&nbsp;        super.getClientBG().sendMessage(response);</b>
+<i>78</i>&nbsp;    }
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;
+<i>81</i>&nbsp;    /**
+<i>82</i>&nbsp;     * This method updates the graphics of the client displaying the message of the initial cards
+<i>83</i>&nbsp;     * request, waiting and sending the response through the ClientBG object.
+<i>84</i>&nbsp;     * @param request message containing the request for the cards chosen for this game
+<i>85</i>&nbsp;     */
+<i>86</i>&nbsp;    @Override
+<i>87</i>&nbsp;    public void updateMenuChange(InitialCardsRequest request) throws QuitPlayerException {
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;        // display all the cards before making the request
+<b class="nc"><i>90</i>&nbsp;        List&lt;AbstractGodCard&gt; cards = request.getCards();</b>
+<b class="nc"><i>91</i>&nbsp;        for (AbstractGodCard card : cards) {</b>
+<i>92</i>&nbsp;            // the name of every God is preceded by its index in the ArrayList
+<b class="nc"><i>93</i>&nbsp;            System.out.printf(&quot; %d - &quot;, cards.indexOf(card));</b>
+<b class="nc"><i>94</i>&nbsp;            card.print();</b>
+<b class="nc"><i>95</i>&nbsp;        }</b>
+<b class="nc"><i>96</i>&nbsp;        bottomMenu.setContent(request.getMessage());</b>
+<i>97</i>&nbsp;
+<b class="nc"><i>98</i>&nbsp;            int playersNumber = request.getNumberOfCard();</b>
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;            // I read as many numbers as how many cards have to be chosen (so that the player cannot
+<i>101</i>&nbsp;            // insert neither less nor more than the requested value)
+<i>102</i>&nbsp;
+<b class="nc"><i>103</i>&nbsp;            ArrayList&lt;Integer&gt; chosenIndexes = new ArrayList&lt;&gt;();</b>
+<i>104</i>&nbsp;            int chosenIndex;
+<b class="nc"><i>105</i>&nbsp;            for (int i = 0; i &lt; playersNumber; i++) {</b>
+<b class="nc"><i>106</i>&nbsp;                bottomMenu.show();</b>
+<b class="nc"><i>107</i>&nbsp;                System.out.printf(&quot;Write a single number and press Enter (%d remaining):\n&quot;, playersNumber - i);</b>
+<b class="nc"><i>108</i>&nbsp;                chosenIndex = inputHandler.requestInputInt();</b>
+<i>109</i>&nbsp;                // avoid repetition of the same Gods
+<b class="nc"><i>110</i>&nbsp;                if (!chosenIndexes.contains(chosenIndex)) {</b>
+<b class="nc"><i>111</i>&nbsp;                    chosenIndexes.add(chosenIndex);</b>
+<i>112</i>&nbsp;                } else {
+<b class="nc"><i>113</i>&nbsp;                    System.out.println(&quot;You have already chosen this God&quot;);</b>
+<b class="nc"><i>114</i>&nbsp;                    i--;</b>
+<i>115</i>&nbsp;                }
+<i>116</i>&nbsp;            }
+<i>117</i>&nbsp;
+<i>118</i>&nbsp;            // constructing the ArrayList of cards that needs to be sent as a response
+<b class="nc"><i>119</i>&nbsp;            ArrayList&lt;AbstractGodCard&gt; chosenCards = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>120</i>&nbsp;            for (Integer index : chosenIndexes) {</b>
+<b class="nc"><i>121</i>&nbsp;                chosenCards.add(cards.get(index));</b>
+<b class="nc"><i>122</i>&nbsp;            }</b>
+<i>123</i>&nbsp;
+<b class="nc"><i>124</i>&nbsp;            bottomMenu.clear();</b>
+<b class="nc"><i>125</i>&nbsp;            ChosenCardsResponse response = new ChosenCardsResponse(chosenCards);</b>
+<b class="nc"><i>126</i>&nbsp;        super.getClientBG().sendMessage(response);</b>
+<i>127</i>&nbsp;    }
+<i>128</i>&nbsp;
+<i>129</i>&nbsp;
+<i>130</i>&nbsp;    /**
+<i>131</i>&nbsp;     * This method updates the graphics of the client displaying the message of the single card
+<i>132</i>&nbsp;     * request, waiting and sending the response through the ClientBG object.
+<i>133</i>&nbsp;     * @param request message containing the request for the card chosen by a player
+<i>134</i>&nbsp;     */
+<i>135</i>&nbsp;    @Override
+<i>136</i>&nbsp;    public void updateMenuChange(CardRequest request) throws QuitPlayerException {
+<b class="nc"><i>137</i>&nbsp;        List&lt;AbstractGodCard&gt; availableCards = request.getCards();</b>
+<i>138</i>&nbsp;
+<b class="nc"><i>139</i>&nbsp;        bottomMenu.setContent(request.getMessage());</b>
+<i>140</i>&nbsp;
+<b class="nc"><i>141</i>&nbsp;        for (AbstractGodCard card : availableCards) {</b>
+<i>142</i>&nbsp;            // the name of every God is preceded by its index in the ArrayList
+<b class="nc"><i>143</i>&nbsp;            System.out.printf(&quot; [%d] - &quot;, availableCards.indexOf(card));</b>
+<b class="nc"><i>144</i>&nbsp;            card.print();</b>
+<b class="nc"><i>145</i>&nbsp;        }</b>
+<i>146</i>&nbsp;
+<i>147</i>&nbsp;        int chosenIndex;
+<i>148</i>&nbsp;        while (true) {
+<b class="nc"><i>149</i>&nbsp;            bottomMenu.show();</b>
+<b class="nc"><i>150</i>&nbsp;            chosenIndex = inputHandler.requestInputInt();</b>
+<b class="nc"><i>151</i>&nbsp;            if (0 &lt;= chosenIndex &amp;&amp; chosenIndex &lt; availableCards.size()) {</b>
+<i>152</i>&nbsp;                // in this case the chosen index is valid, I want to keep its value
+<b class="nc"><i>153</i>&nbsp;                break;</b>
+<i>154</i>&nbsp;            }
+<b class="nc"><i>155</i>&nbsp;            System.out.println(&quot;The number you wrote is not valid&quot;);</b>
+<i>156</i>&nbsp;        }
+<i>157</i>&nbsp;
+<b class="nc"><i>158</i>&nbsp;        System.out.println(&quot;Perfect, you have chosen &quot; + availableCards.get(chosenIndex).getGodName() + &quot;!&quot;);</b>
+<i>159</i>&nbsp;
+<b class="nc"><i>160</i>&nbsp;        bottomMenu.clear();</b>
+<b class="nc"><i>161</i>&nbsp;        ChosenCardResponse response = new ChosenCardResponse(availableCards.get(chosenIndex));</b>
+<i>162</i>&nbsp;
+<b class="nc"><i>163</i>&nbsp;        super.getClientBG().sendMessage(response);</b>
+<i>164</i>&nbsp;
+<i>165</i>&nbsp;    }
+<i>166</i>&nbsp;
+<i>167</i>&nbsp;
+<i>168</i>&nbsp;    /**
+<i>169</i>&nbsp;     * This method updates the graphics of the client displaying the message of the workers color
+<i>170</i>&nbsp;     * request, waiting and sending the response through the ClientBG object.
+<i>171</i>&nbsp;     * @param request message containing the request for the color of player&#39;s workers
+<i>172</i>&nbsp;     */
+<i>173</i>&nbsp;    @Override
+<i>174</i>&nbsp;    public void updateMenuChange(WorkersColorRequest request) throws QuitPlayerException {
+<b class="nc"><i>175</i>&nbsp;        List&lt;Color&gt; availableColors = request.getColorsAvailable();</b>
+<i>176</i>&nbsp;
+<b class="nc"><i>177</i>&nbsp;        bottomMenu.setContent(request.getMessage());</b>
+<i>178</i>&nbsp;
+<b class="nc"><i>179</i>&nbsp;        for (Color color : availableColors) {</b>
+<i>180</i>&nbsp;            // the name of every color is preceded by its index in the ArrayList
+<b class="nc"><i>181</i>&nbsp;            System.out.printf(&quot; [%d] - &quot;, availableColors.indexOf(color));</b>
+<b class="nc"><i>182</i>&nbsp;            Color.printName(color);</b>
+<b class="nc"><i>183</i>&nbsp;        }</b>
+<i>184</i>&nbsp;
+<i>185</i>&nbsp;        int chosenIndex;
+<i>186</i>&nbsp;        while (true) {
+<b class="nc"><i>187</i>&nbsp;            bottomMenu.show();</b>
+<b class="nc"><i>188</i>&nbsp;            chosenIndex = inputHandler.requestInputInt();</b>
+<b class="nc"><i>189</i>&nbsp;            if (0 &lt;= chosenIndex &amp;&amp; chosenIndex &lt; availableColors.size()) {</b>
+<i>190</i>&nbsp;                // in this case the chosen index is valid, I want to keep its value
+<b class="nc"><i>191</i>&nbsp;                break;</b>
+<i>192</i>&nbsp;            }
+<b class="nc"><i>193</i>&nbsp;            System.out.println(&quot;The number you wrote is not valid&quot;);</b>
+<i>194</i>&nbsp;        }
+<i>195</i>&nbsp;
+<b class="nc"><i>196</i>&nbsp;        bottomMenu.clear();</b>
+<b class="nc"><i>197</i>&nbsp;        WorkersColorResponse response = new WorkersColorResponse(availableColors.get(chosenIndex));</b>
+<b class="nc"><i>198</i>&nbsp;        super.getClientBG().sendMessage(response);</b>
+<i>199</i>&nbsp;
+<i>200</i>&nbsp;    }
+<i>201</i>&nbsp;
+<i>202</i>&nbsp;
+<i>203</i>&nbsp;    /**
+<i>204</i>&nbsp;     * This method updates the graphics of the client displaying the message of the action
+<i>205</i>&nbsp;     * request, waiting and sending the response through the ClientBG object.
+<i>206</i>&nbsp;     * @param request message containing the request for the action a player wants to make
+<i>207</i>&nbsp;     */
+<i>208</i>&nbsp;    @Override
+<i>209</i>&nbsp;    public void updateMenuChange(ActionRequest request) throws QuitPlayerException {
+<i>210</i>&nbsp;
+<i>211</i>&nbsp;        /*
+<i>212</i>&nbsp;        Given an HashMap&lt;Coord,ArrayList&lt;Coord&gt;&gt;  I need to choose a couple formed by one of
+<i>213</i>&nbsp;        the keys (Coord) and one of the related elements (Coord) in its value (ArrayList). Use cases:
+<i>214</i>&nbsp;        - where to first place a worker (server will ignore the key Coord, it only needs the second Coord)
+<i>215</i>&nbsp;        - where to build
+<i>216</i>&nbsp;        - where to move a worker
+<i>217</i>&nbsp;        - ...
+<i>218</i>&nbsp;        Note that for the first placement of a worker I will have only one ArrayList: I need to select a Coord in it
+<i>219</i>&nbsp;        (and of course the unique key Coord, there aren&#39;t 2 iterations as in the other cases. However, I must do
+<i>220</i>&nbsp;        the iteration since the method is shared with other scenarios)
+<i>221</i>&nbsp;         */
+<i>222</i>&nbsp;
+<b class="nc"><i>223</i>&nbsp;        Map&lt;Coord, ArrayList&lt;Coord&gt;&gt; hashMap = request.getCellsAvailable();</b>
+<b class="nc"><i>224</i>&nbsp;        bottomMenu.setContent(request.getMessage());</b>
+<i>225</i>&nbsp;
+<i>226</i>&nbsp;            // graphically render all the received coordinates as free (yellow background)
+<b class="nc"><i>227</i>&nbsp;            for (Coord startCoord : hashMap.keySet()) {</b>
+<b class="nc"><i>228</i>&nbsp;                for (Coord endCoord : hashMap.get(startCoord)) {</b>
+<b class="nc"><i>229</i>&nbsp;                    board.getCell(endCoord).markAsFree(true);</b>
+<b class="nc"><i>230</i>&nbsp;                }</b>
+<b class="nc"><i>231</i>&nbsp;            }</b>
+<b class="nc"><i>232</i>&nbsp;            this.render();</b>
+<i>233</i>&nbsp;
+<i>234</i>&nbsp;            int chosenX;
+<i>235</i>&nbsp;            int chosenY;
+<i>236</i>&nbsp;            Coord chosenCoord;
+<i>237</i>&nbsp;            // obtain the second coordinate of the requested couple
+<i>238</i>&nbsp;            loop: while (true) {
+<b class="nc"><i>239</i>&nbsp;                System.out.print(&quot;x: &quot;);</b>
+<b class="nc"><i>240</i>&nbsp;                chosenX = inputHandler.requestInputInt();</b>
+<b class="nc"><i>241</i>&nbsp;                System.out.print(&quot;y: &quot;);</b>
+<b class="nc"><i>242</i>&nbsp;                chosenY = inputHandler.requestInputInt();</b>
+<b class="nc"><i>243</i>&nbsp;                for (Coord startCoord : hashMap.keySet()) {</b>
+<b class="nc"><i>244</i>&nbsp;                    for (Coord endCoord : hashMap.get(startCoord)) {</b>
+<b class="nc"><i>245</i>&nbsp;                        if (chosenX == endCoord.getX() &amp;&amp; chosenY == endCoord.getY()) {</b>
+<b class="nc"><i>246</i>&nbsp;                            chosenCoord = new Coord(chosenX, chosenY);</b>
+<b class="nc"><i>247</i>&nbsp;                            break loop;</b>
+<i>248</i>&nbsp;                        }
+<b class="nc"><i>249</i>&nbsp;                    }</b>
+<b class="nc"><i>250</i>&nbsp;                }</b>
+<b class="nc"><i>251</i>&nbsp;                System.out.println(&quot;The coordinates you wrote are not valid, try again!&quot;);</b>
+<i>252</i>&nbsp;            }
+<i>253</i>&nbsp;
+<i>254</i>&nbsp;            // create an ArrayList with the possible values for the first coordinate of the couple
+<b class="nc"><i>255</i>&nbsp;            ArrayList&lt;Coord&gt; possibleStartCoords = new ArrayList&lt;&gt;();</b>
+<b class="nc"><i>256</i>&nbsp;            for (Coord startCoord : hashMap.keySet()) {</b>
+<b class="nc"><i>257</i>&nbsp;                ArrayList&lt;Coord&gt; currentArraylist = hashMap.get(startCoord);</b>
+<b class="nc"><i>258</i>&nbsp;                for (Coord coord : currentArraylist) {</b>
+<b class="nc"><i>259</i>&nbsp;                    if (coord.getX() == chosenCoord.getX() &amp;&amp; coord.getY() == chosenCoord.getY()) {</b>
+<b class="nc"><i>260</i>&nbsp;                        possibleStartCoords.add(startCoord);</b>
+<i>261</i>&nbsp;                    }
+<b class="nc"><i>262</i>&nbsp;                }</b>
+<b class="nc"><i>263</i>&nbsp;            }</b>
+<i>264</i>&nbsp;
+<i>265</i>&nbsp;            // obtain the first coordinate of the couple (among the 1 or 2 possible ones)
+<i>266</i>&nbsp;            ActionResponse response;
+<b class="nc"><i>267</i>&nbsp;            if (possibleStartCoords.size() == 1) {</b>
+<b class="nc"><i>268</i>&nbsp;                response = new ActionResponse(possibleStartCoords.get(0), chosenCoord);</b>
+<i>269</i>&nbsp;            } else {
+<b class="nc"><i>270</i>&nbsp;                System.out.println(&quot;Choose the worker you want to make the action perform:&quot;);</b>
+<b class="nc"><i>271</i>&nbsp;                for (Coord start : possibleStartCoords) {</b>
+<b class="nc"><i>272</i>&nbsp;                    System.out.printf(&quot; [%d] - (%d, %d)\n&quot;, possibleStartCoords.indexOf(start),</b>
+<b class="nc"><i>273</i>&nbsp;                            start.getX(), start.getY());</b>
+<b class="nc"><i>274</i>&nbsp;                }</b>
+<i>275</i>&nbsp;                int chosenIndex;
+<i>276</i>&nbsp;                while (true) {
+<b class="nc"><i>277</i>&nbsp;                    chosenIndex = inputHandler.requestInputInt();</b>
+<b class="nc"><i>278</i>&nbsp;                    if (0 &lt;= chosenIndex &amp;&amp; chosenIndex &lt; possibleStartCoords.size()) {</b>
+<b class="nc"><i>279</i>&nbsp;                        break;</b>
+<i>280</i>&nbsp;                    }
+<b class="nc"><i>281</i>&nbsp;                    System.out.println(&quot;The number you wrote is not valid, try again!&quot;);</b>
+<i>282</i>&nbsp;                }
+<b class="nc"><i>283</i>&nbsp;                response = new ActionResponse(possibleStartCoords.get(chosenIndex), chosenCoord);</b>
+<i>284</i>&nbsp;            }
+<i>285</i>&nbsp;
+<i>286</i>&nbsp;            // graphically render back all the received coordinates as normal
+<b class="nc"><i>287</i>&nbsp;            for (Coord startCoord : hashMap.keySet()) {</b>
+<b class="nc"><i>288</i>&nbsp;                for (Coord endCoord : hashMap.get(startCoord)) {</b>
+<b class="nc"><i>289</i>&nbsp;                    board.getCell(endCoord).markAsFree(false);</b>
+<b class="nc"><i>290</i>&nbsp;                }</b>
+<b class="nc"><i>291</i>&nbsp;            }</b>
+<b class="nc"><i>292</i>&nbsp;            bottomMenu.clear();</b>
+<b class="nc"><i>293</i>&nbsp;        super.getClientBG().sendMessage(response);</b>
+<i>294</i>&nbsp;
+<i>295</i>&nbsp;    }
+<i>296</i>&nbsp;
+<i>297</i>&nbsp;
+<i>298</i>&nbsp;    /**
+<i>299</i>&nbsp;     * This method updates the graphics of the client displaying the message of the generic request
+<i>300</i>&nbsp;     * that needs a boolean as a response, waiting and sending the response through the ClientBG object.
+<i>301</i>&nbsp;     * @param request message containing the generic boolean request
+<i>302</i>&nbsp;     */
+<i>303</i>&nbsp;    @Override
+<i>304</i>&nbsp;    public void updateMenuChange(RequestMessage request) throws QuitPlayerException {
+<i>305</i>&nbsp;
+<b class="nc"><i>306</i>&nbsp;        bottomMenu.setContent(request.getMessage());</b>
+<b class="nc"><i>307</i>&nbsp;        this.render();</b>
+<i>308</i>&nbsp;
+<i>309</i>&nbsp;        int intChoice;
+<b class="nc"><i>310</i>&nbsp;        boolean booleanChoice = false;</b>
+<i>311</i>&nbsp;
+<i>312</i>&nbsp;        while (true) {
+<b class="nc"><i>313</i>&nbsp;            System.out.println(&quot; [0] YES \n [1] NO &quot;);</b>
+<b class="nc"><i>314</i>&nbsp;            intChoice = inputHandler.requestInputInt();</b>
+<b class="nc"><i>315</i>&nbsp;            if (intChoice == 0 || intChoice == 1) {</b>
+<b class="nc"><i>316</i>&nbsp;                break;</b>
+<i>317</i>&nbsp;            }
+<b class="nc"><i>318</i>&nbsp;            System.out.println(&quot;Choice not valid, try again!&quot;);</b>
+<i>319</i>&nbsp;        }
+<i>320</i>&nbsp;
+<b class="nc"><i>321</i>&nbsp;        switch (intChoice) {</b>
+<i>322</i>&nbsp;            case 0:
+<b class="nc"><i>323</i>&nbsp;                booleanChoice = true;</b>
+<b class="nc"><i>324</i>&nbsp;                break;</b>
+<i>325</i>&nbsp;            case 1:
+<b class="nc"><i>326</i>&nbsp;                booleanChoice = false;</b>
+<i>327</i>&nbsp;                break;
+<i>328</i>&nbsp;        }
+<i>329</i>&nbsp;
+<b class="nc"><i>330</i>&nbsp;        bottomMenu.clear();</b>
+<b class="nc"><i>331</i>&nbsp;        ResponseMessage response = new ResponseMessage(booleanChoice);</b>
+<b class="nc"><i>332</i>&nbsp;        super.getClientBG().sendMessage(response);</b>
+<i>333</i>&nbsp;
+<i>334</i>&nbsp;    }
+<i>335</i>&nbsp;
+<i>336</i>&nbsp;
+<i>337</i>&nbsp;    /**
+<i>338</i>&nbsp;     * This method updates the cli menu displaying a message that notifies players the game has ended.
+<i>339</i>&nbsp;     * @param message message containing the sentence to display
+<i>340</i>&nbsp;     */
+<i>341</i>&nbsp;    @Override
+<i>342</i>&nbsp;    public void updateMenuChange(EndGameMessage message) {
+<b class="nc"><i>343</i>&nbsp;        bottomMenu.setContent(message.getMessage());</b>
+<b class="nc"><i>344</i>&nbsp;        bottomMenu.show();</b>
+<i>345</i>&nbsp;    }
+<i>346</i>&nbsp;
+<i>347</i>&nbsp;
+<i>348</i>&nbsp;    /**
+<i>349</i>&nbsp;     * This method updates the graphics of the client displaying the message of the request
+<i>350</i>&nbsp;     * for a change of the nick, since the chosen one is already in use.
+<i>351</i>&nbsp;     * @param request message that notifies the client that the nick he has just chosen
+<i>352</i>&nbsp;     *                is already taken
+<i>353</i>&nbsp;     */
+<i>354</i>&nbsp;    @Override
+<i>355</i>&nbsp;    public void updateMenuChange(ChangeNickRequest request) throws QuitPlayerException {
+<b class="nc"><i>356</i>&nbsp;        bottomMenu.setContent(request.getMessage());</b>
+<b class="nc"><i>357</i>&nbsp;        bottomMenu.show();</b>
+<i>358</i>&nbsp;        String nickname;
+<b class="nc"><i>359</i>&nbsp;        System.out.print(&quot;Choose another nickname:\n&quot;);</b>
+<b class="nc"><i>360</i>&nbsp;        nickname = inputHandler.requestInputString();</b>
+<b class="nc"><i>361</i>&nbsp;        RegistrationMessage message = new RegistrationMessage(nickname);</b>
+<b class="nc"><i>362</i>&nbsp;        super.getClientBG().sendMessage(message);</b>
+<i>363</i>&nbsp;    }
+<i>364</i>&nbsp;
+<i>365</i>&nbsp;
+<i>366</i>&nbsp;    /**
+<i>367</i>&nbsp;     * This method updates the graphics of the client displaying the message at the top
+<i>368</i>&nbsp;     * of the screen (used to write that it&#39;s someone else&#39;s turn).
+<i>369</i>&nbsp;     * @param message message to be displayed at the top of the screen
+<i>370</i>&nbsp;     */
+<i>371</i>&nbsp;    @Override
+<i>372</i>&nbsp;    public void updateMenuChange(TextMessage message) {
+<b class="nc"><i>373</i>&nbsp;        topMenu.setContentWithNick(message.getMessage());</b>
+<b class="nc"><i>374</i>&nbsp;        this.render();</b>
+<i>375</i>&nbsp;    }
+<i>376</i>&nbsp;
+<i>377</i>&nbsp;
+<i>378</i>&nbsp;    /**
+<i>379</i>&nbsp;     * This method updates the graphics of the client displaying players&#39; nicknames,
+<i>380</i>&nbsp;     * the Gods they&#39;ve chosen and their workers&#39; color.
+<i>381</i>&nbsp;     * @param message message containing workers, their colors and the chosen gods
+<i>382</i>&nbsp;     */
+<i>383</i>&nbsp;    @Override
+<i>384</i>&nbsp;    public void updateMenuChange(PlayersListMessage message) {
+<i>385</i>&nbsp;
+<b class="nc"><i>386</i>&nbsp;        Map&lt;Player, AbstractGodCard&gt; godsHashMap = message.getPlayers();</b>
+<b class="nc"><i>387</i>&nbsp;        Map&lt;Player, Color&gt; colorsHashmap = message.getColor();</b>
+<i>388</i>&nbsp;
+<b class="nc"><i>389</i>&nbsp;        ArrayList&lt;String&gt; playersInfo = new ArrayList&lt;&gt;();</b>
+<i>390</i>&nbsp;
+<b class="nc"><i>391</i>&nbsp;        for (Player player : colorsHashmap.keySet()) {</b>
+<b class="nc"><i>392</i>&nbsp;            playersInfo.add(</b>
+<b class="nc"><i>393</i>&nbsp;                    colorsHashmap.get(player) + player.getNickname() + Color.RESET + &quot;: &quot; +</b>
+<b class="nc"><i>394</i>&nbsp;                    godsHashMap.get(player).getGodName() + &quot; (&quot; +</b>
+<b class="nc"><i>395</i>&nbsp;                    godsHashMap.get(player).getDescription() + &quot;)&quot;);</b>
+<b class="nc"><i>396</i>&nbsp;        }</b>
+<i>397</i>&nbsp;
+<b class="nc"><i>398</i>&nbsp;        middleMenu.setContentWithInfo(playersInfo);</b>
+<b class="nc"><i>399</i>&nbsp;        this.render();</b>
+<i>400</i>&nbsp;
+<i>401</i>&nbsp;    }
+<i>402</i>&nbsp;
+<i>403</i>&nbsp;
+<i>404</i>&nbsp;    /**
+<i>405</i>&nbsp;     * This method updates the graphics of the client displaying, at the beginning of
+<i>406</i>&nbsp;     * the game, some useful information about the state of the game preparation.
+<i>407</i>&nbsp;     *
+<i>408</i>&nbsp;     * @param message message to be displayed
+<i>409</i>&nbsp;     */
+<i>410</i>&nbsp;    @Override
+<i>411</i>&nbsp;    public void updateMenuChange(StartGameMessage message) {
+<b class="nc"><i>412</i>&nbsp;        bottomMenu.setContent(message.getMessage());</b>
+<b class="nc"><i>413</i>&nbsp;        bottomMenu.show();</b>
+<i>414</i>&nbsp;    }
+<i>415</i>&nbsp;
+<i>416</i>&nbsp;
+<i>417</i>&nbsp;    /**
+<i>418</i>&nbsp;     * This method renders all the graphic aspects of the cli.
+<i>419</i>&nbsp;     */
+<i>420</i>&nbsp;    public void render() {
+<i>421</i>&nbsp;        // the cli is made of these four graphical components, printed to the screen in the right order
+<b class="nc"><i>422</i>&nbsp;        topMenu.show();</b>
+<b class="nc"><i>423</i>&nbsp;        middleMenu.show();</b>
+<b class="nc"><i>424</i>&nbsp;        board.show();</b>
+<b class="nc"><i>425</i>&nbsp;        bottomMenu.show();</b>
+<i>426</i>&nbsp;    }
+<i>427</i>&nbsp;
+<i>428</i>&nbsp;
+<i>429</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 13:06</div>
+</div>
+</body>
+</html>

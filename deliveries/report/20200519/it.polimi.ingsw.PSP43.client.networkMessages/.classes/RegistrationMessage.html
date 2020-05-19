@@ -1,0 +1,111 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: RegistrationMessage</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.client.networkMessages</a> ]
+</div>
+
+<h1>Coverage Summary for Class: RegistrationMessage (it.polimi.ingsw.PSP43.client.networkMessages)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RegistrationMessage</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (4/ 6)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.client.networkMessages;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;public class RegistrationMessage extends ClientMessage {
+<i>4</i>&nbsp;    private static final long SerialVersionUID=999888999111222333L;
+<i>5</i>&nbsp;    private String nick;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;    /**
+<i>8</i>&nbsp;     * Not default constructor for RegistrationMessage
+<i>9</i>&nbsp;     * @param nick is the chosen nickname
+<i>10</i>&nbsp;     */
+<b class="fc"><i>11</i>&nbsp;    public RegistrationMessage(String nick) {</b>
+<b class="fc"><i>12</i>&nbsp;        this.nick = nick;</b>
+<b class="fc"><i>13</i>&nbsp;    }</b>
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;    /**
+<i>16</i>&nbsp;     * RegistrationMessage without parameters
+<i>17</i>&nbsp;     */
+<b class="nc"><i>18</i>&nbsp;    public RegistrationMessage() {</b>
+<b class="nc"><i>19</i>&nbsp;    }</b>
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    /**
+<i>22</i>&nbsp;     * Getter method for the string nick
+<i>23</i>&nbsp;     * @return nick
+<i>24</i>&nbsp;     */
+<i>25</i>&nbsp;    public String getNick() {
+<b class="fc"><i>26</i>&nbsp;        return nick;</b>
+<i>27</i>&nbsp;    }
+<i>28</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 13:06</div>
+</div>
+</body>
+</html>

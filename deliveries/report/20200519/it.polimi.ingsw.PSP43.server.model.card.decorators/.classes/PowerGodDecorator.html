@@ -1,0 +1,179 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: PowerGodDecorator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.model.card.decorators</a> ]
+</div>
+
+<h1>Coverage Summary for Class: PowerGodDecorator (it.polimi.ingsw.PSP43.server.model.card.decorators)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PowerGodDecorator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    63.2%
+  </span>
+  <span class="absValue">
+    (12/ 19)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    63%
+  </span>
+  <span class="absValue">
+    (17/ 27)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.model.card.decorators;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.DataToBuild;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.DataToMove;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;import java.util.ArrayList;
+<i>13</i>&nbsp;import java.util.HashMap;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;/**
+<i>16</i>&nbsp; * This decoration is made to add dinamically features to the cards, in order to give powers to the players&#39; Gods and
+<i>17</i>&nbsp; * to limit their possibilities because of the opponents&#39; Gods
+<i>18</i>&nbsp; */
+<i>19</i>&nbsp;public abstract class PowerGodDecorator extends AbstractGodCard {
+<i>20</i>&nbsp;    private static final long serialVersionUID = -1361536654497716050L;
+<i>21</i>&nbsp;    private AbstractGodCard godComponent;
+<i>22</i>&nbsp;
+<b class="nc"><i>23</i>&nbsp;    public PowerGodDecorator() {}</b>
+<i>24</i>&nbsp;
+<b class="fc"><i>25</i>&nbsp;    public PowerGodDecorator(AbstractGodCard godComponent) {</b>
+<b class="fc"><i>26</i>&nbsp;        this.godComponent = godComponent;</b>
+<b class="fc"><i>27</i>&nbsp;    }</b>
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    public AbstractGodCard getGodComponent() {
+<b class="fc"><i>30</i>&nbsp;        return godComponent;</b>
+<i>31</i>&nbsp;    }
+<i>32</i>&nbsp;
+<i>33</i>&nbsp;    public void setGodComponent(AbstractGodCard godComponent) {
+<b class="nc"><i>34</i>&nbsp;        this.godComponent = godComponent;</b>
+<b class="nc"><i>35</i>&nbsp;    }</b>
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    public void move(DataToMove dataToMove) throws WinnerCaughtException {
+<b class="fc"><i>38</i>&nbsp;        godComponent.move(dataToMove);</b>
+<b class="fc"><i>39</i>&nbsp;    }</b>
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    public void build(DataToBuild dataToBuild) {
+<b class="fc"><i>42</i>&nbsp;        godComponent.build(dataToBuild);</b>
+<b class="fc"><i>43</i>&nbsp;    }</b>
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;    public HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; findAvailablePositionsToMove(GameSession gameSession) {
+<b class="fc"><i>46</i>&nbsp;        return godComponent.findAvailablePositionsToMove(gameSession);</b>
+<i>47</i>&nbsp;    }
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    public HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; findAvailablePositionsToBuildBlock(GameSession gameSession) {
+<b class="fc"><i>50</i>&nbsp;        return godComponent.findAvailablePositionsToBuildBlock(gameSession);</b>
+<i>51</i>&nbsp;    }
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    public HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; findAvailablePositionsToBuildDome(GameSession gameSession) {
+<b class="nc"><i>54</i>&nbsp;        return godComponent.findAvailablePositionsToBuildDome(gameSession);</b>
+<i>55</i>&nbsp;    }
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;    public String getGodName() {
+<b class="fc"><i>58</i>&nbsp;        return godComponent.getGodName();</b>
+<i>59</i>&nbsp;    }
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    public String getDescription() {
+<b class="fc"><i>62</i>&nbsp;        return godComponent.getDescription();</b>
+<i>63</i>&nbsp;    }
+<i>64</i>&nbsp;
+<i>65</i>&nbsp;    public String getPower() {
+<b class="fc"><i>66</i>&nbsp;        return godComponent.getPower();</b>
+<i>67</i>&nbsp;    }
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;    public void initMove(GameSession gameSession) throws WinnerCaughtException, GameEndedException {
+<b class="nc"><i>70</i>&nbsp;        godComponent.initMove(gameSession);</b>
+<b class="nc"><i>71</i>&nbsp;    }</b>
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;    public void initBuild(GameSession gameSession) throws GameEndedException {
+<b class="nc"><i>74</i>&nbsp;        godComponent.initBuild(gameSession);</b>
+<b class="nc"><i>75</i>&nbsp;    }</b>
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;    public ActionResponse askForMove(GameSession gameSession) throws GameEndedException {
+<b class="nc"><i>78</i>&nbsp;        return godComponent.askForMove(gameSession);</b>
+<i>79</i>&nbsp;    }
+<i>80</i>&nbsp;
+<i>81</i>&nbsp;    public ActionResponse askForMove(GameSession gameSession, HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositions) throws GameEndedException {
+<b class="fc"><i>82</i>&nbsp;        return godComponent.askForMove(gameSession, availablePositions);</b>
+<i>83</i>&nbsp;    }
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;    public DataToBuild genericAskForBuild(GameSession gameSession) throws GameEndedException {
+<b class="nc"><i>86</i>&nbsp;        return godComponent.genericAskForBuild(gameSession);</b>
+<i>87</i>&nbsp;    }
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;    public ActionResponse askForBuild(GameSession gameSession, HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositionsBuildBlock, String message) throws GameEndedException {
+<b class="fc"><i>90</i>&nbsp;        return godComponent.askForBuild(gameSession, availablePositionsBuildBlock, message);</b>
+<i>91</i>&nbsp;    }
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;    public void print() {
+<b class="fc"><i>94</i>&nbsp;        godComponent.print();</b>
+<b class="fc"><i>95</i>&nbsp;    }</b>
+<i>96</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 13:06</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,209 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: PlayerRegistrationState</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.gameStates</a> ]
+</div>
+
+<h1>Coverage Summary for Class: PlayerRegistrationState (it.polimi.ingsw.PSP43.server.gameStates)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PlayerRegistrationState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.9%
+  </span>
+  <span class="absValue">
+    (26/ 31)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$570517004</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$570517004$auxiliary$aTuuk1Ut</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$570517004$auxiliary$dYJ8DFTE</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$570517004$auxiliary$Hn8FpK93</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$570517004$auxiliary$luh7RznJ</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$570517004$auxiliary$P4NeJsVf</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$570517004$auxiliary$p7MH9LIj</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$570517004$auxiliary$r5WNJt5w</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$570517004$auxiliary$SPsTTzDb</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$570517004$auxiliary$ZdWQdleJ</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.9%
+  </span>
+  <span class="absValue">
+    (26/ 31)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.gameStates;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.PlayersNumberResponse;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.PlayersNumberRequest;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.StartGameMessage;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;import java.io.IOException;
+<i>11</i>&nbsp;import java.util.concurrent.locks.Lock;
+<i>12</i>&nbsp;import java.util.concurrent.locks.ReentrantLock;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;/**
+<i>15</i>&nbsp; * This is the initial state where the game accept new players and, for the first one,
+<i>16</i>&nbsp; * asks for the number of participants required.
+<i>17</i>&nbsp; */
+<i>18</i>&nbsp;public class PlayerRegistrationState extends TurnState {
+<i>19</i>&nbsp;    private Lock lock;
+<i>20</i>&nbsp;    Boolean first;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    public PlayerRegistrationState(GameSession gameSession) {
+<b class="fc"><i>23</i>&nbsp;        super(gameSession, TurnName.PLAYER_REGISTRATION_STATE);</b>
+<b class="fc"><i>24</i>&nbsp;        lock = new ReentrantLock();</b>
+<b class="fc"><i>25</i>&nbsp;        first = Boolean.TRUE;</b>
+<b class="fc"><i>26</i>&nbsp;    }</b>
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    /**
+<i>29</i>&nbsp;     * This method is the one which has to initialise the data of the new player connected.
+<i>30</i>&nbsp;     * If the nickname chosen by the player is already used, it sends an error to the client
+<i>31</i>&nbsp;     * asking him to re-insert the username. In that case the player will be treated as a
+<i>32</i>&nbsp;     * new player connecting to the server.
+<i>33</i>&nbsp;     *
+<i>34</i>&nbsp;     * @param message This is the message sent from the client.
+<i>35</i>&nbsp;     */
+<i>36</i>&nbsp;    public void executeState(RegistrationMessage message) {
+<b class="fc"><i>37</i>&nbsp;        GameSession game = super.getGameSession();</b>
+<b class="fc"><i>38</i>&nbsp;        PlayersHandler playersHandler = game.getPlayersHandler();</b>
+<i>39</i>&nbsp;        try {
+<b class="fc"><i>40</i>&nbsp;            playersHandler.createNewPlayer(message.getNick());</b>
+<b class="fc"><i>41</i>&nbsp;            int numberOfPlayers = game.getPlayersHandler().getNumOfPlayers();</b>
+<i>42</i>&nbsp;            int num;
+<b class="fc"><i>43</i>&nbsp;            if (first == Boolean.TRUE) {</b>
+<b class="fc"><i>44</i>&nbsp;                first = Boolean.FALSE;</b>
+<b class="fc"><i>45</i>&nbsp;                num = askNumberPlayers(game, message);</b>
+<b class="fc"><i>46</i>&nbsp;                game.maxNumPlayers = num;</b>
+<i>47</i>&nbsp;            }
+<i>48</i>&nbsp;
+<b class="fc"><i>49</i>&nbsp;            if (game.maxNumPlayers == numberOfPlayers) {</b>
+<b class="fc"><i>50</i>&nbsp;                this.findNextState();</b>
+<i>51</i>&nbsp;            } else {
+<b class="fc"><i>52</i>&nbsp;                StartGameMessage clientMessage = new StartGameMessage(&quot;We are connecting you with other players!&quot;);</b>
+<b class="fc"><i>53</i>&nbsp;                game.sendMessage(clientMessage, message.getNick());</b>
+<i>54</i>&nbsp;            }
+<b class="nc"><i>55</i>&nbsp;        } catch (IOException | ClassNotFoundException | InterruptedException e) {</b>
+<b class="nc"><i>56</i>&nbsp;            e.printStackTrace();</b>
+<b class="fc"><i>57</i>&nbsp;        }</b>
+<b class="fc"><i>58</i>&nbsp;    }</b>
+<i>59</i>&nbsp;
+<i>60</i>&nbsp;    /**
+<i>61</i>&nbsp;     * This method asks to the first player of the game how many opponents does he want.
+<i>62</i>&nbsp;     *
+<i>63</i>&nbsp;     * @param gameSession This is a reference to the center of the game database.
+<i>64</i>&nbsp;     * @param message     This is the message sent from the client.
+<i>65</i>&nbsp;     */
+<i>66</i>&nbsp;    protected int askNumberPlayers(GameSession gameSession, RegistrationMessage message) throws IOException, ClassNotFoundException, InterruptedException {
+<b class="fc"><i>67</i>&nbsp;        PlayersNumberRequest request = new PlayersNumberRequest(&quot;Choose between a 2 or 3 game play.&quot;);</b>
+<i>68</i>&nbsp;        PlayersNumberResponse response;
+<i>69</i>&nbsp;        try {
+<b class="fc"><i>70</i>&nbsp;            response = gameSession.sendRequest(request, message.getNick(), PlayersNumberResponse.class);</b>
+<b class="nc"><i>71</i>&nbsp;        } catch (GameEndedException e) {</b>
+<b class="nc"><i>72</i>&nbsp;            gameSession.setActive();</b>
+<b class="nc"><i>73</i>&nbsp;            return -1;</b>
+<b class="fc"><i>74</i>&nbsp;        }</b>
+<b class="fc"><i>75</i>&nbsp;        return response.getNumberOfPlayer();</b>
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;    }
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;    /**
+<i>80</i>&nbsp;     * Finds the next state for the game, saving it in a variable in GameSession, and calls on the
+<i>81</i>&nbsp;     * instance of GameSession the method to transit to the next state of play.
+<i>82</i>&nbsp;     */
+<i>83</i>&nbsp;    public void findNextState() {
+<b class="fc"><i>84</i>&nbsp;        GameSession game = super.getGameSession();</b>
+<i>85</i>&nbsp;        int indexCurrentState;
+<b class="fc"><i>86</i>&nbsp;        indexCurrentState = game.getTurnMap().indexOf(game.getCurrentState());</b>
+<b class="fc"><i>87</i>&nbsp;        game.setNextState(game.getTurnMap().get(indexCurrentState + 1));</b>
+<b class="fc"><i>88</i>&nbsp;    }</b>
+<i>89</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-19 13:06</div>
+</div>
+</body>
+</html>
