@@ -52,9 +52,7 @@ public class PlayerRegistrationState extends TurnState {
                 StartGameMessage clientMessage = new StartGameMessage("We are connecting you with other players!");
                 game.sendMessage(clientMessage, message.getNick());
             }
-        } catch (IOException | ClassNotFoundException | InterruptedException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException | ClassNotFoundException | InterruptedException e) { e.printStackTrace(); }
     }
 
     /**

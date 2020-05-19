@@ -47,7 +47,7 @@ public class GameSession extends GameSessionObservable {
         this.turnMap = Collections.unmodifiableList(turnMap);
 
         this.currentState = turnMap.get(FIRSTPOSITION);
-        super.currentState = turnMap.get(FIRSTPOSITION);
+        super.setCurrentState(turnMap.get(FIRSTPOSITION));
         this.nextState = turnMap.get(FIRSTPOSITION);
 
         this.boardObserver = new BoardObserver(this);
@@ -64,9 +64,7 @@ public class GameSession extends GameSessionObservable {
         while (active) {
             try {
                 TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            } catch (InterruptedException e) { e.printStackTrace(); }
             if (!(currentState.getClass().isInstance(nextState))) {
                 this.transitToNextState();
             }
@@ -100,7 +98,7 @@ public class GameSession extends GameSessionObservable {
         for (TurnState t : turnMap) {
             if (nextState.getTurnName() == t.getTurnName()) {
                 this.setCurrentState(nextState);
-                super.currentState = nextState;
+                super.setCurrentState(nextState);
             }
         }
 
@@ -136,8 +134,8 @@ public class GameSession extends GameSessionObservable {
      * @param currentState The state in which the game is.
      */
     public void setCurrentState(TurnState currentState) {
-        super.currentState = currentState;
         this.currentState = currentState;
+        super.setCurrentState(currentState);
     }
 
     /**

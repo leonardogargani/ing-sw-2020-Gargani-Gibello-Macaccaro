@@ -92,7 +92,7 @@ public class ChooseCardState extends TurnState {
             Player current = gameSession.getCurrentPlayer();
             nicknameCurrentPlayer = current.getNickname();
 
-            CardRequest request = new CardRequest("Choose a card:", Collections.unmodifiableList(cardsAvailable));
+            CardRequest request = new CardRequest("Choose a card:", Collections.unmodifiableList(new ArrayList<>(cardsAvailable)));
             ChosenCardResponse response;
             do {
                 try {

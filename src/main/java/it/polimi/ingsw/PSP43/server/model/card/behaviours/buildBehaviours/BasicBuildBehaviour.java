@@ -52,7 +52,7 @@ public class BasicBuildBehaviour extends BasicGodCard implements BuildBehaviour 
     public ActionResponse askForBuild(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositionsBuildBlock, String message) throws GameEndedException {
         Player currentPlayer = gameSession.getCurrentPlayer();
 
-        ActionRequest actionRequest = new ActionRequest(message, Collections.unmodifiableMap(availablePositionsBuildBlock));
+        ActionRequest actionRequest = new ActionRequest(message, Collections.unmodifiableMap(new HashMap<>(availablePositionsBuildBlock)));
 
         return gameSession.sendRequest(actionRequest, currentPlayer.getNickname(), ActionResponse.class);
     }

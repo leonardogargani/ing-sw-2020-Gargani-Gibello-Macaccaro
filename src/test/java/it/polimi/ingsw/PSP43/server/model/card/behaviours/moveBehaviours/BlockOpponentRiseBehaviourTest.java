@@ -86,8 +86,6 @@ public class BlockOpponentRiseBehaviourTest {
 
     @Test
     public void handleMoveWithBlocking() throws IOException, WinnerCaughtException, InterruptedException, ClassNotFoundException, GameEndedException {
-        Map<String, AbstractGodCard> map = gameSession.getCardsHandler().getMapOwnersCard();
-
         spyGame.setCurrentPlayer(currentPlayer);
 
         currentPlayer.setAbstractGodCard(new BasicGodCard("", "", "", new BlockOpponentRiseBehaviour(), new BasicBuildBehaviour()));
@@ -105,6 +103,7 @@ public class BlockOpponentRiseBehaviourTest {
 
         currentPlayer.getAbstractGodCard().initMove(spyGame);
 
+        Map<String, AbstractGodCard> map = gameSession.getCardsHandler().getMapOwnersCard();
         boolean right = true;
         for (String s : map.keySet()) {
             AbstractGodCard c = map.get(s);

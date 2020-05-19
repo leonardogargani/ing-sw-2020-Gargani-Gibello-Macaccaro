@@ -9,7 +9,6 @@ public class WorkersColorRequest extends TextMessage {
     private static final long serialVersionUID = -1959452039599220074L;
     private final List<Color> colorsAvailable;
 
-
     /**
      * Not default constructor for WorkersColorRequest message.
      * @param message is the string that will be shown to the recipient

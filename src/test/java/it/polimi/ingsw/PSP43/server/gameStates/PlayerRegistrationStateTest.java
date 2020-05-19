@@ -8,7 +8,6 @@ import it.polimi.ingsw.PSP43.server.initialisers.GameInitialiser;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.NicknameAlreadyInUseException;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -49,7 +48,8 @@ public class PlayerRegistrationStateTest {
 
         assertEquals(1, spyGame.maxNumPlayers);
         spyState.executeState(new RegistrationMessage("Gibi"));
-        assertEquals(2, spyGame.maxNumPlayers);
+        assertTrue(spyGame.getPlayersHandler().getNumOfPlayers() == 1 && spyGame.getPlayersHandler().getPlayer("Gibi")!=null);
+        assertEquals(2, spyGame.getMaxNumPlayers());
         spyState.executeState(new RegistrationMessage("Rob"));
         assertTrue(spyGame.getPlayersHandler().getNumOfPlayers() == 2 && spyGame.getPlayersHandler().getPlayer("Rob")!=null);
     }

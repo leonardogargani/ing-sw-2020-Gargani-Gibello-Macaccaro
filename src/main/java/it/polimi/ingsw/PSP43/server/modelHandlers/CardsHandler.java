@@ -33,7 +33,7 @@ public class CardsHandler {
      * @return unmodifiable deckOfAbstractGodCards attribute
      */
     public List<AbstractGodCard> getDeckOfAbstractGodCards() {
-        return Collections.unmodifiableList(deckOfAbstractGodCards);
+        return Collections.unmodifiableList(new ArrayList<>(deckOfAbstractGodCards));
     }
 
 
@@ -42,7 +42,7 @@ public class CardsHandler {
      * @return unmodifiable mapOwnersCard attribute
      */
     public Map<String, AbstractGodCard> getMapOwnersCard() {
-        return Collections.unmodifiableMap(mapOwnersCard);
+        return Collections.unmodifiableMap(new HashMap<>(mapOwnersCard));
     }
 
 
@@ -109,7 +109,6 @@ public class CardsHandler {
      * @param decorator
      */
     public void removeDecorator(String godNameRemoving, String decorator) {
-
         AbstractGodCard card, newCard;
 
         for (String s : mapOwnersCard.keySet()) {

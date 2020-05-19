@@ -95,7 +95,7 @@ public class ChooseWorkerState extends TurnState {
                 hashAvailablePositions = new HashMap<>();
                 hashAvailablePositions.put(new Coord(0, 0), availablePositions);
                 placementRequest = new ActionRequest("Choose where to place your worker " + i + " .",
-                        Collections.unmodifiableMap(hashAvailablePositions));
+                        Collections.unmodifiableMap(new HashMap<>(hashAvailablePositions)));
                 do {
                     try {
                         response = game.sendRequest(placementRequest, nicknameCurrentPlayer, ActionResponse.class);

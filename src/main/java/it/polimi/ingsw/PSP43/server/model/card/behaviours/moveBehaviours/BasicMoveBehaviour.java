@@ -25,7 +25,8 @@ public class BasicMoveBehaviour extends BasicGodCard implements MoveBehavior {
     }
 
     public ActionResponse askForMove(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositions) throws GameEndedException {
-        ActionRequest message = new ActionRequest("Choose a position where to place your worker next.", Collections.unmodifiableMap(availablePositions));
+        ActionRequest message = new ActionRequest(  "Choose a position where to place your worker next.",
+                                                            Collections.unmodifiableMap(new HashMap<>(availablePositions)));
         ActionResponse response;
         do {
             response = gameSession.sendRequest(message, gameSession.getCurrentPlayer().getNickname(), ActionResponse.class);

@@ -20,7 +20,7 @@ public class GameSessionObservable implements Runnable {
     protected int maxNumPlayers;
     private int numOfPlayers;
 
-    protected TurnState currentState;
+    private TurnState currentState;
 
     private final HashMap<String, ClientListener> listenersHashMap;
 
@@ -30,6 +30,8 @@ public class GameSessionObservable implements Runnable {
         numOfPlayers = 0;
         maxNumPlayers = 1;
     }
+
+    public void run() {}
 
     public synchronized int registerToTheGame(RegistrationMessage message, ClientListener player) {
         if (numOfPlayers < maxNumPlayers) {
@@ -42,7 +44,7 @@ public class GameSessionObservable implements Runnable {
                 }
             }
             listenersHashMap.put(message.getNick(), player);
-            numOfPlayers++;
+            numOfPlayers = listenersHashMap.size();
             currentState.executeState(message);
             return idGame;
         }
@@ -64,9 +66,17 @@ public class GameSessionObservable implements Runnable {
         EndGameMessage message = new EndGameMessage("We are sorry but you have lost the game.");
         sendMessage(message, playerEliminated.getNickname());
         listenersHashMap.remove(playerEliminated.getNickname());
+        numOfPlayers = listenersHashMap.size();
     }
 
     public void sendMessage(ServerMessage genericMessage, String addressee) {
+        for (String s : getListenersHashMap().keySet()) {
+            if (addressee.equals(s))
+                getListenersHashMap().get(s).sendMessage(genericMessage);
+        }
+    }
+
+    public void sendMessage(EndGameMessage genericMessage, String addressee) {
         for (String s : getListenersHashMap().keySet()) {
             if (addressee.equals(s))
                 getListenersHashMap().get(s).sendMessage(genericMessage);
@@ -80,6 +90,13 @@ public class GameSessionObservable implements Runnable {
     }
 
     public void sendBroadCast(ServerMessage message, ArrayList<String> nicksExcluded) {
+        for (String s : getListenersHashMap().keySet()) {
+            if (!nicksExcluded.contains(s))
+                getListenersHashMap().get(s).sendMessage(message);
+        }
+    }
+
+    public void sendBroadCast(EndGameMessage message, ArrayList<String> nicksExcluded) {
         for (String s : getListenersHashMap().keySet()) {
             if (!nicksExcluded.contains(s))
                 getListenersHashMap().get(s).sendMessage(message);
@@ -140,7 +157,7 @@ public class GameSessionObservable implements Runnable {
         return numOfPlayers;
     }
 
-    public void run() {
-
+    public void setCurrentState(TurnState currentState) {
+        this.currentState = currentState;
     }
 }

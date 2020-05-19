@@ -51,7 +51,7 @@ public class GameSessionTest {
 
         spyGame.setNextState(spyState);
 
-        TimeUnit.SECONDS.sleep(2);
+        TimeUnit.SECONDS.sleep(3);
         assertTrue(spyGame.getCurrentState() instanceof ChooseCardState);
 
         spyGame.setActive();
@@ -69,6 +69,7 @@ public class GameSessionTest {
 
         doReturn(new PlayersNumberResponse(2)).when(spyGame).sendRequest(any(), any(), any());
         spyGame.registerToTheGame(new RegistrationMessage(currentPlayer.getNickname()), clientMock);
+        assertEquals(1, spyGame.getNumOfPlayers());
 
         Player playerEliminated = currentPlayer;
         Integer[] playersWorkerIds = playerEliminated.getWorkersIdsArray();
