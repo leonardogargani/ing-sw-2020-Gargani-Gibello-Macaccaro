@@ -24,19 +24,16 @@ public class ClientBG implements Runnable {
     private final ClientManager clientManager;
     private static final int SERVER_PORT = 50000;
     private String serverIP = null;
-    public Object messageArrived;
+    private Object messageArrived;
+    private String endMessage = null;
     private boolean disconnect = true;
     private ObjectInputStream input;
     private ObjectOutputStream output;
 
 
-    public void setServerIP(String serverIP) {
-        this.serverIP = serverIP;
-    }
-
-
     /**
      * Not default constructor for the client background
+     *
      * @param clientManager is the reference to the client manager thread
      */
     public ClientBG(ClientManager clientManager) {
@@ -51,31 +48,31 @@ public class ClientBG implements Runnable {
      */
     @Override
     public void run() {
-        do{
-        if (clientManager.getGraphicHandler() instanceof CliGraphicHandler) {
-            CliInputHandler ip = new CliInputHandler();
-            try {
-                this.serverIP = ip.requestServerIP();
-            } catch (QuitPlayerException e) {
-                System.exit(0);
-            }
-        } else {
-            while (this.serverIP == null) {
+        do {
+            if (clientManager.getGraphicHandler() instanceof CliGraphicHandler) {
+                CliInputHandler ip = new CliInputHandler();
                 try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    this.serverIP = ip.requestServerIP();
+                } catch (QuitPlayerException e) {
+                    System.exit(0);
+                }
+            } else {
+                while (this.serverIP == null) {
+                    try {
+                        TimeUnit.SECONDS.sleep(1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-        }
-        try {
-            this.disconnect = false;
-            serverSocket = new Socket(this.serverIP, SERVER_PORT);
-        } catch (IOException e) {
-            System.out.println("server unreachable");
-            this.disconnect = true;
-        }
-    } while (this.disconnect);
+            try {
+                this.disconnect = false;
+                serverSocket = new Socket(this.serverIP, SERVER_PORT);
+            } catch (IOException e) {
+                System.out.println("server unreachable");
+                this.disconnect = true;
+            }
+        } while (this.disconnect);
         System.out.println("Connected");
 
         try {
@@ -86,7 +83,7 @@ public class ClientBG implements Runnable {
             System.out.println("Problems starting connection detector");
         }
 
-        if(clientManager.getGraphicHandler() instanceof CliGraphicHandler)
+        if (clientManager.getGraphicHandler() instanceof CliGraphicHandler)
             clientManager.execute();
 
         while (!disconnect) {
@@ -102,13 +99,13 @@ public class ClientBG implements Runnable {
 
 
     /**
-     * This method will be active for the entire duration of the game and when a message arrives (if it's not a ping) the receive
-     * cast it to a ServerMessage and then puts the message in the messageBox, that is an ArrayList of message
-     * placed in the ClientManager class
+     * This method will be active for the entire duration of the game and when a message arrives (if it's not a ping)
+     * the receive cast it to a ServerMessage and then puts the message in the messageBox, that is an ArrayList of
+     * message placed in the ClientManager class
      *
-     * @throws IOException signals that an I/O exception of some sort has occurred.
+     * @throws IOException            signals that an I/O exception of some sort has occurred.
      * @throws ClassNotFoundException occurs when you try to load a class at run time using Class .forName() or
-     * loadClass() methods and mentioned classes are not found in the classpath.
+     *                                loadClass() methods and mentioned classes are not found in the classpath.
      */
     public void receive() throws IOException, ClassNotFoundException {
         do {
@@ -116,18 +113,16 @@ public class ClientBG implements Runnable {
             messageArrived = input.readObject();
         } while (messageArrived instanceof PingMessage);
 
-        if (messageArrived instanceof EndGameMessage) {
-            closer();
-        }
 
-        clientManager.getMessageBox().add((ServerMessage) messageArrived);
+        clientManager.pushMessageInBox((ServerMessage) messageArrived);
     }
 
 
     /**
      * Method used to send messages to the server
+     *
      * @param message that will be sent
-     * */
+     */
     public void sendMessage(ClientMessage message) {
         try {
             output = new ObjectOutputStream(serverSocket.getOutputStream());
@@ -197,8 +192,19 @@ public class ClientBG implements Runnable {
      * This method put an EndGameMessage in the ClientManager's messageBox when you quit the match
      */
     public void handleDisconnection() {
-        clientManager.getMessageBox().add(0, new EndGameMessage("end game!"));
+        if (clientManager.getMessageBox().size() == 0)
+            clientManager.pushMessageInBox(new EndGameMessage("End game!"));
+        else
+            clientManager.notifyMessageArrived();
     }
 
 
+    /**
+     * Setter method for serverIP String
+     *
+     * @param serverIP is the address of the server
+     */
+    public void setServerIP(String serverIP) {
+        this.serverIP = serverIP;
+    }
 }

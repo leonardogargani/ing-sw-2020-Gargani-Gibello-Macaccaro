@@ -11,7 +11,6 @@ import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
 import javafx.application.Application;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -67,51 +66,43 @@ public class ClientManager implements Runnable {
      * This method checks if there are messages in the messageBox and if there are some of these it calls the update
      * on the graphic handler
      * @throws QuitPlayerException if a player in the input writes quit to leave the game
-     * @throws IOException signals that an I/O exception of some sort has occurred.
      */
-    public void handleEvent() throws QuitPlayerException {
-        if (messageBox.size() >= 1) {
-            if (messageBox.get(0) instanceof CellMessage) {
-                graphicHandler.updateBoardChange((CellMessage) messageBox.get(0));
-                messageBox.remove(0);
-            } else if (messageBox.get(0) instanceof ActionRequest) {
-                graphicHandler.updateMenuChange((ActionRequest) messageBox.get(0));
-                messageBox.remove(0);
-            } else if (messageBox.get(0) instanceof CardRequest) {
-                graphicHandler.updateMenuChange((CardRequest) messageBox.get(0));
-                messageBox.remove(0);
-            } else if (messageBox.get(0) instanceof ChangeNickRequest) {
-                graphicHandler.updateMenuChange((ChangeNickRequest) messageBox.get(0));
-                messageBox.remove(0);
-            } else if (messageBox.get(0) instanceof EndGameMessage) {
-                graphicHandler.updateMenuChange((EndGameMessage) messageBox.get(0));
+    public synchronized void handleEvent() throws QuitPlayerException {
+
+        ServerMessage message = popMessageFromBox();
+        {
+            if (message instanceof CellMessage) {
+                graphicHandler.updateBoardChange((CellMessage) message);
+            } else if (message instanceof ActionRequest) {
+                graphicHandler.updateMenuChange((ActionRequest) message);
+            } else if (message instanceof CardRequest) {
+                graphicHandler.updateMenuChange((CardRequest) message);
+            } else if (message instanceof ChangeNickRequest) {
+                graphicHandler.updateMenuChange((ChangeNickRequest) message);
+            } else if (message instanceof EndGameMessage) {
+                graphicHandler.updateMenuChange((EndGameMessage) message);
                 clientBG.setDisconnect(true);
                 clientBG.closer();
                 this.isActive = false;
-            } else if (messageBox.get(0) instanceof InitialCardsRequest) {
-                graphicHandler.updateMenuChange((InitialCardsRequest) messageBox.get(0));
-                messageBox.remove(0);
-            } else if (messageBox.get(0) instanceof PlayersNumberRequest) {
-                graphicHandler.updateMenuChange((PlayersNumberRequest) messageBox.get(0));
-                messageBox.remove(0);
-            } else if (messageBox.get(0) instanceof PlayersListMessage) {
-                graphicHandler.updateMenuChange((PlayersListMessage) messageBox.get(0));
-                messageBox.remove(0);
-            } else if (messageBox.get(0) instanceof RequestMessage) {
-                graphicHandler.updateMenuChange((RequestMessage) messageBox.get(0));
-                messageBox.remove(0);
-            } else if (messageBox.get(0) instanceof StartGameMessage) {
-                graphicHandler.updateMenuChange((StartGameMessage) messageBox.get(0));
-                messageBox.remove(0);
-            } else if (messageBox.get(0) instanceof WorkersColorRequest) {
-                graphicHandler.updateMenuChange((WorkersColorRequest) messageBox.get(0));
-                messageBox.remove(0);
-            } else if (messageBox.get(0) instanceof TextMessage) {
-                graphicHandler.updateMenuChange((TextMessage) messageBox.get(0));
-                messageBox.remove(0);
+            } else if (message instanceof InitialCardsRequest) {
+                graphicHandler.updateMenuChange((InitialCardsRequest) message);
+            } else if (message instanceof PlayersNumberRequest) {
+                graphicHandler.updateMenuChange((PlayersNumberRequest) message);
+            } else if (message instanceof PlayersListMessage) {
+                graphicHandler.updateMenuChange((PlayersListMessage) message);
+            } else if (message instanceof RequestMessage) {
+                graphicHandler.updateMenuChange((RequestMessage) message);
+            } else if (message instanceof StartGameMessage) {
+                graphicHandler.updateMenuChange((StartGameMessage) message);
+            } else if (message instanceof WorkersColorRequest) {
+                graphicHandler.updateMenuChange((WorkersColorRequest) message);
+            } else if (message instanceof TextMessage) {
+                graphicHandler.updateMenuChange((TextMessage) message);
             }
         }
     }
+
+
 
     /**
      * Getter method for the graphic handler
@@ -121,6 +112,7 @@ public class ClientManager implements Runnable {
         return graphicHandler;
     }
 
+    //TODO delete this method
     /**
      * Getter method for the messageBox, that is an ArrayList where messages are put when they are received
      * @return messageBox
@@ -129,13 +121,6 @@ public class ClientManager implements Runnable {
         return messageBox;
     }
 
-    /**
-     * Getter method for the ClientBG, that is the network handler
-     * @return clientBG
-     */
-    public ClientBG getClientBG() {
-        return clientBG;
-    }
 
     /**
      * Initial method called by the clientBG after the start of the connection, it asks a nick from the player and
@@ -157,4 +142,36 @@ public class ClientManager implements Runnable {
     }
 
 
+    /**
+     * Synchronized method to add message in the message box
+     * @param message is the added message
+     */
+    public synchronized void pushMessageInBox(ServerMessage message){
+        messageBox.add( message);
+        notifyMessageArrived();
+    }
+
+
+    /**
+     * Synchronized method to remove a message from the message box
+     * @return the removed message
+     */
+    public synchronized ServerMessage popMessageFromBox() {
+        try {
+            wait();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        ServerMessage message = messageBox.get(0);
+        messageBox.remove(0);
+        return message;
+    }
+
+
+    /**
+     * Synchronized method to notify the arrivals of a message
+     */
+    public synchronized void notifyMessageArrived(){
+        notifyAll();
+    }
 }

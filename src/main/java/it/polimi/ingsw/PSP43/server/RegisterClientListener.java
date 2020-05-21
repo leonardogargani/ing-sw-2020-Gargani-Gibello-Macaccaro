@@ -4,7 +4,6 @@ import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSessionObservable;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -18,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  * ended gameSession
  */
 public class RegisterClientListener implements Runnable {
-    private static ArrayList<GameSessionObservable> gameSessions = new ArrayList<>();
+    private static final ArrayList<GameSessionObservable> gameSessions = new ArrayList<>();
     private ClientListener player;
     private RegistrationMessage message;
 
@@ -100,12 +99,14 @@ public class RegisterClientListener implements Runnable {
      * @param idGameSession is the id of the match that will be deleted
      */
     public void notifyDisconnection(int idGameSession) {
-        for (Iterator<GameSessionObservable> gameSessionIterator = gameSessions.iterator(); gameSessionIterator.hasNext(); ) {
-            GameSessionObservable gameSession = gameSessionIterator.next();
-            if (gameSession.getIdGame() == idGameSession)
-                gameSession.unregisterFromGame(new LeaveGameMessage(), player);
-                gameSessionIterator.remove();
+        synchronized (gameSessions) {
+            for (Iterator<GameSessionObservable> gameSessionIterator = gameSessions.iterator(); gameSessionIterator.hasNext(); ) {
+                GameSessionObservable gameSession = gameSessionIterator.next();
+                if (gameSession.getIdGame() == idGameSession) {
+                    gameSession.unregisterFromGame(new LeaveGameMessage(), player);
+                    gameSessionIterator.remove();
+                }
+            }
         }
-
     }
 }

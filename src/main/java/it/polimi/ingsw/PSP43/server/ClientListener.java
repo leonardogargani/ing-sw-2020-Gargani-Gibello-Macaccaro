@@ -59,7 +59,7 @@ public class ClientListener implements Runnable {
                     handleMessage(message);
                 }
             } catch (IOException e) {
-                handleDisconnection();
+                handleDisconnection(true);
             } catch (ClassNotFoundException | InterruptedException e) {
                 e.printStackTrace();
             }
@@ -87,7 +87,7 @@ public class ClientListener implements Runnable {
                 return (ClientMessage) objectArrived;
 
             else if (objectArrived instanceof LeaveGameMessage) {
-                handleDisconnection();
+                handleDisconnection(true);
                 return null;
             } else {
                 stackMessages.add((ClientMessage) objectArrived);
@@ -108,7 +108,7 @@ public class ClientListener implements Runnable {
                 output.writeObject(message);
             }
         } catch (IOException e) {
-            handleDisconnection();
+            handleDisconnection(true);
         }
     }
 
@@ -123,9 +123,9 @@ public class ClientListener implements Runnable {
                 output.writeObject(message);
             }
         } catch (IOException e) {
-            handleDisconnection();
+            handleDisconnection(false);
         }
-        handleDisconnection();
+        handleDisconnection(false);
     }
 
     /**
@@ -170,7 +170,7 @@ public class ClientListener implements Runnable {
      * and output streams, the socket and then it creates a RegisterClientListener to call the unregister method on
      * this GameSession
      */
-    public synchronized void handleDisconnection() {
+    public synchronized void handleDisconnection(boolean mode) {
         try {
             if (!this.disconnected) {
                 this.disconnected = true;
@@ -181,18 +181,20 @@ public class ClientListener implements Runnable {
                 if(output != null)
                     output.close();
 
+                if(mode){
                 stackMessages.add(new LeaveGameMessage());
                 notifyAll();
 
                 if (this.idGame != -1) {
                     RegisterClientListener notifier = new RegisterClientListener();
                     notifier.notifyDisconnection(this.idGame);
-                }
+                }}
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     /**
      * Setter method for the integer variable idGame
