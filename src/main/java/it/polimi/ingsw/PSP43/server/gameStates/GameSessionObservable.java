@@ -112,7 +112,6 @@ public class GameSessionObservable implements Runnable {
 
         while (true) {
             ClientMessage messageArrived = newSender.call();
-            System.out.println("ciao");
             if (typeExpected.isInstance(messageArrived)) {
                 return typeExpected.cast(messageArrived);
             }
