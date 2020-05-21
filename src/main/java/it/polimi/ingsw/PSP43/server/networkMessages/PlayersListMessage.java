@@ -17,10 +17,10 @@ public class PlayersListMessage extends TextMessage {
     /**
      * Not default constructor for PlayersListMessage.
      * @param message is the string that will be shown to the recipient
-     * @param players is an HashMap with players and theirs associated god card
-     * @param color is an HashMap with players and their associated color chosen
+     * @param players is a Map with players and theirs associated god card
+     * @param color is a Map with players and their associated color chosen
      */
-    public PlayersListMessage(String message, HashMap<Player, AbstractGodCard> players, HashMap<Player, Color> color){
+    public PlayersListMessage(String message, Map<Player, AbstractGodCard> players, Map<Player, Color> color){
         super(message);
         this.players = players;
         this.color = color;
@@ -38,7 +38,7 @@ public class PlayersListMessage extends TextMessage {
 
 
     /**
-     * Getter method for the HashMap players.
+     * Getter method for the Map players.
      * @return players
      */
     public Map<Player, AbstractGodCard> getPlayers() {
@@ -47,7 +47,7 @@ public class PlayersListMessage extends TextMessage {
 
 
     /**
-     * Getter method for the HashMap color.
+     * Getter method for the Map color.
      * @return color
      */
     public Map<Player, Color> getColor() {

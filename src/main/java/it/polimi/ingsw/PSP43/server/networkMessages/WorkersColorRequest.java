@@ -12,7 +12,7 @@ public class WorkersColorRequest extends TextMessage {
     /**
      * Not default constructor for WorkersColorRequest message.
      * @param message is the string that will be shown to the recipient
-     * @param colorsAvailable is an ArrayList of available colors
+     * @param colorsAvailable is a List of available colors
      */
     public WorkersColorRequest(String message, List<Color> colorsAvailable){
         super(message);
@@ -31,7 +31,7 @@ public class WorkersColorRequest extends TextMessage {
 
 
     /**
-     * Getter method for the ArrayList colorsAvailable.
+     * Getter method for the List colorsAvailable.
      * @return colorsAvailable
      */
     public List<Color> getColorsAvailable() {

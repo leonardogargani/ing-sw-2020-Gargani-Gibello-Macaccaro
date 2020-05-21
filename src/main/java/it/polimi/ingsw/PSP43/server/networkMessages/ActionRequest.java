@@ -33,8 +33,8 @@ public class ActionRequest extends TextMessage {
 
 
     /**
-     * Getter method for the HashMap cellsAvailable, that contains the coordinates available for a player's workers.
-     * @return the HashMap cellsAvailable
+     * Getter method for the Map cellsAvailable, that contains the coordinates available for a player's workers.
+     * @return the Map cellsAvailable
      */
     public Map<Coord, ArrayList<Coord>> getCellsAvailable() {
         return cellsAvailable;

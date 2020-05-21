@@ -13,7 +13,7 @@ public class CardRequest extends TextMessage {
     /**
      * Not default constructor for CardRequest message.
      * @param message is the string that will be shown to the recipient
-     * @param cards is an ArrayList of AbstractGodCard among which the recipient will have to choose
+     * @param cards is a List of AbstractGodCard among which the recipient will have to choose
      */
     public CardRequest(String message, List<AbstractGodCard> cards){
         super(message);
@@ -32,7 +32,7 @@ public class CardRequest extends TextMessage {
 
 
     /**
-     * Getter method for the ArrayList cards.
+     * Getter method for the List cards.
      * @return cards
      */
     public List<AbstractGodCard> getCards() {

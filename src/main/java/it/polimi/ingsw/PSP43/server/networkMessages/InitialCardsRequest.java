@@ -14,7 +14,7 @@ public class InitialCardsRequest extends TextMessage {
     /**
      * Not default constructor for InitialCardsRequest message.
      * @param message is the string that will be shown to the recipient
-     * @param cards is an ArrayList of AbstractGodCard among which the creator of the game will have to choose and
+     * @param cards is a List of AbstractGodCard among which the creator of the game will have to choose and
      * these chosen cards will be those present in the game
      * @param numberOfCard is the number of cards that the first player must choose
      */
@@ -45,7 +45,7 @@ public class InitialCardsRequest extends TextMessage {
 
 
     /**
-     * Getter method for the ArrayList cards.
+     * Getter method for the List cards.
      * @return cards
      */
     public List<AbstractGodCard> getCards() {
