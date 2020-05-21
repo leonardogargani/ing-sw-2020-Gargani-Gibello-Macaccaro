@@ -10,10 +10,12 @@ import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.networkMessages.ChangeNickRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
+import it.polimi.ingsw.PSP43.server.networkMessages.PlayersListMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.ServerMessage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class GameSessionObservable implements Runnable {
     private final int idGame;
@@ -37,8 +39,7 @@ public class GameSessionObservable implements Runnable {
         if (numOfPlayers < maxNumPlayers) {
             for (String s : listenersHashMap.keySet()) {
                 if (s.equals(message.getNick())) {
-                    ChangeNickRequest notifyChangeNick = new ChangeNickRequest("We are sorry, but " + message.getNick() +
-                            "is already in use.");
+                    ChangeNickRequest notifyChangeNick = new ChangeNickRequest(message.getNick());
                     player.sendMessage(notifyChangeNick);
                     return -2;
                 }
@@ -52,7 +53,7 @@ public class GameSessionObservable implements Runnable {
     }
 
     public synchronized void unregisterFromGame(LeaveGameMessage message, ClientListener player) {
-        EndGameMessage endGameMessage = new EndGameMessage("We are sorry, due to connection problems the play is ended.");
+        EndGameMessage endGameMessage = new EndGameMessage(null, EndGameMessage.EndGameHeader.DISCONNECTED);
         String nicknameLeft = null;
         for (String s : listenersHashMap.keySet()) {
             if (listenersHashMap.get(s).equals(player)) nicknameLeft = s;
@@ -62,13 +63,13 @@ public class GameSessionObservable implements Runnable {
         sendBroadCast(endGameMessage, listExcluded);
     }
 
-    public void eliminatePlayer(Player playerEliminated) {
-        EndGameMessage message = new EndGameMessage("We are sorry but you have lost the game.");
+    public void eliminatePlayer(Player playerEliminated, PlayersListMessage messageToOthers) {
+        EndGameMessage message = new EndGameMessage(null, EndGameMessage.EndGameHeader.LOSER);
         sendMessage(message, playerEliminated.getNickname());
         listenersHashMap.remove(playerEliminated.getNickname());
         numOfPlayers = listenersHashMap.size();
 
-        // TODO send the updated list of players to the others
+        sendBroadCast(messageToOthers);
     }
 
     public void sendMessage(ServerMessage genericMessage, String addressee) {
@@ -116,7 +117,7 @@ public class GameSessionObservable implements Runnable {
                 return typeExpected.cast(messageArrived);
             }
             else if (messageArrived instanceof LeaveGameMessage) {
-                sendBroadCast(new EndGameMessage("We are sorry, but for connecting problems the game is ended!"));
+                sendBroadCast(new EndGameMessage(null, EndGameMessage.EndGameHeader.DISCONNECTED));
                 throw new GameEndedException();
             }
         }

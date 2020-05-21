@@ -9,6 +9,7 @@ import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
 
@@ -27,7 +28,7 @@ public class DoubleMoveBehaviour extends BasicMoveBehaviour {
      * @param gameSession This is a reference to the center of the game database.
      * @throws WinnerCaughtException if at the end of the move the worker satisfies one of the winning conditions.
      */
-    public void handleInitMove(GameSession gameSession) throws WinnerCaughtException, GameEndedException {
+    public void handleInitMove(GameSession gameSession) throws WinnerCaughtException, GameEndedException, GameLostException {
         Player currentPlayer = gameSession.getCurrentPlayer();
         WorkersHandler workersHandler = gameSession.getWorkersHandler();
 

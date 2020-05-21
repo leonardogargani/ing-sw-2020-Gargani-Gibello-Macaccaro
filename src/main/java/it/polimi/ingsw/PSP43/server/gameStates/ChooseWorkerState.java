@@ -62,7 +62,7 @@ public class ChooseWorkerState extends TurnState {
         do {
             currentPlayer = game.getCurrentPlayer();
             String nicknameCurrentPlayer = currentPlayer.getNickname();
-            WorkersColorRequest colorRequest = new WorkersColorRequest("Choose a color of the worker you will own.", Collections.unmodifiableList(availableColors));
+            WorkersColorRequest colorRequest = new WorkersColorRequest(Collections.unmodifiableList(availableColors));
             WorkersColorResponse colorResponse;
             do {
                 try {
@@ -130,7 +130,7 @@ public class ChooseWorkerState extends TurnState {
         HashMap<Player, AbstractGodCard> cardsChosen = new HashMap<>();
         for (String s : game.getCardsHandler().getMapOwnersCard().keySet())
             cardsChosen.put(game.getPlayersHandler().getPlayer(s), game.getPlayersHandler().getPlayer(s).getAbstractGodCard());
-        PlayersListMessage listOfPlayers = new PlayersListMessage(null, cardsChosen, colorsChosen);
+        PlayersListMessage listOfPlayers = new PlayersListMessage(null, game);
         game.sendBroadCast(listOfPlayers);
 
         game.transitToNextState();

@@ -13,6 +13,7 @@ import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
 
@@ -35,7 +36,7 @@ public class BuildBeforeMoveBehaviour extends BasicMoveBehaviour {
      *
      * @param gameSession The necessary data to do the move made by the player.
      */
-    public void handleInitMove(GameSession gameSession) throws WinnerCaughtException, GameEndedException {
+    public void handleInitMove(GameSession gameSession) throws WinnerCaughtException, GameEndedException, GameLostException {
         Player currentPlayer = gameSession.getCurrentPlayer();
 
         WorkersHandler workersHandler = gameSession.getWorkersHandler();

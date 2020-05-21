@@ -6,6 +6,7 @@ import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.TextMessage;
 
@@ -27,6 +28,20 @@ public class MoveState extends TurnState {
         Player currentPlayer;
         Player nextPlayer;
 
+        for (Worker w : handler.getWorkers()) {
+            w.setLatestMoved(false);
+        }
+
+        findCurrentPlayer();
+    }
+
+    private void findCurrentPlayer() {
+        GameSession game = super.getGameSession();
+        PlayersHandler playersHandler = game.getPlayersHandler();
+        WorkersHandler handler = game.getWorkersHandler();
+        Player currentPlayer;
+        Player nextPlayer;
+
         if (initFirst == -1) {
             game.setCurrentPlayer(playersHandler.getPlayer(FIRSTPOSITION));
             initFirst = FIRSTPOSITION;
@@ -35,14 +50,25 @@ public class MoveState extends TurnState {
             nextPlayer = playersHandler.getNextPlayer(currentPlayer.getNickname());
             game.setCurrentPlayer(nextPlayer);
         }
+        sendAllWaitingMessage();
+    }
 
-        currentPlayer = game.getCurrentPlayer();
+    private void sendAllWaitingMessage() {
+        GameSession game = super.getGameSession();
+        Player currentPlayer = game.getCurrentPlayer();
+
         TextMessage broadcastMessage = new TextMessage(currentPlayer.getNickname());
         ArrayList<String> nicksExcluded = new ArrayList<>();
         nicksExcluded.add(currentPlayer.getNickname());
         game.sendBroadCast(broadcastMessage, nicksExcluded);
 
-        for (Worker w : handler.getWorkers()) {
+        setAllWorkersUnmoved();
+    }
+
+    private void setAllWorkersUnmoved() {
+        WorkersHandler workersHandler = super.getGameSession().getWorkersHandler();
+
+        for (Worker w : workersHandler.getWorkers()) {
             w.setLatestMoved(false);
         }
 
@@ -65,6 +91,12 @@ public class MoveState extends TurnState {
         } catch (GameEndedException e) {
             game.setActive();
             return;
+        } catch (GameLostException e) {
+            Player nextPlayer = game.getPlayersHandler().getNextPlayer(currentPlayer.getNickname());
+            game.setCurrentPlayer(nextPlayer);
+            game.eliminatePlayer(currentPlayer);
+
+            this.sendAllWaitingMessage();
         }
 
         findNextState();

@@ -2,7 +2,7 @@ package it.polimi.ingsw.PSP43.server.modelHandlersException;
 
 
 public class WinnerCaughtException extends Exception {
-
+    private static final long serialVersionUID = 4120386884141385141L;
     private final String winner;
 
 

@@ -10,6 +10,7 @@ import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
+import it.polimi.ingsw.PSP43.server.networkMessages.PlayersListMessage;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -118,7 +119,8 @@ public class GameSession extends GameSessionObservable {
         Integer[] workersToRemove = playerToRemove.getWorkersIdsArray();
         workersHandler.removeWorkers(workersToRemove);
 
-        super.eliminatePlayer(playerEliminated);
+        super.eliminatePlayer(playerEliminated, new PlayersListMessage(playerEliminated.getNickname() +
+                " has lost the game.", this));
     }
 
     /**

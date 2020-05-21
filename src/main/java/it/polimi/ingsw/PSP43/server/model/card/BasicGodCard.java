@@ -7,6 +7,7 @@ import it.polimi.ingsw.PSP43.server.model.*;
 import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.BasicBuildBehaviour;
 import it.polimi.ingsw.PSP43.server.model.card.behaviours.moveBehaviours.BasicMoveBehaviour;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class BasicGodCard extends AbstractGodCard {
         return new BasicGodCard(super.getGodName(), super.getDescription(), super.getPower(), moveBehaviour, buildBehaviour);
     }
 
-    public void initMove(GameSession gameSession) throws GameEndedException, WinnerCaughtException {
+    public void initMove(GameSession gameSession) throws GameEndedException, WinnerCaughtException, GameLostException {
         moveBehaviour.handleInitMove(gameSession);
     }
 
@@ -49,7 +50,7 @@ public class BasicGodCard extends AbstractGodCard {
         buildBehaviour.handleInitBuild(gameSession);
     }
 
-    public ActionResponse askForMove(GameSession gameSession) throws GameEndedException {
+    public ActionResponse askForMove(GameSession gameSession) throws GameEndedException, GameLostException {
         return moveBehaviour.askForMove(gameSession);
     }
 

@@ -4,7 +4,7 @@ import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import java.util.List;
 
 
-public class InitialCardsRequest extends TextMessage {
+public class InitialCardsRequest extends ServerMessage {
 
     private static final long serialVersionUID = 300298265202994722L;
     private final List<AbstractGodCard> cards;
@@ -13,13 +13,11 @@ public class InitialCardsRequest extends TextMessage {
 
     /**
      * Not default constructor for InitialCardsRequest message.
-     * @param message is the string that will be shown to the recipient
      * @param cards is a List of AbstractGodCard among which the creator of the game will have to choose and
      * these chosen cards will be those present in the game
      * @param numberOfCard is the number of cards that the first player must choose
      */
-    public InitialCardsRequest(String message, List<AbstractGodCard> cards, int numberOfCard){
-        super(message);
+    public InitialCardsRequest(List<AbstractGodCard> cards, int numberOfCard){
         this.cards = cards;
         this.numberOfCard = numberOfCard;
     }
@@ -31,16 +29,6 @@ public class InitialCardsRequest extends TextMessage {
      */
     public int getNumberOfCard() {
         return numberOfCard;
-    }
-
-
-    /**
-     * Getter method for the string message.
-     * @return message
-     */
-    @Override
-    public String getMessage() {
-        return super.getMessage();
     }
 
 

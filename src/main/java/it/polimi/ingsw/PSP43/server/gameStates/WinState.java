@@ -16,8 +16,8 @@ public class WinState extends TurnState {
     }
 
     public void executeState() {
-        EndGameMessage messageForLosers = new EndGameMessage(winner + " win the play!", endGameHeader);
-        EndGameMessage messageForTheWinner = new EndGameMessage("Congratulations! You have won the game!", endGameHeader);
+        EndGameMessage messageForLosers = new EndGameMessage(winner, EndGameMessage.EndGameHeader.LOSER);
+        EndGameMessage messageForTheWinner = new EndGameMessage(null, EndGameMessage.EndGameHeader.WINNER);
 
         ArrayList<String> nicksExcluded = new ArrayList<>();
         nicksExcluded.add(winner);

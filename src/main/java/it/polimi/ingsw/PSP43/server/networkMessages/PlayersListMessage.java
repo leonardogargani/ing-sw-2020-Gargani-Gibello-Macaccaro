@@ -1,8 +1,13 @@
 package it.polimi.ingsw.PSP43.server.networkMessages;
 
 import it.polimi.ingsw.PSP43.Color;
+import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Player;
+import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,13 +22,30 @@ public class PlayersListMessage extends TextMessage {
     /**
      * Not default constructor for PlayersListMessage.
      * @param message is the string that will be shown to the recipient
-     * @param players is a Map with players and theirs associated god card
-     * @param color is a Map with players and their associated color chosen
+     * @param gameSession
      */
-    public PlayersListMessage(String message, Map<Player, AbstractGodCard> players, Map<Player, Color> color){
+    public PlayersListMessage(String message, GameSession gameSession){
         super(message);
-        this.players = players;
-        this.color = color;
+
+        PlayersHandler playersHandler = gameSession.getPlayersHandler();
+        HashMap<Player, AbstractGodCard> playerCardMap = new HashMap<>();
+
+        for (int i = 0; i < playersHandler.getNumOfPlayers(); i++) {
+            Player actualPlayer = playersHandler.getPlayer(i);
+            AbstractGodCard actualCard = actualPlayer.getAbstractGodCard();
+            playerCardMap.put(actualPlayer, actualCard);
+        }
+
+        HashMap<Player, Color> playerColorMap = new HashMap<>();
+        for (int i = 0; i < playersHandler.getNumOfPlayers(); i++) {
+            Player actualPlayer = playersHandler.getPlayer(i);
+            Integer[] ids = actualPlayer.getWorkersIdsArray();
+            Worker actualWorker = gameSession.getWorkersHandler().getWorker(ids[0]);
+            playerColorMap.put(actualPlayer, actualWorker.getColor());
+        }
+
+        this.players = playerCardMap;
+        this.color = playerColorMap;
     }
 
 

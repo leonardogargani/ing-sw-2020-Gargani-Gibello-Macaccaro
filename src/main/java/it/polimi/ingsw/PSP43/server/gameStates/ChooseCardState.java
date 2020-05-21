@@ -46,8 +46,7 @@ public class ChooseCardState extends TurnState {
         game.sendBroadCast(openingMessage, nicksExcluded);
 
         List<AbstractGodCard> available = game.getCardsHandler().getDeckOfAbstractGodCards();
-        InitialCardsRequest cardsRequest = new InitialCardsRequest("Choose " + playersHandler.getNumOfPlayers() + " cards. You " +
-                "will receive the latest not chosen by other players.", available, game.getListenersHashMap().size());
+        InitialCardsRequest cardsRequest = new InitialCardsRequest(available, game.getListenersHashMap().size());
         ChosenCardsResponse responseCardMessage;
         do {
             try {
@@ -92,7 +91,7 @@ public class ChooseCardState extends TurnState {
             Player current = gameSession.getCurrentPlayer();
             nicknameCurrentPlayer = current.getNickname();
 
-            CardRequest request = new CardRequest("Choose a card:", Collections.unmodifiableList(new ArrayList<>(cardsAvailable)));
+            CardRequest request = new CardRequest(Collections.unmodifiableList(new ArrayList<>(cardsAvailable)));
             ChosenCardResponse response;
             do {
                 try {

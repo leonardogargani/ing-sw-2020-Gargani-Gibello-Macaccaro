@@ -8,6 +8,7 @@ import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.BasicGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
 
@@ -18,8 +19,10 @@ import java.util.HashMap;
 public class BasicMoveBehaviour extends BasicGodCard implements MoveBehavior {
     private static final long serialVersionUID = -198685635604926007L;
 
-    public ActionResponse askForMove(GameSession gameSession) throws GameEndedException {
+    public ActionResponse askForMove(GameSession gameSession) throws GameEndedException, GameLostException {
         HashMap<Coord, ArrayList<Coord>> availablePositions = findAvailablePositionsToMove(gameSession);
+
+        if (availablePositions.size() == 0) throw new GameLostException();
 
         return askForMove(gameSession, availablePositions);
     }
@@ -35,7 +38,7 @@ public class BasicMoveBehaviour extends BasicGodCard implements MoveBehavior {
         return response;
     }
 
-    public void handleInitMove(GameSession gameSession) throws GameEndedException, WinnerCaughtException {
+    public void handleInitMove(GameSession gameSession) throws GameEndedException, WinnerCaughtException, GameLostException {
         WorkersHandler workersHandler = gameSession.getWorkersHandler();
 
         ActionResponse response = askForMove(gameSession);

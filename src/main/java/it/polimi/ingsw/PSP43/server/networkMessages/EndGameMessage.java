@@ -18,7 +18,8 @@ public class EndGameMessage extends TextMessage {
      * @param message is the string that will be shown to the recipient
      * @param endGameHeader
      */
-    public EndGameMessage(String message, EndGameHeader endGameHeader){super(message);
+    public EndGameMessage(String message, EndGameHeader endGameHeader){
+        super(message);
         this.endGameHeader = endGameHeader;
     }
 

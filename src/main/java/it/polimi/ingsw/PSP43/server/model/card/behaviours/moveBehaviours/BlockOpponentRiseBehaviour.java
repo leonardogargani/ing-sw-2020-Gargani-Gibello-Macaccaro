@@ -10,6 +10,7 @@ import it.polimi.ingsw.PSP43.server.model.card.BlockRiseFactory;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
 /**
@@ -46,7 +47,7 @@ public class BlockOpponentRiseBehaviour extends BasicMoveBehaviour {
      * @param gameSession The main access to the database of the game.
      * @throws WinnerCaughtException if a worker is moved on the third level.
      */
-    public void handleInitMove(GameSession gameSession) throws WinnerCaughtException, GameEndedException {
+    public void handleInitMove(GameSession gameSession) throws WinnerCaughtException, GameEndedException, GameLostException {
         disablePowers(gameSession);
 
         WorkersHandler workersHandler = gameSession.getWorkersHandler();

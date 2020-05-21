@@ -9,6 +9,7 @@ import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
 import java.io.Serializable;
@@ -170,11 +171,11 @@ public abstract class AbstractGodCard implements Serializable {
 
     public AbstractGodCard cleanFromEffects(String nameOfEffect) { return null; }
 
-    public void initMove(GameSession gameSession) throws WinnerCaughtException, GameEndedException {}
+    public void initMove(GameSession gameSession) throws WinnerCaughtException, GameEndedException, GameLostException {}
 
     public void initBuild(GameSession gameSession) throws GameEndedException {}
 
-    public ActionResponse askForMove(GameSession gameSession) throws GameEndedException { return null; }
+    public ActionResponse askForMove(GameSession gameSession) throws GameEndedException, GameLostException { return null; }
 
     public ActionResponse askForMove(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositions) throws GameEndedException { return null; }
 

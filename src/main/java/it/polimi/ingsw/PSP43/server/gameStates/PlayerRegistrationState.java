@@ -62,7 +62,7 @@ public class PlayerRegistrationState extends TurnState {
      * @param message     This is the message sent from the client.
      */
     protected int askNumberPlayers(GameSession gameSession, RegistrationMessage message) throws IOException, ClassNotFoundException, InterruptedException {
-        PlayersNumberRequest request = new PlayersNumberRequest("Choose between a 2 or 3 game play.");
+        PlayersNumberRequest request = new PlayersNumberRequest();
         PlayersNumberResponse response;
         try {
             response = gameSession.sendRequest(request, message.getNick(), PlayersNumberResponse.class);

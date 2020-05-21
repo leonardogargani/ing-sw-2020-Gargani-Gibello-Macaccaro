@@ -7,6 +7,7 @@ import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
 import java.util.ArrayList;
@@ -66,7 +67,7 @@ public abstract class PowerGodDecorator extends AbstractGodCard {
         return godComponent.getPower();
     }
 
-    public void initMove(GameSession gameSession) throws WinnerCaughtException, GameEndedException {
+    public void initMove(GameSession gameSession) throws WinnerCaughtException, GameEndedException, GameLostException {
         godComponent.initMove(gameSession);
     }
 
@@ -74,7 +75,7 @@ public abstract class PowerGodDecorator extends AbstractGodCard {
         godComponent.initBuild(gameSession);
     }
 
-    public ActionResponse askForMove(GameSession gameSession) throws GameEndedException {
+    public ActionResponse askForMove(GameSession gameSession) throws GameEndedException, GameLostException {
         return godComponent.askForMove(gameSession);
     }
 

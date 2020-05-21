@@ -4,29 +4,17 @@ import it.polimi.ingsw.PSP43.Color;
 import java.util.List;
 
 
-public class WorkersColorRequest extends TextMessage {
+public class WorkersColorRequest extends ServerMessage {
 
     private static final long serialVersionUID = -1959452039599220074L;
     private final List<Color> colorsAvailable;
 
     /**
      * Not default constructor for WorkersColorRequest message.
-     * @param message is the string that will be shown to the recipient
      * @param colorsAvailable is a List of available colors
      */
-    public WorkersColorRequest(String message, List<Color> colorsAvailable){
-        super(message);
+    public WorkersColorRequest(List<Color> colorsAvailable){
         this.colorsAvailable = colorsAvailable;
-    }
-
-
-    /**
-     * Getter method for the string message.
-     * @return message
-     */
-    @Override
-    public String getMessage() {
-        return super.getMessage();
     }
 
 

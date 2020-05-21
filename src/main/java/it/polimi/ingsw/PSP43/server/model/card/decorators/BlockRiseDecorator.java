@@ -9,6 +9,7 @@ import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
 import java.util.ArrayList;
@@ -48,8 +49,10 @@ public class BlockRiseDecorator extends PowerGodDecorator {
         return super.getGodComponent().cleanFromEffects(nameOfEffect);
     }
 
-    public void initMove(GameSession gameSession) throws WinnerCaughtException, GameEndedException {
+    public void initMove(GameSession gameSession) throws WinnerCaughtException, GameEndedException, GameLostException {
         HashMap<Coord, ArrayList<Coord>> availablePositionsAfterBlocked = findAvailablePositionsToMove(gameSession);
+
+        if (availablePositionsAfterBlocked.size() == 0) throw new GameLostException();
 
         ActionResponse actionResponse = askForMove(gameSession, availablePositionsAfterBlocked);
         Worker workerMoved = gameSession.getWorkersHandler().getWorker(actionResponse.getWorkerPosition());
