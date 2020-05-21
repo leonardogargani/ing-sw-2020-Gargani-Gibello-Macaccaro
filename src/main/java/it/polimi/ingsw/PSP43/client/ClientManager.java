@@ -58,6 +58,8 @@ public class ClientManager implements Runnable {
                 handleEvent();
             } catch (QuitPlayerException e) {
                 clientBG.sendMessage(new LeaveGameMessage());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -67,7 +69,7 @@ public class ClientManager implements Runnable {
      * on the graphic handler
      * @throws QuitPlayerException if a player in the input writes quit to leave the game
      */
-    public synchronized void handleEvent() throws QuitPlayerException {
+    public synchronized void handleEvent() throws QuitPlayerException, InterruptedException {
 
         ServerMessage message = popMessageFromBox();
         {
@@ -156,14 +158,13 @@ public class ClientManager implements Runnable {
      * Synchronized method to remove a message from the message box
      * @return the removed message
      */
-    public synchronized ServerMessage popMessageFromBox() {
-        try {
+    public synchronized ServerMessage popMessageFromBox() throws InterruptedException {
+        while(messageBox.size() == 0) {
             wait();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
+
         ServerMessage message = messageBox.get(0);
-        messageBox.remove(0);
+        messageBox.remove(message);
         return message;
     }
 

@@ -20,7 +20,7 @@ import java.util.HashMap;
 public class BasicGodCard extends AbstractGodCard {
     private static final long serialVersionUID = 6236626696645439491L;
 
-    private BasicMoveBehaviour moveBehavior;
+    private BasicMoveBehaviour moveBehaviour;
     private BasicBuildBehaviour buildBehaviour;
 
     public BasicGodCard() {
@@ -33,52 +33,16 @@ public class BasicGodCard extends AbstractGodCard {
      */
     public BasicGodCard(String godName, String description, String power, BasicMoveBehaviour moveBehaviour, BasicBuildBehaviour buildBehaviour) {
         super(godName, description, power);
-        this.moveBehavior = moveBehaviour;
+        this.moveBehaviour = moveBehaviour;
         this.buildBehaviour = buildBehaviour;
     }
 
-    public void setGodName(String godName) {
-        super.setGodName(godName);
-    }
-
-    /**
-     * Method that returns the name of the god.
-     * @return name of the god
-     */
-    public String getGodName() {
-        return super.getGodName();
-    }
-
-    public void setDescription(String description) {
-        super.setDescription(description);
-    }
-
-    /**
-     * Method that returns the description of the power of the god.
-     * @return description of the power of the god
-     */
-    public String getDescription() {
-        return super.getDescription();
-    }
-
-    public void setPower(String power) {
-        super.setPower(power);
-    }
-
-    /**
-     * Method that returns the description of the power of the god.
-     * @return description of the power of the god
-     */
-    public String getPower() {
-        return super.getPower();
-    }
-
     public AbstractGodCard cleanFromEffects(String nameOfEffect) {
-        return new BasicGodCard(super.getGodName(), super.getDescription(), super.getPower(), moveBehavior, buildBehaviour);
+        return new BasicGodCard(super.getGodName(), super.getDescription(), super.getPower(), moveBehaviour, buildBehaviour);
     }
 
     public void initMove(GameSession gameSession) throws GameEndedException, WinnerCaughtException {
-        moveBehavior.handleInitMove(gameSession);
+        moveBehaviour.handleInitMove(gameSession);
     }
 
     public void initBuild(GameSession gameSession) throws GameEndedException {
@@ -86,11 +50,11 @@ public class BasicGodCard extends AbstractGodCard {
     }
 
     public ActionResponse askForMove(GameSession gameSession) throws GameEndedException {
-        return moveBehavior.askForMove(gameSession);
+        return moveBehaviour.askForMove(gameSession);
     }
 
     public ActionResponse askForMove(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositions) throws GameEndedException {
-        return moveBehavior.askForMove(gameSession, availablePositions);
+        return moveBehaviour.askForMove(gameSession, availablePositions);
     }
 
     public DataToBuild genericAskForBuild(GameSession gameSession) throws GameEndedException {
@@ -100,6 +64,4 @@ public class BasicGodCard extends AbstractGodCard {
     public ActionResponse askForBuild(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositionsBuildBlock, String message) throws GameEndedException {
         return buildBehaviour.askForBuild(gameSession, availablePositionsBuildBlock, message);
     }
-
-
 }

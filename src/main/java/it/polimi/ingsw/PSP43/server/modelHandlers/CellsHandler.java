@@ -7,6 +7,7 @@ import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -64,10 +65,10 @@ public class CellsHandler {
     /**
      * Method to update cell's attributes and make them consistent to the game.
      * @param newDescriptionCell is a cell received from a client that specifies the new state of a cell, identified by the coordinates supplied
-     * @param c includes the coordinates of the cell that are going to be modified
+     * @param newCoord includes the coordinates of the cell that are going to be modified
      */
-    public void changeStateOfCell (Cell newDescriptionCell, Coord c) {
-        Cell cellToChange = board[c.getX()][c.getY()];
+    public void changeStateOfCell (Cell newDescriptionCell, Coord newCoord) {
+        Cell cellToChange = board[newCoord.getX()][newCoord.getY()];
         cellToChange.setOccupiedByDome(newDescriptionCell.getOccupiedByDome());
         cellToChange.setOccupiedByWorker(newDescriptionCell.getOccupiedByWorker());
         cellToChange.setHeight(newDescriptionCell.getHeight());
@@ -120,7 +121,7 @@ public class CellsHandler {
     public HashMap<Coord, ArrayList<Coord>> findWorkersNeighbouringCoords(Player player) {
 
         Integer[] workerIds = player.getWorkersIdsArray();
-        ArrayList<Worker> workers = gameSession.getWorkersHandler().getWorkers(workerIds);
+        List<Worker> workers = gameSession.getWorkersHandler().getWorkers(workerIds);
 
         HashMap<Coord, ArrayList<Coord>> availablePositions = new HashMap<>();
         ArrayList<Coord> positions;
@@ -131,24 +132,6 @@ public class CellsHandler {
         }
         return availablePositions;
 
-    }
-
-
-    /**
-     * This method finds all the neighbouring cells for the worker provided from the caller.
-     * @param worker reference of the worker of which the method has to find the neighbouring cells
-     * @return an HashMap in which the key value are the coordinates of the worker supplied by the caller and the values are all the neighbouring
-     * cells of that worker
-     */
-    public HashMap<Coord, ArrayList<Coord>> findWorkerNeighbouringCoords(Worker worker) {
-
-        HashMap<Coord, ArrayList<Coord>> availablePositions = new HashMap<>();
-        ArrayList<Coord> positions;
-
-        positions = findNeighbouringCoords(worker.getCurrentPosition());
-        availablePositions.put(worker.getCurrentPosition(), positions);
-
-        return availablePositions;
     }
 
 

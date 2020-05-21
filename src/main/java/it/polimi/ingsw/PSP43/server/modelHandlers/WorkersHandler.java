@@ -64,7 +64,7 @@ public class WorkersHandler {
      */
     public int addNewWorker(Color color) {
         int workerId = workers.size();
-        Worker newWorker = new Worker(workerId, color, gameSession.getBoardObserver());
+        Worker newWorker = new Worker(workerId, color);
         workers.add(newWorker);
         return workerId;
     }
@@ -132,12 +132,12 @@ public class WorkersHandler {
      * @param ids ids of the worker that are wanted to be returned
      * @return ArrayList of requested workers
      */
-    public ArrayList<Worker> getWorkers(Integer[] ids) {
+    public List<Worker> getWorkers(Integer[] ids) {
         ArrayList<Worker> workers = new ArrayList<>();
         for (Integer i : ids) {
             workers.add(getWorker(i));
         }
-        return workers;
+        return Collections.unmodifiableList(new ArrayList<>(workers));
     }
 
 

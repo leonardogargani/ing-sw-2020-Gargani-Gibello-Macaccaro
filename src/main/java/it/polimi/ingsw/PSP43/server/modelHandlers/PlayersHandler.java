@@ -5,7 +5,6 @@ import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.*;
 import java.util.ArrayList;
 
-
 /**
  * This is a class intended to handle all the requests to store informations about players in game
  * (such as nickname) and the cards they own during the game;
@@ -83,7 +82,6 @@ public class PlayersHandler {
      */
     public void deletePlayer(String nick) {
         gamePlayers.removeIf(p -> p.getNickname().equals(nick));
-        // TODO: call here notifyMenuChange() once it is implemented
     }
 
 

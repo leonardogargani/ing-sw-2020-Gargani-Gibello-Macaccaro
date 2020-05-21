@@ -126,7 +126,7 @@ public class Cell extends Observable {
     /**
      * This method notifies the related observer that a change occurred and the client needs to be advised.
      */
-    public void notifyBoardChange() {
+    private void notifyBoardChange() {
         super.getBoardObserver().notifyBoardChange(this);
     }
 
@@ -135,6 +135,7 @@ public class Cell extends Observable {
      * This method clones a cell so that it can be used instead of the real one.
      * @return copy of the cell
      */
+    @Override
     public Cell clone() {
         Cell clone = new Cell(coord.clone(), super.getBoardObserver());
         clone.setHeight(this.getHeight());

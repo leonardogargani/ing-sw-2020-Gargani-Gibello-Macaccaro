@@ -8,7 +8,6 @@ import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
 
-
 public class DoubleSameSpaceBehaviour extends BasicBuildBehaviour {
     private static final long serialVersionUID = -834139120755922247L;
 

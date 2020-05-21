@@ -22,9 +22,8 @@ public class Worker {
      * Non-default constructor, it initializes a worker with its color, chosen by the owner.
      * @param id id of the worker
      * @param color color of the worker
-     * @param boardObserver boardObserver of the game
      */
-    public Worker(int id, Color color, BoardObserver boardObserver) {
+    public Worker(int id, Color color) {
         this.id = id;
         this.currentPosition = null;
         this.previousPosition = null;

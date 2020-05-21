@@ -20,7 +20,7 @@ public class WorkerTest {
     @Before
     public void setUp() throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException {
         BoardObserver boardObserver = new BoardObserver(new GameSession(9));
-        test = new Worker(5, Color.ANSI_BLUE, boardObserver);
+        test = new Worker(5, Color.ANSI_BLUE);
     }
 
     // getter and setter are tested both at the same time

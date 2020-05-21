@@ -67,6 +67,8 @@ public class GameSessionObservable implements Runnable {
         sendMessage(message, playerEliminated.getNickname());
         listenersHashMap.remove(playerEliminated.getNickname());
         numOfPlayers = listenersHashMap.size();
+
+        // TODO send the updated list of players to the others
     }
 
     public void sendMessage(ServerMessage genericMessage, String addressee) {
@@ -110,6 +112,7 @@ public class GameSessionObservable implements Runnable {
 
         while (true) {
             ClientMessage messageArrived = newSender.call();
+            System.out.println("ciao");
             if (typeExpected.isInstance(messageArrived)) {
                 return typeExpected.cast(messageArrived);
             }
