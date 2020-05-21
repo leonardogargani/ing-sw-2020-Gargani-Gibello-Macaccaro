@@ -2,7 +2,6 @@ package it.polimi.ingsw.PSP43.server.gameStates;
 
 import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class WinState extends TurnState {
@@ -17,8 +16,8 @@ public class WinState extends TurnState {
     }
 
     public void executeState() {
-        EndGameMessage messageForLosers = new EndGameMessage(winner + " win the play!");
-        EndGameMessage messageForTheWinner = new EndGameMessage("Congratulations! You have won the game!");
+        EndGameMessage messageForLosers = new EndGameMessage(winner + " win the play!", endGameHeader);
+        EndGameMessage messageForTheWinner = new EndGameMessage("Congratulations! You have won the game!", endGameHeader);
 
         ArrayList<String> nicksExcluded = new ArrayList<>();
         nicksExcluded.add(winner);

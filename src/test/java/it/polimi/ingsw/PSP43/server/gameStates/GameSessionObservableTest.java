@@ -4,7 +4,6 @@ import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.ClientListener;
-import it.polimi.ingsw.PSP43.server.initialisers.GameInitialiser;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
@@ -14,7 +13,6 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.MockitoAnnotations;
-import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -129,7 +127,7 @@ public class GameSessionObservableTest {
         spyGame.registerToTheGame(new RegistrationMessage(secondNick), clientListenerMock);
         spyGame.registerToTheGame(new RegistrationMessage(thirdNick), clientListenerMock);
 
-        spyGame.sendMessage(new EndGameMessage(""), firstNick);
+        spyGame.sendMessage(new EndGameMessage("", endGameHeader), firstNick);
         verify(clientListenerMock, times(1)).sendMessage(any());
     }
 
@@ -213,7 +211,7 @@ public class GameSessionObservableTest {
 
         ArrayList<String> nicksExcluded = new ArrayList<>();
         nicksExcluded.add(firstNick);
-        EndGameMessage endGameMessage = new EndGameMessage("");
+        EndGameMessage endGameMessage = new EndGameMessage("", endGameHeader);
         spyGame.sendBroadCast(endGameMessage, nicksExcluded);
         verify(firstMock, times(0)).sendMessage(endGameMessage);
         verify(secondMock, times(1)).sendMessage(endGameMessage);
@@ -274,8 +272,8 @@ public class GameSessionObservableTest {
 
         ArrayList<String> nicksExcluded = new ArrayList<>();
         nicksExcluded.add(firstNick);
-        EndGameMessage endGameMessageWinner = new EndGameMessage("");
-        EndGameMessage endGameMessageLoser = new EndGameMessage("");
+        EndGameMessage endGameMessageWinner = new EndGameMessage("", endGameHeader);
+        EndGameMessage endGameMessageLoser = new EndGameMessage("", endGameHeader);
         spyGame.sendEndingMessage(endGameMessageLoser, endGameMessageWinner, nicksExcluded);
         verify(firstMock, times(1)).sendMessage(endGameMessageWinner);
         verify(secondMock, times(1)).sendMessage(endGameMessageLoser);

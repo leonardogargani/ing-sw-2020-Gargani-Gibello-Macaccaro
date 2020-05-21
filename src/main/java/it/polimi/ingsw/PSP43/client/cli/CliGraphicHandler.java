@@ -65,7 +65,7 @@ public class CliGraphicHandler extends GraphicHandler {
     @Override
     public void updateMenuChange(PlayersNumberRequest request) throws QuitPlayerException {
 
-        bottomMenu.setContent(request.getMessage());
+        bottomMenu.setContent(Screens.PLAYERS_NUMBER_REQUEST.toString());
         int chosenNumber;
         do {
             // I need to show() only the CliTopMenu, containing the request
@@ -93,36 +93,41 @@ public class CliGraphicHandler extends GraphicHandler {
             System.out.printf(" %d - ", cards.indexOf(card));
             card.print();
         }
-        bottomMenu.setContent(request.getMessage());
 
-            int playersNumber = request.getNumberOfCard();
+        int playersNumber = request.getNumberOfCard();
 
-            // I read as many numbers as how many cards have to be chosen (so that the player cannot
-            // insert neither less nor more than the requested value)
+        if (playersNumber == 2) {
+            bottomMenu.setContent(Screens.INITIAL_2_CARDS_REQUEST.toString());
+        } else {
+            bottomMenu.setContent(Screens.INITIAL_3_CARDS_REQUEST.toString());
+        }
 
-            ArrayList<Integer> chosenIndexes = new ArrayList<>();
-            int chosenIndex;
-            for (int i = 0; i < playersNumber; i++) {
-                bottomMenu.show();
-                System.out.printf("Write a single number and press Enter (%d remaining):\n", playersNumber - i);
-                chosenIndex = inputHandler.requestInputInt();
-                // avoid repetition of the same Gods
-                if (!chosenIndexes.contains(chosenIndex)) {
-                    chosenIndexes.add(chosenIndex);
-                } else {
-                    System.out.println("You have already chosen this God");
-                    i--;
-                }
+        // I read as many numbers as how many cards have to be chosen (so that the player cannot
+        // insert neither less nor more than the requested value)
+
+        ArrayList<Integer> chosenIndexes = new ArrayList<>();
+        int chosenIndex;
+        for (int i = 0; i < playersNumber; i++) {
+            bottomMenu.show();
+            System.out.printf("Write a single number and press Enter (%d remaining):\n", playersNumber - i);
+            chosenIndex = inputHandler.requestInputInt();
+            // avoid repetition of the same Gods
+            if (!chosenIndexes.contains(chosenIndex)) {
+                chosenIndexes.add(chosenIndex);
+            } else {
+                System.out.println("You have already chosen this God");
+                i--;
             }
+        }
 
-            // constructing the ArrayList of cards that needs to be sent as a response
-            ArrayList<AbstractGodCard> chosenCards = new ArrayList<>();
-            for (Integer index : chosenIndexes) {
-                chosenCards.add(cards.get(index));
-            }
+        // constructing the ArrayList of cards that needs to be sent as a response
+        ArrayList<AbstractGodCard> chosenCards = new ArrayList<>();
+        for (Integer index : chosenIndexes) {
+            chosenCards.add(cards.get(index));
+        }
 
-            bottomMenu.clear();
-            ChosenCardsResponse response = new ChosenCardsResponse(chosenCards);
+        bottomMenu.clear();
+        ChosenCardsResponse response = new ChosenCardsResponse(chosenCards);
         super.getClientBG().sendMessage(response);
     }
 
@@ -136,7 +141,7 @@ public class CliGraphicHandler extends GraphicHandler {
     public void updateMenuChange(CardRequest request) throws QuitPlayerException {
         List<AbstractGodCard> availableCards = request.getCards();
 
-        bottomMenu.setContent(request.getMessage());
+        bottomMenu.setContent(Screens.CARD_REQUEST.toString());
 
         for (AbstractGodCard card : availableCards) {
             // the name of every God is preceded by its index in the ArrayList
@@ -174,7 +179,7 @@ public class CliGraphicHandler extends GraphicHandler {
     public void updateMenuChange(WorkersColorRequest request) throws QuitPlayerException {
         List<Color> availableColors = request.getColorsAvailable();
 
-        bottomMenu.setContent(request.getMessage());
+        bottomMenu.setContent(Screens.WORKERS_COLOR_REQUEST.toString());
 
         for (Color color : availableColors) {
             // the name of every color is preceded by its index in the ArrayList
@@ -222,6 +227,7 @@ public class CliGraphicHandler extends GraphicHandler {
 
         Map<Coord, ArrayList<Coord>> hashMap = request.getCellsAvailable();
         bottomMenu.setContent(request.getMessage());
+        topMenu.setContent(Screens.YOUR_TURN.toString());
 
             // graphically render all the received coordinates as free (yellow background)
             for (Coord startCoord : hashMap.keySet()) {
@@ -340,7 +346,27 @@ public class CliGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(EndGameMessage message) {
-        bottomMenu.setContent(message.getMessage());
+
+        for (int i = 0; i < 15; i++) {
+            System.out.println("\n");
+        }
+
+        EndGameMessage.EndGameHeader endGameHeader = message.getEndGameHeader();
+        switch (endGameHeader) {
+            case WINNER:
+                bottomMenu.setContent(Screens.WINNER.toString());
+                break;
+            case LOSER:
+                String nick = message.getMessage();
+                bottomMenu.setContentWithNick(nick);
+                break;
+            case DISCONNECTED:
+                bottomMenu.setContent(Screens.DISCONNECTED.toString());
+                break;
+            default:
+                System.out.println("An error occurred");
+        }
+
         bottomMenu.show();
     }
 
@@ -353,10 +379,9 @@ public class CliGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(ChangeNickRequest request) throws QuitPlayerException {
-        bottomMenu.setContent(request.getMessage());
+        bottomMenu.setContent(request.getMessage() + " is already in use, choose another nickname:");
         bottomMenu.show();
         String nickname;
-        System.out.print("Choose another nickname:\n");
         nickname = inputHandler.requestInputString();
         RegistrationMessage message = new RegistrationMessage(nickname);
         super.getClientBG().sendMessage(message);
@@ -383,6 +408,8 @@ public class CliGraphicHandler extends GraphicHandler {
     @Override
     public void updateMenuChange(PlayersListMessage message) {
 
+        // TODO use the String message field to print who lose in the cliBottomMenu
+
         Map<Player, AbstractGodCard> godsHashMap = message.getPlayers();
         Map<Player, Color> colorsHashmap = message.getColor();
 
@@ -404,7 +431,6 @@ public class CliGraphicHandler extends GraphicHandler {
     /**
      * This method updates the graphics of the client displaying, at the beginning of
      * the game, some useful information about the state of the game preparation.
-     *
      * @param message message to be displayed
      */
     @Override

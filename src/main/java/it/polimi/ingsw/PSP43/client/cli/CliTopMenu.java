@@ -31,7 +31,7 @@ public class CliTopMenu {
     public void setContentWithNick(String nick) {
         this.content =
                 "          -------------------------------------          \n" +
-                "                    It's " + nick + "'s turn\n" +
+                "                    It's " + nick + "'s turn             \n" +
                 "          -------------------------------------          \n";
     }
 

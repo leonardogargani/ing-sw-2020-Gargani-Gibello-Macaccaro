@@ -1,6 +1,8 @@
 package it.polimi.ingsw.PSP43.client.cli;
 
 
+import it.polimi.ingsw.PSP43.Color;
+
 public class CliBottomMenu {
 
     private String content;
@@ -28,6 +30,21 @@ public class CliBottomMenu {
      */
     public void clear() {
         this.setContent("");
+    }
+
+
+    /**
+     * Method that, given the nickname of a player, sets the content of the menu
+     * to a nicely formatted "*nickname* won the game".
+     * @param nick nickname of the player playing his own turn at the moment
+     */
+    public void setContentWithNick(String nick) {
+        this.content =
+                Color.ANSI_RED +
+                "          -------------------------------------          \n" +
+                "                    " + nick + " won the game            \n" +
+                "          -------------------------------------          \n" +
+                Color.RESET;
     }
 
 }

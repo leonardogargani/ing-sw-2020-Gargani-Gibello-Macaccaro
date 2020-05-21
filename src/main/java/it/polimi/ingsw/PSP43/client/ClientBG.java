@@ -193,7 +193,7 @@ public class ClientBG implements Runnable {
      */
     public void handleDisconnection() {
         if (clientManager.getMessageBox().size() == 0)
-            clientManager.pushMessageInBox(new EndGameMessage("End game!"));
+            clientManager.pushMessageInBox(new EndGameMessage("End game!", endGameHeader));
         else
             clientManager.notifyMessageArrived();
     }

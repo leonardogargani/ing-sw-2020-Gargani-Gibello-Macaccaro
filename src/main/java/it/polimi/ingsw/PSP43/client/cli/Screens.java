@@ -37,6 +37,16 @@ public enum Screens {
                     Color.RESET
     ),
 
+    DISCONNECTED(
+            Color.ANSI_RED +
+                    "* * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n" +
+                    "*                                                       *\n" +
+                    "*          You  disconnected  from  the  game!          *\n" +
+                    "*                                                       *\n" +
+                    "* * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n" +
+                    Color.RESET
+    ),
+
     YOUR_TURN(
             Color.ANSI_WHITE +
                     "          -------------------------------------          \n" +
@@ -65,8 +75,8 @@ public enum Screens {
 
     CARD_REQUEST(
             Color.ANSI_WHITE +
-            "Choose a card:\n" +
-            Color.RESET
+                    "Choose a card:\n" +
+                    Color.RESET
     ),
 
     WORKERS_COLOR_REQUEST(
@@ -75,21 +85,15 @@ public enum Screens {
             Color.RESET
     ),
 
-    BUILD_POSITION_REQUEST(
+    BLOCK_POSITION_REQUEST(
             Color.ANSI_WHITE +
-            "Choose where to build:\n" +
+            "Choose a position where to build a block:\n" +
             Color.RESET
     ),
 
-    WORKER_0_PLACEMENT_REQUEST(
+    WORKER_PLACEMENT_REQUEST(
             Color.ANSI_WHITE +
-            "Choose a position to place your Worker 0 in:\n" +
-            Color.RESET
-    ),
-
-    WORKER_1_PLACEMENT_REQUEST(
-            Color.ANSI_WHITE +
-            "Choose a position to place your Worker 1 in:\n" +
+            "Choose a position to place your worker in:\n" +
             Color.RESET
     ),
 
