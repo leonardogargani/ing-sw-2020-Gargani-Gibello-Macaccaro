@@ -13,11 +13,11 @@ import it.polimi.ingsw.PSP43.server.model.card.BasicGodCard;
 import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.BasicBuildBehaviour;
 import it.polimi.ingsw.PSP43.server.model.card.behaviours.moveBehaviours.BasicMoveBehaviour;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -52,7 +52,7 @@ public class BlockRiseDecoratorTest {
     }
 
     @Test
-    public void findAvailablePositionsToMove() throws IOException {
+    public void findAvailablePositionsToMove() {
         Coord coordHigher = new Coord(3,3);
         Cell cellHigher = spyGame.getCellsHandler().getCell(coordHigher);
         cellHigher.setHeight(1);
@@ -71,14 +71,14 @@ public class BlockRiseDecoratorTest {
     }
 
     @Test
-    public void cleanFromEffects() throws ClassNotFoundException {
+    public void cleanFromEffects() {
         AbstractGodCard cleanCard = abstractGodCard.cleanFromEffects("it.polimi.ingsw.PSP43.server.model.card.decorators.BlockRiseDecorator");
 
         assertFalse(cleanCard instanceof BlockRiseDecorator);
     }
 
     @Test
-    public void initMove() throws ClassNotFoundException, GameEndedException, InterruptedException, IOException, WinnerCaughtException {
+    public void initMove() throws GameEndedException, WinnerCaughtException, GameLostException {
         Coord coordToMove = new Coord(3, 4);
 
         doReturn(new ActionResponse(workerToMove.getCurrentPosition(), coordToMove)).when(spyGame).sendRequest(any(), any(), any());

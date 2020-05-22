@@ -10,11 +10,11 @@ import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.model.card.BasicGodCard;
 import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.BasicBuildBehaviour;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -54,7 +54,7 @@ public class BuildBeforeMoveBehaviourTest {
      * already checked in the superclass method "move(...)".
      */
     @Test
-    public void handleInitMoveWithBuildBlock() throws ClassNotFoundException, WinnerCaughtException, InterruptedException, IOException, GameEndedException {
+    public void handleInitMoveWithBuildBlock() throws WinnerCaughtException, GameEndedException, GameLostException {
         Integer[] playerWorkers = currentPlayer.getWorkersIdsArray();
         Worker workerToBuild = null;
         for (Integer playerWorker : playerWorkers) {
@@ -90,7 +90,7 @@ public class BuildBeforeMoveBehaviourTest {
      * already checked in the superclass method "move(...)".
      */
     @Test
-    public void handleInitMoveWithBuildDome() throws ClassNotFoundException, WinnerCaughtException, InterruptedException, IOException, GameEndedException {
+    public void handleInitMoveWithBuildDome() throws WinnerCaughtException, GameEndedException, GameLostException {
         Player currentPlayer = spyGame.getPlayersHandler().getPlayer(0);
         Integer[] playerWorkers = currentPlayer.getWorkersIdsArray();
         Worker workerToBuild = null;
@@ -122,7 +122,7 @@ public class BuildBeforeMoveBehaviourTest {
     }
 
     @Test
-    public void findAvailablePositionsToBuildBlockOrDome() throws IOException {
+    public void findAvailablePositionsToBuildBlockOrDome() {
         Worker worker = spyGame.getWorkersHandler().getWorker(new Coord(4, 3));
         Coord coordWhereToMove = new Coord(4, 4);
         DataToMove dataToMove = new DataToMove(spyGame, currentPlayer, worker, coordWhereToMove);

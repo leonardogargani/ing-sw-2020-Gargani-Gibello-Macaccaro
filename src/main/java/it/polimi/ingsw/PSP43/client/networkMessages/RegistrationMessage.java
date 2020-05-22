@@ -2,8 +2,7 @@ package it.polimi.ingsw.PSP43.client.networkMessages;
 
 
 public class RegistrationMessage extends ClientMessage {
-
-    private static final long SerialVersionUID=999888999111222333L;
+    private static final long serialVersionUID = 8041591888628625078L;
     private String nick;
 
 

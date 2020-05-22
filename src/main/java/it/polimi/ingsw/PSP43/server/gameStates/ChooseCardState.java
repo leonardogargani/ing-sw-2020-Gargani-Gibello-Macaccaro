@@ -115,15 +115,15 @@ public class ChooseCardState extends TurnState {
     }
 
     /**
-     * Finds the next state for the game, saving it in a variable in GameSession, and calls on the
-     * instance of GameSession the method to transit to the next state of play.
+     * This method finds the next turn of the game (saving it into a variable in the GameSession database),
+     * which will be always a ChooseWorkerState.
      */
     public void findNextState() {
         GameSession game = super.getGameSession();
-        int indexCurrentState;
-        indexCurrentState = game.getTurnMap().indexOf(game.getCurrentState());
-        game.setNextState(game.getTurnMap().get(indexCurrentState + 1));
 
-        game.transitToNextState();
+        for (TurnState t : game.getTurnStateMap()) {
+            if (t.getTurnName() == TurnName.CHOOSE_WORKER_STATE)
+                game.setNextState(t);
+        }
     }
 }

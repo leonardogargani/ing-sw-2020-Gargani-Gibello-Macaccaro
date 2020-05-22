@@ -100,7 +100,7 @@ public class ChooseCardStateTest {
 
     @Test
     public void findNextState() throws ClassNotFoundException, IOException, WinnerCaughtException, InterruptedException {
-        spyGame.setCurrentState(spyGame.getTurnMap().get(1));
+        spyGame.setCurrentState(spyGame.getTurnStateMap().get(1));
 
         Mockito.doNothing().when(spyGame).transitToNextState();
 

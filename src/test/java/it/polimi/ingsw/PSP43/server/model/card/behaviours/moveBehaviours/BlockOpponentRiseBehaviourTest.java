@@ -14,6 +14,7 @@ import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.BasicB
 import it.polimi.ingsw.PSP43.server.model.card.decorators.BlockRiseDecorator;
 import it.polimi.ingsw.PSP43.server.model.card.BlockRiseFactory;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.NicknameAlreadyInUseException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import org.junit.Before;
@@ -49,7 +50,7 @@ public class BlockOpponentRiseBehaviourTest {
     }
 
     @Test
-    public void handleInitMoveWithNoBlocking() throws IOException, WinnerCaughtException, InterruptedException, ClassNotFoundException, GameEndedException {
+    public void handleInitMoveWithNoBlocking() throws WinnerCaughtException, GameEndedException, GameLostException {
         Map<String, AbstractGodCard> map = gameSession.getCardsHandler().getMapOwnersCard();
 
         spyGame.setCurrentPlayer(currentPlayer);
@@ -85,7 +86,7 @@ public class BlockOpponentRiseBehaviourTest {
     }
 
     @Test
-    public void handleMoveWithBlocking() throws IOException, WinnerCaughtException, InterruptedException, ClassNotFoundException, GameEndedException {
+    public void handleMoveWithBlocking() throws WinnerCaughtException, GameEndedException, GameLostException {
         spyGame.setCurrentPlayer(currentPlayer);
 
         currentPlayer.setAbstractGodCard(new BasicGodCard("", "", "", new BlockOpponentRiseBehaviour(), new BasicBuildBehaviour()));

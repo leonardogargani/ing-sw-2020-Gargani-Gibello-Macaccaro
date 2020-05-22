@@ -97,7 +97,7 @@ public class ChooseWorkerStateTest {
         Mockito.doNothing().when(spyGame).transitToNextState();
         Mockito.doNothing().when(spyGame).sendBroadCast(any());
 
-        spyGame.setCurrentState(spyGame.getTurnMap().get(2));
+        spyGame.setCurrentState(spyGame.getTurnStateMap().get(2));
 
         spyState.findNextState();
 

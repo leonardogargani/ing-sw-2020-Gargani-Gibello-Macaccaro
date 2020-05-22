@@ -10,9 +10,12 @@ import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.TextMessage;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * This is the State of the game where the current player is asked to make a move
+ * according to the powers of his god.
+ */
 public class MoveState extends TurnState {
     private static final int FIRSTPOSITION = 0;
     protected int initFirst = -1;
@@ -21,24 +24,23 @@ public class MoveState extends TurnState {
         super(gameSession, TurnName.MOVE_STATE);
     }
 
+    /**
+     * This method initialises the turn by calling methods that :
+     * -    find the current player of the game;
+     * -    send a message to all the other players (different from the current) telling that they have to wait for their turn;
+     * -    set all the workers as unmoved (flag set true if the worker is moved, to recognise it as build-allowed
+     *      during the turn);
+     */
     public void initState() {
-        GameSession game = super.getGameSession();
-        PlayersHandler playersHandler = game.getPlayersHandler();
-        WorkersHandler handler = game.getWorkersHandler();
-        Player currentPlayer;
-        Player nextPlayer;
-
-        for (Worker w : handler.getWorkers()) {
-            w.setLatestMoved(false);
-        }
-
         findCurrentPlayer();
     }
 
+    /**
+     * This method finds the current player of the game.
+     */
     private void findCurrentPlayer() {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
-        WorkersHandler handler = game.getWorkersHandler();
         Player currentPlayer;
         Player nextPlayer;
 
@@ -53,6 +55,10 @@ public class MoveState extends TurnState {
         sendAllWaitingMessage();
     }
 
+    /**
+     * This method sends a message to all the players (different from the current) telling them they have to
+     * wait for their turn.
+     */
     private void sendAllWaitingMessage() {
         GameSession game = super.getGameSession();
         Player currentPlayer = game.getCurrentPlayer();
@@ -65,6 +71,10 @@ public class MoveState extends TurnState {
         setAllWorkersUnmoved();
     }
 
+    /**
+     * This method sets all the workers as "unmoved". It is important to know during the build state which worker is
+     * allowed to build.
+     */
     private void setAllWorkersUnmoved() {
         WorkersHandler workersHandler = super.getGameSession().getWorkersHandler();
 
@@ -75,6 +85,10 @@ public class MoveState extends TurnState {
         executeState();
     }
 
+    /**
+     * This method executes the turn. It gives the possibility to the current player to move a worker,
+     * accordingly to the powers of the god he owns.
+     */
     public void executeState() {
         GameSession game = super.getGameSession();
         Player currentPlayer = game.getCurrentPlayer();
@@ -83,8 +97,8 @@ public class MoveState extends TurnState {
         try {
             playerCard.initMove(game);
         } catch (WinnerCaughtException e) {
-            int winnerStateIndex = game.getTurnMap().size() - 1;
-            WinState nextState = (WinState) game.getTurnMap().get(winnerStateIndex);
+            int winnerStateIndex = game.getTurnStateMap().size() - 1;
+            WinState nextState = (WinState) game.getTurnStateMap().get(winnerStateIndex);
             nextState.setWinner(e.getWinner());
             game.setNextState(nextState);
             game.transitToNextState();
@@ -102,11 +116,16 @@ public class MoveState extends TurnState {
         findNextState();
     }
 
+    /**
+     * This method finds the next turn of the game (saving it into a variable in the GameSession database),
+     * which will be always a BuildState.
+     */
     public void findNextState() {
         GameSession game = super.getGameSession();
-        TurnState currentState = game.getCurrentState();
-        int indexCurrentState = game.getTurnMap().indexOf(currentState);
-        TurnState nextState = game.getTurnMap().get(indexCurrentState + 1);
-        game.setNextState(nextState);
+
+        for (TurnState t : game.getTurnStateMap()) {
+            if (t.getTurnName() == TurnName.BUILD_STATE)
+                game.setNextState(t);
+        }
     }
 }

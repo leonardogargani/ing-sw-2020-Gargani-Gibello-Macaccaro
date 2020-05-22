@@ -18,6 +18,13 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * This is the "central" class of the game. It stores all the data about the states, that is all the turns of the game, and
+ * about the game (current player and current state). It is also the main access to the database of the game, in which
+ * the players, cards, workers and cells data are stored. In that way the controllers can access them, compute with the
+ * interaction of players and call the handlers to change the state of the database (model).
+ *
+ */
 public class GameSession extends GameSessionObservable {
     private static final int FIRSTPOSITION = 0;
     private Boolean active;
@@ -26,7 +33,7 @@ public class GameSession extends GameSessionObservable {
 
     private TurnState currentState;
     private TurnState nextState;
-    private final List<TurnState> turnMap;
+    private final List<TurnState> turnStateMap;
 
     private final CellsHandler cellsHandler;
     private final PlayersHandler playersHandler;
@@ -45,7 +52,7 @@ public class GameSession extends GameSessionObservable {
                                                                         new MoveState(this),
                                                                         new BuildState(this),
                                                                         new WinState(this)));
-        this.turnMap = Collections.unmodifiableList(turnMap);
+        this.turnStateMap = Collections.unmodifiableList(turnMap);
 
         this.currentState = turnMap.get(FIRSTPOSITION);
         super.setCurrentState(turnMap.get(FIRSTPOSITION));
@@ -76,6 +83,13 @@ public class GameSession extends GameSessionObservable {
     }
 
     /**
+     * This method sets the state of the thread (true = running, false = stopped).
+     */
+    public void setActive() {
+        this.active = Boolean.FALSE;
+    }
+
+    /**
      * This method returns true if the thread is running, false otherwise.
      * @return a boolean that represents the state of the thread (true = running, false = stopped).
      */
@@ -84,51 +98,11 @@ public class GameSession extends GameSessionObservable {
     }
 
     /**
-     * This method sets the state of the thread (true = running, false = stopped).
+     * This method returns the List representing all the states in a game.
+     * @return a List representing all the states in a game.
      */
-    public void setActive() {
-        this.active = Boolean.FALSE;
-    }
-
-    /**
-     * This method does the transition during the game to one state of the play to the following.
-     */
-    protected void transitToNextState() {
-        TurnState nextState = this.getNextState();
-
-        for (TurnState t : turnMap) {
-            if (nextState.getTurnName() == t.getTurnName()) {
-                this.setCurrentState(nextState);
-                super.setCurrentState(nextState);
-            }
-        }
-
-        currentState.initState();
-    }
-
-    /**
-     * This method eliminates a player from the game when he looses the match.
-     * @param playerEliminated This represents the data of the player who's lost the game and has to be
-     *                         removed from the database.
-     */
-    public void eliminatePlayer(Player playerEliminated) {
-        cardsHandler.removeCardToPlayer(playerEliminated.getNickname());
-        Player playerToRemove = playersHandler.getPlayer(playerEliminated.getNickname());
-        playersHandler.deletePlayer(playerEliminated.getNickname());
-
-        Integer[] workersToRemove = playerToRemove.getWorkersIdsArray();
-        workersHandler.removeWorkers(workersToRemove);
-
-        super.eliminatePlayer(playerEliminated, new PlayersListMessage(playerEliminated.getNickname() +
-                " has lost the game.", this));
-    }
-
-    /**
-     * This method is given to know the turn state in which the game is.
-     * @return the state in which the game is.
-     */
-    public TurnState getCurrentState() {
-        return currentState;
+    public List<TurnState> getTurnStateMap() {
+        return turnStateMap;
     }
 
     /**
@@ -141,6 +115,22 @@ public class GameSession extends GameSessionObservable {
     }
 
     /**
+     * This method is given to know the turn state in which the game is.
+     * @return the state in which the game is.
+     */
+    public TurnState getCurrentState() {
+        return currentState;
+    }
+
+    /**
+     * This method sets the next state variable to the one passed from the caller.
+     * @param nextState The next state of the game.
+     */
+    public void setNextState(TurnState nextState) {
+        this.nextState = nextState;
+    }
+
+    /**
      * This method returns the following state in which the game will be.
      * @return the next state in which the game will be.
      */
@@ -148,16 +138,12 @@ public class GameSession extends GameSessionObservable {
         return this.nextState;
     }
 
-    public void setNextState(TurnState nextState) {
-        this.nextState = nextState;
-    }
-
     /**
-     * This method returns the List representing all the states in a game.
-     * @return a List representing all the states in a game.
+     * This method sets the current player of the game.
+     * @param currentPlayer The player that represents the current player of the game.
      */
-    public List<TurnState> getTurnMap() {
-        return turnMap;
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
     }
 
     /**
@@ -168,13 +154,6 @@ public class GameSession extends GameSessionObservable {
         return currentPlayer;
     }
 
-    /**
-     * This method sets the current player of the game.
-     * @param currentPlayer The player that represents the current player of the game.
-     */
-    public void setCurrentPlayer(Player currentPlayer) {
-        this.currentPlayer = currentPlayer;
-    }
 
     /**
      * This method returns the class which handles the cells during the game.
@@ -218,11 +197,43 @@ public class GameSession extends GameSessionObservable {
     }
 
     /**
+     * This method does the transition during the game to one state of the play to the following.
+     */
+    protected void transitToNextState() {
+        TurnState nextState = this.getNextState();
+
+        for (TurnState t : turnStateMap) {
+            if (nextState.getTurnName() == t.getTurnName()) {
+                this.setCurrentState(nextState);
+                super.setCurrentState(nextState);
+            }
+        }
+
+        currentState.initState();
+    }
+
+    /**
+     * This method eliminates a player from the game when he looses the match.
+     * @param playerEliminated This represents the data of the player who's lost the game and has to be
+     *                         removed from the database.
+     */
+    public void eliminatePlayer(Player playerEliminated) {
+        cardsHandler.removeCardToPlayer(playerEliminated.getNickname());
+        Player playerToRemove = playersHandler.getPlayer(playerEliminated.getNickname());
+        playersHandler.deletePlayer(playerEliminated.getNickname());
+
+        Integer[] workersToRemove = playerToRemove.getWorkersIdsArray();
+        workersHandler.removeWorkers(workersToRemove);
+
+        super.eliminatePlayer(playerEliminated, new PlayersListMessage(playerEliminated.getNickname() +
+                " has lost the game.", this));
+    }
+
+    /**
      * This method calls the super method and then sets to false the boolean "active" to stop the thread.
      * @param message The message from the client to unsubscribe himself from the game.
      * @param player The reference to the listener of the client who left the game.
      */
-    @Override
     public synchronized void unregisterFromGame(LeaveGameMessage message, ClientListener player) {
         super.unregisterFromGame(message, player);
         this.active = Boolean.FALSE;
@@ -234,7 +245,6 @@ public class GameSession extends GameSessionObservable {
      * @param messageForTheWinner The message that has to be delivered to the winner of the game.
      * @param nicksExcluded All the nicknames of the players excluded from receiving the "messageForTheLosers".
      */
-    @Override
     public void sendEndingMessage(EndGameMessage messageToLosers, EndGameMessage messageForTheWinner, ArrayList<String> nicksExcluded) {
         super.sendEndingMessage(messageToLosers, messageForTheWinner, nicksExcluded);
         this.active = Boolean.FALSE;

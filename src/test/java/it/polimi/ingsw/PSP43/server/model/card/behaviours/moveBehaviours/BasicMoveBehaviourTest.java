@@ -11,11 +11,11 @@ import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.model.card.BasicGodCard;
 import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.BasicBuildBehaviour;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
@@ -43,7 +43,7 @@ public class BasicMoveBehaviourTest {
     }
 
     @Test
-    public void testAskForMove() throws ClassNotFoundException, GameEndedException, InterruptedException, IOException {
+    public void testAskForMove() throws GameEndedException, GameLostException {
         currentPlayer.setAbstractGodCard(new BasicGodCard("", "", "", new BasicMoveBehaviour(), new BasicBuildBehaviour()));
 
         Worker workerToMove = spyGame.getWorkersHandler().getWorker(new Coord(4, 3));
@@ -57,7 +57,7 @@ public class BasicMoveBehaviourTest {
     }
 
     @Test
-    public void testHandleInitMove() throws ClassNotFoundException, GameEndedException, InterruptedException, IOException, WinnerCaughtException {
+    public void testHandleInitMove() throws GameEndedException, WinnerCaughtException, GameLostException {
         currentPlayer.setAbstractGodCard(new BasicGodCard("", "", "", new BasicMoveBehaviour(), new BasicBuildBehaviour()));
 
         Coord workerCoord = new Coord(4,3);

@@ -4,8 +4,7 @@ import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 
 
 public class ChosenCardResponse extends ClientMessage {
-
-    private static final long SerialVersionUID = 383838393939373737L;
+    private static final long serialVersionUID = 1620104199294461503L;
     private AbstractGodCard card;
 
 

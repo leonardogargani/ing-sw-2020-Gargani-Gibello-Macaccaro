@@ -12,11 +12,11 @@ import it.polimi.ingsw.PSP43.server.model.card.BasicGodCard;
 import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.BasicBuildBehaviour;
 import it.polimi.ingsw.PSP43.server.model.card.behaviours.moveBehaviours.BasicMoveBehaviour;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -51,7 +51,7 @@ public class SwapMoveDecoratorTest {
     }
 
     @Test
-    public void move() throws ClassNotFoundException, IOException, GameEndedException, InterruptedException, WinnerCaughtException {
+    public void move() throws GameEndedException, WinnerCaughtException, GameLostException {
         Worker workerForced = spyGame.getWorkersHandler().getWorker(new Coord(4,2));
         doReturn(new ActionResponse(workerToMove.getCurrentPosition(), new Coord(4, 2))).when(spyGame).sendRequest(any(), any(), any());
 
@@ -83,7 +83,7 @@ public class SwapMoveDecoratorTest {
     }
 
     @Test
-    public void cleanFromEffects() throws ClassNotFoundException {
+    public void cleanFromEffects() {
         abstractGodCard.cleanFromEffects("it.polimi.ingsw.PSP43.server.model.card.decorators.BlockRiseDecorator");
 
         boolean verified = true;

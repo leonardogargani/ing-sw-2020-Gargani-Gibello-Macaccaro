@@ -7,21 +7,15 @@ import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.networkMessages.PlayersNumberRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.StartGameMessage;
 
-import java.io.IOException;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 /**
  * This is the initial state where the game accept new players and, for the first one,
  * asks for the number of participants required.
  */
 public class PlayerRegistrationState extends TurnState {
-    private Lock lock;
     Boolean first;
 
     public PlayerRegistrationState(GameSession gameSession) {
         super(gameSession, TurnName.PLAYER_REGISTRATION_STATE);
-        lock = new ReentrantLock();
         first = Boolean.TRUE;
     }
 
@@ -36,23 +30,21 @@ public class PlayerRegistrationState extends TurnState {
     public void executeState(RegistrationMessage message) {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
-        try {
-            playersHandler.createNewPlayer(message.getNick());
-            int numberOfPlayers = game.getPlayersHandler().getNumOfPlayers();
-            int num;
-            if (first == Boolean.TRUE) {
-                first = Boolean.FALSE;
-                num = askNumberPlayers(game, message);
-                game.maxNumPlayers = num;
-            }
+        playersHandler.createNewPlayer(message.getNick());
+        int numberOfPlayers = game.getPlayersHandler().getNumOfPlayers();
+        int num;
+        if (first == Boolean.TRUE) {
+            first = Boolean.FALSE;
+            num = askNumberPlayers(game, message);
+            game.maxNumPlayers = num;
+        }
 
-            if (game.maxNumPlayers == numberOfPlayers) {
-                this.findNextState();
-            } else {
-                StartGameMessage clientMessage = new StartGameMessage("We are connecting you with other players!");
-                game.sendMessage(clientMessage, message.getNick());
-            }
-        } catch (IOException | ClassNotFoundException | InterruptedException e) { e.printStackTrace(); }
+        if (game.maxNumPlayers == numberOfPlayers) {
+            this.findNextState();
+        } else {
+            StartGameMessage clientMessage = new StartGameMessage("We are connecting you with other players!");
+            game.sendMessage(clientMessage, message.getNick());
+        }
     }
 
     /**
@@ -61,7 +53,7 @@ public class PlayerRegistrationState extends TurnState {
      * @param gameSession This is a reference to the center of the game database.
      * @param message     This is the message sent from the client.
      */
-    protected int askNumberPlayers(GameSession gameSession, RegistrationMessage message) throws IOException, ClassNotFoundException, InterruptedException {
+    protected int askNumberPlayers(GameSession gameSession, RegistrationMessage message) {
         PlayersNumberRequest request = new PlayersNumberRequest();
         PlayersNumberResponse response;
         try {
@@ -75,13 +67,15 @@ public class PlayerRegistrationState extends TurnState {
     }
 
     /**
-     * Finds the next state for the game, saving it in a variable in GameSession, and calls on the
-     * instance of GameSession the method to transit to the next state of play.
+     * This method finds the next turn of the game (saving it into a variable in the GameSession database),
+     * which will be always a ChooseCardState.
      */
     public void findNextState() {
         GameSession game = super.getGameSession();
-        int indexCurrentState;
-        indexCurrentState = game.getTurnMap().indexOf(game.getCurrentState());
-        game.setNextState(game.getTurnMap().get(indexCurrentState + 1));
+
+        for (TurnState t : game.getTurnStateMap()) {
+            if (t.getTurnName() == TurnName.CHOOSE_CARD_STATE)
+                game.setNextState(t);
+        }
     }
 }

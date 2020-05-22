@@ -4,8 +4,7 @@ import it.polimi.ingsw.PSP43.Color;
 
 
 public class WorkersColorResponse extends ClientMessage {
-
-    private static final long SerialVersionUID=432109876543210987L;
+    private static final long serialVersionUID = -7968705884426214270L;
     private Color color;
 
 

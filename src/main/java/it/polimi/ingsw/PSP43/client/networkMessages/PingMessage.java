@@ -2,9 +2,7 @@ package it.polimi.ingsw.PSP43.client.networkMessages;
 
 
 public class PingMessage extends ClientMessage {
-
-    private static final long SerialVersionUID=765432109876543210L;
-
+    private static final long serialVersionUID = -2619710276575124658L;
 
     /**
      * PingMessage constructor.

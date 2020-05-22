@@ -4,7 +4,5 @@ import java.io.Serializable;
 
 
 public abstract class ClientMessage implements Serializable {
-
-    private static final long SerialVersionUID = 525252535353545454L;
-
+    private static final long serialVersionUID = 9103189652295599926L;
 }

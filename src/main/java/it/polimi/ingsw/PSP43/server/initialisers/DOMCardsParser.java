@@ -23,11 +23,19 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
+/**
+ * This class is used to parse the XML configuration file and to initialise the deck of cards of the game.
+ */
 public class DOMCardsParser {
 
     public DOMCardsParser() {
     }
 
+    /**
+     * This method is called by the GameSession to initialise all the cards of the game which can be chosen
+     * by a player.
+     * @return a deck of cards used during the game.
+     */
     public static ArrayList<AbstractGodCard> buildDeck() throws ParserConfigurationException,
             IOException, org.xml.sax.SAXException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -47,7 +55,7 @@ public class DOMCardsParser {
         return buildCompleteDeck(cards);
     }
 
-    public static ArrayList<AbstractGodCard> buildCompleteDeck(NodeList list) {
+    private static ArrayList<AbstractGodCard> buildCompleteDeck(NodeList list) {
         ArrayList<AbstractGodCard> deck = new ArrayList<>();
         for (int i = 0; i<list.getLength(); i++) {
             if (list.item(i).getNodeType() == Node.ELEMENT_NODE) {
@@ -58,7 +66,7 @@ public class DOMCardsParser {
         return deck;
     }
 
-    public static AbstractGodCard buildComponent(Element element) {
+    private static AbstractGodCard buildComponent(Element element) {
         String nodeName = element.getNodeName().substring(0,1).toUpperCase() + element.getNodeName().substring(1);
         if (nodeName.equals("BasicGodCard") && element.getNodeType() == Node.ELEMENT_NODE) {
             String godName = element.getElementsByTagName("godName").item(0).getTextContent();
@@ -109,7 +117,7 @@ public class DOMCardsParser {
         }
     }
 
-    public static BasicMoveBehaviour buildMoveBehaviour(String nameMoveBehaviour) {
+    private static BasicMoveBehaviour buildMoveBehaviour(String nameMoveBehaviour) {
         String moveBehavior = nameMoveBehaviour.substring(0,1).toUpperCase() + nameMoveBehaviour.substring(1);
         switch (moveBehavior) {
             case "BasicMoveBehaviour":
@@ -125,7 +133,7 @@ public class DOMCardsParser {
         }
     }
 
-    public static BasicBuildBehaviour buildBuildBlockBehaviour(String nameBlockBehaviour) {
+    private static BasicBuildBehaviour buildBuildBlockBehaviour(String nameBlockBehaviour) {
         String buildBlockBehaviour = nameBlockBehaviour.substring(0,1).toUpperCase() + nameBlockBehaviour.substring(1);
         switch (buildBlockBehaviour) {
             case "BasicBuildBehaviour":

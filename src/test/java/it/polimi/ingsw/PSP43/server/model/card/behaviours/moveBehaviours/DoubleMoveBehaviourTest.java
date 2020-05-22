@@ -13,11 +13,11 @@ import it.polimi.ingsw.PSP43.server.model.card.BasicGodCard;
 import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.BasicBuildBehaviour;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -47,7 +47,7 @@ public class DoubleMoveBehaviourTest {
      * This method tests if the two sub-sequent moves are done in the right way.
      */
     @Test
-    public void handleMove() throws ClassNotFoundException, GameEndedException, InterruptedException, IOException, WinnerCaughtException {
+    public void handleMove() throws GameEndedException, WinnerCaughtException, GameLostException {
         currentPlayer.setAbstractGodCard(new BasicGodCard("", "", "", new DoubleMoveBehaviour(), new BasicBuildBehaviour()));
 
         Coord initialWorkerCoord = new Coord(4,3);
@@ -74,7 +74,7 @@ public class DoubleMoveBehaviourTest {
      * This method tests that it is not possible for a player to move his worker back to the previous position.
      */
     @Test
-    public void findAvailablePositionsToMove() throws IOException {
+    public void findAvailablePositionsToMove() {
         Coord initialWorkerCoord = new Coord(4,3);
         Worker workerToMoveTwice = gameSession.getWorkersHandler().getWorker(initialWorkerCoord);
         DoubleMoveBehaviour doubleMoveBehaviour = new DoubleMoveBehaviour();

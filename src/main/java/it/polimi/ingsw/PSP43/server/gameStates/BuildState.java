@@ -4,19 +4,27 @@ import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 
-import java.io.IOException;
-
+/**
+ * This is the State of the game where the current player is asked to make a build
+ * according to the powers of his god.
+ */
 public class BuildState extends TurnState {
-    private static final int FIRSTPOSITION = 0;
 
     public BuildState(GameSession gameSession) {
         super(gameSession, TurnName.BUILD_STATE);
     }
 
+    /**
+     * This method initialises the turn. It simply calls the super method of the class TurnState.
+     */
     public void initState() {
         super.initState();
     }
 
+    /**
+     * This method executes the turn. It gives the possibility to the current player to build a dome or a block,
+     * accordingly to the powers of the god he owns.
+     */
     public void executeState() {
         GameSession game = super.getGameSession();
         Player currentPlayer = game.getCurrentPlayer();
@@ -32,12 +40,16 @@ public class BuildState extends TurnState {
         findNextState();
     }
 
+    /**
+     * This method finds the next turn of the game (saving it into a variable in the GameSession database),
+     * which will be always a MoveState.
+     */
     public void findNextState() {
         GameSession game = super.getGameSession();
-        TurnState currentState = game.getCurrentState();
-        int indexCurrentState = game.getTurnMap().indexOf(currentState);
-        TurnState nextState = game.getTurnMap().get(indexCurrentState - 1);
-        game.setNextState(nextState);
-        game.transitToNextState();
+
+        for (TurnState t : game.getTurnStateMap()) {
+            if (t.getTurnName() == TurnName.MOVE_STATE)
+                game.setNextState(t);
+        }
     }
 }

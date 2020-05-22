@@ -6,8 +6,7 @@ import java.util.ArrayList;
 
 
 public class ChosenCardsResponse extends ClientMessage {
-
-    private static final long SerialVersionUID=321098765432109876L;
+    private static final long serialVersionUID = 2562293916488235686L;
     private ArrayList<AbstractGodCard> cards;
 
 

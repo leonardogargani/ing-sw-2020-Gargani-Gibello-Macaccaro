@@ -9,20 +9,27 @@ import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.NicknameAlreadyInUseException;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * This is a class that supports testing initialising all the necessary data to simulate a game.
+ */
 public class GameInitialiser {
 
-    public static GameSession initialiseGame() throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException {
+    public static GameSession initialiseGame() throws ParserConfigurationException, SAXException, IOException {
         return new GameSession(9);
     }
 
-    public static GameSession initialisePlayers(GameSession gameSession) throws NicknameAlreadyInUseException {
+    /**
+     * This method is used to initialise two players (Gibi and Rob) into a game.
+     * @param gameSession The data of the game.
+     * @return the data of the game in which the players' data have been added.
+     */
+    public static GameSession initialisePlayers(GameSession gameSession) {
         String[] players = new String[]{"Gibi" , "Rob"};
         for (String player : players) {
             gameSession.getPlayersHandler().createNewPlayer(player);
@@ -31,7 +38,11 @@ public class GameInitialiser {
         return gameSession;
     }
 
-    public static void initialiseWorkers(GameSession gameSession) throws IOException {
+    /**
+     * This method is used to initialise the workers of the game.
+     * @param gameSession The data of the game which have to be updated.
+     */
+    public static void initialiseWorkers(GameSession gameSession) {
         Color[] colors = new Color[]{Color.ANSI_RED, Color.ANSI_GREEN};
         int[] workerIds = new int[2];
 
@@ -71,6 +82,10 @@ public class GameInitialiser {
 
     }
 
+    /**
+     * This method is used to initialise the cards used by the players of the game.
+     * @param gameSession The data of the game which have to be updated.
+     */
     public static void initialiseCards(GameSession gameSession) {
         PlayersHandler playersHandler = gameSession.getPlayersHandler();
         CardsHandler cardsHandler = gameSession.getCardsHandler();

@@ -5,7 +5,6 @@ import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.WorkersColorResponse;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
-import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
@@ -22,7 +21,6 @@ import java.util.HashMap;
 public class ChooseWorkerState extends TurnState {
     private static final int FIRSTPOSITION = 0;
     private final ArrayList<Color> availableColors;
-    private final HashMap<Player, Color> colorsChosen;
 
     public ChooseWorkerState(GameSession gameSession) {
         super(gameSession, TurnName.CHOOSE_WORKER_STATE);
@@ -30,7 +28,6 @@ public class ChooseWorkerState extends TurnState {
         availableColors.add(Color.ANSI_RED);
         availableColors.add(Color.ANSI_BLUE);
         availableColors.add(Color.ANSI_GREEN);
-        colorsChosen = new HashMap<>();
     }
 
     /**
@@ -50,7 +47,8 @@ public class ChooseWorkerState extends TurnState {
 
 
     /**
-     * This method asks, one at a time, to the players the color chosen for their workers and also where they want to place them.
+     * This method asks, one at a time, to the players the color chosen for their workers
+     * and also where they want to place them.
      */
     public void executeState() {
         GameSession game = super.getGameSession();
@@ -80,7 +78,6 @@ public class ChooseWorkerState extends TurnState {
                 workersIds[i] = workersHandler.addNewWorker(colorResponse.getColor());
             }
             availableColors.remove(colorResponse.getColor());
-            colorsChosen.put(currentPlayer, colorResponse.getColor());
 
             // then the ids of the workers are set into the related owner
             currentPlayer.setWorkersIdsArray(workersIds);
@@ -118,21 +115,20 @@ public class ChooseWorkerState extends TurnState {
     }
 
     /**
-     * This method has to find the next state and also to send all the infos to the client to display name of players, gods chosen and the color of every player.
+     * This method finds the next turn of the game (saving it into a variable in the GameSession database),
+     * which will be always a MoveState. It sends also to all the players the infos to display
+     * name of players, gods chosen and the color of every player.
      */
     public void findNextState() {
         GameSession game = super.getGameSession();
-        int indexCurrentState;
-        indexCurrentState = game.getTurnMap().indexOf(game.getCurrentState());
-        game.setNextState(game.getTurnMap().get(indexCurrentState + 1));
+
+        for (TurnState t : game.getTurnStateMap()) {
+            if (t.getTurnName() == TurnName.MOVE_STATE)
+                game.setNextState(t);
+        }
 
         // here I send all the infos to the client to display name of players, gods chosen and the color of every player
-        HashMap<Player, AbstractGodCard> cardsChosen = new HashMap<>();
-        for (String s : game.getCardsHandler().getMapOwnersCard().keySet())
-            cardsChosen.put(game.getPlayersHandler().getPlayer(s), game.getPlayersHandler().getPlayer(s).getAbstractGodCard());
         PlayersListMessage listOfPlayers = new PlayersListMessage(null, game);
         game.sendBroadCast(listOfPlayers);
-
-        game.transitToNextState();
     }
 }

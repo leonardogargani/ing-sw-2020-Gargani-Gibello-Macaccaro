@@ -4,8 +4,7 @@ import it.polimi.ingsw.PSP43.server.model.Coord;
 
 
 public class ActionResponse extends ClientMessage {
-
-    private static final long SerialVersionUID=543210987654321098L;
+    private static final long serialVersionUID = -3850574828879543142L;
     private Coord workerPosition;
     private Coord position;
 
