@@ -6,7 +6,6 @@ import it.polimi.ingsw.PSP43.client.cli.QuitPlayerException;
 import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.PingMessage;
-import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.ServerMessage;
 
 import java.io.IOException;
@@ -172,8 +171,6 @@ public class ClientBG implements Runnable {
 
     /**
      * Method that close input and output streams and the socket at the end of the match
-     *
-     * @throws IOException signals that an I/O exception of some sort has occurred.
      */
     public void closer() {
         try {
@@ -192,8 +189,11 @@ public class ClientBG implements Runnable {
      * This method put an EndGameMessage in the ClientManager's messageBox when you quit the match
      */
     public void handleDisconnection() {
-        if (clientManager.getMessageBox().size() == 0)
-            clientManager.pushMessageInBox(new EndGameMessage("End game!", endGameHeader));
+        if (clientManager.getMessageBox().size() == 0){
+            clientManager.setActive(false);
+            this.disconnect = true;
+            closer();
+        }
         else
             clientManager.notifyMessageArrived();
     }

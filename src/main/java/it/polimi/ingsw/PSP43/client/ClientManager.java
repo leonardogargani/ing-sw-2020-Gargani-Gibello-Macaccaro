@@ -114,7 +114,15 @@ public class ClientManager implements Runnable {
         return graphicHandler;
     }
 
-    //TODO delete this method
+
+    /**
+     * Setter method for the boolean variable isActive
+     * @param active false to stop the run of the thread
+     */
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
     /**
      * Getter method for the messageBox, that is an ArrayList where messages are put when they are received
      * @return messageBox
