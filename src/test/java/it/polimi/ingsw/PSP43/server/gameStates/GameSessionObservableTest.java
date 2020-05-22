@@ -127,7 +127,7 @@ public class GameSessionObservableTest {
         spyGame.registerToTheGame(new RegistrationMessage(secondNick), clientListenerMock);
         spyGame.registerToTheGame(new RegistrationMessage(thirdNick), clientListenerMock);
 
-        spyGame.sendMessage(new EndGameMessage("", endGameHeader), firstNick);
+        spyGame.sendMessage(new EndGameMessage(null, EndGameMessage.EndGameHeader.LOSER), firstNick);
         verify(clientListenerMock, times(1)).sendMessage(any());
     }
 
@@ -211,7 +211,7 @@ public class GameSessionObservableTest {
 
         ArrayList<String> nicksExcluded = new ArrayList<>();
         nicksExcluded.add(firstNick);
-        EndGameMessage endGameMessage = new EndGameMessage("", endGameHeader);
+        EndGameMessage endGameMessage = new EndGameMessage(null, EndGameMessage.EndGameHeader.DISCONNECTED);
         spyGame.sendBroadCast(endGameMessage, nicksExcluded);
         verify(firstMock, times(0)).sendMessage(endGameMessage);
         verify(secondMock, times(1)).sendMessage(endGameMessage);
@@ -272,8 +272,8 @@ public class GameSessionObservableTest {
 
         ArrayList<String> nicksExcluded = new ArrayList<>();
         nicksExcluded.add(firstNick);
-        EndGameMessage endGameMessageWinner = new EndGameMessage("", endGameHeader);
-        EndGameMessage endGameMessageLoser = new EndGameMessage("", endGameHeader);
+        EndGameMessage endGameMessageWinner = new EndGameMessage(null, EndGameMessage.EndGameHeader.WINNER);
+        EndGameMessage endGameMessageLoser = new EndGameMessage(firstNick, EndGameMessage.EndGameHeader.LOSER);
         spyGame.sendEndingMessage(endGameMessageLoser, endGameMessageWinner, nicksExcluded);
         verify(firstMock, times(1)).sendMessage(endGameMessageWinner);
         verify(secondMock, times(1)).sendMessage(endGameMessageLoser);

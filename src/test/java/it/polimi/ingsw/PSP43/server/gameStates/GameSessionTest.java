@@ -98,6 +98,6 @@ public class GameSessionTest {
     public void sendEndingMessage() {
         ArrayList<String> nicks = new ArrayList<>();
         nicks.add(spyGame.getPlayersHandler().getPlayer(0).getNickname());
-        spyGame.sendEndingMessage(new EndGameMessage("", endGameHeader), new EndGameMessage("", endGameHeader), nicks);
+        spyGame.sendEndingMessage(new EndGameMessage(null, EndGameMessage.EndGameHeader.LOSER), new EndGameMessage(null, EndGameMessage.EndGameHeader.WINNER), nicks);
     }
 }
