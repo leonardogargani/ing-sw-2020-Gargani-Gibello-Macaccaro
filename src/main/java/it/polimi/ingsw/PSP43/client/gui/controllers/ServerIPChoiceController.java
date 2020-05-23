@@ -56,6 +56,11 @@ public class ServerIPChoiceController {
 
         try {
             stage.setScene(new Scene(loader.load()));
+            // set minimum sizes of the stage (can be either before and after loader.load())
+            stage.setMinHeight(700);
+            stage.setMinWidth(1000);
+            // set the stage to the center of the screen (needs to be after loader.load())
+            stage.centerOnScreen();
         } catch (IOException e) {
             e.printStackTrace();
         }
