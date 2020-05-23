@@ -29,14 +29,14 @@ public class GuiGraphicHandler extends GraphicHandler {
 
                 // setting ClientBG attribute in the ServerIPChoiceController
                 FXMLLoader loader1 = new FXMLLoader();
-                loader1.setLocation(getClass().getResource("/FXML/serverIPChoice.fxml"));
+                loader1.setLocation(getClass().getResource("/FXML/game_init/serverIPChoice.fxml"));
                 loader1.load();
                 ServerIPChoiceController controller1 = loader1.getController();
                 controller1.setClientBG(clientBG);
 
                 // setting ClientBG attribute in the NicknameChoiceController
                 FXMLLoader loader2 = new FXMLLoader();
-                loader2.setLocation(getClass().getResource("/FXML/nicknameChoice.fxml"));
+                loader2.setLocation(getClass().getResource("/FXML/game_init/nicknameChoice.fxml"));
                 loader2.load();
                 NicknameChoiceController controller2 = loader2.getController();
                 controller2.setClientBG(clientBG);

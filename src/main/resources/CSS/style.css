@@ -1,0 +1,17 @@
+/* selector for the root container (Pane) */
+.root {
+    -fx-background-color: #9ff3fc;
+}
+
+
+/* class selector */
+.confirm-button{
+    -fx-text-fill: #0251fc;
+    -fx-background-color: #dbdbdb;
+    -fx-background-radius: 15;
+    -fx-border-color: #3f3f3f;
+    -fx-border-radius: 15;
+    /* vertical and horizontal padding */
+    -fx-padding: 5 10;
+}
+

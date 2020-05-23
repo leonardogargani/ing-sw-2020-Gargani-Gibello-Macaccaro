@@ -47,7 +47,7 @@
                                  <children>
                                     <ImageView fitHeight="236.0" fitWidth="174.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../images/gods/01_Apollo_1.png" />
+                                          <Image url="@../../images/gods/01_Apollo_1.png" />
                                        </image>
                                     </ImageView>
                                  </children>

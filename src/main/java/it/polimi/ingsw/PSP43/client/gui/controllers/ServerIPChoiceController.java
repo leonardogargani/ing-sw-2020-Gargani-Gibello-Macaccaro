@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.Objects;
 
 
 public class ServerIPChoiceController {
@@ -20,6 +21,13 @@ public class ServerIPChoiceController {
     public TextField serverIPField;
 
     private static ClientBG clientBG;
+
+
+    // this method is called as soon as the fxml file gets loaded
+    @FXML
+    private void initialize() {
+        confirmButton.getStyleClass().add("confirm-button");
+    }
 
 
     /**
@@ -52,7 +60,7 @@ public class ServerIPChoiceController {
         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/FXML/nicknameChoice.fxml"));
+        loader.setLocation(getClass().getResource("/FXML/game_init/nicknameChoice.fxml"));
 
         try {
             stage.setScene(new Scene(loader.load()));
