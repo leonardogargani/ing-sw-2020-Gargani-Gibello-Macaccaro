@@ -2,8 +2,8 @@ package it.polimi.ingsw.PSP43.client.gui;
 
 import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.GraphicHandler;
-import it.polimi.ingsw.PSP43.client.gui.controllers.NicknameChoiceController;
-import it.polimi.ingsw.PSP43.client.gui.controllers.ServerIPChoiceController;
+import it.polimi.ingsw.PSP43.client.gui.controllers.game_init.NicknameChoiceController;
+import it.polimi.ingsw.PSP43.client.gui.controllers.game_init.ServerIPChoiceController;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;

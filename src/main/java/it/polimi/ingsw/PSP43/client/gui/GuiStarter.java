@@ -44,7 +44,7 @@ public class GuiStarter extends Application {
         try {
             Scene scene = new Scene(loader.load());
             // set the css stylesheet for the serverIPChoice screen
-            scene.getStylesheets().add(getClass().getResource("/CSS/style.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/CSS/game_init/style.css").toExternalForm());
             primaryStage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();

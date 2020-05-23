@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP43.client.gui.controllers;
+package it.polimi.ingsw.PSP43.client.gui.controllers.game_init;
 
 import it.polimi.ingsw.PSP43.client.ClientBG;
 import javafx.event.ActionEvent;
@@ -11,7 +11,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import java.io.IOException;
-import java.util.Objects;
 
 
 public class ServerIPChoiceController {
@@ -23,7 +22,9 @@ public class ServerIPChoiceController {
     private static ClientBG clientBG;
 
 
-    // this method is called as soon as the fxml file gets loaded
+    /**
+     * Method called as soon as the controlled fxml file gets loaded, here used to set css ids and classes
+     */
     @FXML
     private void initialize() {
         confirmButton.getStyleClass().add("confirm-button");
@@ -54,21 +55,26 @@ public class ServerIPChoiceController {
         }
 
         String serverIP = serverIPField.getText();
-
         clientBG.setServerIP(serverIP);
-
-        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/FXML/game_init/nicknameChoice.fxml"));
 
         try {
-            stage.setScene(new Scene(loader.load()));
+
+            Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(loader.load());
+
+            scene.getStylesheets().add(getClass().getResource("/CSS/game_init/style.css").toExternalForm());
+            stage.setScene(scene);
+
             // set minimum sizes of the stage (can be either before and after loader.load())
             stage.setMinHeight(700);
             stage.setMinWidth(1000);
-            // set the stage to the center of the screen (needs to be after loader.load())
+
+            // set the stage to the center of the screen (must be after loader.load())
             stage.centerOnScreen();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
