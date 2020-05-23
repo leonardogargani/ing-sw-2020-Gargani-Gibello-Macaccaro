@@ -11,7 +11,9 @@
                 <xs:element name="swapIfPossibleDecorator" type="swapIfPossibleDecorator" minOccurs="0"/>
                 <xs:element name="swapMoveDecorator" type="swapMoveDecorator" minOccurs="0"/>
                 <xs:element name="unconditionedBuildDomeDecorator" type="unconditionedBuildDomeDecorator" minOccurs="0"/>
-                <xs:element name="winConditionDecorator" type="winConditionDecorator" minOccurs="0"/>
+                <xs:element name="winTwoFloorsFallDecorator" type="winTwoFloorsFallDecorator" minOccurs="0"/>
+                <xs:element name="buildUnderFeetDecorator" type="buildUnderFeetDecorator" minOccurs="0"/>
+                <xs:element name="winFiveDomeDecorator" type="winFiveDomeDecorator" minOccurs="0"/>
             </xs:choice>
         </xs:sequence>
     </xs:complexType>
@@ -33,6 +35,8 @@
             <xs:element name="blockOpponentRiseBehaviour"/>
             <xs:element name="buildBeforeMoveBehaviour"/>
             <xs:element name="doubleMoveBehaviour"/>
+            <xs:element name="infiniteMovesOnPerimeterBehaviour"/>
+            <xs:element name="forceToOppSideBehaviour"/>
         </xs:choice>
     </xs:complexType>
 
@@ -41,6 +45,7 @@
             <xs:element name="basicBuildBehaviour"/>
             <xs:element name="doubleDifferentSpaceBehaviour"/>
             <xs:element name="doubleSameSpaceBehaviour"/>
+            <xs:element name="removeBlockFromNeighbourDecorator"/>
         </xs:choice>
     </xs:complexType>
 
@@ -51,7 +56,9 @@
             <xs:element name="swapIfPossibleDecorator" type="swapIfPossibleDecorator"/>
             <xs:element name="swapMoveDecorator" type="swapMoveDecorator"/>
             <xs:element name="unconditionedBuildDomeDecorator" type="unconditionedBuildDomeDecorator"/>
-            <xs:element name="winConditionDecorator" type="winConditionDecorator"/>
+            <xs:element name="winTwoFloorsFallDecorator" type="winTwoFloorsFallDecorator"/>
+            <xs:element name="buildUnderFeetDecorator" type="buildUnderFeetDecorator"/>
+            <xs:element name="winFiveDomeDecorator" type="winFiveDomeDecorator"/>
         </xs:choice>
     </xs:complexType>
 
@@ -62,7 +69,9 @@
             <xs:element name="swapIfPossibleDecorator" type="swapIfPossibleDecorator"/>
             <xs:element name="swapMoveDecorator" type="swapMoveDecorator"/>
             <xs:element name="unconditionedBuildDomeDecorator" type="unconditionedBuildDomeDecorator"/>
-            <xs:element name="winConditionDecorator" type="winConditionDecorator"/>
+            <xs:element name="winTwoFloorsFallDecorator" type="winTwoFloorsFallDecorator"/>
+            <xs:element name="buildUnderFeetDecorator" type="buildUnderFeetDecorator"/>
+            <xs:element name="winFiveDomeDecorator" type="winFiveDomeDecorator"/>
         </xs:choice>
     </xs:complexType>
 
@@ -73,7 +82,9 @@
             <xs:element name="swapIfPossibleDecorator" type="swapIfPossibleDecorator"/>
             <xs:element name="swapMoveDecorator" type="swapMoveDecorator"/>
             <xs:element name="unconditionedBuildDomeDecorator" type="unconditionedBuildDomeDecorator"/>
-            <xs:element name="winConditionDecorator" type="winConditionDecorator"/>
+            <xs:element name="winTwoFloorsFallDecorator" type="winTwoFloorsFallDecorator"/>
+            <xs:element name="buildUnderFeetDecorator" type="buildUnderFeetDecorator"/>
+            <xs:element name="winFiveDomeDecorator" type="winFiveDomeDecorator"/>
         </xs:choice>
     </xs:complexType>
 
@@ -84,18 +95,61 @@
             <xs:element name="swapIfPossibleDecorator" type="swapIfPossibleDecorator"/>
             <xs:element name="swapMoveDecorator" type="swapMoveDecorator"/>
             <xs:element name="unconditionedBuildDomeDecorator" type="unconditionedBuildDomeDecorator"/>
-            <xs:element name="winConditionDecorator" type="winConditionDecorator"/>
+            <xs:element name="winTwoFloorsFallDecorator" type="winTwoFloorsFallDecorator"/>
+            <xs:element name="buildUnderFeetDecorator" type="buildUnderFeetDecorator"/>
+            <xs:element name="winFiveDomeDecorator" type="winFiveDomeDecorator"/>
         </xs:choice>
     </xs:complexType>
 
-    <xs:complexType name="winConditionDecorator">
+    <xs:complexType name="winTwoFloorsFallDecorator">
         <xs:choice>
             <xs:element name="basicGodCard" type="basicGodCard"/>
             <xs:element name="blockRiseDecorator" type="blockRiseDecorator"/>
             <xs:element name="swapIfPossibleDecorator" type="swapIfPossibleDecorator"/>
             <xs:element name="swapMoveDecorator" type="swapMoveDecorator"/>
             <xs:element name="unconditionedBuildDomeDecorator" type="unconditionedBuildDomeDecorator"/>
-            <xs:element name="winConditionDecorator" type="winConditionDecorator"/>
+            <xs:element name="winTwoFloorsFallDecorator" type="winTwoFloorsFallDecorator"/>
+            <xs:element name="buildUnderFeetDecorator" type="buildUnderFeetDecorator"/>
+            <xs:element name="winFiveDomeDecorator" type="winFiveDomeDecorator"/>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="buildUnderFeetDecorator">
+        <xs:choice>
+            <xs:element name="basicGodCard" type="basicGodCard"/>
+            <xs:element name="blockRiseDecorator" type="blockRiseDecorator"/>
+            <xs:element name="swapIfPossibleDecorator" type="swapIfPossibleDecorator"/>
+            <xs:element name="swapMoveDecorator" type="swapMoveDecorator"/>
+            <xs:element name="unconditionedBuildDomeDecorator" type="unconditionedBuildDomeDecorator"/>
+            <xs:element name="winConditionDecorator" type="winTwoFloorsFallDecorator"/>
+            <xs:element name="buildUnderFeetDecorator" type="buildUnderFeetDecorator"/>
+            <xs:element name="winFiveDomeDecorator" type="winFiveDomeDecorator"/>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="winFiveDomeDecorator">
+        <xs:choice>
+            <xs:element name="basicGodCard" type="basicGodCard"/>
+            <xs:element name="blockRiseDecorator" type="blockRiseDecorator"/>
+            <xs:element name="swapIfPossibleDecorator" type="swapIfPossibleDecorator"/>
+            <xs:element name="swapMoveDecorator" type="swapMoveDecorator"/>
+            <xs:element name="unconditionedBuildDomeDecorator" type="unconditionedBuildDomeDecorator"/>
+            <xs:element name="winConditionDecorator" type="winTwoFloorsFallDecorator"/>
+            <xs:element name="buildUnderFeetDecorator" type="buildUnderFeetDecorator"/>
+            <xs:element name="winFiveDomeDecorator" type="winFiveDomeDecorator"/>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="removeBlockFromNeighbourDecorator">
+        <xs:choice>
+            <xs:element name="basicGodCard" type="basicGodCard"/>
+            <xs:element name="blockRiseDecorator" type="blockRiseDecorator"/>
+            <xs:element name="swapIfPossibleDecorator" type="swapIfPossibleDecorator"/>
+            <xs:element name="swapMoveDecorator" type="swapMoveDecorator"/>
+            <xs:element name="unconditionedBuildDomeDecorator" type="unconditionedBuildDomeDecorator"/>
+            <xs:element name="winConditionDecorator" type="winTwoFloorsFallDecorator"/>
+            <xs:element name="buildUnderFeetDecorator" type="buildUnderFeetDecorator"/>
+            <xs:element name="winFiveDomeDecorator" type="winFiveDomeDecorator"/>
         </xs:choice>
     </xs:complexType>
 </xs:schema>

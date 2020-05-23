@@ -11,7 +11,6 @@ import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
 /**
  * This class is made to give run-time the possibility to a card
@@ -45,9 +44,8 @@ public class BlockOpponentRiseBehaviour extends BasicMoveBehaviour {
      * This method handles the move of a worker and at the end, if he has risen of one level,
      * calls the method to block the other workers to move up in the next move.
      * @param gameSession The main access to the database of the game.
-     * @throws WinnerCaughtException if a worker is moved on the third level.
      */
-    public void handleInitMove(GameSession gameSession) throws WinnerCaughtException, GameEndedException, GameLostException {
+    public void handleInitMove(GameSession gameSession) throws GameEndedException, GameLostException {
         disablePowers(gameSession);
 
         WorkersHandler workersHandler = gameSession.getWorkersHandler();

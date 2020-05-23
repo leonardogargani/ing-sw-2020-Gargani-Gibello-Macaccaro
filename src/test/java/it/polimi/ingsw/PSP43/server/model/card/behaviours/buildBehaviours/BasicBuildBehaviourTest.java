@@ -11,6 +11,8 @@ import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.model.card.BasicGodCard;
+import it.polimi.ingsw.PSP43.server.model.card.behaviours.moveBehaviours.BasicMoveBehaviour;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +27,7 @@ import static org.mockito.Mockito.spy;
 public class BasicBuildBehaviourTest {
     GameSession gameSession;
     GameSession spyGame;
-    ArrayList<AbstractGodCard> deck;
+    AbstractGodCard abstractGodCard;
     Player currentPlayer;
 
     @Before
@@ -35,10 +37,12 @@ public class BasicBuildBehaviourTest {
         GameInitialiser.initialiseWorkers(gameSession);
         spyGame = spy(gameSession);
 
-        deck = DOMCardsParser.buildDeck();
+        abstractGodCard = new BasicGodCard("", "", "", new BasicMoveBehaviour(), new BasicBuildBehaviour());
 
         currentPlayer = gameSession.getPlayersHandler().getPlayer("Gibi");
+        currentPlayer.setAbstractGodCard(abstractGodCard);
         spyGame.setCurrentPlayer(currentPlayer);
+
     }
 
     @Test

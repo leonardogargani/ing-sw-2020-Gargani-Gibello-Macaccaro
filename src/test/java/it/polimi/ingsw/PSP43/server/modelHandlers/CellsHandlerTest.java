@@ -27,24 +27,22 @@ import static org.junit.Assert.*;
 public class CellsHandlerTest {
     GameSession gameSession;
     GameSession spyGame;
-    BoardObserver obs;
-    BoardObserver spyObs;
-    ArrayList<AbstractGodCard> deck;
+    Player currentPlayer;
 
     @Before
     public void setUp() throws ClassNotFoundException, ParserConfigurationException, SAXException, IOException, NicknameAlreadyInUseException {
         gameSession = GameInitialiser.initialiseGame();
-        deck = DOMCardsParser.buildDeck();
         GameInitialiser.initialisePlayers(gameSession);
         GameInitialiser.initialiseCards(gameSession);
         GameInitialiser.initialiseWorkers(gameSession);
         spyGame = Mockito.spy(gameSession);
-        obs = new BoardObserver(gameSession);
-        spyObs = Mockito.spy(obs);
+
+        currentPlayer = spyGame.getPlayersHandler().getPlayer(0);
+        spyGame.setCurrentPlayer(currentPlayer);
     }
 
     @Test
-    public void changeStateOfCell() throws IOException {
+    public void changeStateOfCell() {
         CellsHandler handler = gameSession.getCellsHandler();
 
         Coord coordOccupiedByDome = new Coord(0, 3);
@@ -67,7 +65,7 @@ public class CellsHandlerTest {
     }
 
     @Test
-    public void findAllCoordsFree() {
+    public void findAllFreeCords() {
         ArrayList<Coord> coords;
         coords = gameSession.getCellsHandler().findAllFreeCoords();
 
@@ -86,21 +84,27 @@ public class CellsHandlerTest {
     }
 
     @Test
-    public void findNeighbouringCoordsLowerBound() throws IOException {
-        // TODO
-        /*Player currentPlayer = gameSession.getCurrentPlayer();
+    public void findNeighbouringCoordsLowerBound() {
+        Integer[] ids = currentPlayer.getWorkersIdsArray();
+        Worker workerToCheckNeighbours = spyGame.getWorkersHandler().getWorker(ids[0]);
+
+        WorkersHandler workersHandler = spyGame.getWorkersHandler();
+        workersHandler.changePosition(workerToCheckNeighbours, new Coord(3, 4));
+
         HashMap<Coord, ArrayList<Coord>> neighbouringCoords = gameSession.getCellsHandler().findWorkersNeighbouringCoords(currentPlayer);
 
         ArrayList<Coord> coordsToCheck = new ArrayList<>();
-        coordsToCheck.add(new Coord(1,4));
-        coordsToCheck.add(new Coord(1,3));
+        coordsToCheck.add(new Coord(2,4));
         coordsToCheck.add(new Coord(2,3));
         coordsToCheck.add(new Coord(3,3));
-        coordsToCheck.add(new Coord(3,4));
+        coordsToCheck.add(new Coord(4,3));
+        coordsToCheck.add(new Coord(4,4));
 
         boolean right = true;
         for (Coord key : neighbouringCoords.keySet()) {
-            if (neighbouringCoords.get(key).size() != coordsToCheck.size()) right = false;
+            if (key.equals(workerToCheckNeighbours.getCurrentPosition())){
+                if (neighbouringCoords.get(key).size() != coordsToCheck.size()) right = false;
+            }
         }
 
         for (Coord c : neighbouringCoords.keySet()) {
@@ -117,78 +121,74 @@ public class CellsHandlerTest {
                     }
                 }
             }
-            else {
-                right = false;
-                break;
-            }
         }
 
-        assertTrue(right);*/
+        assertTrue(right);
     }
 
     @Test
-    public void findNeighbouringCoordsUpperBound() throws IOException {
-        /*
-        Worker workerToCheckNeighbours = new Worker(0, Color.ANSI_RED, gameSession.getBoardObserver());
-        workerToCheckNeighbours.setCurrentPosition(new Coord(3, 0));
-        ArrayList<Worker> workersToFindNeighbours = new ArrayList<>();
-        workersToFindNeighbours.add(workerToCheckNeighbours);
-        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = gameSession.getCellsHandler().findWorkersNeighbouringCoords(workersToFindNeighbours);
+    public void findNeighbouringCoordsUpperBound() {
+        Integer[] ids = currentPlayer.getWorkersIdsArray();
+        Worker workerToCheckNeighbours = spyGame.getWorkersHandler().getWorker(ids[0]);
+
+        WorkersHandler workersHandler = spyGame.getWorkersHandler();
+        workersHandler.changePosition(workerToCheckNeighbours, new Coord(0, 0));
+
+        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = gameSession.getCellsHandler().findWorkersNeighbouringCoords(currentPlayer);
 
         ArrayList<Coord> coordsToCheck = new ArrayList<>();
-        coordsToCheck.add(new Coord(2,0));
-        coordsToCheck.add(new Coord(2,1));
-        coordsToCheck.add(new Coord(3,1));
-        coordsToCheck.add(new Coord(4,1));
+        coordsToCheck.add(new Coord(0,1));
+        coordsToCheck.add(new Coord(1,1));
+        coordsToCheck.add(new Coord(1,0));
+
+        boolean right = true;
+        for (Coord key : neighbouringCoords.keySet()) {
+            if (key.equals(workerToCheckNeighbours.getCurrentPosition())){
+                if (neighbouringCoords.get(key).size() != coordsToCheck.size()) right = false;
+            }
+        }
+
+        for (Coord c : neighbouringCoords.keySet()) {
+            if (c.equals(workerToCheckNeighbours.getCurrentPosition())) {
+                ArrayList<Coord> effectiveCoords = neighbouringCoords.get(c);
+                for (Coord c1 : effectiveCoords) {
+                    Iterator<Coord> iterator = coordsToCheck.iterator();
+                    while (true) {
+                        if (iterator.next().equals(c1)) break;
+                        else if (!iterator.hasNext()) {
+                            right = false;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        assertTrue(right);
+    }
+
+    @Test
+    public void findNeighbouringCoordsRightBound() {
+        Integer[] ids = currentPlayer.getWorkersIdsArray();
+        Worker workerToCheckNeighbours = spyGame.getWorkersHandler().getWorker(ids[0]);
+
+        WorkersHandler workersHandler = spyGame.getWorkersHandler();
+        workersHandler.changePosition(workerToCheckNeighbours, new Coord(4, 1));
+
+        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = gameSession.getCellsHandler().findWorkersNeighbouringCoords(currentPlayer);
+
+        ArrayList<Coord> coordsToCheck = new ArrayList<>();
         coordsToCheck.add(new Coord(4,0));
-
-        boolean right = true;
-        for (Coord key : neighbouringCoords.keySet()) {
-            if (neighbouringCoords.get(key).size() != coordsToCheck.size()) right = false;
-        }
-
-        for (Coord c : neighbouringCoords.keySet()) {
-            if (c.equals(workerToCheckNeighbours.getCurrentPosition())) {
-                ArrayList<Coord> effectiveCoords = neighbouringCoords.get(c);
-                for (Coord c1 : effectiveCoords) {
-                    Iterator<Coord> iterator = coordsToCheck.iterator();
-                    while (true) {
-                        if (iterator.next().equals(c1)) break;
-                        else if (!iterator.hasNext()) {
-                            right = false;
-                            break;
-                        }
-                    }
-                }
-            }
-            else {
-                right = false;
-                break;
-            }
-        }
-
-        assertTrue(right);*/
-    }
-
-    @Test
-    public void findNeighbouringCoordsRightBound() throws IOException {
-        /*
-        Worker workerToCheckNeighbours = new Worker(0, Color.ANSI_RED, gameSession.getBoardObserver());
-        workerToCheckNeighbours.setCurrentPosition(new Coord(4, 2));
-        ArrayList<Worker> workersToFindNeighbours = new ArrayList<>();
-        workersToFindNeighbours.add(workerToCheckNeighbours);
-        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = gameSession.getCellsHandler().findWorkersNeighbouringCoords(workersToFindNeighbours);
-
-        ArrayList<Coord> coordsToCheck = new ArrayList<>();
-        coordsToCheck.add(new Coord(4,1));
+        coordsToCheck.add(new Coord(3,0));
         coordsToCheck.add(new Coord(3,1));
         coordsToCheck.add(new Coord(3,2));
-        coordsToCheck.add(new Coord(3,3));
-        coordsToCheck.add(new Coord(4,3));
+        coordsToCheck.add(new Coord(4,2));
 
         boolean right = true;
         for (Coord key : neighbouringCoords.keySet()) {
-            if (neighbouringCoords.get(key).size() != coordsToCheck.size()) right = false;
+            if (key.equals(workerToCheckNeighbours.getCurrentPosition())){
+                if (neighbouringCoords.get(key).size() != coordsToCheck.size()) right = false;
+            }
         }
 
         for (Coord c : neighbouringCoords.keySet()) {
@@ -205,23 +205,20 @@ public class CellsHandlerTest {
                     }
                 }
             }
-            else {
-                right = false;
-                break;
-            }
         }
 
-        assertTrue(right);*/
+        assertTrue(right);
     }
 
     @Test
-    public void findNeighbouringCoordsLeftBound() throws IOException {
-        /*
-        Worker workerToCheckNeighbours = new Worker(0, Color.ANSI_RED, gameSession.getBoardObserver());
-        workerToCheckNeighbours.setCurrentPosition(new Coord(0 , 2));
-        ArrayList<Worker> workersToFindNeighbours = new ArrayList<>();
-        workersToFindNeighbours.add(workerToCheckNeighbours);
-        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = gameSession.getCellsHandler().findWorkersNeighbouringCoords(workersToFindNeighbours);
+    public void findNeighbouringCoordsLeftBound() {
+        Integer[] ids = currentPlayer.getWorkersIdsArray();
+        Worker workerToCheckNeighbours = spyGame.getWorkersHandler().getWorker(ids[0]);
+
+        WorkersHandler workersHandler = spyGame.getWorkersHandler();
+        workersHandler.changePosition(workerToCheckNeighbours, new Coord(0, 2));
+
+        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = gameSession.getCellsHandler().findWorkersNeighbouringCoords(currentPlayer);
 
         ArrayList<Coord> coordsToCheck = new ArrayList<>();
         coordsToCheck.add(new Coord(0,1));
@@ -232,7 +229,9 @@ public class CellsHandlerTest {
 
         boolean right = true;
         for (Coord key : neighbouringCoords.keySet()) {
-            if (neighbouringCoords.get(key).size() != coordsToCheck.size()) right = false;
+            if (key.equals(workerToCheckNeighbours.getCurrentPosition())){
+                if (neighbouringCoords.get(key).size() != coordsToCheck.size()) right = false;
+            }
         }
 
         for (Coord c : neighbouringCoords.keySet()) {
@@ -249,18 +248,13 @@ public class CellsHandlerTest {
                     }
                 }
             }
-            else {
-                right = false;
-                break;
-            }
         }
 
         assertTrue(right);
-        */
     }
 
     @Test
-    public void simpleLeftRightDirectionIterator() {
+    public void simpleLeftRightDirection() {
         Coord origin = new Coord(0,0);
         Coord destination = new Coord(1,0);
         ArrayList<Coord> coordsExpected = new ArrayList<>();
@@ -290,7 +284,7 @@ public class CellsHandlerTest {
     }
 
     @Test
-    public void simpleRightLeftDirectionIterator() {
+    public void simpleRightLeftDirection() {
         Coord origin = new Coord(4,2);
         Coord destination = new Coord(3,2);
         ArrayList<Coord> coordsExpected = new ArrayList<>();
@@ -320,7 +314,7 @@ public class CellsHandlerTest {
     }
 
     @Test
-    public void simpleBottomUpDirectionIterator() {
+    public void simpleBottomUpDirection() {
         Coord origin = new Coord(0,4);
         Coord destination = new Coord(0,3);
         ArrayList<Coord> coordsExpected = new ArrayList<>();
@@ -350,7 +344,7 @@ public class CellsHandlerTest {
     }
 
     @Test
-    public void simpleUpBottomDirectionIterator() {
+    public void simpleUpBottomDirection() {
         Coord origin = new Coord(3,0);
         Coord destination = new Coord(3,1);
         ArrayList<Coord> coordsExpected = new ArrayList<>();
@@ -380,7 +374,7 @@ public class CellsHandlerTest {
     }
 
     @Test
-    public void slantingUpBottomDirectionIterator() {
+    public void slantingUpBottomDirection() {
         Coord origin = new Coord(3,0);
         Coord destination = new Coord(2,1);
         ArrayList<Coord> coordsExpected = new ArrayList<>();
@@ -409,7 +403,7 @@ public class CellsHandlerTest {
     }
 
     @Test
-    public void slantingBottomUpDirectionIterator() {
+    public void slantingBottomUpDirection() {
         Coord origin = new Coord(0,4);
         Coord destination = new Coord(1,3);
         ArrayList<Coord> coordsExpected = new ArrayList<>();

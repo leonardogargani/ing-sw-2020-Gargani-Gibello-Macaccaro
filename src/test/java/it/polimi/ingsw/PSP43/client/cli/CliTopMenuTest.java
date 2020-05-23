@@ -34,7 +34,7 @@ public class CliTopMenuTest {
         test.setContentWithNick("TestNick");
         test.show();
         assertEquals(("          -------------------------------------          " + "\n" +
-                              "                    It's TestNick's turn" + "\n" +
+                              "                    It's TestNick's turn             " + "\n" +
                               "          -------------------------------------          " + "\n" + System.lineSeparator()),
                 outContent.toString());
     }

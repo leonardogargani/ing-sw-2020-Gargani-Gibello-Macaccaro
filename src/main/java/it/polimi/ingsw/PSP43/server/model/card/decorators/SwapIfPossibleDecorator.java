@@ -27,7 +27,7 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
         super(godComponent);
     }
 
-    public void initMove(GameSession gameSession) throws WinnerCaughtException, GameEndedException, GameLostException {
+    public void initMove(GameSession gameSession) throws GameEndedException, GameLostException {
         HashMap<Coord, ArrayList<Coord>> availablePositions = findAvailablePositionsToMove(gameSession);
 
         if (availablePositions.size() == 0) throw new GameLostException();
@@ -54,7 +54,7 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
         move(new DataToMove(gameSession, gameSession.getCurrentPlayer(), workerMoved, actionResponse.getPosition()), coordToForce);
     }
 
-    public void move(DataToMove dataToMove, Coord coordToForce) throws WinnerCaughtException {
+    public void move(DataToMove dataToMove, Coord coordToForce) {
         GameSession gameSession = dataToMove.getGameSession();
 
         Coord coordToMove = dataToMove.getNewPosition();

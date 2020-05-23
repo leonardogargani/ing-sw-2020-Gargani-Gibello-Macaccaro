@@ -50,7 +50,7 @@ public class Player implements Serializable {
      * This method assigns a couple of workers, represented by their ids, to their owner.
      * @param workersIdsArray ids of the workers owned by the player
      */
-    public void setWorkersIdsArray(int[] workersIdsArray) {
+    public void setWorkersIdsArray(Integer[] workersIdsArray) {
         for (int i=0; i<workersIdsArray.length && i<this.workersIdsArray.length; i++) {
             this.workersIdsArray[i] = workersIdsArray[i];
         }

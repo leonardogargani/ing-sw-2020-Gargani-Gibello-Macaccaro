@@ -2,7 +2,10 @@ package it.polimi.ingsw.PSP43.server.gameStates;
 
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+
+import java.util.Map;
 
 /**
  * This is the State of the game where the current player is asked to make a build
@@ -35,6 +38,15 @@ public class BuildState extends TurnState {
         } catch (GameEndedException e) {
             game.setActive();
             return;
+        }
+
+        Map<String, AbstractGodCard> map = game.getCardsHandler().getMapOwnersCard();
+        for (String s : map.keySet()) {
+            AbstractGodCard card = map.get(s);
+
+            if (super.checkForWinner(card, game)) {
+                return;
+            }
         }
 
         findNextState();

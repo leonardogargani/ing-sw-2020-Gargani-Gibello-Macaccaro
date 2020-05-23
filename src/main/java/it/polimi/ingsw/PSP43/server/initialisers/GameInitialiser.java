@@ -44,12 +44,12 @@ public class GameInitialiser {
      */
     public static void initialiseWorkers(GameSession gameSession) {
         Color[] colors = new Color[]{Color.ANSI_RED, Color.ANSI_GREEN};
-        int[] workerIds = new int[2];
 
         for (int i=0; i<gameSession.getPlayersHandler().getNumOfPlayers(); i++) {
             String nicknameCurrent = gameSession.getPlayersHandler().getPlayer(i).getNickname();
+            Integer[] workerIds = new Integer[2];
             for (int j=0; j<2; j++) {
-                workerIds[i] = gameSession.getWorkersHandler().addNewWorker(colors[i]);
+                workerIds[j] = gameSession.getWorkersHandler().addNewWorker(colors[i]);
             }
             gameSession.getPlayersHandler().getPlayer(nicknameCurrent).setWorkersIdsArray(workerIds);
         }

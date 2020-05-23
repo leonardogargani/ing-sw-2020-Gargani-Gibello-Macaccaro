@@ -5,11 +5,9 @@ import it.polimi.ingsw.PSP43.server.model.card.BasicGodCard;
 import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.BasicBuildBehaviour;
 import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.DoubleDifferentSpaceBehaviour;
 import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.DoubleSameSpaceBehaviour;
+import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.RemoveBlockFromNeighbourBehaviour;
 import it.polimi.ingsw.PSP43.server.model.card.behaviours.moveBehaviours.*;
-import it.polimi.ingsw.PSP43.server.model.card.decorators.SwapIfPossibleDecorator;
-import it.polimi.ingsw.PSP43.server.model.card.decorators.SwapMoveDecorator;
-import it.polimi.ingsw.PSP43.server.model.card.decorators.UnconditionedDomeBuildDecorator;
-import it.polimi.ingsw.PSP43.server.model.card.decorators.WinConditionDecorator;
+import it.polimi.ingsw.PSP43.server.model.card.decorators.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -111,8 +109,12 @@ public class DOMCardsParser {
                     return new SwapMoveDecorator(component);
                 case "UnconditionedBuildDomeDecorator":
                     return new UnconditionedDomeBuildDecorator(component);
+                case "WinFiveDomeDecorator":
+                    return new WinFiveDomeDecorator(component);
+                case "BuildUnderFeetDecorator":
+                    return new BuildUnderFeetDecorator(component);
                 default:
-                    return new WinConditionDecorator(component);
+                    return new WinTwoFloorsFallDecorator(component);
             }
         }
     }
@@ -128,6 +130,10 @@ public class DOMCardsParser {
                 return new BuildBeforeMoveBehaviour();
             case "DoubleMoveBehaviour":
                 return new DoubleMoveBehaviour();
+            case "ForceToOppSideBehaviour":
+                return new ForceToOppSideBehaviour();
+            case "InfiniteMovesOnPerimeterBehaviour":
+                return new InfiniteMovesOnPerimeterBehaviour();
             default:
                 return null;
         }
@@ -142,6 +148,8 @@ public class DOMCardsParser {
                 return new DoubleSameSpaceBehaviour();
             case "DoubleDifferentSpaceBehaviour":
                 return new DoubleDifferentSpaceBehaviour();
+            case "RemoveBlockFromNeighbourBehaviour":
+                return new RemoveBlockFromNeighbourBehaviour();
             default:
                 return null;
         }

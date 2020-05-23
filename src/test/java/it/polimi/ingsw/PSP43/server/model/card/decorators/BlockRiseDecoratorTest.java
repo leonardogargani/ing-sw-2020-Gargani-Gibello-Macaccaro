@@ -44,9 +44,10 @@ public class BlockRiseDecoratorTest {
         deck = DOMCardsParser.buildDeck();
 
         currentPlayer = spyGame.getPlayersHandler().getPlayer(0);
-        spyGame.setCurrentPlayer(currentPlayer);
 
         abstractGodCard = new BlockRiseDecorator(new BasicGodCard("", "", "", new BasicMoveBehaviour(), new BasicBuildBehaviour()));
+        currentPlayer.setAbstractGodCard(abstractGodCard);
+        spyGame.setCurrentPlayer(currentPlayer);
 
         workerToMove = spyGame.getWorkersHandler().getWorker(new Coord(4, 3));
     }

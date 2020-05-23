@@ -44,15 +44,16 @@ public class UnconditionedDomeBuildDecoratorTest {
         deck = DOMCardsParser.buildDeck();
 
         currentPlayer = spyGame.getPlayersHandler().getPlayer(0);
-        spyGame.setCurrentPlayer(currentPlayer);
 
         abstractGodCard = new UnconditionedDomeBuildDecorator(new BasicGodCard("", "", "", new BasicMoveBehaviour(), new BasicBuildBehaviour()));
+        currentPlayer.setAbstractGodCard(abstractGodCard);
+        spyGame.setCurrentPlayer(currentPlayer);
 
         workerToBuild = spyGame.getWorkersHandler().getWorker(new Coord(4, 3));
     }
 
     @Test
-    public void initBuild() throws ClassNotFoundException, GameEndedException, InterruptedException, IOException {
+    public void initBuild() throws GameEndedException {
         Coord coordBuildDome = new Coord(3, 3);
         Coord coordBuildBlock = new Coord(3, 4);
 

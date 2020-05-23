@@ -189,4 +189,10 @@ public class WorkersHandler {
         }
     }
 
+    public boolean isOnPerimetralCell(Worker worker) {
+        Coord currentPosition = worker.getCurrentPosition();
+
+        return cellsHandler.isPerimetral(currentPosition);
+    }
+
 }

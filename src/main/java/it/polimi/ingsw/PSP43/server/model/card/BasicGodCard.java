@@ -6,6 +6,8 @@ import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.*;
 import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.BasicBuildBehaviour;
 import it.polimi.ingsw.PSP43.server.model.card.behaviours.moveBehaviours.BasicMoveBehaviour;
+import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
+import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
@@ -42,7 +44,7 @@ public class BasicGodCard extends AbstractGodCard {
         return new BasicGodCard(super.getGodName(), super.getDescription(), super.getPower(), moveBehaviour, buildBehaviour);
     }
 
-    public void initMove(GameSession gameSession) throws GameEndedException, WinnerCaughtException, GameLostException {
+    public void initMove(GameSession gameSession) throws GameEndedException, GameLostException {
         moveBehaviour.handleInitMove(gameSession);
     }
 
@@ -64,5 +66,23 @@ public class BasicGodCard extends AbstractGodCard {
 
     public ActionResponse askForBuild(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositionsBuildBlock, String message) throws GameEndedException {
         return buildBehaviour.askForBuild(gameSession, availablePositionsBuildBlock, message);
+    }
+
+    public boolean checkConditionsToWin(GameSession gameSession) {
+        WorkersHandler workersHandler = gameSession.getWorkersHandler();
+        CellsHandler cellsHandler = gameSession.getCellsHandler();
+
+        Integer[] wIds = gameSession.getCurrentPlayer().getWorkersIdsArray();
+        for (Integer i : wIds) {
+            Worker worker = workersHandler.getWorker(i);
+            if (worker.isLatestMoved()) {
+
+                Coord workerCoordUpdated = worker.getCurrentPosition();
+                Cell workerCellUpdated = cellsHandler.getCell(workerCoordUpdated);
+
+                return workerCellUpdated.getHeight() == 3;
+            }
+        }
+        return false;
     }
 }

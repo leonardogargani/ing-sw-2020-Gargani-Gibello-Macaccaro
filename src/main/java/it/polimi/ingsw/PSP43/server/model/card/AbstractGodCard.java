@@ -85,18 +85,12 @@ public abstract class AbstractGodCard implements Serializable {
         return power;
     }
 
-    public void move(DataToMove dataToMove) throws WinnerCaughtException {
+    public void move(DataToMove dataToMove) {
         GameSession gameSession = dataToMove.getGameSession();
         Coord newPosition = dataToMove.getNewPosition();
         Worker workerToMove = dataToMove.getWorker();
 
         gameSession.getWorkersHandler().changePosition(workerToMove, newPosition);
-
-        Worker workerUpdated = gameSession.getWorkersHandler().getWorker(workerToMove.getId());
-        Coord workerCoordUpdated = workerUpdated.getCurrentPosition();
-        Cell workerCellUpdated = gameSession.getCellsHandler().getCell(workerCoordUpdated);
-
-        if (workerCellUpdated.getHeight() == 3) throw new WinnerCaughtException(dataToMove.getPlayer().getNickname());
     }
 
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(GameSession gameSession) {
@@ -171,7 +165,7 @@ public abstract class AbstractGodCard implements Serializable {
 
     public AbstractGodCard cleanFromEffects(String nameOfEffect) { return null; }
 
-    public void initMove(GameSession gameSession) throws WinnerCaughtException, GameEndedException, GameLostException {}
+    public void initMove(GameSession gameSession) throws GameEndedException, GameLostException {}
 
     public void initBuild(GameSession gameSession) throws GameEndedException {}
 
@@ -182,6 +176,10 @@ public abstract class AbstractGodCard implements Serializable {
     public DataToBuild genericAskForBuild(GameSession gameSession) throws GameEndedException { return null; }
 
     public ActionResponse askForBuild(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositionsBuildBlock, String message) throws GameEndedException { return null; }
+
+    public boolean checkConditionsToWin(GameSession gameSession) {
+        return false;
+    }
 
     public void print() {
         System.out.println("    Godname : " + godName);

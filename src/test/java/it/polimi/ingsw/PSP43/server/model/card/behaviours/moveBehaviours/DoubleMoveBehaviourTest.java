@@ -27,8 +27,8 @@ import static org.mockito.Mockito.*;
 public class DoubleMoveBehaviourTest {
     GameSession gameSession;
     GameSession spyGame;
-    ArrayList<AbstractGodCard> deck;
     Player currentPlayer;
+    AbstractGodCard abstractGodCard;
 
     @Before
     public void setUp() throws Exception {
@@ -37,9 +37,9 @@ public class DoubleMoveBehaviourTest {
         GameInitialiser.initialiseWorkers(gameSession);
         spyGame = spy(gameSession);
 
-        deck = DOMCardsParser.buildDeck();
-
         currentPlayer = gameSession.getPlayersHandler().getPlayer("Gibi");
+        abstractGodCard = new BasicGodCard("", "", "", new DoubleMoveBehaviour(), new BasicBuildBehaviour());
+        currentPlayer.setAbstractGodCard(abstractGodCard);
         spyGame.setCurrentPlayer(currentPlayer);
     }
 
@@ -48,8 +48,6 @@ public class DoubleMoveBehaviourTest {
      */
     @Test
     public void handleMove() throws GameEndedException, WinnerCaughtException, GameLostException {
-        currentPlayer.setAbstractGodCard(new BasicGodCard("", "", "", new DoubleMoveBehaviour(), new BasicBuildBehaviour()));
-
         Coord initialWorkerCoord = new Coord(4,3);
         Worker workerToMoveTwice = gameSession.getWorkersHandler().getWorker(initialWorkerCoord);
 

@@ -90,11 +90,7 @@ public class PlayersHandler {
      * @param player The data stored about a player into the list of players
      * @param abstractGodCardChosen The data of the card chosen by a player during the game
      */
-    public void setCardToPlayer(Player player, AbstractGodCard abstractGodCardChosen) throws CardAlreadyInUseException {
-        for (Player p : gamePlayers)
-            if (p.getAbstractGodCard() != null && p.getAbstractGodCard().getGodName().equals(abstractGodCardChosen.getGodName())) {
-                throw new CardAlreadyInUseException("We are sorry, but the card " + abstractGodCardChosen.getGodName() + " is already in use.");
-            }
+    public void setCardToPlayer(Player player, AbstractGodCard abstractGodCardChosen) {
         player.setAbstractGodCard(abstractGodCardChosen);
     }
 

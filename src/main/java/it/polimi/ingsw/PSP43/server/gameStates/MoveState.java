@@ -96,12 +96,6 @@ public class MoveState extends TurnState {
 
         try {
             playerCard.initMove(game);
-        } catch (WinnerCaughtException e) {
-            int winnerStateIndex = game.getTurnStateMap().size() - 1;
-            WinState nextState = (WinState) game.getTurnStateMap().get(winnerStateIndex);
-            nextState.setWinner(e.getWinner());
-            game.setNextState(nextState);
-            game.transitToNextState();
         } catch (GameEndedException e) {
             game.setActive();
             return;
@@ -111,6 +105,10 @@ public class MoveState extends TurnState {
             game.eliminatePlayer(currentPlayer);
 
             this.sendAllWaitingMessage();
+        }
+
+        if (super.checkForWinner(playerCard, game)) {
+            return;
         }
 
         findNextState();

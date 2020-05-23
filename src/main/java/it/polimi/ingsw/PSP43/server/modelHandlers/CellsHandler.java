@@ -140,7 +140,7 @@ public class CellsHandler {
      * @param coord The coordinates of which the method has to identify all the neighbouring coordinates.
      * @return An ArrayList of coordinates representing all the neighbours of the coordinates supplied by the caller.
      */
-    private ArrayList<Coord> findNeighbouringCoords(Coord coord) {
+    public ArrayList<Coord> findNeighbouringCoords(Coord coord) {
 
         ArrayList<Coord> positions = new ArrayList<>();
 
@@ -199,4 +199,53 @@ public class CellsHandler {
         return clonedCellsRequired;
     }
 
+    public int findNumberOfDomes() {
+        int numberDomes = 0;
+
+        for (Cell[] cells : board) {
+            for (int j = 0; j < board.length; j++) {
+                if (cells[j].getHeight() == 4) numberDomes++;
+            }
+        }
+
+        return numberDomes;
+    }
+
+    public boolean isPerimetral(Coord c) {
+        return c.getY() == DIM -1 || c.getY() == 0 || c.getX() == DIM -1 || c.getX() == 0;
+    }
+
+    public boolean isOppositeCoordFree(Coord coordForcer, Coord coordForced) {
+        int xIncrement = coordForcer.getX() - coordForced.getX();
+        int yIncrement = coordForcer.getY() - coordForced.getY();
+
+        if ((coordForcer.getX() + xIncrement < 0 || coordForcer.getX() + xIncrement > 4) ||
+                (coordForcer.getY() + yIncrement < 0 || coordForcer.getY() + yIncrement > 4)) {
+            return false;
+        }
+        else {
+            Cell cellToForce = board[coordForcer.getX() + xIncrement][coordForcer.getY() + yIncrement];
+            if (cellToForce.getOccupiedByDome() || cellToForce.getOccupiedByWorker()) {
+                return false;
+            }
+            else return true;
+        }
+    }
+
+    public Coord findOppositeCoordFree(Coord coordForcer, Coord coordForced) {
+        int xIncrement = coordForcer.getX() - coordForced.getX();
+        int yIncrement = coordForcer.getY() - coordForced.getY();
+
+        if ((coordForcer.getX() + xIncrement < 0 || coordForcer.getX() + xIncrement > 4) ||
+                (coordForcer.getY() + yIncrement < 0 || coordForcer.getY() + yIncrement > 4)) {
+            return null;
+        }
+        else {
+            Cell cellToForce = board[coordForcer.getX() + xIncrement][coordForcer.getY() + yIncrement];
+            if (cellToForce.getOccupiedByDome() || cellToForce.getOccupiedByWorker()) {
+                return null;
+            }
+            else return new Coord(coordForcer.getX() + xIncrement, coordForcer.getY() + yIncrement);
+        }
+    }
 }

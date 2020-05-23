@@ -35,7 +35,7 @@ public abstract class PowerGodDecorator extends AbstractGodCard {
         this.godComponent = godComponent;
     }
 
-    public void move(DataToMove dataToMove) throws WinnerCaughtException {
+    public void move(DataToMove dataToMove) {
         godComponent.move(dataToMove);
     }
 
@@ -67,7 +67,7 @@ public abstract class PowerGodDecorator extends AbstractGodCard {
         return godComponent.getPower();
     }
 
-    public void initMove(GameSession gameSession) throws WinnerCaughtException, GameEndedException, GameLostException {
+    public void initMove(GameSession gameSession) throws GameEndedException, GameLostException {
         godComponent.initMove(gameSession);
     }
 
@@ -89,6 +89,10 @@ public abstract class PowerGodDecorator extends AbstractGodCard {
 
     public ActionResponse askForBuild(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositionsBuildBlock, String message) throws GameEndedException {
         return godComponent.askForBuild(gameSession, availablePositionsBuildBlock, message);
+    }
+
+    public boolean checkConditionsToWin(GameSession gameSession) {
+        return godComponent.checkConditionsToWin(gameSession);
     }
 
     public void print() {

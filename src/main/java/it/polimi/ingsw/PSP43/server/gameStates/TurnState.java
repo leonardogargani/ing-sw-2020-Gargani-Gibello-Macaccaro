@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
+import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 
 /**
  * This is an abstract class to represent a general structure of turns of a game.
@@ -46,28 +47,36 @@ public abstract class TurnState {
     /**
      * This method initialises the turn of the game.
      */
-    public void initState() {
-        executeState();
-    }
+    public void initState() {}
 
     /**
      * This method executes the turn of the game.
      * @param message The message of registration arrived from the player on the client.
      */
-    public void executeState(RegistrationMessage message) {
-        findNextState();
-    }
+    public void executeState(RegistrationMessage message) {}
 
     /**
      * This method executes the turn of the game.
      */
-    public void executeState() {
-        findNextState();
-    }
+    public void executeState() {}
 
     /**
      * This method finds the next turn of the game, saving it into a variable of the GameSession.
      */
-    public void findNextState() {
+    public void findNextState() {}
+
+    public boolean checkForWinner(AbstractGodCard card, GameSession gameSession) {
+        if (card.checkConditionsToWin(gameSession)) {
+            WinState nextState;
+            for (TurnState t : gameSession.getTurnStateMap()) {
+                if (t.getTurnName() == TurnName.WIN_STATE) {
+                    nextState = (WinState) t;
+                    nextState.setWinner(gameSession.getCurrentPlayer().getNickname());
+                    gameSession.setNextState(t);
+                }
+            }
+            return true;
+        }
+        else return false;
     }
 }

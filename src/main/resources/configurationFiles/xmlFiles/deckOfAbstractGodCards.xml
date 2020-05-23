@@ -4,7 +4,9 @@
         <basicGodCard>
             <godName>Apollo</godName>
             <godDescription>God Of Music</godDescription>
-            <godPower>"Your Move: Your Worker may move into an opponent Worker’s space by forcing their Worker to the space yours just vacated."</godPower>
+            <godPower>Your Move: Your Worker may move into an opponent Worker’s space by forcing their Worker to the
+                space yours just vacated.
+            </godPower>
             <moveBehaviour>
                 <basicMoveBehaviour/>
             </moveBehaviour>
@@ -16,7 +18,7 @@
     <basicGodCard>
         <godName>Prometheus</godName>
         <godDescription>Titan Benefactor of Mankind</godDescription>
-        <godPower>"Your Turn: If your Worker does not move up, it may build both before and after moving."</godPower>
+        <godPower>Your Turn: If your Worker does not move up, it may build both before and after moving.</godPower>
         <moveBehaviour>
             <buildBeforeMoveBehaviour/>
         </moveBehaviour>
@@ -27,7 +29,7 @@
     <basicGodCard>
         <godName>Artemis</godName>
         <godDescription>Goddes of the Hunt</godDescription>
-        <godPower>"Your Move: Your Worker may move one additional time, but not back to its initial space."</godPower>
+        <godPower>Your Move: Your Worker may move one additional time, but not back to its initial space.</godPower>
         <moveBehaviour>
             <doubleMoveBehaviour/>
         </moveBehaviour>
@@ -38,7 +40,9 @@
     <basicGodCard>
         <godName>Athena</godName>
         <godDescription>Goddes of Wisdom</godDescription>
-        <godPower>"Opponent’s Turn: If one of your Workers moved up on your last turn, opponent Workers cannot move up this turn."</godPower>
+        <godPower>Opponent’s Turn: If one of your Workers moved up on your last turn, opponent Workers cannot move up
+            this turn.
+        </godPower>
         <moveBehaviour>
             <blockOpponentRiseBehaviour/>
         </moveBehaviour>
@@ -49,7 +53,8 @@
     <basicGodCard>
         <godName>Hephaestus</godName>
         <godDescription>God of Blacksmiths</godDescription>
-        <godPower>"Your Build: Your Worker may build one additional block (not dome) on top of your first block."</godPower>
+        <godPower>Your Build: Your Worker may build one additional block (not dome) on top of your first block.
+        </godPower>
         <moveBehaviour>
             <basicMoveBehaviour/>
         </moveBehaviour>
@@ -60,7 +65,7 @@
     <basicGodCard>
         <godName>Demeter</godName>
         <godDescription>Goddess of the Harvest</godDescription>
-        <godPower>"Your Build: Your Worker may build one additional time, but not on the same space."</godPower>
+        <godPower>Your Build: Your Worker may build one additional time, but not on the same space.</godPower>
         <moveBehaviour>
             <basicMoveBehaviour/>
         </moveBehaviour>
@@ -72,7 +77,7 @@
         <basicGodCard>
             <godName>Atlas</godName>
             <godDescription>Titan Shouldering the Heavens</godDescription>
-            <godPower>"Your Build: Your Worker may build a dome at any level. "</godPower>
+            <godPower>Your Build: Your Worker may build a dome at any level.</godPower>
             <moveBehaviour>
                 <basicMoveBehaviour/>
             </moveBehaviour>
@@ -86,21 +91,23 @@
             <basicGodCard>
                 <godName>Minotaur</godName>
                 <godDescription>Bull-headed Monster</godDescription>
-                <godPower>"Your Move: Your Worker may move into an opponent Worker’s space, if their Worker can be forced one space straight backwards to an unoccupied space at any level."</godPower>
-            <moveBehaviour>
-                <basicMoveBehaviour/>
-            </moveBehaviour>
-            <buildBehaviour>
-                <basicBuildBehaviour/>
-            </buildBehaviour>
+                <godPower>Your Move: Your Worker may move into an opponent Worker’s space, if their Worker can be forced
+                    one space straight backwards to an unoccupied space at any level.
+                </godPower>
+                <moveBehaviour>
+                    <basicMoveBehaviour/>
+                </moveBehaviour>
+                <buildBehaviour>
+                    <basicBuildBehaviour/>
+                </buildBehaviour>
             </basicGodCard>
         </swapMoveDecorator>
     </swapIfPossibleDecorator>
-    <winConditionDecorator>
+    <winTwoFloorsFallDecorator>
         <basicGodCard>
             <godName>Pan</godName>
             <godDescription>God of the Wild</godDescription>
-            <godPower>"Win Condition: You also win if your Worker moves down two or more levels."</godPower>
+            <godPower>Win Condition: You also win if your Worker moves down two or more levels.</godPower>
             <moveBehaviour>
                 <basicMoveBehaviour/>
             </moveBehaviour>
@@ -108,5 +115,66 @@
                 <basicBuildBehaviour/>
             </buildBehaviour>
         </basicGodCard>
-    </winConditionDecorator>
+    </winTwoFloorsFallDecorator>
+    <buildUnderFeetDecorator>
+        <basicGodCard>
+            <godName>Zeus</godName>
+            <godDescription>God of the Sky</godDescription>
+            <godPower>Your build: Your Worker may build a block under itself.</godPower>
+            <moveBehaviour>
+                <basicMoveBehaviour/>
+            </moveBehaviour>
+            <buildBehaviour>
+                <basicBuildBehaviour/>
+            </buildBehaviour>
+        </basicGodCard>
+    </buildUnderFeetDecorator>
+    <winFiveDomeDecorator>
+        <basicGodCard>
+            <godName>Chronus</godName>
+            <godDescription>God of Time</godDescription>
+            <godPower>Win Condition : You also win when there are at least five Complete Towers on the board.</godPower>
+            <moveBehaviour>
+                <basicMoveBehaviour/>
+            </moveBehaviour>
+            <buildBehaviour>
+                <basicBuildBehaviour/>
+            </buildBehaviour>
+        </basicGodCard>
+    </winFiveDomeDecorator>
+    <basicGodCard>
+        <godName>Triton</godName>
+        <godDescription>God of the Waves</godDescription>
+        <godPower>Your move : Each time your Worker moves into a perimeter space, it may immediately move again.
+        </godPower>
+        <moveBehaviour>
+            <infiniteMovesOnPerimeterBehaviour/>
+        </moveBehaviour>
+        <buildBehaviour>
+            <basicBuildBehaviour/>
+        </buildBehaviour>
+    </basicGodCard>
+    <basicGodCard>
+        <godName>Ares</godName>
+        <godDescription>God of War</godDescription>
+        <godPower>End of Your Turn : You may remove an unoccupied block (not dome) neighboring your unmoved Worker.
+        </godPower>
+        <moveBehaviour>
+            <basicMoveBehaviour/>
+        </moveBehaviour>
+        <buildBehaviour>
+            <removeBlockFromNeighbourDecorator/>
+        </buildBehaviour>
+    </basicGodCard>
+    <basicGodCard>
+        <godName>Charon</godName>
+        <godDescription>Ferryman to the Underworld</godDescription>
+        <godPower>Your Move : Before your Worker moves, you may force a neighboring opponent Worker to the space directly on the other side of your Worker, if that space is unoccupied.</godPower>
+        <moveBehaviour>
+            <forceToOppSideBehaviour/>
+        </moveBehaviour>
+        <buildBehaviour>
+            <basicBuildBehaviour/>
+        </buildBehaviour>
+    </basicGodCard>
 </deckOfAbstractGodCards>

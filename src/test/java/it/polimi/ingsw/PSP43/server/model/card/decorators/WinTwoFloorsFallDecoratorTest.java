@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP43.server.model.card.decorators;
 
+import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.initialisers.DOMCardsParser;
 import it.polimi.ingsw.PSP43.server.initialisers.GameInitialiser;
@@ -8,20 +9,21 @@ import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.model.card.BasicGodCard;
 import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.BasicBuildBehaviour;
 import it.polimi.ingsw.PSP43.server.model.card.behaviours.moveBehaviours.BasicMoveBehaviour;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.spy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
-public class WinConditionDecoratorTest {
+public class WinTwoFloorsFallDecoratorTest {
     GameSession gameSession;
     GameSession spyGame;
-    ArrayList<AbstractGodCard> deck;
     Player currentPlayer;
     AbstractGodCard abstractGodCard;
     Worker workerToMove;
@@ -33,18 +35,18 @@ public class WinConditionDecoratorTest {
         GameInitialiser.initialiseWorkers(gameSession);
         GameInitialiser.initialiseCards(gameSession);
         spyGame = spy(gameSession);
-        deck = DOMCardsParser.buildDeck();
 
         currentPlayer = spyGame.getPlayersHandler().getPlayer(0);
-        spyGame.setCurrentPlayer(currentPlayer);
 
-        abstractGodCard = new WinConditionDecorator(new BasicGodCard("", "", "", new BasicMoveBehaviour(), new BasicBuildBehaviour()));
+        abstractGodCard = new WinTwoFloorsFallDecorator(new BasicGodCard("", "", "", new BasicMoveBehaviour(), new BasicBuildBehaviour()));
+        currentPlayer.setAbstractGodCard(abstractGodCard);
+        spyGame.setCurrentPlayer(currentPlayer);
 
         workerToMove = spyGame.getWorkersHandler().getWorker(new Coord(4, 3));
     }
 
     @Test
-    public void move() throws IOException, InterruptedException, ClassNotFoundException {
+    public void checkConditionsOfWinTest() throws GameEndedException {
         Coord workerCoord = workerToMove.getCurrentPosition();
         Cell workerCell = spyGame.getCellsHandler().getCell(workerCoord);
         workerCell.setHeight(3);
@@ -55,24 +57,22 @@ public class WinConditionDecoratorTest {
         cellToMove.setHeight(0);
         spyGame.getCellsHandler().changeStateOfCell(cellToMove, coordToMove);
 
-        boolean catched = false;
+        doReturn(new ActionResponse(workerToMove.getCurrentPosition(), coordToMove)).when(spyGame).sendRequest(any(), any(), any());
 
         try {
-            abstractGodCard.move(new DataToMove(spyGame, currentPlayer, workerToMove, coordToMove));
-        } catch (WinnerCaughtException e) {
-            catched = true;
-        }
+            abstractGodCard.initMove(spyGame);
+        } catch (GameLostException | GameEndedException e) { e.printStackTrace(); }
 
-        assertTrue(catched);
+        assertTrue(abstractGodCard.checkConditionsToWin(spyGame));
     }
 
     @Test
-    public void cleanFromEffects() throws ClassNotFoundException {
+    public void cleanFromEffects() {
         abstractGodCard.cleanFromEffects("it.polimi.ingsw.PSP43.server.model.card.decorators.BlockRiseDecorator");
 
         boolean verified = true;
         while (true) {
-            if (!(abstractGodCard instanceof WinConditionDecorator) && !(abstractGodCard instanceof BasicGodCard)) {
+            if (!(abstractGodCard instanceof WinTwoFloorsFallDecorator) && !(abstractGodCard instanceof BasicGodCard)) {
                 verified = false;
             }
             if (abstractGodCard instanceof BasicGodCard) break;

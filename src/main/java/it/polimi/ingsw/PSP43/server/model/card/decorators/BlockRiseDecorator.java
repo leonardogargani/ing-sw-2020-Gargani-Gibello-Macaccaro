@@ -1,16 +1,10 @@
 package it.polimi.ingsw.PSP43.server.model.card.decorators;
 
-import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
-import it.polimi.ingsw.PSP43.server.model.DataToMove;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
-import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,6 +21,18 @@ public class BlockRiseDecorator extends PowerGodDecorator {
     public BlockRiseDecorator(AbstractGodCard godComponent) {
         super(godComponent);
     }
+
+    // TODO useless if I call the findpositions on the external abs
+    /*public void initMove(GameSession gameSession) throws WinnerCaughtException, GameEndedException, GameLostException {
+        HashMap<Coord, ArrayList<Coord>> availablePositionsAfterBlocked = findAvailablePositionsToMove(gameSession);
+
+        if (availablePositionsAfterBlocked.size() == 0) throw new GameLostException();
+
+        ActionResponse actionResponse = askForMove(gameSession, availablePositionsAfterBlocked);
+        Worker workerMoved = gameSession.getWorkersHandler().getWorker(actionResponse.getWorkerPosition());
+
+        move(new DataToMove(gameSession, gameSession.getCurrentPlayer(), workerMoved, actionResponse.getPosition()));
+    }*/
 
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(GameSession gameSession) {
         CellsHandler cellsHandler = gameSession.getCellsHandler();
@@ -47,16 +53,5 @@ public class BlockRiseDecorator extends PowerGodDecorator {
 
     public AbstractGodCard cleanFromEffects(String nameOfEffect) {
         return super.getGodComponent().cleanFromEffects(nameOfEffect);
-    }
-
-    public void initMove(GameSession gameSession) throws WinnerCaughtException, GameEndedException, GameLostException {
-        HashMap<Coord, ArrayList<Coord>> availablePositionsAfterBlocked = findAvailablePositionsToMove(gameSession);
-
-        if (availablePositionsAfterBlocked.size() == 0) throw new GameLostException();
-
-        ActionResponse actionResponse = askForMove(gameSession, availablePositionsAfterBlocked);
-        Worker workerMoved = gameSession.getWorkersHandler().getWorker(actionResponse.getWorkerPosition());
-
-        move(new DataToMove(gameSession, gameSession.getCurrentPlayer(), workerMoved, actionResponse.getPosition()));
     }
 }

@@ -73,7 +73,7 @@ public class ChooseWorkerState extends TurnState {
 
             // here all the new workers of the player are added into the workersHandler with the color chosen, then the color
             // is removed from available colors
-            int[] workersIds = new int[2];
+            Integer[] workersIds = new Integer[2];
             for (int i=0; i<2; i++) {
                 workersIds[i] = workersHandler.addNewWorker(colorResponse.getColor());
             }

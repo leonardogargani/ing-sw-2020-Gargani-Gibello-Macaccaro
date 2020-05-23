@@ -7,6 +7,7 @@ import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
+import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.model.card.BasicGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
@@ -23,9 +24,10 @@ public class BasicBuildBehaviour extends BasicGodCard implements BuildBehaviour 
     public DataToBuild genericAskForBuild(GameSession gameSession) throws GameEndedException {
         Player currentPlayer = gameSession.getCurrentPlayer();
         WorkersHandler workersHandler = gameSession.getWorkersHandler();
+        AbstractGodCard abstractGodCard = currentPlayer.getAbstractGodCard();
 
-        HashMap<Coord, ArrayList<Coord>> availablePositionsBuildBlock = findAvailablePositionsToBuildBlock(gameSession);
-        HashMap<Coord, ArrayList<Coord>> availablePositionsBuildDome = findAvailablePositionsToBuildDome(gameSession);
+        HashMap<Coord, ArrayList<Coord>> availablePositionsBuildBlock = abstractGodCard.findAvailablePositionsToBuildBlock(gameSession);
+        HashMap<Coord, ArrayList<Coord>> availablePositionsBuildDome = abstractGodCard.findAvailablePositionsToBuildDome(gameSession);
 
         ResponseMessage response = new ResponseMessage(false);
         if (availablePositionsBuildDome.size() != 0) {

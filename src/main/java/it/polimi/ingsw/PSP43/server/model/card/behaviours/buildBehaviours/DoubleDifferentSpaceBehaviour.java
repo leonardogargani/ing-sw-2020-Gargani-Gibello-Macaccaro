@@ -6,6 +6,7 @@ import it.polimi.ingsw.PSP43.server.model.DataToBuild;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
+import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
@@ -53,11 +54,12 @@ public class DoubleDifferentSpaceBehaviour extends BasicBuildBehaviour {
     private void buildAnotherTime(DataToBuild oldDataToBuild) throws GameEndedException {
         GameSession game = oldDataToBuild.getGameSession();
         Player currentPlayer = game.getCurrentPlayer();
+        AbstractGodCard abstractGodCard = currentPlayer.getAbstractGodCard();
 
-        HashMap<Coord, ArrayList<Coord>> availablePositionsToBuildBlock = findAvailablePositionsToBuildBlock(game);
+        HashMap<Coord, ArrayList<Coord>> availablePositionsToBuildBlock = abstractGodCard.findAvailablePositionsToBuildBlock(game);
         filterAllowedPositions(availablePositionsToBuildBlock, oldDataToBuild);
 
-        HashMap<Coord, ArrayList<Coord>> availablePositionsToBuildDome = findAvailablePositionsToBuildDome(game);
+        HashMap<Coord, ArrayList<Coord>> availablePositionsToBuildDome = abstractGodCard.findAvailablePositionsToBuildDome(game);
         filterAllowedPositions(availablePositionsToBuildDome, oldDataToBuild);
 
         ResponseMessage responseMessage = new ResponseMessage(false);

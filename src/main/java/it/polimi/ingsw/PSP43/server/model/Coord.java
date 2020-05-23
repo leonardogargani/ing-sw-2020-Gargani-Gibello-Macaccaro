@@ -61,5 +61,4 @@ public class Coord implements Serializable {
     public Coord clone() {
         return new Coord(this.getX(), this.getY());
     }
-
 }

@@ -1,17 +1,10 @@
 package it.polimi.ingsw.PSP43.server.model.card.decorators;
 
-import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
-import it.polimi.ingsw.PSP43.client.networkMessages.ResponseMessage;
-import it.polimi.ingsw.PSP43.server.model.DataToBuild;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
-import it.polimi.ingsw.PSP43.server.model.Player;
-import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
-import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +20,8 @@ public class UnconditionedDomeBuildDecorator extends PowerGodDecorator {
         super(godComponent);
     }
 
-    public void initBuild(GameSession gameSession) throws GameEndedException {
+    // TODO it could be not necessary if I always call the findpositions on the most external abstractgodcard
+    /*public void initBuild(GameSession gameSession) throws GameEndedException {
         Player currentPlayer = gameSession.getCurrentPlayer();
 
         HashMap<Coord, ArrayList<Coord>> availablePositionsToBuildDome = this.findAvailablePositionsToBuildDome(gameSession);
@@ -52,7 +46,7 @@ public class UnconditionedDomeBuildDecorator extends PowerGodDecorator {
             Worker workerToBuild = gameSession.getWorkersHandler().getWorker(actionResponse.getWorkerPosition());
             build(new DataToBuild(gameSession, currentPlayer, workerToBuild, actionResponse.getPosition(), Boolean.FALSE));
         }
-    }
+    }*/
 
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildDome(GameSession gameSession) {
         CellsHandler cellsHandler = gameSession.getCellsHandler();
