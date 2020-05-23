@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP43.client.gui.controllers;
+package it.polimi.ingsw.PSP43.client.gui.controllers.game_init;
 
 import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
@@ -16,6 +16,15 @@ public class NicknameChoiceController {
     public Label buttonPressedLabel;
 
     private static ClientBG clientBG;
+
+
+    /**
+     * Method called as soon as the controlled fxml file gets loaded, here used to set css ids and classes
+     */
+    @FXML
+    private void initialize() {
+        confirmButton.getStyleClass().add("confirm-button");
+    }
 
 
     /**

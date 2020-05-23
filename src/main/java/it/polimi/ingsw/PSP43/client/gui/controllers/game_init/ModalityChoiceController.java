@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP43.client.gui.controllers;
+package it.polimi.ingsw.PSP43.client.gui.controllers.game_init;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,9 +12,11 @@ import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 import java.io.IOException;
 
+
 // probably there will be no choice to take, cli and gui will be in two different jars
-/*
 public class ModalityChoiceController {
+
+    /*
 
     public RadioButton cliButton;
     public RadioButton guiButton;
@@ -61,6 +63,6 @@ public class ModalityChoiceController {
 
     }
 
-}
-
  */
+
+}

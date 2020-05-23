@@ -39,12 +39,12 @@ public class GuiStarter extends Application {
         this.primaryStage = primaryStage;
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/FXML/serverIPChoice.fxml"));
+        loader.setLocation(getClass().getResource("/FXML/game_init/serverIPChoice.fxml"));
 
         try {
             Scene scene = new Scene(loader.load());
-
-            //scene.getStylesheets().add(getClass().getResource("/CSS/style.css").toExternalForm());
+            // set the css stylesheet for the serverIPChoice screen
+            scene.getStylesheets().add(getClass().getResource("/CSS/game_init/style.css").toExternalForm());
             primaryStage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();

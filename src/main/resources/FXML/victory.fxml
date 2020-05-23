@@ -13,7 +13,7 @@
    <top>
       <ImageView fitHeight="150.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
          <image>
-            <Image url="@../images/other/santorini-logo.png" />
+            <Image url="@../images/others/santorini_logo.png" />
          </image>
       </ImageView>
    </top>
@@ -28,7 +28,7 @@
             </Label>
             <ImageView id="homeButton" fx:id="homeButton" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../images/buttons/home.png" />
+                  <Image url="@../images/icons/buttons/home.png" />
                </image>
                <HBox.margin>
                   <Insets right="10.0" />
@@ -40,7 +40,7 @@
    <center>
       <ImageView fitHeight="450.0" fitWidth="450.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
          <image>
-            <Image url="@../images/other/trophy_large.png" />
+            <Image url="@../images/others/winner.png" />
          </image>
       </ImageView>
    </center>
