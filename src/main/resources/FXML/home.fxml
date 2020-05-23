@@ -18,7 +18,7 @@
          <children>
             <ImageView fitHeight="650.0" fitWidth="650.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../images/other/Santorini.png" />
+                  <Image url="@../images/others/santorini_game.png" />
                </image>
                <viewport>
                   <Rectangle2D />
@@ -38,7 +38,7 @@
                <children>
                   <ImageView id="Quit" fx:id="exitButon" fitHeight="73.0" fitWidth="107.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                      <image>
-                        <Image url="@../images/buttons/exitButton.png" />
+                        <Image url="@../images/icons/buttons/exit.png" />
                      </image>
                   </ImageView>
                   <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
@@ -46,7 +46,7 @@
                         <Region prefHeight="200.0" prefWidth="170.0" />
                         <ImageView fx:id="playButton" fitHeight="110.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/buttons/playButton.png" />
+                              <Image url="@../images/icons/buttons/play_with_board.png" />
                            </image>
                            <HBox.margin>
                               <Insets top="30.0" />
