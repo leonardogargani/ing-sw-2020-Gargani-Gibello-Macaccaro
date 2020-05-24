@@ -61,29 +61,13 @@ public class NicknameChoiceController {
 
 
         /*
-
         Dovrò fare, in ordine, le seguenti operazioni:
         - invio il RegistrationMessage   [fatto a riga 44]
         - scrivi nella label "wait..."
         - termina il metodo: verrà poi eseguita un update che notificherà l'arrivo di uno dei due seguenti casi
         - ChangeNickRequest -> nick non valido, richiedi cambiamento (sono rimasto nella schermata  di inserimento nel frattempo)
         - StartGameMessage -> stampa messaggio a tutto schermo in una nuova Scene con icona di caricamento
-
          */
-
-
-
-        /*
-
-        Per passare un oggetto ad un controller:
-        - dopo aver fatto la load()...      [se non funziona scomponi  Scene scene = new Scene(loader.load());  in due istruzioni]
-        - MyControllerType controller = loader.getController();
-        - controller.setMyAttribute(myValue);
-        --> nota: la classe MyController deve avere come metodo setMyAttribute(...) che setterà  MyAttributeClass myAttribute
-
-         */
-
-
 
     }
 

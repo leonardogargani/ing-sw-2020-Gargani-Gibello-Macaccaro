@@ -2,7 +2,6 @@ package it.polimi.ingsw.PSP43.client.gui;
 
 import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.GraphicHandler;
-import it.polimi.ingsw.PSP43.client.cli.Screens;
 import it.polimi.ingsw.PSP43.client.gui.controllers.game_init.NicknameChoiceController;
 import it.polimi.ingsw.PSP43.client.gui.controllers.game_init.ServerIPChoiceController;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
@@ -10,7 +9,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 
@@ -50,6 +48,13 @@ public class GuiGraphicHandler extends GraphicHandler {
                 NicknameChoiceController controller2 = loader2.getController();
                 nicknameChoiceController = controller2;
                 controller2.setClientBG(clientBG);
+
+                // setting ClientBG attribute in the PlayersNumberChoiceController
+                FXMLLoader loader3 = new FXMLLoader();
+                loader3.setLocation(getClass().getResource("/FXML/game_init/playersNumberChoice.fxml"));
+                loader3.load();
+                ServerIPChoiceController controller3 = loader1.getController();
+                controller3.setClientBG(clientBG);
 
             } catch (IOException e) {
                 e.printStackTrace();

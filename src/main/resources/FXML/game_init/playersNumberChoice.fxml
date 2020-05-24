@@ -22,7 +22,7 @@
                     <Insets />
                 </VBox.margin>
             </Label>
-            <HBox fx:id="toggleGroup" alignment="CENTER" prefHeight="28.0" prefWidth="365.0" spacing="100.0">
+            <HBox fx:id="toggleGroup" alignment="CENTER" prefHeight="28.0" prefWidth="272.0" spacing="100.0">
                <children>
                   <RadioButton fx:id="twoPlayersButton" mnemonicParsing="false" text="2">
                      <toggleGroup>
@@ -37,7 +37,7 @@
                     <Font size="16.0" />
                 </font>
             </Button>
-            <Label text="Label" />
+            <Label fx:id="buttonPressedLabel" alignment="CENTER" prefHeight="22.0" prefWidth="328.0" textFill="RED" />
         </children>
     </VBox>
 </children>
