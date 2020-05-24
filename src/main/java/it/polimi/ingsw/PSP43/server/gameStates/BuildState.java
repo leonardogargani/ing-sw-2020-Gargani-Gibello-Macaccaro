@@ -2,7 +2,6 @@ package it.polimi.ingsw.PSP43.server.gameStates;
 
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
-import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 
 import java.util.Map;
@@ -44,12 +43,10 @@ public class BuildState extends TurnState {
         for (String s : map.keySet()) {
             AbstractGodCard card = map.get(s);
 
-            if (super.checkForWinner(card, game)) {
-                return;
+            if (!super.checkForWinner(card, game)) {
+                findNextState();
             }
         }
-
-        findNextState();
     }
 
     /**

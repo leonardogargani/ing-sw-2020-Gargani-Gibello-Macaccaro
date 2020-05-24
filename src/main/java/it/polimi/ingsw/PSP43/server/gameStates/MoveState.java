@@ -7,7 +7,6 @@ import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.TextMessage;
 
 import java.util.ArrayList;
@@ -107,11 +106,9 @@ public class MoveState extends TurnState {
             this.sendAllWaitingMessage();
         }
 
-        if (super.checkForWinner(playerCard, game)) {
-            return;
+        if (!super.checkForWinner(playerCard, game)) {
+            findNextState();;
         }
-
-        findNextState();
     }
 
     /**

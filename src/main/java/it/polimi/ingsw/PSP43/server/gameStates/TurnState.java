@@ -47,18 +47,18 @@ public abstract class TurnState {
     /**
      * This method initialises the turn of the game.
      */
-    public void initState() {}
+    public void initState() { executeState();}
 
     /**
      * This method executes the turn of the game.
      * @param message The message of registration arrived from the player on the client.
      */
-    public void executeState(RegistrationMessage message) {}
+    public void executeState(RegistrationMessage message) { findNextState(); }
 
     /**
      * This method executes the turn of the game.
      */
-    public void executeState() {}
+    public void executeState() { findNextState(); }
 
     /**
      * This method finds the next turn of the game, saving it into a variable of the GameSession.
@@ -69,7 +69,7 @@ public abstract class TurnState {
         if (card.checkConditionsToWin(gameSession)) {
             WinState nextState;
             for (TurnState t : gameSession.getTurnStateMap()) {
-                if (t.getTurnName() == TurnName.WIN_STATE) {
+                if (TurnName.WIN_STATE == t.getTurnName()) {
                     nextState = (WinState) t;
                     nextState.setWinner(gameSession.getCurrentPlayer().getNickname());
                     gameSession.setNextState(t);

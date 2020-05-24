@@ -178,7 +178,7 @@ public abstract class AbstractGodCard implements Serializable {
     public ActionResponse askForBuild(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositionsBuildBlock, String message) throws GameEndedException { return null; }
 
     public boolean checkConditionsToWin(GameSession gameSession) {
-        return false;
+        return true;
     }
 
     public void print() {
