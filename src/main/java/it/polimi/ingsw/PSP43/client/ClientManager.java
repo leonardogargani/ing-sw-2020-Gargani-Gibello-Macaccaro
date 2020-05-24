@@ -5,11 +5,9 @@ import it.polimi.ingsw.PSP43.client.cli.CliInputHandler;
 import it.polimi.ingsw.PSP43.client.cli.QuitPlayerException;
 import it.polimi.ingsw.PSP43.client.cli.Screens;
 import it.polimi.ingsw.PSP43.client.gui.GuiGraphicHandler;
-import it.polimi.ingsw.PSP43.client.gui.GuiStarter;
 import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
-import javafx.application.Application;
 
 import java.util.ArrayList;
 
@@ -49,7 +47,9 @@ public class ClientManager implements Runnable {
         } else {
             clientBGThread.start();
             graphicHandler = new GuiGraphicHandler(clientBG);
-            Application.launch(GuiStarter.class);
+            GuiExecutor guiExecutor = new GuiExecutor();
+            Thread guiExecutorThread = new Thread(guiExecutor);
+            guiExecutorThread.start();
         }
 
 
