@@ -157,7 +157,7 @@ public class ClientManager implements Runnable {
      * @param message is the added message
      */
     public synchronized void pushMessageInBox(ServerMessage message){
-        messageBox.add( message);
+        messageBox.add(message);
         notifyMessageArrived();
     }
 

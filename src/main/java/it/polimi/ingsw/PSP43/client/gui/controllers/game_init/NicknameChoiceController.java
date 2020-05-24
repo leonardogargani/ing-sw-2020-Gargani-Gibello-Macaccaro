@@ -52,10 +52,12 @@ public class NicknameChoiceController {
 
         String nickname = nicknameField.getText();
 
-        buttonPressedLabel.setText("work in progress");
-
         clientBG.sendMessage(new RegistrationMessage(nickname));
 
+
+        System.out.println("nick sent");
+
+        //buttonPressedLabel.setText("nickname not in use (work in progress)");
 
 
         /*

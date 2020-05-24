@@ -82,8 +82,9 @@ public class ClientBG implements Runnable {
             System.out.println("Problems starting connection detector");
         }
 
-        if (clientManager.getGraphicHandler() instanceof CliGraphicHandler)
+        if (clientManager.getGraphicHandler() instanceof CliGraphicHandler) {
             clientManager.execute();
+        }
 
         while (!disconnect) {
             try {

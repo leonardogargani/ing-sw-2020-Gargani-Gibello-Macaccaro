@@ -2,15 +2,24 @@ package it.polimi.ingsw.PSP43.client.gui;
 
 import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.GraphicHandler;
+import it.polimi.ingsw.PSP43.client.cli.Screens;
 import it.polimi.ingsw.PSP43.client.gui.controllers.game_init.NicknameChoiceController;
 import it.polimi.ingsw.PSP43.client.gui.controllers.game_init.ServerIPChoiceController;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
 import java.io.IOException;
 
 
 public class GuiGraphicHandler extends GraphicHandler {
+
+
+    // this attribute is needed since an update method has to change the label of the controller
+    private NicknameChoiceController nicknameChoiceController;
+
 
     /**
      * Non default constructor that sets the ClientBG attribute both in this class and
@@ -39,6 +48,7 @@ public class GuiGraphicHandler extends GraphicHandler {
                 loader2.setLocation(getClass().getResource("/FXML/game_init/nicknameChoice.fxml"));
                 loader2.load();
                 NicknameChoiceController controller2 = loader2.getController();
+                nicknameChoiceController = controller2;
                 controller2.setClientBG(clientBG);
 
             } catch (IOException e) {
@@ -68,7 +78,24 @@ public class GuiGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(PlayersNumberRequest request) {
-        // TODO implementation with JavaFX
+
+        System.out.println("playersNumberRequest received");
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/FXML/game_init/playersNumberChoice.fxml"));
+
+        try {
+
+            Stage stage = GuiStarter.getPrimaryStage();
+            Scene scene = new Scene(loader.load());
+
+            scene.getStylesheets().add(getClass().getResource("/CSS/game_init/style.css").toExternalForm());
+            stage.setScene(scene);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -145,7 +172,26 @@ public class GuiGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(ChangeNickRequest request) {
-        // TODO implementation with JavaFX
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/FXML/game_init/nicknameChoice.fxml"));
+
+        try {
+
+            Stage stage = GuiStarter.getPrimaryStage();
+            Scene scene = new Scene(loader.load());
+
+            nicknameChoiceController.buttonPressedLabel.setText("already in use, choose another nickname");
+
+            scene.getStylesheets().add(getClass().getResource("/CSS/game_init/style.css").toExternalForm());
+            stage.setScene(scene);
+
+            System.out.println("nickname already used");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

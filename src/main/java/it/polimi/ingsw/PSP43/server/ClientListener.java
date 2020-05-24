@@ -5,12 +5,12 @@ import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.PingMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+
 
 /**
  * ClientListener is the server network handler
@@ -26,7 +26,6 @@ public class ClientListener implements Runnable {
 
     /**
      * Not default constructor for the ClientListener class
-     *
      * @param clientSocket is the socket that is opened between a client and this ClientListener
      */
     public ClientListener(Socket clientSocket) {
@@ -34,6 +33,7 @@ public class ClientListener implements Runnable {
         this.lockOut = new Object();
         this.stackMessages = new ArrayList<>();
     }
+
 
     /**
      * Override of the run method, here the ClientListener creates and starts the connection detector to keep the
@@ -97,6 +97,7 @@ public class ClientListener implements Runnable {
             }
     }
 
+
     /**
      * Method used to send messages to the client
      * @param message that will be sent
@@ -111,6 +112,7 @@ public class ClientListener implements Runnable {
             handleDisconnection(true);
         }
     }
+
 
     /**
      * Method used to send EndGameMessages, after the  delivery it calls the handleDisconnection method
@@ -128,6 +130,7 @@ public class ClientListener implements Runnable {
         handleDisconnection(false);
     }
 
+
     /**
      * This method checks the kind of message and then if it is a RegistrationMessage it creates and starts a
      * RegisterClientListener, that is a thread for the registration in a match
@@ -140,6 +143,7 @@ public class ClientListener implements Runnable {
             newRegisterThread.start();
         }
     }
+
 
     /**
      * Getter method for a single message in the stackMessages ArrayList
@@ -156,6 +160,7 @@ public class ClientListener implements Runnable {
         return stackMessages.get(0);
     }
 
+
     /**
      * Remover method for messages in the stackMessages ArrayList
      * @param message that will be removed
@@ -164,6 +169,7 @@ public class ClientListener implements Runnable {
         stackMessages.remove(message);
         notifyAll();
     }
+
 
     /**
      * This method is called when for some reason(ex. connection problem) the match has to end, so it closes input
@@ -204,6 +210,7 @@ public class ClientListener implements Runnable {
         this.idGame = idGame;
     }
 
+
     /**
      * Getter method for the boolean variable disconnected, when this variable becomes true this thread and the
      * ConnectionDetector thread are stopped
@@ -212,4 +219,5 @@ public class ClientListener implements Runnable {
     public boolean isDisconnected() {
         return disconnected;
     }
+
 }
