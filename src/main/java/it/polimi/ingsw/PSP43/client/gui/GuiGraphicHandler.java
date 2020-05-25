@@ -3,6 +3,7 @@ package it.polimi.ingsw.PSP43.client.gui;
 import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.GraphicHandler;
 import it.polimi.ingsw.PSP43.client.gui.controllers.game_init.NicknameChoiceController;
+import it.polimi.ingsw.PSP43.client.gui.controllers.game_init.PlayersNumberChoiceController;
 import it.polimi.ingsw.PSP43.client.gui.controllers.game_init.ServerIPChoiceController;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
 import javafx.application.Platform;
@@ -13,7 +14,6 @@ import java.io.IOException;
 
 
 public class GuiGraphicHandler extends GraphicHandler {
-
 
     // this attribute is needed since an update method has to change the label of the controller
     private NicknameChoiceController nicknameChoiceController;
@@ -53,7 +53,7 @@ public class GuiGraphicHandler extends GraphicHandler {
                 FXMLLoader loader3 = new FXMLLoader();
                 loader3.setLocation(getClass().getResource("/FXML/game_init/playersNumberChoice.fxml"));
                 loader3.load();
-                ServerIPChoiceController controller3 = loader1.getController();
+                PlayersNumberChoiceController controller3 = loader3.getController();
                 controller3.setClientBG(clientBG);
 
             } catch (IOException e) {
@@ -62,6 +62,38 @@ public class GuiGraphicHandler extends GraphicHandler {
 
         });
 
+    }
+
+
+    /**
+     * Method that accepts an fxml path and a variable number of css path so that they can be used
+     * to set a new scene to the primary stage. This method must be used only when a message arrives
+     * (because of the Platform.runLater() statement) and there is no need to change or set the
+     * value/content of a JavaFX element (e.g.: arrival of a ChangeNickRequest message).
+     * @param fxml path of the fxml file to be loaded
+     * @param cssStylesheets paths of an arbitrary number of css files that contain the styles to be
+     *                       applied to the fxml
+     */
+    private void loadToPrimaryStage(String fxml, String... cssStylesheets) {
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource(fxml));
+
+        try {
+
+            Stage stage = GuiStarter.getPrimaryStage();
+            Scene scene = new Scene(loader.load());
+
+            for (String stylesheet : cssStylesheets) {
+                scene.getStylesheets().add(getClass().getResource(stylesheet).toExternalForm());
+            }
+
+            // run the specified Runnable on the JavaFX Application Thread at some unspecified time in the future
+            Platform.runLater(() -> stage.setScene(scene));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -84,22 +116,7 @@ public class GuiGraphicHandler extends GraphicHandler {
     @Override
     public void updateMenuChange(PlayersNumberRequest request) {
 
-        System.out.println("playersNumberRequest received");
-
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/FXML/game_init/playersNumberChoice.fxml"));
-
-        try {
-
-            Stage stage = GuiStarter.getPrimaryStage();
-            Scene scene = new Scene(loader.load());
-
-            scene.getStylesheets().add(getClass().getResource("/CSS/game_init/style.css").toExternalForm());
-            stage.setScene(scene);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        loadToPrimaryStage("/FXML/game_init/playersNumberChoice.fxml", "/CSS/game_init/style.css");
 
     }
 
@@ -182,16 +199,18 @@ public class GuiGraphicHandler extends GraphicHandler {
         loader.setLocation(getClass().getResource("/FXML/game_init/nicknameChoice.fxml"));
 
         try {
-
             Stage stage = GuiStarter.getPrimaryStage();
             Scene scene = new Scene(loader.load());
+            NicknameChoiceController controller = loader.getController();
 
-            nicknameChoiceController.buttonPressedLabel.setText("already in use, choose another nickname");
+            // since it is needed to set the text of the label, the method loadToPrimaryStage() can't be used
+            controller.setLabelText("already in use, choose another nickname");
 
             scene.getStylesheets().add(getClass().getResource("/CSS/game_init/style.css").toExternalForm());
-            stage.setScene(scene);
 
-            System.out.println("nickname already used");
+            Platform.runLater(() -> {
+                stage.setScene(scene);
+            });
 
         } catch (IOException e) {
             e.printStackTrace();

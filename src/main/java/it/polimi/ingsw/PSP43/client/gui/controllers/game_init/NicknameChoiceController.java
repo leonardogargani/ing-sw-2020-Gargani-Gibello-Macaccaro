@@ -54,9 +54,6 @@ public class NicknameChoiceController {
 
         clientBG.sendMessage(new RegistrationMessage(nickname));
 
-
-        System.out.println("nick sent");
-
         //buttonPressedLabel.setText("nickname not in use (work in progress)");
 
 
@@ -69,6 +66,11 @@ public class NicknameChoiceController {
         - StartGameMessage -> stampa messaggio a tutto schermo in una nuova Scene con icona di caricamento
          */
 
+    }
+
+
+    public void setLabelText(String textToDisplay) {
+        buttonPressedLabel.setText(textToDisplay);
     }
 
 }
