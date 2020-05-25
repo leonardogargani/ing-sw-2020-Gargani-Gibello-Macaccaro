@@ -7,7 +7,7 @@ import it.polimi.ingsw.PSP43.client.networkMessages.*;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
-import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
 import java.util.ArrayList;
 import java.util.List;

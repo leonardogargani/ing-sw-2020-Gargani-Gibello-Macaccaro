@@ -2,11 +2,11 @@ package it.polimi.ingsw.PSP43.server.initialisers;
 
 import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.server.BoardObserver;
-import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
+import it.polimi.ingsw.PSP43.server.gameStates.GameSessionForTest;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Worker;
-import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import org.xml.sax.SAXException;
@@ -20,8 +20,8 @@ import java.util.List;
  */
 public class GameInitialiser {
 
-    public static GameSession initialiseGame() throws ParserConfigurationException, SAXException, IOException {
-        return new GameSession(9);
+    public static GameSessionForTest initialiseGame() throws ParserConfigurationException, SAXException, IOException {
+        return new GameSessionForTest(9);
     }
 
     /**
@@ -29,7 +29,7 @@ public class GameInitialiser {
      * @param gameSession The data of the game.
      * @return the data of the game in which the players' data have been added.
      */
-    public static GameSession initialisePlayers(GameSession gameSession) {
+    public static GameSessionForTest initialisePlayers(GameSessionForTest gameSession) {
         String[] players = new String[]{"Gibi" , "Rob"};
         for (String player : players) {
             gameSession.getPlayersHandler().createNewPlayer(player);
@@ -42,7 +42,7 @@ public class GameInitialiser {
      * This method is used to initialise the workers of the game.
      * @param gameSession The data of the game which have to be updated.
      */
-    public static void initialiseWorkers(GameSession gameSession) {
+    public static void initialiseWorkers(GameSessionForTest gameSession) {
         Color[] colors = new Color[]{Color.ANSI_RED, Color.ANSI_GREEN};
 
         for (int i=0; i<gameSession.getPlayersHandler().getNumOfPlayers(); i++) {
@@ -86,14 +86,13 @@ public class GameInitialiser {
      * This method is used to initialise the cards used by the players of the game.
      * @param gameSession The data of the game which have to be updated.
      */
-    public static void initialiseCards(GameSession gameSession) {
+    public static void initialiseCards(GameSessionForTest gameSession) {
         PlayersHandler playersHandler = gameSession.getPlayersHandler();
         CardsHandler cardsHandler = gameSession.getCardsHandler();
         List<AbstractGodCard> cards = gameSession.getCardsHandler().getDeckOfAbstractGodCards();
 
         for (int i=0; i<playersHandler.getNumOfPlayers(); i++) {
             cardsHandler.setCardToPlayer(playersHandler.getPlayer(i).getNickname(), cards.get(i).getGodName());
-            playersHandler.getPlayer(i).setAbstractGodCard(cards.get(i));
         }
 
     }

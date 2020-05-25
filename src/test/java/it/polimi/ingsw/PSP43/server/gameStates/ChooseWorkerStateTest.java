@@ -3,11 +3,8 @@ package it.polimi.ingsw.PSP43.server.gameStates;
 import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.WorkersColorResponse;
-import it.polimi.ingsw.PSP43.server.BoardObserver;
-import it.polimi.ingsw.PSP43.server.initialisers.DOMCardsParser;
 import it.polimi.ingsw.PSP43.server.initialisers.GameInitialiser;
 import it.polimi.ingsw.PSP43.server.model.Coord;
-import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.NicknameAlreadyInUseException;
 import org.junit.Before;
@@ -24,11 +21,8 @@ import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 
 public class ChooseWorkerStateTest {
-    GameSession gameSession;
-    GameSession spyGame;
-    BoardObserver obs;
-    BoardObserver spyObs;
-    ArrayList<AbstractGodCard> deck;
+    GameSessionForTest gameSession;
+    GameSessionForTest spyGame;
     ChooseWorkerState state;
     ChooseWorkerState spyState;
 
@@ -38,9 +32,6 @@ public class ChooseWorkerStateTest {
         GameInitialiser.initialisePlayers(gameSession);
         GameInitialiser.initialiseWorkers(gameSession);
         spyGame = Mockito.spy(gameSession);
-        obs = new BoardObserver(gameSession);
-        spyObs = Mockito.spy(obs);
-        deck = DOMCardsParser.buildDeck();
         state = new ChooseWorkerState(spyGame);
         spyState = Mockito.spy(state);
     }

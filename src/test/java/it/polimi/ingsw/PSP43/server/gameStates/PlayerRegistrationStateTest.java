@@ -5,7 +5,7 @@ import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.BoardObserver;
 import it.polimi.ingsw.PSP43.server.initialisers.DOMCardsParser;
 import it.polimi.ingsw.PSP43.server.initialisers.GameInitialiser;
-import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.NicknameAlreadyInUseException;
 import org.junit.Before;

@@ -1,9 +1,5 @@
 package it.polimi.ingsw.PSP43.server.model;
 
-import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
-import it.polimi.ingsw.PSP43.server.model.card.BasicGodCard;
-import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.BasicBuildBehaviour;
-import it.polimi.ingsw.PSP43.server.model.card.behaviours.moveBehaviours.BasicMoveBehaviour;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -34,12 +30,5 @@ public class PlayerTest {
         for (int i = 0; i < expectedWorkersIdsArray.length; i++) {
             assertSame(expectedWorkersIdsArray[i], actualWorkersIdsArray[i]);
         }
-    }
-
-    @Test
-    public void testGetSetCard() {
-        AbstractGodCard abstractGodCard = new BasicGodCard("Zeus", "This is the description of Zeus.", "", new BasicMoveBehaviour(), new BasicBuildBehaviour());
-        playerTest.setAbstractGodCard(abstractGodCard);
-        assertEquals(abstractGodCard, playerTest.getAbstractGodCard());
     }
 }

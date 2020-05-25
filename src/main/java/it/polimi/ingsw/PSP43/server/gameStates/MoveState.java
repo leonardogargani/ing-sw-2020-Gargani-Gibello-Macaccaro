@@ -2,7 +2,8 @@ package it.polimi.ingsw.PSP43.server.gameStates;
 
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
-import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
@@ -91,7 +92,9 @@ public class MoveState extends TurnState {
     public void executeState() {
         GameSession game = super.getGameSession();
         Player currentPlayer = game.getCurrentPlayer();
-        AbstractGodCard playerCard = currentPlayer.getAbstractGodCard();
+        CardsHandler cardsHandler = game.getCardsHandler();
+
+        AbstractGodCard playerCard = cardsHandler.getPlayerCard(currentPlayer.getNickname());
 
         try {
             playerCard.initMove(game);

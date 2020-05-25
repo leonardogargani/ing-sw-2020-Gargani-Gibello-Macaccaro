@@ -4,10 +4,10 @@ import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
-import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,11 +28,12 @@ public class PlayersListMessage extends TextMessage {
         super(message);
 
         PlayersHandler playersHandler = gameSession.getPlayersHandler();
+        CardsHandler cardsHandler = gameSession.getCardsHandler();
         HashMap<Player, AbstractGodCard> playerCardMap = new HashMap<>();
 
         for (int i = 0; i < playersHandler.getNumOfPlayers(); i++) {
             Player actualPlayer = playersHandler.getPlayer(i);
-            AbstractGodCard actualCard = actualPlayer.getAbstractGodCard();
+            AbstractGodCard actualCard = cardsHandler.getPlayerCard(actualPlayer.getNickname());
             playerCardMap.put(actualPlayer, actualCard);
         }
 

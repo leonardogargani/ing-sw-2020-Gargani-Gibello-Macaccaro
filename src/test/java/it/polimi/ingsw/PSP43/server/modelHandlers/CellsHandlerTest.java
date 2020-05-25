@@ -1,15 +1,11 @@
 package it.polimi.ingsw.PSP43.server.modelHandlers;
 
-import it.polimi.ingsw.PSP43.Color;
-import it.polimi.ingsw.PSP43.server.BoardObserver;
-import it.polimi.ingsw.PSP43.server.initialisers.DOMCardsParser;
+import it.polimi.ingsw.PSP43.server.gameStates.GameSessionForTest;
 import it.polimi.ingsw.PSP43.server.initialisers.GameInitialiser;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
-import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
-import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.NicknameAlreadyInUseException;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,8 +21,8 @@ import java.util.Iterator;
 import static org.junit.Assert.*;
 
 public class CellsHandlerTest {
-    GameSession gameSession;
-    GameSession spyGame;
+    GameSessionForTest gameSession;
+    GameSessionForTest spyGame;
     Player currentPlayer;
 
     @Before

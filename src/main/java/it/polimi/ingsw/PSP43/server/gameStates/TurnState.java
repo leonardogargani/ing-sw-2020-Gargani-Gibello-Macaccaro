@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
-import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
 
 /**
  * This is an abstract class to represent a general structure of turns of a game.

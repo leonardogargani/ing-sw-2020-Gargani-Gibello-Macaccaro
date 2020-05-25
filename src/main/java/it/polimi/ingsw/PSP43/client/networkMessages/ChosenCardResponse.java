@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP43.client.networkMessages;
 
-import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
 
 
 public class ChosenCardResponse extends ClientMessage {

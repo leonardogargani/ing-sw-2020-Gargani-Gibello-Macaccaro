@@ -1,8 +1,7 @@
 package it.polimi.ingsw.PSP43.server.modelHandlers;
 
 import it.polimi.ingsw.PSP43.server.model.*;
-import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.*;
+
 import java.util.ArrayList;
 
 /**
@@ -83,15 +82,4 @@ public class PlayersHandler {
     public void deletePlayer(String nick) {
         gamePlayers.removeIf(p -> p.getNickname().equals(nick));
     }
-
-
-    /**
-     * Method that assigns a God card to the player who has chosen it.
-     * @param player The data stored about a player into the list of players
-     * @param abstractGodCardChosen The data of the card chosen by a player during the game
-     */
-    public void setCardToPlayer(Player player, AbstractGodCard abstractGodCardChosen) {
-        player.setAbstractGodCard(abstractGodCardChosen);
-    }
-
 }

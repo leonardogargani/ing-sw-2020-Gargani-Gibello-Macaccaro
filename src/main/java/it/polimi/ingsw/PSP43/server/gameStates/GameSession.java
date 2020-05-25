@@ -38,7 +38,7 @@ public class GameSession extends GameSessionObservable {
     private final CellsHandler cellsHandler;
     private final PlayersHandler playersHandler;
     private final WorkersHandler workersHandler;
-    private final CardsHandler cardsHandler;
+    CardsHandler cardsHandler;
 
     private final BoardObserver boardObserver;
 
