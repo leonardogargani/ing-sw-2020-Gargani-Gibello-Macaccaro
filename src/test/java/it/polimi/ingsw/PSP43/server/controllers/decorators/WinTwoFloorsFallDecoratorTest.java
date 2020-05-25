@@ -1,7 +1,6 @@
 package it.polimi.ingsw.PSP43.server.controllers.decorators;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
-import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSessionForTest;
 import it.polimi.ingsw.PSP43.server.initialisers.GameInitialiser;
 import it.polimi.ingsw.PSP43.server.model.*;
@@ -44,14 +43,32 @@ public class WinTwoFloorsFallDecoratorTest {
 
     @Test
     public void checkConditionsOfWinTest() throws GameEndedException {
-        Coord workerCoord = workerToMove.getCurrentPosition();
-        Cell workerCell = spyGame.getCellsHandler().getCell(workerCoord);
-        workerCell.setHeight(3);
-        spyGame.getCellsHandler().changeStateOfCell(workerCell, workerCoord);
+        Coord initialWorkerCoord = workerToMove.getCurrentPosition();
+        Cell initialWorkerCell = spyGame.getCellsHandler().getCell(initialWorkerCoord);
+        initialWorkerCell.setHeight(3);
+        spyGame.getCellsHandler().changeStateOfCell(initialWorkerCell, initialWorkerCoord);
 
         Coord coordToMove = new Coord(3, 3);
         Cell cellToMove = spyGame.getCellsHandler().getCell(coordToMove);
         cellToMove.setHeight(0);
+        spyGame.getCellsHandler().changeStateOfCell(cellToMove, coordToMove);
+
+        doReturn(new ActionResponse(workerToMove.getCurrentPosition(), coordToMove)).when(spyGame).sendRequest(any(), any(), any());
+
+        try {
+            abstractGodCard.initMove(spyGame);
+        } catch (GameLostException | GameEndedException e) { e.printStackTrace(); }
+
+        assertTrue(abstractGodCard.checkConditionsToWin(spyGame));
+
+        initialWorkerCoord = workerToMove.getCurrentPosition();
+        initialWorkerCell = spyGame.getCellsHandler().getCell(initialWorkerCoord);
+        initialWorkerCell.setHeight(2);
+        spyGame.getCellsHandler().changeStateOfCell(initialWorkerCell, initialWorkerCoord);
+
+        coordToMove = new Coord(4, 3);
+        cellToMove = spyGame.getCellsHandler().getCell(coordToMove);
+        cellToMove.setHeight(3);
         spyGame.getCellsHandler().changeStateOfCell(cellToMove, coordToMove);
 
         doReturn(new ActionResponse(workerToMove.getCurrentPosition(), coordToMove)).when(spyGame).sendRequest(any(), any(), any());

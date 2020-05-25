@@ -1,7 +1,6 @@
 package it.polimi.ingsw.PSP43.server.controllers.decorators;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
-import it.polimi.ingsw.PSP43.server.model.DataToBuild;
 import it.polimi.ingsw.PSP43.server.model.DataToMove;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Coord;
@@ -18,9 +17,7 @@ import java.util.HashMap;
  */
 public abstract class PowerGodDecorator extends AbstractGodCard {
     private static final long serialVersionUID = -1361536654497716050L;
-    private AbstractGodCard godComponent;
-
-    public PowerGodDecorator() {}
+    private final AbstractGodCard godComponent;
 
     public PowerGodDecorator(AbstractGodCard godComponent) {
         this.godComponent = godComponent;
@@ -30,16 +27,8 @@ public abstract class PowerGodDecorator extends AbstractGodCard {
         return godComponent;
     }
 
-    public void setGodComponent(AbstractGodCard godComponent) {
-        this.godComponent = godComponent;
-    }
-
     public void move(DataToMove dataToMove) {
         godComponent.move(dataToMove);
-    }
-
-    public void build(DataToBuild dataToBuild) {
-        godComponent.build(dataToBuild);
     }
 
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(GameSession gameSession) {
@@ -48,10 +37,6 @@ public abstract class PowerGodDecorator extends AbstractGodCard {
 
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildBlock(GameSession gameSession) {
         return godComponent.findAvailablePositionsToBuildBlock(gameSession);
-    }
-
-    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildDome(GameSession gameSession) {
-        return godComponent.findAvailablePositionsToBuildDome(gameSession);
     }
 
     public String getGodName() {
@@ -74,20 +59,8 @@ public abstract class PowerGodDecorator extends AbstractGodCard {
         godComponent.initBuild(gameSession);
     }
 
-    public ActionResponse askForMove(GameSession gameSession) throws GameEndedException, GameLostException {
-        return godComponent.askForMove(gameSession);
-    }
-
     public ActionResponse askForMove(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositions) throws GameEndedException {
         return godComponent.askForMove(gameSession, availablePositions);
-    }
-
-    public DataToBuild genericAskForBuild(GameSession gameSession) throws GameEndedException {
-        return godComponent.genericAskForBuild(gameSession);
-    }
-
-    public ActionResponse askForBuild(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositionsBuildBlock, String message) throws GameEndedException {
-        return godComponent.askForBuild(gameSession, availablePositionsBuildBlock, message);
     }
 
     public boolean checkConditionsToWin(GameSession gameSession) {

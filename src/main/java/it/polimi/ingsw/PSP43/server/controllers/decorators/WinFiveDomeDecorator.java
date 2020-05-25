@@ -13,10 +13,19 @@ public class WinFiveDomeDecorator extends PowerGodDecorator {
         CellsHandler cellsHandler = gameSession.getCellsHandler();
 
         if (cellsHandler.findNumberOfDomes() == 5) return true;
-        else return checkConditionsToWin(gameSession);
+        else return super.checkConditionsToWin(gameSession);
     }
 
     public AbstractGodCard cleanFromEffects(String nameOfEffect) {
-        return super.cleanFromEffects(nameOfEffect);
+        AbstractGodCard component = super.getGodComponent().cleanFromEffects(nameOfEffect);
+        Class<?> c = null;
+        try {
+            c = Class.forName(nameOfEffect);
+        } catch (ClassNotFoundException e) { e.printStackTrace(); }
+
+        assert c != null;
+        if (!c.isInstance(this))
+            return new WinFiveDomeDecorator(component);
+        else return component;
     }
 }

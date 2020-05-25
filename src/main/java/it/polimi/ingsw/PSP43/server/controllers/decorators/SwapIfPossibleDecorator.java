@@ -18,10 +18,6 @@ import java.util.*;
 public class SwapIfPossibleDecorator extends PowerGodDecorator {
     private static final long serialVersionUID = 8250965157977039866L;
 
-    public SwapIfPossibleDecorator() {
-        super();
-    }
-
     public SwapIfPossibleDecorator(AbstractGodCard godComponent) {
         super(godComponent);
     }

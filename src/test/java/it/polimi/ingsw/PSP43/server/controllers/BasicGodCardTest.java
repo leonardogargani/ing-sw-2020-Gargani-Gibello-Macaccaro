@@ -1,7 +1,5 @@
 package it.polimi.ingsw.PSP43.server.controllers;
 
-import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
-import it.polimi.ingsw.PSP43.server.controllers.BasicGodCard;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSessionForTest;
 import it.polimi.ingsw.PSP43.server.initialisers.GameInitialiser;
 import it.polimi.ingsw.PSP43.server.model.Cell;

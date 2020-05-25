@@ -6,8 +6,4 @@ public class BlockRiseFactory implements DecoratorFactory {
     public AbstractGodCard buildDecorator(AbstractGodCard param) {
         return new BlockRiseDecorator(param);
     }
-
-    public AbstractGodCard buildDecorator() {
-        return new BlockRiseDecorator();
-    }
 }

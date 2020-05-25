@@ -19,10 +19,6 @@ import java.util.Iterator;
 public class SwapMoveDecorator extends PowerGodDecorator {
     private static final long serialVersionUID = 1282873326963180012L;
 
-    public SwapMoveDecorator() {
-        super();
-    }
-
     public SwapMoveDecorator(AbstractGodCard godComponent) {
         super(godComponent);
     }

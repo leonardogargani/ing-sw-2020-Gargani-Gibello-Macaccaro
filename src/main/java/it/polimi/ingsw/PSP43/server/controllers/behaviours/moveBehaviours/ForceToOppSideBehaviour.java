@@ -6,6 +6,7 @@ import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.*;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
 import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
 
@@ -16,8 +17,7 @@ import java.util.Iterator;
 public class ForceToOppSideBehaviour extends BasicMoveBehaviour {
     private static final long serialVersionUID = -8412302139395339178L;
 
-
-    public void initMove(GameSession gameSession) throws GameEndedException {
+    public void handleInitMove(GameSession gameSession) throws GameEndedException, GameLostException {
         Player currentPlayer = gameSession.getCurrentPlayer();
 
         Coord coordForcingWorker = askIfWantToForce(gameSession);
@@ -35,32 +35,32 @@ public class ForceToOppSideBehaviour extends BasicMoveBehaviour {
         }
     }
 
-    private Coord askIfWantToForce(GameSession gameSession) throws GameEndedException {
+    public Coord askIfWantToForce(GameSession gameSession) throws GameEndedException {
         Player currentPlayer = gameSession.getCurrentPlayer();
         CellsHandler cellsHandler = gameSession.getCellsHandler();
 
-        HashMap<Coord, ArrayList<Coord>> neighbouringWorkersCoords = cellsHandler.findWorkersNeighbouringCoords(currentPlayer);
-        selectPositionsWorkersToForce(cellsHandler, neighbouringWorkersCoords);
-
-        if (neighbouringWorkersCoords.size() != 0) {
-            RequestMessage actionRequest = new RequestMessage("Do you want to force an opponent" +
+        HashMap<Coord, ArrayList<Coord>> neighbouringCoordsSelected = selectPositionsWorkersToForce(cellsHandler, currentPlayer);
+        if (neighbouringCoordsSelected.size() != 0) {
+            RequestMessage actionRequest = new RequestMessage("Do you want to force an opponent " +
                     "to the space directly on the other side of your Worker? (Remember you will " +
                     "have to use that Worker during your move and build of this turn).");
             ResponseMessage actionResponse = gameSession.sendRequest(actionRequest,
                     currentPlayer.getNickname(), ResponseMessage.class);
 
             if (actionResponse.isResponse())
-                return askWhereToForce(gameSession, neighbouringWorkersCoords);
+                return askWhereToForce(gameSession, neighbouringCoordsSelected);
             else return null;
         }
 
         return null;
     }
 
-    private void selectPositionsWorkersToForce(CellsHandler cellsHandler, HashMap<Coord, ArrayList<Coord>> neighbouringWorkersCoords) {
-        for (Iterator<Coord> coordKeyIterator = neighbouringWorkersCoords.keySet().iterator(); coordKeyIterator.hasNext(); ) {
+    public HashMap<Coord, ArrayList<Coord>> selectPositionsWorkersToForce(CellsHandler cellsHandler, Player currentPlayer) {
+        HashMap<Coord, ArrayList<Coord>> neighbouringCoordsSelected = cellsHandler.findWorkersNeighbouringCoords(currentPlayer);
+
+        for (Iterator<Coord> coordKeyIterator = neighbouringCoordsSelected.keySet().iterator(); coordKeyIterator.hasNext(); ) {
             Coord coordForcer = coordKeyIterator.next();
-            ArrayList<Coord> actualKeyValues = neighbouringWorkersCoords.get(coordForcer);
+            ArrayList<Coord> actualKeyValues = neighbouringCoordsSelected.get(coordForcer);
 
             for (Iterator<Coord> coordIterator = actualKeyValues.iterator(); coordIterator.hasNext(); ) {
                 Coord coordForced = coordIterator.next();
@@ -78,6 +78,7 @@ public class ForceToOppSideBehaviour extends BasicMoveBehaviour {
 
             if (actualKeyValues.size() == 0) coordKeyIterator.remove();
         }
+        return neighbouringCoordsSelected;
     }
 
     private Coord askWhereToForce(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availableWorkersToForce) throws GameEndedException {

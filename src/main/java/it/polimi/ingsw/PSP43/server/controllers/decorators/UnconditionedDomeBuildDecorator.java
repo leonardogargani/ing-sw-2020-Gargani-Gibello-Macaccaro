@@ -13,9 +13,6 @@ import java.util.Iterator;
 public class UnconditionedDomeBuildDecorator extends PowerGodDecorator {
     private static final long serialVersionUID = 8289108530021462717L;
 
-    public UnconditionedDomeBuildDecorator() {
-    }
-
     public UnconditionedDomeBuildDecorator(AbstractGodCard godComponent) {
         super(godComponent);
     }

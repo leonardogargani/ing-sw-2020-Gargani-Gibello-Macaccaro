@@ -70,7 +70,7 @@ public class DOMCardsParser {
 
             BasicMoveBehaviour moveBehavior = null;
             BasicBuildBehaviour buildBehaviour = null;
-            NodeList nodeListMoveBehaviour = element.getElementsByTagName("moveBehaviours");
+            NodeList nodeListMoveBehaviour = element.getElementsByTagName("moveBehaviour");
             NodeList nodeListBuildBlockBehaviour = element.getElementsByTagName("buildBehaviour");
 
             for (int i=0; i<nodeListMoveBehaviour.getLength(); i++) {

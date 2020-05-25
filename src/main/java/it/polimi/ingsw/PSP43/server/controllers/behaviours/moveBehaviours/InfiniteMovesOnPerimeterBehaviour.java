@@ -19,11 +19,12 @@ import java.util.HashMap;
 public class InfiniteMovesOnPerimeterBehaviour extends BasicMoveBehaviour{
     private static final long serialVersionUID = 1879532628217866328L;
 
-    public void initMove(GameSession gameSession) throws GameEndedException, GameLostException {
-        super.initMove(gameSession);
+    public void handleInitMove(GameSession gameSession) throws GameEndedException, GameLostException {
+        super.handleInitMove(gameSession);
+        infiniteMoves(gameSession);
     }
 
-    private void infiniteMoves(GameSession gameSession) throws GameEndedException, GameLostException {
+    private void infiniteMoves(GameSession gameSession) throws GameEndedException {
         Player currentPlayer = gameSession.getCurrentPlayer();
         WorkersHandler workersHandler = gameSession.getWorkersHandler();
         Integer[] wIds = gameSession.getCurrentPlayer().getWorkersIdsArray();
