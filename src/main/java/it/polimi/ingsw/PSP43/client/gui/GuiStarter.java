@@ -43,22 +43,23 @@ public class GuiStarter extends Application {
         GuiStarter.primaryStage = primaryStage;
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/FXML/game_init/serverIPChoice.fxml"));
+        loader.setLocation(getClass().getResource("/FXML/game_init/home.fxml"));
 
         try {
             Scene scene = new Scene(loader.load());
             // set the css stylesheet for the serverIPChoice screen
-            scene.getStylesheets().add(getClass().getResource("/CSS/game_init/style.css").toExternalForm());
             primaryStage.setScene(scene);
+            scene.getStylesheets().add(getClass().getResource("/CSS/game_init/home.css").toExternalForm());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         // set the minimum height and width so that the window cannot be resized to lower values
-        primaryStage.setMinHeight(400);
-        primaryStage.setMinWidth(600);
-
+        primaryStage.setMinHeight(650);
+        primaryStage.setMinWidth(650);
+        primaryStage.setResizable(false);
         primaryStage.show();
+        primaryStage.centerOnScreen();
 
     }
 

@@ -22,3 +22,8 @@
     -fx-effect: dropshadow(three-pass-box, black, 10, 0, 0, 0);
 }
 
+
+.confirm-button:pressed {
+    -fx-effect: dropshadow(three-pass-box, blue, 10, 0, 0, 0);
+}
+

@@ -13,13 +13,13 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="650.0" style="-fx-background-color: #00ffff;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP43.client.gui.controllers.game_init.HomeController">
    <center>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="650.0" prefWidth="650.0" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fitHeight="650.0" fitWidth="650.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="650.0" fitWidth="650.0" opacity="0.83" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../images/others/santorini_game.png" />
+                  <Image url="@../../images/others/santorini_game.png" />
                </image>
                <viewport>
                   <Rectangle2D />
@@ -39,7 +39,7 @@
                <children>
                   <ImageView id="Quit" fx:id="exitButon" fitHeight="73.0" fitWidth="107.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                      <image>
-                        <Image url="@../images/icons/buttons/exit.png" />
+                        <Image url="@../../images/icons/buttons/exit.png" />
                      </image>
                      <effect>
                         <DropShadow height="150.0" radius="74.5" spread="0.55" width="150.0" />
@@ -48,9 +48,9 @@
                   <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <children>
                         <Region maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="153.0" />
-                        <ImageView fx:id="playButton" fitHeight="130.0" fitWidth="130.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="playImage" fitHeight="130.0" fitWidth="130.0" onMouseClicked="#handlePlayImage" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/icons/buttons/play_with_board.png" />
+                              <Image url="@../../images/icons/buttons/play_with_board.png" />
                            </image>
                            <HBox.margin>
                               <Insets top="40.0" />

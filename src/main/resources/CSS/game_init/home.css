@@ -1,0 +1,8 @@
+.root {
+
+}
+
+/* id selector */
+#play-image:pressed {
+    -fx-effect: dropshadow(three-pass-box, blue, 50, 0, 0, 0);
+}
