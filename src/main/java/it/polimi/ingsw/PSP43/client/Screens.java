@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP43.client.cli;
+package it.polimi.ingsw.PSP43.client;
 
 import it.polimi.ingsw.PSP43.Color;
 

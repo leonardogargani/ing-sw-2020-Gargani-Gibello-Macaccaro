@@ -3,7 +3,6 @@ package it.polimi.ingsw.PSP43.client;
 import it.polimi.ingsw.PSP43.client.cli.CliGraphicHandler;
 import it.polimi.ingsw.PSP43.client.cli.CliInputHandler;
 import it.polimi.ingsw.PSP43.client.cli.QuitPlayerException;
-import it.polimi.ingsw.PSP43.client.cli.Screens;
 import it.polimi.ingsw.PSP43.client.gui.GuiGraphicHandler;
 import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;

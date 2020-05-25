@@ -4,10 +4,16 @@ import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.networkMessages.PlayersNumberResponse;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 
 public class PlayersNumberChoiceController {
@@ -66,6 +72,29 @@ public class PlayersNumberChoiceController {
         PlayersNumberResponse response = new PlayersNumberResponse(chosenNumber);
         clientBG.sendMessage(response);
 
+        // display a waiting screen while other players are connecting
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/FXML/game_init/wait.fxml"));
+        try {
+            Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(loader.load());
+
+            WaitController controller = loader.getController();
+            controller.setLabelText("Wait for other players to connect...");
+
+            scene.getStylesheets().add(getClass().getResource("/CSS/game_init/style.css").toExternalForm());
+            stage.setScene(scene);
+
+            // set minimum sizes of the stage (can be either before and after loader.load())
+            stage.setMinHeight(700);
+            stage.setMinWidth(1000);
+
+            // set the stage to the center of the screen (must be after loader.load())
+            stage.centerOnScreen();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
 }

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP43.client.cli;
 
 import it.polimi.ingsw.PSP43.Color;
-import org.junit.Before;
+import it.polimi.ingsw.PSP43.client.Screens;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

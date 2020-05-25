@@ -19,7 +19,7 @@ public class NicknameChoiceController {
 
 
     /**
-     * Method called as soon as the controlled fxml file gets loaded, here used to set css ids and classes
+     * Method called as soon as the controlled fxml file gets loaded, here used to set css ids and classes.
      */
     @FXML
     private void initialize() {
@@ -69,6 +69,11 @@ public class NicknameChoiceController {
     }
 
 
+    /**
+     * Method that sets the content of the label under the confirm button, used to notify the player
+     * if some errors have occurred.
+     * @param textToDisplay text to be displayed inside the label under the button
+     */
     public void setLabelText(String textToDisplay) {
         buttonPressedLabel.setText(textToDisplay);
     }

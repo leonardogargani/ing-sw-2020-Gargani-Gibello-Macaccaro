@@ -23,7 +23,7 @@ public class ServerIPChoiceController {
 
 
     /**
-     * Method called as soon as the controlled fxml file gets loaded, here used to set css ids and classes
+     * Method called as soon as the controlled fxml file gets loaded, here used to set css ids and classes.
      */
     @FXML
     private void initialize() {
@@ -67,13 +67,6 @@ public class ServerIPChoiceController {
 
             scene.getStylesheets().add(getClass().getResource("/CSS/game_init/style.css").toExternalForm());
             stage.setScene(scene);
-
-            // set minimum sizes of the stage (can be either before and after loader.load())
-            stage.setMinHeight(700);
-            stage.setMinWidth(1000);
-
-            // set the stage to the center of the screen (must be after loader.load())
-            stage.centerOnScreen();
 
         } catch (IOException e) {
             e.printStackTrace();
