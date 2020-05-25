@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -31,26 +32,32 @@
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="224.99997965494794" minWidth="10.0" prefWidth="138.66670735677081" />
                </columnConstraints>
                <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="364.3333435058594" minHeight="10.0" prefHeight="364.3333435058594" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="275.3333435058594" minHeight="10.0" prefHeight="68.66665649414062" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="125.66666793823242" minHeight="10.0" prefHeight="125.66666793823242" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="364.3333435058594" minHeight="10.0" prefHeight="342.3333333333333" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="275.3333435058594" minHeight="10.0" prefHeight="180.99999999999994" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
                   <ImageView id="Quit" fx:id="exitButon" fitHeight="73.0" fitWidth="107.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                      <image>
                         <Image url="@../images/icons/buttons/exit.png" />
                      </image>
+                     <effect>
+                        <DropShadow height="150.0" radius="74.5" spread="0.55" width="150.0" />
+                     </effect>
                   </ImageView>
-                  <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                  <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <children>
-                        <Region prefHeight="200.0" prefWidth="170.0" />
-                        <ImageView fx:id="playButton" fitHeight="110.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
+                        <Region maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="153.0" />
+                        <ImageView fx:id="playButton" fitHeight="130.0" fitWidth="130.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/icons/buttons/play_with_board.png" />
                            </image>
                            <HBox.margin>
-                              <Insets top="30.0" />
+                              <Insets top="40.0" />
                            </HBox.margin>
+                           <effect>
+                              <DropShadow height="150.0" radius="74.5" spread="0.55" width="150.0" />
+                           </effect>
                         </ImageView>
                      </children>
                   </HBox>
