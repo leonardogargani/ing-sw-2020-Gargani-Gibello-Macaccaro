@@ -1,8 +1,8 @@
 package it.polimi.ingsw.PSP43.server.modelHandlers;
 
 import it.polimi.ingsw.PSP43.server.initialisers.DOMCardsParser;
-import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
-import it.polimi.ingsw.PSP43.server.model.card.DecoratorFactory;
+import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.controllers.DecoratorFactory;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -13,7 +13,7 @@ import java.util.*;
 public class CardsHandler {
 
     private List<AbstractGodCard> deckOfAbstractGodCards;
-    private final HashMap<String, AbstractGodCard> mapOwnersCard;
+    final HashMap<String, AbstractGodCard> mapOwnersCard;
 
 
     /**
@@ -66,6 +66,13 @@ public class CardsHandler {
         mapOwnersCard.put(nickOwner, abstractGodCardToSet);
     }
 
+    public AbstractGodCard getPlayerCard(String nick) {
+        for (String s : mapOwnersCard.keySet()) {
+            if (s.equals(nick))
+                return mapOwnersCard.get(s);
+        }
+        return null;
+    }
 
     /**
      * Method that removes a God card from a player.

@@ -1,13 +1,13 @@
 package it.polimi.ingsw.PSP43.server.initialisers;
 
-import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
-import it.polimi.ingsw.PSP43.server.model.card.BasicGodCard;
-import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.BasicBuildBehaviour;
-import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.DoubleDifferentSpaceBehaviour;
-import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.DoubleSameSpaceBehaviour;
-import it.polimi.ingsw.PSP43.server.model.card.behaviours.buildBehaviours.RemoveBlockFromNeighbourBehaviour;
-import it.polimi.ingsw.PSP43.server.model.card.behaviours.moveBehaviours.*;
-import it.polimi.ingsw.PSP43.server.model.card.decorators.*;
+import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.controllers.BasicGodCard;
+import it.polimi.ingsw.PSP43.server.controllers.behaviours.buildBehaviours.BasicBuildBehaviour;
+import it.polimi.ingsw.PSP43.server.controllers.behaviours.buildBehaviours.DoubleDifferentSpaceBehaviour;
+import it.polimi.ingsw.PSP43.server.controllers.behaviours.buildBehaviours.DoubleSameSpaceBehaviour;
+import it.polimi.ingsw.PSP43.server.controllers.behaviours.buildBehaviours.RemoveBlockFromNeighbourBehaviour;
+import it.polimi.ingsw.PSP43.server.controllers.behaviours.moveBehaviours.*;
+import it.polimi.ingsw.PSP43.server.controllers.decorators.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -25,9 +25,6 @@ import java.util.ArrayList;
  * This class is used to parse the XML configuration file and to initialise the deck of cards of the game.
  */
 public class DOMCardsParser {
-
-    public DOMCardsParser() {
-    }
 
     /**
      * This method is called by the GameSession to initialise all the cards of the game which can be chosen

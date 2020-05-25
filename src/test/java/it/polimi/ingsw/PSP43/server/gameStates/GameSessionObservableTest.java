@@ -112,8 +112,7 @@ public class GameSessionObservableTest {
 
         spyGame.eliminatePlayer(spyGame.getPlayersHandler().getPlayer(firstNick));
         assertTrue(spyGame.getNumOfPlayers() == 2 && spyGame.getListenersHashMap().get(firstNick) == null);
-
-         */
+*/
     }
 
     @Test

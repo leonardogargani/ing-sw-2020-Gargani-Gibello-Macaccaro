@@ -4,12 +4,10 @@ import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.PlayersNumberResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.ClientListener;
-import it.polimi.ingsw.PSP43.server.initialisers.GameInitialiser;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
-import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,22 +22,28 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class GameSessionTest {
-    private GameSession spyGame;
+    private GameSessionForTest spyGame;
     private ChooseCardState spyState;
-    private Player currentPlayer;
+    private String nickName;
 
     @Before
     public void setUp() throws Exception {
-        GameSession gameSession = new GameSession(9);
-        GameInitialiser.initialisePlayers(gameSession);
-        GameInitialiser.initialiseWorkers(gameSession);
-        GameInitialiser.initialiseCards(gameSession);
+        GameSessionForTest gameSession = new GameSessionForTest(9);
         spyGame = spy(gameSession);
         ChooseCardState state = new ChooseCardState(gameSession);
         spyState = Mockito.spy(state);
 
-        spyGame.setCurrentPlayer(spyGame.getPlayersHandler().getPlayer(0));
-        currentPlayer = spyGame.getCurrentPlayer();
+        nickName = "Gibi";
+
+        ClientListener clientMock = mock(ClientListener.class);
+        doNothing().when(clientMock).sendMessage(any());
+
+        TurnState spyState = spy(new PlayerRegistrationState(spyGame));
+        spyGame.setCurrentState(spyState);
+
+        doReturn(new PlayersNumberResponse(2)).when(spyGame).sendRequest(any(), any(), any());
+        spyGame.registerToTheGame(new RegistrationMessage(nickName), clientMock);
+        assertEquals(1, spyGame.getNumOfPlayers());
     }
 
     @Test
@@ -59,19 +63,8 @@ public class GameSessionTest {
     }
 
     @Test
-    public void eliminatePlayer() throws GameEndedException {
-        ClientListener clientMock = mock(ClientListener.class);
-        doNothing().when(clientMock).sendMessage(any());
-
-        TurnState spyState = spy(new PlayerRegistrationState(spyGame));
-        spyGame.setCurrentState(spyState);
-        doNothing().when(spyState).executeState(any());
-
-        doReturn(new PlayersNumberResponse(2)).when(spyGame).sendRequest(any(), any(), any());
-        spyGame.registerToTheGame(new RegistrationMessage(currentPlayer.getNickname()), clientMock);
-        assertEquals(1, spyGame.getNumOfPlayers());
-
-        Player playerEliminated = currentPlayer;
+    public void eliminatePlayer() {
+        Player playerEliminated = spyGame.getPlayersHandler().getPlayer(0);
         Integer[] playersWorkerIds = playerEliminated.getWorkersIdsArray();
 
         spyGame.eliminatePlayer(playerEliminated);

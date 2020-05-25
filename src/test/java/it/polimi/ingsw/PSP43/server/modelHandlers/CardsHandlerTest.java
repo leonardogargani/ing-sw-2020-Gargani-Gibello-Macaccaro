@@ -1,8 +1,8 @@
 package it.polimi.ingsw.PSP43.server.modelHandlers;
 
-import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
-import it.polimi.ingsw.PSP43.server.model.card.BlockRiseFactory;
-import it.polimi.ingsw.PSP43.server.model.card.decorators.BlockRiseDecorator;
+import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.controllers.BlockRiseFactory;
+import it.polimi.ingsw.PSP43.server.controllers.decorators.BlockRiseDecorator;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -53,7 +53,7 @@ public class CardsHandlerTest {
             }
         }
 
-        cardsHandler.removeDecorator(firstGodName, "it.polimi.ingsw.PSP43.server.model.card.decorators.BlockRiseDecorator");
+        cardsHandler.removeDecorator(firstGodName, "it.polimi.ingsw.PSP43.server.controllers.decorators.BlockRiseDecorator");
 
         map = cardsHandler.getMapOwnersCard();
         for (String s : map.keySet()) {

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP43.server.networkMessages;
 
-import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
 import java.util.List;
 
 

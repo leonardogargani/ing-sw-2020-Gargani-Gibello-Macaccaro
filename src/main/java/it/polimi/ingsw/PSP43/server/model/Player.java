@@ -1,8 +1,6 @@
 package it.polimi.ingsw.PSP43.server.model;
 
-import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
 import java.io.Serializable;
-
 
 /**
  * Player is the class that represents the actual person who is playing the game.
@@ -14,7 +12,6 @@ public class Player implements Serializable {
 
     private final String nickname;
     private final Integer[] workersIdsArray;
-    private AbstractGodCard abstractGodCard;
 
 
     /**
@@ -24,7 +21,6 @@ public class Player implements Serializable {
     public Player(String nickname) {
         this.nickname = nickname;
         this.workersIdsArray = new Integer[]{0, 1};
-        this.abstractGodCard = null;
     }
 
 
@@ -55,23 +51,4 @@ public class Player implements Serializable {
             this.workersIdsArray[i] = workersIdsArray[i];
         }
     }
-
-
-    /**
-     * This method returns the God Power abstractGodCard owned by the player.
-     * @return abstractGodCard owned by the player
-     */
-    public AbstractGodCard getAbstractGodCard() {
-        return abstractGodCard;
-    }
-
-
-    /**
-     * This method assigns a God Power abstractGodCard to a player who'll become its owner.
-     * @param abstractGodCard abstractGodCard of a God Power
-     */
-    public void setAbstractGodCard(AbstractGodCard abstractGodCard) {
-        this.abstractGodCard = abstractGodCard;
-    }
-
 }

@@ -3,7 +3,7 @@ package it.polimi.ingsw.PSP43.server.gameStates;
 import it.polimi.ingsw.PSP43.client.Screens;
 import it.polimi.ingsw.PSP43.client.networkMessages.ChosenCardResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.ChosenCardsResponse;
-import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
@@ -103,7 +103,6 @@ public class ChooseCardState extends TurnState {
                 }
             } while (response == null);
 
-            current.setAbstractGodCard(response.getCard());
             cardsHandler.setCardToPlayer(nicknameCurrentPlayer, response.getCard().getGodName());
 
             for (Iterator<AbstractGodCard> cardsIterator = cardsAvailable.iterator(); cardsIterator.hasNext(); ) {

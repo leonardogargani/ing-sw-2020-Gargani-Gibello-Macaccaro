@@ -3,8 +3,7 @@ package it.polimi.ingsw.PSP43.server.gameStates;
 import it.polimi.ingsw.PSP43.server.initialisers.GameInitialiser;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
-import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
-import it.polimi.ingsw.PSP43.server.model.card.BasicGodCard;
+import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
@@ -24,8 +23,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class MoveStateTest {
-    GameSession gameSession;
-    GameSession spyGame;
+    GameSessionForTest gameSession;
+    GameSessionForTest spyGame;
     MoveState state;
     MoveState spyState;
 
@@ -77,9 +76,12 @@ public class MoveStateTest {
 
     @Test
     public void executeTest() {
-        AbstractGodCard mockCard = mock(AbstractGodCard.class);
         Player currentPlayer = spyGame.getPlayersHandler().getPlayer(0);
-        currentPlayer.setAbstractGodCard(mockCard);
+        spyGame.setCurrentPlayer(currentPlayer);
+
+        AbstractGodCard mockCard = mock(AbstractGodCard.class);
+        spyGame.getCardsHandler().setCardToPlayer(currentPlayer.getNickname(), mockCard);
+
         spyGame.setCurrentPlayer(currentPlayer);
         spyState.executeState();
     }

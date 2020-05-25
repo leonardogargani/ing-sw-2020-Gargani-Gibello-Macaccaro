@@ -2,7 +2,7 @@ package it.polimi.ingsw.PSP43.server.gameStates;
 
 import it.polimi.ingsw.PSP43.server.initialisers.GameInitialiser;
 import it.polimi.ingsw.PSP43.server.model.Player;
-import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -11,8 +11,8 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 public class BuildStateTest {
-    GameSession gameSession;
-    GameSession spyGame;
+    GameSessionForTest gameSession;
+    GameSessionForTest spyGame;
     BuildState state;
     BuildState spyState;
     Player currentPlayer;
@@ -26,10 +26,11 @@ public class BuildStateTest {
         state = new BuildState(spyGame);
         spyState = Mockito.spy(state);
 
-        mockCard = mock(AbstractGodCard.class);
         currentPlayer = spyGame.getPlayersHandler().getPlayer(0);
-        spyGame.getPlayersHandler().setCardToPlayer(currentPlayer, mockCard);
         spyGame.setCurrentPlayer(currentPlayer);
+
+        mockCard = mock(AbstractGodCard.class);
+        spyGame.getCardsHandler().setCardToPlayer(currentPlayer.getNickname(), mockCard);
     }
 
     @Test

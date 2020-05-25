@@ -2,27 +2,24 @@ package it.polimi.ingsw.PSP43.server.gameStates;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.ChosenCardResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.ChosenCardsResponse;
-import it.polimi.ingsw.PSP43.server.BoardObserver;
 import it.polimi.ingsw.PSP43.server.initialisers.DOMCardsParser;
 import it.polimi.ingsw.PSP43.server.initialisers.GameInitialiser;
-import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.model.Player;
+import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 
 public class ChooseCardStateTest {
-    GameSession gameSession;
-    GameSession spyGame;
-    BoardObserver obs;
-    BoardObserver spyObs;
+    GameSessionForTest gameSession;
+    GameSessionForTest spyGame;
     ArrayList<AbstractGodCard> deck;
     ChooseCardState state;
     ChooseCardState spyState;
@@ -32,15 +29,13 @@ public class ChooseCardStateTest {
         gameSession = GameInitialiser.initialiseGame();
         GameInitialiser.initialisePlayers(gameSession);
         spyGame = Mockito.spy(gameSession);
-        obs = new BoardObserver(gameSession);
-        spyObs = Mockito.spy(obs);
         deck = DOMCardsParser.buildDeck();
         state = new ChooseCardState(spyGame);
         spyState = Mockito.spy(state);
     }
 
     @Test
-    public void initState() throws ClassNotFoundException, IOException, WinnerCaughtException, InterruptedException, GameEndedException {
+    public void initState() throws GameEndedException {
         ChosenCardsResponse response = new ChosenCardsResponse(deck);
 
         Mockito.doReturn(response).when(spyGame).sendRequest(any(), any(), any());
@@ -62,14 +57,19 @@ public class ChooseCardStateTest {
     }
 
     @Test
-    public void executeState() throws ClassNotFoundException, IOException, WinnerCaughtException, InterruptedException, GameEndedException {
+    public void executeState() throws GameEndedException {
+        Player godLikePlayer = spyGame.getPlayersHandler().getPlayer(0);
+
         ArrayList<AbstractGodCard> initialAvailableCards = new ArrayList<>();
-        ArrayList<AbstractGodCard> cardsToCheck = new ArrayList<>();
+        HashMap<String, String> expectedCorrespondence = new HashMap<>();
+
         initialAvailableCards.add(deck.get(0));
         initialAvailableCards.add(deck.get(1));
-        cardsToCheck.add(deck.get(0));
-        cardsToCheck.add(deck.get(1));
         spyState.cardsAvailable = initialAvailableCards;
+
+        expectedCorrespondence.put(godLikePlayer.getNickname(), deck.get(1).getGodName());
+        String secondPlayer = spyGame.getPlayersHandler().getNextPlayer(godLikePlayer.getNickname()).getNickname();
+        expectedCorrespondence.put(secondPlayer, deck.get(0).getGodName());
 
         Mockito.doReturn(new ChosenCardResponse(spyState.cardsAvailable.get(0)))
                 .doReturn(new ChosenCardResponse(spyState.cardsAvailable.get(1)))
@@ -78,28 +78,14 @@ public class ChooseCardStateTest {
 
         spyState.executeState();
 
-        boolean equals = true;
-        AbstractGodCard godlikePlayerCard = cardsToCheck.get(cardsToCheck.size() - 1);
-        AbstractGodCard effectivePlayerCard = spyGame.getPlayersHandler().getPlayer(0).getAbstractGodCard();
-
-        if (!godlikePlayerCard.getGodName().equals(effectivePlayerCard.getGodName()) ||
-                !godlikePlayerCard.getDescription().equals(effectivePlayerCard.getDescription()) ||
-                !godlikePlayerCard.getPower().equals(effectivePlayerCard.getPower()))
-            equals = false;
-
-        for (int i = 1; i < spyGame.getPlayersHandler().getNumOfPlayers(); i++) {
-            godlikePlayerCard = cardsToCheck.get(i - 1);
-            effectivePlayerCard = spyGame.getPlayersHandler().getPlayer(i).getAbstractGodCard();
-            if (!godlikePlayerCard.getGodName().equals(effectivePlayerCard.getGodName()) ||
-                    !godlikePlayerCard.getDescription().equals(effectivePlayerCard.getDescription()) ||
-                    !godlikePlayerCard.getPower().equals(effectivePlayerCard.getPower()))
-                equals = false;
+        for (String player : expectedCorrespondence.keySet()) {
+            String effectiveGodNameSaved = spyGame.getCardsHandler().getPlayerCard(player).getGodName();
+            assertEquals(expectedCorrespondence.get(player), effectiveGodNameSaved);
         }
-        assertTrue(equals);
     }
 
     @Test
-    public void findNextState() throws ClassNotFoundException, IOException, WinnerCaughtException, InterruptedException {
+    public void findNextState() {
         spyGame.setCurrentState(spyGame.getTurnStateMap().get(1));
 
         Mockito.doNothing().when(spyGame).transitToNextState();
