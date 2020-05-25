@@ -1,17 +1,24 @@
 /* selector for the root container (Pane) */
 .root {
-    -fx-background-color: #9ff3fc;
+    -fx-background-image: url("../../images/others/santorini_cover_transparent.png") no-repeat center center fixed;
+    -fx-background-size: 100% 100%;
 }
 
 
 /* class selector */
-.confirm-button{
+.confirm-button {
     -fx-text-fill: #0251fc;
-    -fx-background-color: #dbdbdb;
+    -fx-background-color: #ffffff;
     -fx-background-radius: 15;
     -fx-border-color: #3f3f3f;
     -fx-border-radius: 15;
     /* vertical and horizontal padding */
     -fx-padding: 5 10;
+}
+
+
+.confirm-button:hover {
+    -fx-background-color: #d7f3ff;
+    -fx-effect: dropshadow(three-pass-box, black, 10, 0, 0, 0);
 }
 
