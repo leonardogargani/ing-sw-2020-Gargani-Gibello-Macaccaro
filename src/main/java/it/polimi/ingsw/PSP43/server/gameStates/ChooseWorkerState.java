@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
 import it.polimi.ingsw.PSP43.Color;
+import it.polimi.ingsw.PSP43.client.Screens;
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.WorkersColorResponse;
 import it.polimi.ingsw.PSP43.server.model.Coord;
@@ -39,7 +40,7 @@ public class ChooseWorkerState extends TurnState {
         PlayersHandler playersHandler = game.getPlayersHandler();
         game.setCurrentPlayer(playersHandler.getPlayer(FIRSTPOSITION));
 
-        StartGameMessage openingMessage = new StartGameMessage("You are going to choose the color and the initial position for your workers!");
+        StartGameMessage openingMessage = new StartGameMessage(Screens.CHOOSING_INITIAL_POSITION.toString());
         game.sendBroadCast(openingMessage);
 
         executeState();

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP43.client.gui.controllers.game_init;
 
 import it.polimi.ingsw.PSP43.client.ClientBG;
+import it.polimi.ingsw.PSP43.client.Screens;
 import it.polimi.ingsw.PSP43.client.networkMessages.PlayersNumberResponse;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,7 +13,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 
@@ -74,13 +74,13 @@ public class PlayersNumberChoiceController {
 
         // display a waiting screen while other players are connecting
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/FXML/game_init/wait.fxml"));
+        loader.setLocation(getClass().getResource("/FXML/miscellaneous/wait.fxml"));
         try {
             Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
             Scene scene = new Scene(loader.load());
 
             WaitController controller = loader.getController();
-            controller.setLabelText("Wait for other players to connect...");
+            controller.setLabelText(Screens.CONNECTING_WITH_OTHERS.toString());
 
             scene.getStylesheets().add(getClass().getResource("/CSS/game_init/style.css").toExternalForm());
             stage.setScene(scene);

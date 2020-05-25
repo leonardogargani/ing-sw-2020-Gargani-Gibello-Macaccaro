@@ -119,6 +119,18 @@ public enum Screens {
             Color.ANSI_WHITE +
             "Choose a position where to force your opponent:\n" +
             Color.RESET
+    ),
+
+    CONNECTING_WITH_OTHERS(
+            "Wait for other players to connect..."
+    ),
+
+    CHOOSING_A_CARD(
+            "You're going to choose a God Card..."
+    ),
+
+    CHOOSING_INITIAL_POSITION(
+            "You're going to choose color and initial position..."
     );
 
 

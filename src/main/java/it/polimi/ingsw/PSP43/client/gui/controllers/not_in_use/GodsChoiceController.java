@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PSP43.client.gui.controllers.game_init;
+package it.polimi.ingsw.PSP43.client.gui.controllers.not_in_use;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

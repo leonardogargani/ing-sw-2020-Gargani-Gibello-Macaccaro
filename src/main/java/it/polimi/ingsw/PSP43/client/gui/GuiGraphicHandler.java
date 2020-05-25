@@ -5,6 +5,7 @@ import it.polimi.ingsw.PSP43.client.GraphicHandler;
 import it.polimi.ingsw.PSP43.client.gui.controllers.game_init.NicknameChoiceController;
 import it.polimi.ingsw.PSP43.client.gui.controllers.game_init.PlayersNumberChoiceController;
 import it.polimi.ingsw.PSP43.client.gui.controllers.game_init.ServerIPChoiceController;
+import it.polimi.ingsw.PSP43.client.gui.controllers.game_init.WaitController;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -128,7 +129,12 @@ public class GuiGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(InitialCardsRequest request) {
-        // TODO implementation with JavaFX
+
+        loadToPrimaryStage("/FXML/game_init/cardsChoice.fxml");
+
+
+        // TODO display the gods contained in the request
+
     }
 
 
@@ -247,7 +253,28 @@ public class GuiGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(StartGameMessage message) {
-        // TODO implementation with JavaFX
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/FXML/miscellaneous/wait.fxml"));
+        try {
+            Stage stage = GuiStarter.getPrimaryStage();
+            Scene scene = new Scene(loader.load());
+
+            WaitController controller = loader.getController();
+            controller.setLabelText(message.getMessage());
+            scene.getStylesheets().add(getClass().getResource("/CSS/game_init/style.css").toExternalForm());
+
+            Platform.runLater(() -> {
+                stage.setMinHeight(700);
+                stage.setMinWidth(1000);
+                stage.centerOnScreen();
+                stage.setScene(scene);
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

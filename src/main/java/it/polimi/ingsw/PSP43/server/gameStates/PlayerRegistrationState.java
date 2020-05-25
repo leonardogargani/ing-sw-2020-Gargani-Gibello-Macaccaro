@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
+import it.polimi.ingsw.PSP43.client.Screens;
 import it.polimi.ingsw.PSP43.client.networkMessages.PlayersNumberResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
@@ -42,7 +43,7 @@ public class PlayerRegistrationState extends TurnState {
         if (game.maxNumPlayers == numberOfPlayers) {
             this.findNextState();
         } else {
-            StartGameMessage clientMessage = new StartGameMessage("We are connecting you with other players!");
+            StartGameMessage clientMessage = new StartGameMessage(Screens.CONNECTING_WITH_OTHERS.toString());
             game.sendMessage(clientMessage, message.getNick());
         }
     }

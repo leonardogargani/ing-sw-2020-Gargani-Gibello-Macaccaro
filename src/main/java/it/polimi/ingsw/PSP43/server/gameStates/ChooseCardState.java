@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
+import it.polimi.ingsw.PSP43.client.Screens;
 import it.polimi.ingsw.PSP43.client.networkMessages.ChosenCardResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.ChosenCardsResponse;
 import it.polimi.ingsw.PSP43.server.model.card.AbstractGodCard;
@@ -40,7 +41,7 @@ public class ChooseCardState extends TurnState {
         game.setCurrentPlayer(playersHandler.getPlayer(FIRSTPOSITION));
         Player current = game.getCurrentPlayer();
 
-        StartGameMessage openingMessage = new StartGameMessage("You are going to choose a God Card to use during the game in some minutes!");
+        StartGameMessage openingMessage = new StartGameMessage(Screens.CHOOSING_A_CARD.toString());
         ArrayList<String> nicksExcluded = new ArrayList<>();
         nicksExcluded.add(current.getNickname());
         game.sendBroadCast(openingMessage, nicksExcluded);
