@@ -24,7 +24,6 @@ public class ClientBG implements Runnable {
     private static final int SERVER_PORT = 50000;
     private String serverIP = null;
     private Object messageArrived;
-    private String endMessage = null;
     private boolean disconnect = true;
     private ObjectInputStream input;
     private ObjectOutputStream output;

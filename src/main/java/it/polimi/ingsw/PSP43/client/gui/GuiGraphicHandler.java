@@ -2,6 +2,7 @@ package it.polimi.ingsw.PSP43.client.gui;
 
 import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.GraphicHandler;
+import it.polimi.ingsw.PSP43.client.gui.controllers.game_end.EndController;
 import it.polimi.ingsw.PSP43.client.gui.controllers.game_init.NicknameChoiceController;
 import it.polimi.ingsw.PSP43.client.gui.controllers.game_init.PlayersNumberChoiceController;
 import it.polimi.ingsw.PSP43.client.gui.controllers.game_init.ServerIPChoiceController;
@@ -11,6 +12,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 
 
@@ -57,6 +59,7 @@ public class GuiGraphicHandler extends GraphicHandler {
                 PlayersNumberChoiceController controller3 = loader3.getController();
                 controller3.setClientBG(clientBG);
 
+                //TODO add settings for BoardController
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -188,7 +191,25 @@ public class GuiGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(EndGameMessage message) {
-        // TODO implementation with JavaFX
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/FXML/game_end/end.fxml"));
+
+        try {
+            Stage stage = GuiStarter.getPrimaryStage();
+            Scene scene = new Scene(loader.load());
+            EndController controller = loader.getController();
+            controller.setEndMessage(message);
+
+            scene.getStylesheets().add(getClass().getResource("/CSS/game_end/endStyle.css").toExternalForm());
+
+            Platform.runLater(() -> {
+                stage.setScene(scene);
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -215,6 +236,9 @@ public class GuiGraphicHandler extends GraphicHandler {
             scene.getStylesheets().add(getClass().getResource("/CSS/game_init/style.css").toExternalForm());
 
             Platform.runLater(() -> {
+                stage.setMinHeight(700);
+                stage.setMinWidth(1000);
+                stage.centerOnScreen();
                 stage.setScene(scene);
             });
 

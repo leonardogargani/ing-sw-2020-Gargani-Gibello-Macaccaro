@@ -19,14 +19,18 @@ public class ClientManager implements Runnable {
     private ClientBG clientBG;
     private boolean isActive;
     private final ArrayList<ServerMessage> messageBox;
+    private boolean isFirstGame;
+    private Thread guiExecutorThread;
 
     /**
      * Not default constructor for ClientManager class that initializes the game on your chosen interface CLI or GUI
+     *
      * @param chosenInterface can be 1 for the CLI or 2 for the GUI
      */
-    public ClientManager(int chosenInterface) {
+    public ClientManager(int chosenInterface, boolean isFirstGame) {
         this.chosenInterface = chosenInterface;
         this.isActive = true;
+        this.isFirstGame = isFirstGame;
         this.messageBox = new ArrayList<>();
     }
 
@@ -46,15 +50,19 @@ public class ClientManager implements Runnable {
         } else {
             clientBGThread.start();
             graphicHandler = new GuiGraphicHandler(clientBG);
-            GuiExecutor guiExecutor = new GuiExecutor();
-            Thread guiExecutorThread = new Thread(guiExecutor);
-            guiExecutorThread.start();
+            if (this.isFirstGame) {
+                GuiExecutor guiExecutor = new GuiExecutor();
+                guiExecutorThread = new Thread(guiExecutor);
+                guiExecutorThread.start();
+            }
         }
 
-
+        //Added check on the life of guiExecutorThread
         while (isActive) {
             try {
-                handleEvent();
+                if (guiExecutorThread.isAlive())
+                    handleEvent();
+                else throw new QuitPlayerException("Gui closed");
             } catch (QuitPlayerException e) {
                 clientBG.sendMessage(new LeaveGameMessage());
             } catch (InterruptedException e) {
@@ -66,6 +74,7 @@ public class ClientManager implements Runnable {
     /**
      * This method checks if there are messages in the messageBox and if there are some of these it calls the update
      * on the graphic handler
+     *
      * @throws QuitPlayerException if a player in the input writes quit to leave the game
      */
     public synchronized void handleEvent() throws QuitPlayerException, InterruptedException {
@@ -104,9 +113,9 @@ public class ClientManager implements Runnable {
     }
 
 
-
     /**
      * Getter method for the graphic handler
+     *
      * @return graphic handler that can be a CliGraphicHandler or a GuiGraphicHandler
      */
     public GraphicHandler getGraphicHandler() {
@@ -116,6 +125,7 @@ public class ClientManager implements Runnable {
 
     /**
      * Setter method for the boolean variable isActive
+     *
      * @param active false to stop the run of the thread
      */
     public void setActive(boolean active) {
@@ -124,6 +134,7 @@ public class ClientManager implements Runnable {
 
     /**
      * Getter method for the messageBox, that is an ArrayList where messages are put when they are received
+     *
      * @return messageBox
      */
     public ArrayList<ServerMessage> getMessageBox() {
@@ -153,9 +164,10 @@ public class ClientManager implements Runnable {
 
     /**
      * Synchronized method to add message in the message box
+     *
      * @param message is the added message
      */
-    public synchronized void pushMessageInBox(ServerMessage message){
+    public synchronized void pushMessageInBox(ServerMessage message) {
         messageBox.add(message);
         notifyMessageArrived();
     }
@@ -163,10 +175,11 @@ public class ClientManager implements Runnable {
 
     /**
      * Synchronized method to remove a message from the message box
+     *
      * @return the removed message
      */
     public synchronized ServerMessage popMessageFromBox() throws InterruptedException {
-        while(messageBox.size() == 0) {
+        while (messageBox.size() == 0) {
             wait();
         }
 
@@ -179,7 +192,7 @@ public class ClientManager implements Runnable {
     /**
      * Synchronized method to notify the arrivals of a message
      */
-    public synchronized void notifyMessageArrived(){
+    public synchronized void notifyMessageArrived() {
         notifyAll();
     }
 }

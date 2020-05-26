@@ -1,0 +1,30 @@
+
+.root {
+    -fx-background-image: url("../../images/others/santorini_cover.jpg") no-repeat center center fixed;
+    -fx-background-size: 100% 100%;
+}
+
+.label {
+    -fx-font-family: "Comic Sans Ms";
+    -fx-font-style: italic;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3399ff;
+}
+
+.cloud-label {
+    -fx-font-size: 18;
+}
+
+.homeButton-label {
+    -fx-font-size: 14;
+}
+
+.home-ImageView {
+    -fx-effect: dropshadow(three-pass-box, black, 70, 0.55, 150, 150);
+}
+
+.home-ImageView :pressed {
+    -fx-effect: dropshadow(three-pass-box, black, 70, 0.70, 150, 150);
+}
+
+

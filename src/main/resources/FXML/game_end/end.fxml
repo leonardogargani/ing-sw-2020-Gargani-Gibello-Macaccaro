@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP43.client.gui.controllers.game_end.EndController">
+   <center>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="300.0" layoutX="350.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/others/santorini_logo.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="centralImage" fitHeight="350.0" fitWidth="350.0" layoutX="325.0" layoutY="100.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="300.0" fitWidth="400.0" layoutX="300.0" layoutY="450.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/others/cloud2.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="homeButton" fitHeight="100.0" fitWidth="100.0" layoutX="850.0" layoutY="500.0" onMouseClicked="#onHomeButtonClicked" onMouseExited="#hideHomeButtonLabel" onMouseMoved="#showHomeButtonLabel" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/icons/buttons/home.png" />
+               </image>
+               <effect>
+                  <DropShadow height="150.0" radius="74.5" spread="0.55" width="150.0" />
+               </effect>
+            </ImageView>
+            <Label fx:id="homeButtonLabel" alignment="CENTER" layoutX="815.0" layoutY="600.0" prefHeight="50.0" prefWidth="170.0" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <effect>
+                  <DropShadow height="30.0" radius="19.5" spread="0.6" width="50.0" />
+               </effect>
+            </Label>
+            <Label fx:id="cloudLabel" alignment="CENTER" layoutX="350.0" layoutY="540.0" prefHeight="30.0" prefWidth="300.0" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>
