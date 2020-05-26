@@ -3,23 +3,18 @@ package it.polimi.ingsw.PSP43.client.gui;
 import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.GraphicHandler;
 import it.polimi.ingsw.PSP43.client.gui.controllers.game_end.EndController;
-import it.polimi.ingsw.PSP43.client.gui.controllers.game_init.NicknameChoiceController;
-import it.polimi.ingsw.PSP43.client.gui.controllers.game_init.PlayersNumberChoiceController;
-import it.polimi.ingsw.PSP43.client.gui.controllers.game_init.ServerIPChoiceController;
-import it.polimi.ingsw.PSP43.client.gui.controllers.game_init.WaitController;
+import it.polimi.ingsw.PSP43.client.gui.controllers.game_init.*;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 
 public class GuiGraphicHandler extends GraphicHandler {
 
-    // this attribute is needed since an update method has to change the label of the controller
-    private NicknameChoiceController nicknameChoiceController;
+    private FXMLLoader loader;
 
 
     /**
@@ -28,6 +23,7 @@ public class GuiGraphicHandler extends GraphicHandler {
      * @param clientBG clientBG of the current client
      */
     public GuiGraphicHandler(ClientBG clientBG) {
+
         super(clientBG);
 
         // Platform.startup(()->{}) starts the JavaFX runtime as soon as the GuiGraphicHandler constructor is invoked:
@@ -38,25 +34,24 @@ public class GuiGraphicHandler extends GraphicHandler {
             try {
 
                 // setting ClientBG attribute in the ServerIPChoiceController
-                FXMLLoader loader1 = new FXMLLoader();
-                loader1.setLocation(getClass().getResource("/FXML/game_init/serverIPChoice.fxml"));
-                loader1.load();
-                ServerIPChoiceController controller1 = loader1.getController();
+                loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/FXML/game_init/serverIPChoice.fxml"));
+                loader.load();
+                ServerIPChoiceController controller1 = loader.getController();
                 controller1.setClientBG(clientBG);
 
                 // setting ClientBG attribute in the NicknameChoiceController
-                FXMLLoader loader2 = new FXMLLoader();
-                loader2.setLocation(getClass().getResource("/FXML/game_init/nicknameChoice.fxml"));
-                loader2.load();
-                NicknameChoiceController controller2 = loader2.getController();
-                nicknameChoiceController = controller2;
+                loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/FXML/game_init/nicknameChoice.fxml"));
+                loader.load();
+                NicknameChoiceController controller2 = loader.getController();
                 controller2.setClientBG(clientBG);
 
                 // setting ClientBG attribute in the PlayersNumberChoiceController
-                FXMLLoader loader3 = new FXMLLoader();
-                loader3.setLocation(getClass().getResource("/FXML/game_init/playersNumberChoice.fxml"));
-                loader3.load();
-                PlayersNumberChoiceController controller3 = loader3.getController();
+                loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/FXML/game_init/playersNumberChoice.fxml"));
+                loader.load();
+                PlayersNumberChoiceController controller3 = loader.getController();
                 controller3.setClientBG(clientBG);
 
                 //TODO add settings for BoardController
@@ -80,7 +75,7 @@ public class GuiGraphicHandler extends GraphicHandler {
      */
     private void loadToPrimaryStage(String fxml, String... cssStylesheets) {
 
-        FXMLLoader loader = new FXMLLoader();
+        loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(fxml));
 
         try {
@@ -133,10 +128,15 @@ public class GuiGraphicHandler extends GraphicHandler {
     @Override
     public void updateMenuChange(InitialCardsRequest request) {
 
-        loadToPrimaryStage("/FXML/game_init/cardsChoice.fxml");
+        loadToPrimaryStage("/FXML/game_init/cardsChoice.fxml", "/CSS/game_init/cardsChoice.css");
 
+        // the controller is now the one associated to cardsChoice.fxml (since it has just been loaded)
+        CardsChoiceController controller = loader.getController();
 
-        // TODO display the gods contained in the request
+        controller.setCardsList(request.getCards());
+        controller.setNumberOfPlayers(request.getNumberOfCard());
+
+        controller.customInit();
 
     }
 
@@ -191,24 +191,13 @@ public class GuiGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(EndGameMessage message) {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/FXML/game_end/end.fxml"));
 
-        try {
-            Stage stage = GuiStarter.getPrimaryStage();
-            Scene scene = new Scene(loader.load());
-            EndController controller = loader.getController();
-            controller.setEndMessage(message);
+        loadToPrimaryStage("/FXML/game_end/end.fxml", "/CSS/game_end/endStyle.css");
 
-            scene.getStylesheets().add(getClass().getResource("/CSS/game_end/endStyle.css").toExternalForm());
+        // at this point the controller is the one associated to nicknameChoice.fxml
+        EndController controller = loader.getController();
 
-            Platform.runLater(() -> {
-                stage.setScene(scene);
-            });
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        controller.setEndMessage(message);
 
     }
 
@@ -222,27 +211,12 @@ public class GuiGraphicHandler extends GraphicHandler {
     @Override
     public void updateMenuChange(ChangeNickRequest request) {
 
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/FXML/game_init/nicknameChoice.fxml"));
+        loadToPrimaryStage("/FXML/game_init/nicknameChoice.fxml", "/CSS/game_init/style.css");
 
-        try {
-            Stage stage = GuiStarter.getPrimaryStage();
-            Scene scene = new Scene(loader.load());
-            NicknameChoiceController controller = loader.getController();
+        // at this point the controller is the one associated to nicknameChoice.fxml
+        NicknameChoiceController controller = loader.getController();
 
-            // since it is needed to set the text of the label, the method loadToPrimaryStage() can't be used
-            controller.setLabelText("already in use, choose another nickname");
-
-            scene.getStylesheets().add(getClass().getResource("/CSS/game_init/style.css").toExternalForm());
-
-            Platform.runLater(() -> {
-                stage.centerOnScreen();
-                stage.setScene(scene);
-            });
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        controller.setLabelText("already in use, choose another nickname");
 
     }
 
@@ -268,6 +242,7 @@ public class GuiGraphicHandler extends GraphicHandler {
         // TODO implementation with JavaFX
     }
 
+
     /**
      * This method updates the graphics of the client displaying, at the beginning of
      * the game, some useful information about the state of the game preparation.
@@ -276,7 +251,7 @@ public class GuiGraphicHandler extends GraphicHandler {
     @Override
     public void updateMenuChange(StartGameMessage message) {
 
-        FXMLLoader loader = new FXMLLoader();
+        loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/FXML/miscellaneous/wait.fxml"));
         try {
             Stage stage = GuiStarter.getPrimaryStage();
