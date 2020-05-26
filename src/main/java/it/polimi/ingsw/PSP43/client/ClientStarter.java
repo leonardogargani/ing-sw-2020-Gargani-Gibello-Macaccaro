@@ -30,7 +30,7 @@ public class ClientStarter {
                 }
             } while (chosenMode != 1 && chosenMode != 2);
 
-            ClientManager clientManager = new ClientManager(chosenMode);
+            ClientManager clientManager = new ClientManager(chosenMode, true);
             Thread clientManagerThread = new Thread(clientManager);
             clientManagerThread.start();
 

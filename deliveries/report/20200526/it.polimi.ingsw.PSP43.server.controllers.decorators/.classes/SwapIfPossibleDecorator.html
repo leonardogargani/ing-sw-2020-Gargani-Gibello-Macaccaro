@@ -1,0 +1,202 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: SwapIfPossibleDecorator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.controllers.decorators</a> ]
+</div>
+
+<h1>Coverage Summary for Class: SwapIfPossibleDecorator (it.polimi.ingsw.PSP43.server.controllers.decorators)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SwapIfPossibleDecorator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/ 8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    98.3%
+  </span>
+  <span class="absValue">
+    (58/ 59)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.controllers.decorators;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.DataToMove;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Cell;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Worker;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
+<i>11</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
+<i>12</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+<i>13</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
+<i>14</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;import java.util.*;
+<i>17</i>&nbsp;
+<b class="fc"><i>18</i>&nbsp;public class SwapIfPossibleDecorator extends PowerGodDecorator {</b>
+<i>19</i>&nbsp;    private static final long serialVersionUID = 8250965157977039866L;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    public SwapIfPossibleDecorator(AbstractGodCard godComponent) {
+<b class="fc"><i>22</i>&nbsp;        super(godComponent);</b>
+<b class="fc"><i>23</i>&nbsp;    }</b>
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    public void initMove(GameSession gameSession) throws GameEndedException, GameLostException {
+<b class="fc"><i>26</i>&nbsp;        HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositions = findAvailablePositionsToMove(gameSession);</b>
+<i>27</i>&nbsp;
+<b class="fc"><i>28</i>&nbsp;        if (availablePositions.size() == 0) throw new GameLostException();</b>
+<i>29</i>&nbsp;
+<b class="fc"><i>30</i>&nbsp;        ActionResponse actionResponse = askForMove(gameSession, availablePositions);</b>
+<i>31</i>&nbsp;
+<b class="fc"><i>32</i>&nbsp;        Worker workerMoved = gameSession.getWorkersHandler().getWorker(actionResponse.getWorkerPosition());</b>
+<i>33</i>&nbsp;
+<b class="fc"><i>34</i>&nbsp;        Cell cellToMove = gameSession.getCellsHandler().getCell(actionResponse.getPosition());</b>
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;        ActionResponse response;
+<b class="fc"><i>37</i>&nbsp;        Coord coordToForce = null;</b>
+<b class="fc"><i>38</i>&nbsp;        if (cellToMove.getOccupiedByWorker()) {</b>
+<b class="fc"><i>39</i>&nbsp;            CellsHandler cellsHandler = gameSession.getCellsHandler();</b>
+<i>40</i>&nbsp;
+<b class="fc"><i>41</i>&nbsp;            Coord currentWorkerPosition = workerMoved.getCurrentPosition();</b>
+<i>42</i>&nbsp;
+<b class="fc"><i>43</i>&nbsp;            ActionRequest request = new ActionRequest(&quot;Choose a position where to force your opponent.&quot;,</b>
+<b class="fc"><i>44</i>&nbsp;                    Map.of(new Coord(0, 0), directionAvailableCoords(cellsHandler, currentWorkerPosition, actionResponse.getPosition())));</b>
+<b class="fc"><i>45</i>&nbsp;            response = gameSession.sendRequest(request, gameSession.getCurrentPlayer().getNickname(), ActionResponse.class);</b>
+<b class="fc"><i>46</i>&nbsp;            coordToForce = response.getPosition();</b>
+<i>47</i>&nbsp;        }
+<i>48</i>&nbsp;
+<b class="fc"><i>49</i>&nbsp;        move(new DataToMove(gameSession, gameSession.getCurrentPlayer(), workerMoved, actionResponse.getPosition()), coordToForce);</b>
+<b class="fc"><i>50</i>&nbsp;    }</b>
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;    public void move(DataToMove dataToMove, Coord coordToForce) {
+<b class="fc"><i>53</i>&nbsp;        GameSession gameSession = dataToMove.getGameSession();</b>
+<i>54</i>&nbsp;
+<b class="fc"><i>55</i>&nbsp;        Coord coordToMove = dataToMove.getNewPosition();</b>
+<b class="fc"><i>56</i>&nbsp;        Cell cellToMove = gameSession.getCellsHandler().getCell(coordToMove);</b>
+<i>57</i>&nbsp;
+<b class="fc"><i>58</i>&nbsp;        if (!cellToMove.getOccupiedByWorker()) super.move(dataToMove);</b>
+<i>59</i>&nbsp;        else {
+<b class="fc"><i>60</i>&nbsp;            WorkersHandler workersHandler = gameSession.getWorkersHandler();</b>
+<b class="fc"><i>61</i>&nbsp;            Worker playerWorker = dataToMove.getWorker();</b>
+<b class="fc"><i>62</i>&nbsp;            Worker opponentWorker = workersHandler.getWorker(dataToMove.getNewPosition());</b>
+<i>63</i>&nbsp;
+<b class="fc"><i>64</i>&nbsp;            workersHandler.changePosition(opponentWorker, coordToForce);</b>
+<b class="fc"><i>65</i>&nbsp;            workersHandler.changePosition(playerWorker, coordToMove);</b>
+<i>66</i>&nbsp;        }
+<b class="fc"><i>67</i>&nbsp;    }</b>
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;    public HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; findAvailablePositionsToMove(GameSession gameSession) {
+<b class="fc"><i>70</i>&nbsp;        CellsHandler cellsHandler = gameSession.getCellsHandler();</b>
+<b class="fc"><i>71</i>&nbsp;        HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositions = super.findAvailablePositionsToMove(gameSession);</b>
+<i>72</i>&nbsp;
+<b class="fc"><i>73</i>&nbsp;        for (Iterator&lt;Map.Entry&lt;Coord, ArrayList&lt;Coord&gt;&gt;&gt; keyIterator = availablePositions.entrySet().iterator(); keyIterator.hasNext(); ) {</b>
+<b class="fc"><i>74</i>&nbsp;            Map.Entry&lt;Coord, ArrayList&lt;Coord&gt;&gt; currentKey = keyIterator.next();</b>
+<b class="fc"><i>75</i>&nbsp;            ArrayList&lt;Coord&gt; availableCurrentPositions = currentKey.getValue();</b>
+<b class="fc"><i>76</i>&nbsp;            for (Iterator&lt;Coord&gt; coordIterator = availableCurrentPositions.iterator(); coordIterator.hasNext(); ) {</b>
+<b class="fc"><i>77</i>&nbsp;                Coord arrivalCoord = coordIterator.next();</b>
+<b class="fc"><i>78</i>&nbsp;                if (cellsHandler.getCell(arrivalCoord).getOccupiedByWorker()) {</b>
+<b class="fc"><i>79</i>&nbsp;                    ArrayList&lt;Cell&gt; availablePositionsOnDirection = directionAvailableCells(cellsHandler, currentKey.getKey(), arrivalCoord);</b>
+<b class="fc"><i>80</i>&nbsp;                    if (availablePositionsOnDirection.size() == 0) coordIterator.remove();</b>
+<i>81</i>&nbsp;                }
+<b class="fc"><i>82</i>&nbsp;            }</b>
+<b class="fc"><i>83</i>&nbsp;            if (availableCurrentPositions.size() == 0) keyIterator.remove();</b>
+<b class="fc"><i>84</i>&nbsp;        }</b>
+<b class="fc"><i>85</i>&nbsp;        return availablePositions;</b>
+<i>86</i>&nbsp;    }
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;    private ArrayList&lt;Cell&gt; directionAvailableCells(CellsHandler handler, Coord oldPosition, Coord newPosition) {
+<b class="fc"><i>89</i>&nbsp;        ArrayList&lt;Coord&gt; coordsInDirection = handler.findSameDirectionCoords(oldPosition, newPosition);</b>
+<b class="fc"><i>90</i>&nbsp;        ArrayList&lt;Cell&gt; cellsInDirection = handler.getCells(coordsInDirection);</b>
+<b class="fc"><i>91</i>&nbsp;        Cell cellOpponent = handler.getCell(newPosition);</b>
+<i>92</i>&nbsp;
+<b class="fc"><i>93</i>&nbsp;        cellsInDirection.removeIf(c -&gt; c.getHeight() != cellOpponent.getHeight());</b>
+<i>94</i>&nbsp;
+<b class="fc"><i>95</i>&nbsp;        return cellsInDirection;</b>
+<i>96</i>&nbsp;    }
+<i>97</i>&nbsp;
+<i>98</i>&nbsp;    private ArrayList&lt;Coord&gt; directionAvailableCoords(CellsHandler handler, Coord oldPosition, Coord newPosition) {
+<b class="fc"><i>99</i>&nbsp;        ArrayList&lt;Coord&gt; coordsInDirection = handler.findSameDirectionCoords(oldPosition, newPosition);</b>
+<b class="fc"><i>100</i>&nbsp;        int heightOpponent = handler.getCell(newPosition).getHeight();</b>
+<i>101</i>&nbsp;
+<b class="fc"><i>102</i>&nbsp;        coordsInDirection.removeIf(coord -&gt; handler.getCell(coord).getHeight() != heightOpponent);</b>
+<i>103</i>&nbsp;
+<b class="fc"><i>104</i>&nbsp;        return coordsInDirection;</b>
+<i>105</i>&nbsp;    }
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;    public AbstractGodCard cleanFromEffects(String nameOfEffect) {
+<b class="fc"><i>108</i>&nbsp;        AbstractGodCard component = super.getGodComponent().cleanFromEffects(nameOfEffect);</b>
+<b class="fc"><i>109</i>&nbsp;        Class&lt;?&gt; c = null;</b>
+<i>110</i>&nbsp;        try {
+<b class="fc"><i>111</i>&nbsp;            c = Class.forName(nameOfEffect);</b>
+<b class="fc"><i>112</i>&nbsp;        } catch (ClassNotFoundException e) { e.printStackTrace(); }</b>
+<i>113</i>&nbsp;
+<b class="fc"><i>114</i>&nbsp;        assert c != null;</b>
+<b class="fc"><i>115</i>&nbsp;        if (!c.isInstance(this))</b>
+<b class="fc"><i>116</i>&nbsp;            return new SwapIfPossibleDecorator(component);</b>
+<b class="nc"><i>117</i>&nbsp;        else return component;</b>
+<i>118</i>&nbsp;    }
+<i>119</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-26 09:04</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,205 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: PlayerRegistrationState</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.gameStates</a> ]
+</div>
+
+<h1>Coverage Summary for Class: PlayerRegistrationState (it.polimi.ingsw.PSP43.server.gameStates)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PlayerRegistrationState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    89.7%
+  </span>
+  <span class="absValue">
+    (26/ 29)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$634496852</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$634496852$auxiliary$1iyrq2aq</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$634496852$auxiliary$HodLzRDR</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$634496852$auxiliary$JHaCbboR</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$634496852$auxiliary$K27YOfCy</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$634496852$auxiliary$lSpWuqUR</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$634496852$auxiliary$m6V0rXZ7</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$634496852$auxiliary$nJxq4fYt</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$634496852$auxiliary$PVbno6GJ</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$634496852$auxiliary$TTYaNFBD</td>
+  </tr>
+  <tr>
+    <td class="name">PlayerRegistrationState$MockitoMock$634496852$auxiliary$UVXGLoFV</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    89.7%
+  </span>
+  <span class="absValue">
+    (26/ 29)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.gameStates;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.Screens;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.PlayersNumberResponse;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.PlayersNumberRequest;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.StartGameMessage;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;/**
+<i>12</i>&nbsp; * This is the initial state where the game accept new players and, for the first one,
+<i>13</i>&nbsp; * asks for the number of participants required.
+<i>14</i>&nbsp; */
+<i>15</i>&nbsp;public class PlayerRegistrationState extends TurnState {
+<i>16</i>&nbsp;    Boolean first;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;    public PlayerRegistrationState(GameSession gameSession) {
+<b class="fc"><i>19</i>&nbsp;        super(gameSession, TurnName.PLAYER_REGISTRATION_STATE);</b>
+<b class="fc"><i>20</i>&nbsp;        first = Boolean.TRUE;</b>
+<b class="fc"><i>21</i>&nbsp;    }</b>
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;    /**
+<i>24</i>&nbsp;     * This method is the one which has to initialise the data of the new player connected.
+<i>25</i>&nbsp;     * If the nickname chosen by the player is already used, it sends an error to the client
+<i>26</i>&nbsp;     * asking him to re-insert the username. In that case the player will be treated as a
+<i>27</i>&nbsp;     * new player connecting to the server.
+<i>28</i>&nbsp;     *
+<i>29</i>&nbsp;     * @param message This is the message sent from the client.
+<i>30</i>&nbsp;     */
+<i>31</i>&nbsp;    public void executeState(RegistrationMessage message) {
+<b class="fc"><i>32</i>&nbsp;        GameSession game = super.getGameSession();</b>
+<b class="fc"><i>33</i>&nbsp;        PlayersHandler playersHandler = game.getPlayersHandler();</b>
+<b class="fc"><i>34</i>&nbsp;        playersHandler.createNewPlayer(message.getNick());</b>
+<b class="fc"><i>35</i>&nbsp;        int numberOfPlayers = game.getPlayersHandler().getNumOfPlayers();</b>
+<i>36</i>&nbsp;        int num;
+<b class="fc"><i>37</i>&nbsp;        if (first == Boolean.TRUE) {</b>
+<b class="fc"><i>38</i>&nbsp;            first = Boolean.FALSE;</b>
+<b class="fc"><i>39</i>&nbsp;            num = askNumberPlayers(game, message);</b>
+<b class="fc"><i>40</i>&nbsp;            game.maxNumPlayers = num;</b>
+<i>41</i>&nbsp;        }
+<i>42</i>&nbsp;
+<b class="fc"><i>43</i>&nbsp;        if (game.maxNumPlayers == numberOfPlayers) {</b>
+<b class="fc"><i>44</i>&nbsp;            this.findNextState();</b>
+<i>45</i>&nbsp;        } else {
+<b class="fc"><i>46</i>&nbsp;            StartGameMessage clientMessage = new StartGameMessage(Screens.CONNECTING_WITH_OTHERS.toString());</b>
+<b class="fc"><i>47</i>&nbsp;            game.sendMessage(clientMessage, message.getNick());</b>
+<i>48</i>&nbsp;        }
+<b class="fc"><i>49</i>&nbsp;    }</b>
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    /**
+<i>52</i>&nbsp;     * This method asks to the first player of the game how many opponents does he want.
+<i>53</i>&nbsp;     *
+<i>54</i>&nbsp;     * @param gameSession This is a reference to the center of the game database.
+<i>55</i>&nbsp;     * @param message     This is the message sent from the client.
+<i>56</i>&nbsp;     */
+<i>57</i>&nbsp;    protected int askNumberPlayers(GameSession gameSession, RegistrationMessage message) {
+<b class="fc"><i>58</i>&nbsp;        PlayersNumberRequest request = new PlayersNumberRequest();</b>
+<i>59</i>&nbsp;        PlayersNumberResponse response;
+<i>60</i>&nbsp;        try {
+<b class="fc"><i>61</i>&nbsp;            response = gameSession.sendRequest(request, message.getNick(), PlayersNumberResponse.class);</b>
+<b class="nc"><i>62</i>&nbsp;        } catch (GameEndedException e) {</b>
+<b class="nc"><i>63</i>&nbsp;            gameSession.setActive();</b>
+<b class="nc"><i>64</i>&nbsp;            return -1;</b>
+<b class="fc"><i>65</i>&nbsp;        }</b>
+<b class="fc"><i>66</i>&nbsp;        return response.getNumberOfPlayer();</b>
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    }
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;    /**
+<i>71</i>&nbsp;     * This method finds the next turn of the game (saving it into a variable in the GameSession database),
+<i>72</i>&nbsp;     * which will be always a ChooseCardState.
+<i>73</i>&nbsp;     */
+<i>74</i>&nbsp;    public void findNextState() {
+<b class="fc"><i>75</i>&nbsp;        GameSession game = super.getGameSession();</b>
+<i>76</i>&nbsp;
+<b class="fc"><i>77</i>&nbsp;        for (TurnState t : game.getTurnStateMap()) {</b>
+<b class="fc"><i>78</i>&nbsp;            if (t.getTurnName() == TurnName.CHOOSE_CARD_STATE)</b>
+<b class="fc"><i>79</i>&nbsp;                game.setNextState(t);</b>
+<b class="fc"><i>80</i>&nbsp;        }</b>
+<b class="fc"><i>81</i>&nbsp;    }</b>
+<i>82</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-26 09:04</div>
+</div>
+</body>
+</html>

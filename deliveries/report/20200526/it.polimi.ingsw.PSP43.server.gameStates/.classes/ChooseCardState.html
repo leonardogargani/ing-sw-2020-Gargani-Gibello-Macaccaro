@@ -1,0 +1,249 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ChooseCardState</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.gameStates</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ChooseCardState (it.polimi.ingsw.PSP43.server.gameStates)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ChooseCardState</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.7%
+  </span>
+  <span class="absValue">
+    (47/ 53)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ChooseCardState$MockitoMock$330326257</td>
+  </tr>
+  <tr>
+    <td class="name">ChooseCardState$MockitoMock$330326257$auxiliary$00NVzmoy</td>
+  </tr>
+  <tr>
+    <td class="name">ChooseCardState$MockitoMock$330326257$auxiliary$10xlwShT</td>
+  </tr>
+  <tr>
+    <td class="name">ChooseCardState$MockitoMock$330326257$auxiliary$9ZIqv9Ro</td>
+  </tr>
+  <tr>
+    <td class="name">ChooseCardState$MockitoMock$330326257$auxiliary$fsSh14L1</td>
+  </tr>
+  <tr>
+    <td class="name">ChooseCardState$MockitoMock$330326257$auxiliary$fUrVqfC1</td>
+  </tr>
+  <tr>
+    <td class="name">ChooseCardState$MockitoMock$330326257$auxiliary$L8RzUbEb</td>
+  </tr>
+  <tr>
+    <td class="name">ChooseCardState$MockitoMock$330326257$auxiliary$mCbxta9P</td>
+  </tr>
+  <tr>
+    <td class="name">ChooseCardState$MockitoMock$330326257$auxiliary$W64WcqUR</td>
+  </tr>
+  <tr>
+    <td class="name">ChooseCardState$MockitoMock$330326257$auxiliary$zEHDvNlR</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88.7%
+  </span>
+  <span class="absValue">
+    (47/ 53)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.gameStates;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.Screens;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.ChosenCardResponse;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.ChosenCardsResponse;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Player;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+<i>11</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.CardRequest;
+<i>12</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.InitialCardsRequest;
+<i>13</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.StartGameMessage;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;import java.util.ArrayList;
+<i>16</i>&nbsp;import java.util.Collections;
+<i>17</i>&nbsp;import java.util.Iterator;
+<i>18</i>&nbsp;import java.util.List;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;/**
+<i>21</i>&nbsp; * This is the State of the game where the players are asked to choose the cards
+<i>22</i>&nbsp; * they will own during the game.
+<i>23</i>&nbsp; */
+<i>24</i>&nbsp;public class ChooseCardState extends TurnState {
+<i>25</i>&nbsp;    protected ArrayList&lt;AbstractGodCard&gt; cardsAvailable;
+<i>26</i>&nbsp;    private static final int FIRSTPOSITION = 0;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    public ChooseCardState(GameSession gameSession) {
+<b class="fc"><i>29</i>&nbsp;        super(gameSession, TurnName.CHOOSE_CARD_STATE);</b>
+<b class="fc"><i>30</i>&nbsp;    }</b>
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    /**
+<i>33</i>&nbsp;     * This method initialises the god-like player, it asks him to pick up some cards
+<i>34</i>&nbsp;     * to use during the game and sends a message to all the other players telling them to wait
+<i>35</i>&nbsp;     * several minutes to choose the card they will own.
+<i>36</i>&nbsp;     */
+<i>37</i>&nbsp;    public void initState() {
+<b class="fc"><i>38</i>&nbsp;        GameSession game = super.getGameSession();</b>
+<b class="fc"><i>39</i>&nbsp;        PlayersHandler playersHandler = game.getPlayersHandler();</b>
+<i>40</i>&nbsp;
+<b class="fc"><i>41</i>&nbsp;        game.setCurrentPlayer(playersHandler.getPlayer(FIRSTPOSITION));</b>
+<b class="fc"><i>42</i>&nbsp;        Player current = game.getCurrentPlayer();</b>
+<i>43</i>&nbsp;
+<b class="fc"><i>44</i>&nbsp;        StartGameMessage openingMessage = new StartGameMessage(Screens.CHOOSING_A_CARD.toString());</b>
+<b class="fc"><i>45</i>&nbsp;        ArrayList&lt;String&gt; nicksExcluded = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>46</i>&nbsp;        nicksExcluded.add(current.getNickname());</b>
+<b class="fc"><i>47</i>&nbsp;        game.sendBroadCast(openingMessage, nicksExcluded);</b>
+<i>48</i>&nbsp;
+<b class="fc"><i>49</i>&nbsp;        List&lt;AbstractGodCard&gt; available = game.getCardsHandler().getDeckOfAbstractGodCards();</b>
+<b class="fc"><i>50</i>&nbsp;        InitialCardsRequest cardsRequest = new InitialCardsRequest(available, game.getListenersHashMap().size());</b>
+<i>51</i>&nbsp;        ChosenCardsResponse responseCardMessage;
+<i>52</i>&nbsp;        do {
+<i>53</i>&nbsp;            try {
+<b class="fc"><i>54</i>&nbsp;                responseCardMessage = game.sendRequest(cardsRequest, game.getCurrentPlayer().getNickname(), ChosenCardsResponse.class);</b>
+<b class="nc"><i>55</i>&nbsp;            } catch (GameEndedException e) {</b>
+<b class="nc"><i>56</i>&nbsp;                game.setActive();</b>
+<b class="nc"><i>57</i>&nbsp;                return;</b>
+<b class="fc"><i>58</i>&nbsp;            }</b>
+<b class="fc"><i>59</i>&nbsp;        } while (responseCardMessage==null);</b>
+<b class="fc"><i>60</i>&nbsp;        cardsAvailable = responseCardMessage.getCardsName();</b>
+<b class="fc"><i>61</i>&nbsp;        this.executeState();</b>
+<b class="fc"><i>62</i>&nbsp;    }</b>
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;    /**
+<i>65</i>&nbsp;     * This method picks up the next player to the god-like in the list where they are saved
+<i>66</i>&nbsp;     * and calls a method that, one at a time, asks to all the players which card they want to
+<i>67</i>&nbsp;     * use during the game. The latest card will be assigned to the god-like player.
+<i>68</i>&nbsp;     */
+<i>69</i>&nbsp;    public void executeState() {
+<b class="fc"><i>70</i>&nbsp;        GameSession game = super.getGameSession();</b>
+<b class="fc"><i>71</i>&nbsp;        PlayersHandler playersHandler = game.getPlayersHandler();</b>
+<i>72</i>&nbsp;
+<b class="fc"><i>73</i>&nbsp;        game.setCurrentPlayer(playersHandler.getPlayer(FIRSTPOSITION + 1));</b>
+<i>74</i>&nbsp;
+<b class="fc"><i>75</i>&nbsp;        askForCards(game);</b>
+<i>76</i>&nbsp;
+<b class="fc"><i>77</i>&nbsp;        this.findNextState();</b>
+<b class="fc"><i>78</i>&nbsp;    }</b>
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;    /**
+<i>81</i>&nbsp;     * This method asks to all the participants to the game to choose a card they want to use during
+<i>82</i>&nbsp;     * the game.
+<i>83</i>&nbsp;     * @param gameSession This is a reference to the center of the gameSession database.
+<i>84</i>&nbsp;     */
+<i>85</i>&nbsp;    private void askForCards(GameSession gameSession) {
+<b class="fc"><i>86</i>&nbsp;        PlayersHandler playersHandler = gameSession.getPlayersHandler();</b>
+<b class="fc"><i>87</i>&nbsp;        String nicknameGodLikePlayer = playersHandler.getPlayer(FIRSTPOSITION).getNickname();</b>
+<i>88</i>&nbsp;        String nicknameCurrentPlayer;
+<b class="fc"><i>89</i>&nbsp;        CardsHandler cardsHandler = gameSession.getCardsHandler();</b>
+<i>90</i>&nbsp;
+<i>91</i>&nbsp;        do {
+<b class="fc"><i>92</i>&nbsp;            Player current = gameSession.getCurrentPlayer();</b>
+<b class="fc"><i>93</i>&nbsp;            nicknameCurrentPlayer = current.getNickname();</b>
+<i>94</i>&nbsp;
+<b class="fc"><i>95</i>&nbsp;            CardRequest request = new CardRequest(Collections.unmodifiableList(new ArrayList&lt;&gt;(cardsAvailable)));</b>
+<i>96</i>&nbsp;            ChosenCardResponse response;
+<i>97</i>&nbsp;            do {
+<i>98</i>&nbsp;                try {
+<b class="fc"><i>99</i>&nbsp;                    response = gameSession.sendRequest(request, nicknameCurrentPlayer, ChosenCardResponse.class);</b>
+<b class="nc"><i>100</i>&nbsp;                } catch (GameEndedException e) {</b>
+<b class="nc"><i>101</i>&nbsp;                    gameSession.setActive();</b>
+<b class="nc"><i>102</i>&nbsp;                    return;</b>
+<b class="fc"><i>103</i>&nbsp;                }</b>
+<b class="fc"><i>104</i>&nbsp;            } while (response == null);</b>
+<i>105</i>&nbsp;
+<b class="fc"><i>106</i>&nbsp;            cardsHandler.setCardToPlayer(nicknameCurrentPlayer, response.getCard().getGodName());</b>
+<i>107</i>&nbsp;
+<b class="fc"><i>108</i>&nbsp;            for (Iterator&lt;AbstractGodCard&gt; cardsIterator = cardsAvailable.iterator(); cardsIterator.hasNext(); ) {</b>
+<b class="fc"><i>109</i>&nbsp;                AbstractGodCard card = cardsIterator.next();</b>
+<b class="fc"><i>110</i>&nbsp;                if (card.getGodName().equals(response.getCard().getGodName())) cardsIterator.remove();</b>
+<b class="fc"><i>111</i>&nbsp;            }</b>
+<i>112</i>&nbsp;
+<b class="fc"><i>113</i>&nbsp;            gameSession.setCurrentPlayer(playersHandler.getNextPlayer(nicknameCurrentPlayer));</b>
+<b class="fc"><i>114</i>&nbsp;        } while (!nicknameGodLikePlayer.equals(nicknameCurrentPlayer));</b>
+<b class="fc"><i>115</i>&nbsp;    }</b>
+<i>116</i>&nbsp;
+<i>117</i>&nbsp;    /**
+<i>118</i>&nbsp;     * This method finds the next turn of the game (saving it into a variable in the GameSession database),
+<i>119</i>&nbsp;     * which will be always a ChooseWorkerState.
+<i>120</i>&nbsp;     */
+<i>121</i>&nbsp;    public void findNextState() {
+<b class="fc"><i>122</i>&nbsp;        GameSession game = super.getGameSession();</b>
+<i>123</i>&nbsp;
+<b class="fc"><i>124</i>&nbsp;        for (TurnState t : game.getTurnStateMap()) {</b>
+<b class="fc"><i>125</i>&nbsp;            if (t.getTurnName() == TurnName.CHOOSE_WORKER_STATE)</b>
+<b class="fc"><i>126</i>&nbsp;                game.setNextState(t);</b>
+<b class="fc"><i>127</i>&nbsp;        }</b>
+<b class="fc"><i>128</i>&nbsp;    }</b>
+<i>129</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-26 09:04</div>
+</div>
+</body>
+</html>

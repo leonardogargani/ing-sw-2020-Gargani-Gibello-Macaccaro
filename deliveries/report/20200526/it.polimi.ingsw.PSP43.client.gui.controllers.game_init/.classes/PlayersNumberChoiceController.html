@@ -1,0 +1,183 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: PlayersNumberChoiceController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.client.gui.controllers.game_init</a> ]
+</div>
+
+<h1>Coverage Summary for Class: PlayersNumberChoiceController (it.polimi.ingsw.PSP43.client.gui.controllers.game_init)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PlayersNumberChoiceController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 25)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.client.gui.controllers.game_init;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.ClientBG;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.Screens;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.PlayersNumberResponse;
+<i>6</i>&nbsp;import javafx.event.ActionEvent;
+<i>7</i>&nbsp;import javafx.fxml.FXML;
+<i>8</i>&nbsp;import javafx.fxml.FXMLLoader;
+<i>9</i>&nbsp;import javafx.scene.Node;
+<i>10</i>&nbsp;import javafx.scene.Scene;
+<i>11</i>&nbsp;import javafx.scene.control.Button;
+<i>12</i>&nbsp;import javafx.scene.control.Label;
+<i>13</i>&nbsp;import javafx.scene.control.RadioButton;
+<i>14</i>&nbsp;import javafx.scene.control.ToggleGroup;
+<i>15</i>&nbsp;import javafx.stage.Stage;
+<i>16</i>&nbsp;import java.io.IOException;
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;
+<b class="nc"><i>19</i>&nbsp;public class PlayersNumberChoiceController {</b>
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    public Button confirmButton;
+<i>22</i>&nbsp;    public ToggleGroup toggleGroup;
+<i>23</i>&nbsp;    public RadioButton twoPlayersButton;
+<i>24</i>&nbsp;    public RadioButton threePlayersButton;
+<i>25</i>&nbsp;    public Label buttonPressedLabel;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    private static ClientBG clientBG;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    /**
+<i>31</i>&nbsp;     * Method called as soon as the controlled fxml file gets loaded, here used to set css ids and classes
+<i>32</i>&nbsp;     */
+<i>33</i>&nbsp;    @FXML
+<i>34</i>&nbsp;    private void initialize() {
+<b class="nc"><i>35</i>&nbsp;        confirmButton.getStyleClass().add(&quot;confirm-button&quot;);</b>
+<i>36</i>&nbsp;    }
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    /**
+<i>40</i>&nbsp;     * Method that sets the ClientBG attribute of the controller, it will be invoked inside
+<i>41</i>&nbsp;     * the GuiGraphicHandler constructor so that the controller will have already the attribute set
+<i>42</i>&nbsp;     * once it will be utilized.
+<i>43</i>&nbsp;     * @param clientBG clientBG of the current client
+<i>44</i>&nbsp;     */
+<i>45</i>&nbsp;    public void setClientBG(ClientBG clientBG) {
+<b class="nc"><i>46</i>&nbsp;        PlayersNumberChoiceController.clientBG = clientBG;</b>
+<i>47</i>&nbsp;    }
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    /**
+<i>51</i>&nbsp;     * Method that handles an event performed on the button to confirm the number of players.
+<i>52</i>&nbsp;     * @param event event performed on the button
+<i>53</i>&nbsp;     */
+<i>54</i>&nbsp;    @FXML
+<i>55</i>&nbsp;    private void handleConfirmButton(ActionEvent event) {
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;        int chosenNumber;
+<i>58</i>&nbsp;
+<b class="nc"><i>59</i>&nbsp;        if (toggleGroup.getSelectedToggle() == null) {</b>
+<b class="nc"><i>60</i>&nbsp;            buttonPressedLabel.setText(&quot;You must choose a number!&quot;);</b>
+<i>61</i>&nbsp;            return;
+<i>62</i>&nbsp;        }
+<i>63</i>&nbsp;
+<b class="nc"><i>64</i>&nbsp;        RadioButton selectedButton = (RadioButton) toggleGroup.getSelectedToggle();</b>
+<i>65</i>&nbsp;
+<b class="nc"><i>66</i>&nbsp;        if (twoPlayersButton.equals(selectedButton)) {</b>
+<b class="nc"><i>67</i>&nbsp;            chosenNumber = 2;</b>
+<i>68</i>&nbsp;        } else {
+<b class="nc"><i>69</i>&nbsp;            chosenNumber = 3;</b>
+<i>70</i>&nbsp;        }
+<i>71</i>&nbsp;
+<b class="nc"><i>72</i>&nbsp;        PlayersNumberResponse response = new PlayersNumberResponse(chosenNumber);</b>
+<b class="nc"><i>73</i>&nbsp;        clientBG.sendMessage(response);</b>
+<i>74</i>&nbsp;
+<i>75</i>&nbsp;        // display a waiting screen while other players are connecting
+<b class="nc"><i>76</i>&nbsp;        FXMLLoader loader = new FXMLLoader();</b>
+<b class="nc"><i>77</i>&nbsp;        loader.setLocation(getClass().getResource(&quot;/FXML/miscellaneous/wait.fxml&quot;));</b>
+<i>78</i>&nbsp;        try {
+<b class="nc"><i>79</i>&nbsp;            Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();</b>
+<b class="nc"><i>80</i>&nbsp;            Scene scene = new Scene(loader.load());</b>
+<i>81</i>&nbsp;
+<b class="nc"><i>82</i>&nbsp;            WaitController controller = loader.getController();</b>
+<b class="nc"><i>83</i>&nbsp;            controller.setLabelText(Screens.CONNECTING_WITH_OTHERS.toString());</b>
+<i>84</i>&nbsp;
+<b class="nc"><i>85</i>&nbsp;            scene.getStylesheets().add(getClass().getResource(&quot;/CSS/game_init/style.css&quot;).toExternalForm());</b>
+<b class="nc"><i>86</i>&nbsp;            stage.setScene(scene);</b>
+<i>87</i>&nbsp;
+<i>88</i>&nbsp;            // set minimum sizes of the stage (can be either before and after loader.load())
+<b class="nc"><i>89</i>&nbsp;            stage.setMinHeight(700);</b>
+<b class="nc"><i>90</i>&nbsp;            stage.setMinWidth(1000);</b>
+<i>91</i>&nbsp;
+<i>92</i>&nbsp;            // set the stage to the center of the screen (must be after loader.load())
+<b class="nc"><i>93</i>&nbsp;            stage.centerOnScreen();</b>
+<b class="nc"><i>94</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>95</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>96</i>&nbsp;        }</b>
+<i>97</i>&nbsp;    }
+<i>98</i>&nbsp;
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-26 09:04</div>
+</div>
+</body>
+</html>

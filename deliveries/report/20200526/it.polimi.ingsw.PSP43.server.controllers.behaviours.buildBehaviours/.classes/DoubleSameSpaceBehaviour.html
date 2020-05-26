@@ -1,0 +1,116 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DoubleSameSpaceBehaviour</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.controllers.behaviours.buildBehaviours</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DoubleSameSpaceBehaviour (it.polimi.ingsw.PSP43.server.controllers.behaviours.buildBehaviours)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DoubleSameSpaceBehaviour</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (12/ 12)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.controllers.behaviours.buildBehaviours;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.ResponseMessage;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.DataToBuild;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Cell;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Player;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
+<i>10</i>&nbsp;
+<b class="fc"><i>11</i>&nbsp;public class DoubleSameSpaceBehaviour extends BasicBuildBehaviour {</b>
+<i>12</i>&nbsp;    private static final long serialVersionUID = -834139120755922247L;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;    public void handleInitBuild(GameSession gameSession) throws GameEndedException {
+<b class="fc"><i>15</i>&nbsp;        Player currentPlayer = gameSession.getCurrentPlayer();</b>
+<b class="fc"><i>16</i>&nbsp;        DataToBuild dataToBuild = genericAskForBuild(gameSession);</b>
+<i>17</i>&nbsp;
+<b class="fc"><i>18</i>&nbsp;        if (dataToBuild.getBuildDome()) build(dataToBuild);</b>
+<i>19</i>&nbsp;        else {
+<b class="fc"><i>20</i>&nbsp;            build(dataToBuild);</b>
+<i>21</i>&nbsp;
+<b class="fc"><i>22</i>&nbsp;            Cell cellBuilt = gameSession.getCellsHandler().getCell(dataToBuild.getNewPosition());</b>
+<b class="fc"><i>23</i>&nbsp;            if (cellBuilt.getHeight() &lt; 3) {</b>
+<b class="fc"><i>24</i>&nbsp;                RequestMessage requestMessage = new RequestMessage(&quot;Do you want to build another block on the same space?&quot;);</b>
+<b class="fc"><i>25</i>&nbsp;                ResponseMessage responseMessage = gameSession.sendRequest(requestMessage, currentPlayer.getNickname(), ResponseMessage.class);</b>
+<i>26</i>&nbsp;
+<b class="fc"><i>27</i>&nbsp;                if (responseMessage.isResponse()) {</b>
+<b class="fc"><i>28</i>&nbsp;                    build(dataToBuild);</b>
+<i>29</i>&nbsp;                }
+<i>30</i>&nbsp;            }
+<i>31</i>&nbsp;        }
+<b class="fc"><i>32</i>&nbsp;    }</b>
+<i>33</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-26 09:04</div>
+</div>
+</body>
+</html>

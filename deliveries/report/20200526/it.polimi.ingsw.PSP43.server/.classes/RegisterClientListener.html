@@ -1,0 +1,195 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: RegisterClientListener</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server</a> ]
+</div>
+
+<h1>Coverage Summary for Class: RegisterClientListener (it.polimi.ingsw.PSP43.server)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RegisterClientListener</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (3/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    12.5%
+  </span>
+  <span class="absValue">
+    (5/ 40)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.gameStates.GameSessionObservable;
+<i>7</i>&nbsp;import org.xml.sax.SAXException;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;import javax.xml.parsers.ParserConfigurationException;
+<i>10</i>&nbsp;import java.io.IOException;
+<i>11</i>&nbsp;import java.util.ArrayList;
+<i>12</i>&nbsp;import java.util.Iterator;
+<i>13</i>&nbsp;import java.util.concurrent.TimeUnit;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;/**
+<i>16</i>&nbsp; * This class implements Runnable and it put new players in a match(gameSession), it is also used for the removal of a
+<i>17</i>&nbsp; * ended gameSession
+<i>18</i>&nbsp; */
+<i>19</i>&nbsp;public class RegisterClientListener implements Runnable {
+<b class="fc"><i>20</i>&nbsp;    private static final ArrayList&lt;GameSessionObservable&gt; gameSessions = new ArrayList&lt;&gt;();</b>
+<i>21</i>&nbsp;    private ClientListener player;
+<i>22</i>&nbsp;    private RegistrationMessage message;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    /**
+<i>25</i>&nbsp;     * Not default constructor for RegisterClientListener class
+<i>26</i>&nbsp;     *
+<i>27</i>&nbsp;     * @param player  that is creating this RegisterClientListener
+<i>28</i>&nbsp;     * @param message is the registration message with the nick inside
+<i>29</i>&nbsp;     */
+<b class="nc"><i>30</i>&nbsp;    public RegisterClientListener(ClientListener player, RegistrationMessage message) {</b>
+<b class="nc"><i>31</i>&nbsp;        this.player = player;</b>
+<b class="nc"><i>32</i>&nbsp;        this.message = message;</b>
+<b class="nc"><i>33</i>&nbsp;    }</b>
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    /**
+<i>36</i>&nbsp;     * Constructor without parameters
+<i>37</i>&nbsp;     */
+<b class="fc"><i>38</i>&nbsp;    public RegisterClientListener() {</b>
+<b class="fc"><i>39</i>&nbsp;    }</b>
+<i>40</i>&nbsp;
+<i>41</i>&nbsp;    /**
+<i>42</i>&nbsp;     * Override of the run method, it contains the algorithms that checks if there is a game that hasn&#39;t started yet or if
+<i>43</i>&nbsp;     * a new game session is needed
+<i>44</i>&nbsp;     */
+<i>45</i>&nbsp;    @Override
+<i>46</i>&nbsp;    public void run() {
+<i>47</i>&nbsp;        try {
+<b class="nc"><i>48</i>&nbsp;            int idGame = -1, counter = 0;</b>
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;            // until there are available gameSessions to inspect in the list I check them if they are available
+<b class="nc"><i>51</i>&nbsp;            while (idGame == -1 &amp;&amp; gameSessions.size() &gt; counter) {</b>
+<b class="nc"><i>52</i>&nbsp;                GameSessionObservable gameSession = gameSessions.get(counter);</b>
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;                // if the gameSession is in registration phase for the first player, I wait
+<b class="nc"><i>56</i>&nbsp;                while (gameSession.getMaxNumPlayers() == 1) {</b>
+<b class="nc"><i>57</i>&nbsp;                    TimeUnit.SECONDS.sleep(1);</b>
+<i>58</i>&nbsp;                }
+<i>59</i>&nbsp;
+<b class="nc"><i>60</i>&nbsp;                if (player.isDisconnected())</b>
+<b class="nc"><i>61</i>&nbsp;                    break;</b>
+<i>62</i>&nbsp;
+<b class="nc"><i>63</i>&nbsp;                if (gameSession.getMaxNumPlayers() &gt; gameSession.getNumOfPlayers()) {</b>
+<b class="nc"><i>64</i>&nbsp;                    idGame = gameSession.registerToTheGame(message, player);</b>
+<i>65</i>&nbsp;                }
+<i>66</i>&nbsp;
+<b class="nc"><i>67</i>&nbsp;                counter++;</b>
+<b class="nc"><i>68</i>&nbsp;            }</b>
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;            // if there is not a gameSession available, I create a new one
+<b class="nc"><i>71</i>&nbsp;            if (idGame == -1 &amp; !player.isDisconnected()) {</b>
+<b class="nc"><i>72</i>&nbsp;                GameSession game = new GameSession(gameSessions.size());</b>
+<b class="nc"><i>73</i>&nbsp;                gameSessions.add(game);</b>
+<b class="nc"><i>74</i>&nbsp;                Thread gameThread = new Thread(game);</b>
+<b class="nc"><i>75</i>&nbsp;                gameThread.start();</b>
+<i>76</i>&nbsp;
+<b class="nc"><i>77</i>&nbsp;                idGame = game.registerToTheGame(message, player);</b>
+<i>78</i>&nbsp;            }
+<i>79</i>&nbsp;
+<b class="nc"><i>80</i>&nbsp;            player.setIdGame(idGame);</b>
+<b class="nc"><i>81</i>&nbsp;        } catch (IOException | InterruptedException | SAXException | ParserConfigurationException e) {</b>
+<b class="nc"><i>82</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>83</i>&nbsp;        }</b>
+<b class="nc"><i>84</i>&nbsp;    }</b>
+<i>85</i>&nbsp;
+<i>86</i>&nbsp;    /**
+<i>87</i>&nbsp;     * Synchronized method to remove a gameSession
+<i>88</i>&nbsp;     *
+<i>89</i>&nbsp;     * @param idGameSession is the id of the gameSession we are going to remove
+<i>90</i>&nbsp;     */
+<i>91</i>&nbsp;    public synchronized void removeGameSession(int idGameSession) {
+<b class="fc"><i>92</i>&nbsp;        gameSessions.removeIf(gameSessionObservable -&gt; gameSessionObservable.getIdGame() == idGameSession);</b>
+<b class="fc"><i>93</i>&nbsp;    }</b>
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;    /**
+<i>96</i>&nbsp;     * This method notifies to the gameSession that a player left the game, other players must be notified and
+<i>97</i>&nbsp;     * after that gameSession must be deleted
+<i>98</i>&nbsp;     *
+<i>99</i>&nbsp;     * @param idGameSession is the id of the match that will be deleted
+<i>100</i>&nbsp;     */
+<i>101</i>&nbsp;    public void notifyDisconnection(int idGameSession) {
+<b class="nc"><i>102</i>&nbsp;        synchronized (gameSessions) {</b>
+<b class="nc"><i>103</i>&nbsp;            for (Iterator&lt;GameSessionObservable&gt; gameSessionIterator = gameSessions.iterator(); gameSessionIterator.hasNext(); ) {</b>
+<b class="nc"><i>104</i>&nbsp;                GameSessionObservable gameSession = gameSessionIterator.next();</b>
+<b class="nc"><i>105</i>&nbsp;                if (gameSession.getIdGame() == idGameSession) {</b>
+<b class="nc"><i>106</i>&nbsp;                    gameSession.unregisterFromGame(new LeaveGameMessage(), player);</b>
+<b class="nc"><i>107</i>&nbsp;                    gameSessionIterator.remove();</b>
+<i>108</i>&nbsp;                }
+<b class="nc"><i>109</i>&nbsp;            }</b>
+<b class="nc"><i>110</i>&nbsp;        }</b>
+<b class="nc"><i>111</i>&nbsp;    }</b>
+<i>112</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-05-26 09:04</div>
+</div>
+</body>
+</html>
