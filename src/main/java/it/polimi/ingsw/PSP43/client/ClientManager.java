@@ -21,6 +21,7 @@ public class ClientManager implements Runnable {
     private final ArrayList<ServerMessage> messageBox;
     private boolean isFirstGame;
     private Thread guiExecutorThread;
+    private GuiExecutor guiExecutor = null;
 
     /**
      * Not default constructor for ClientManager class that initializes the game on your chosen interface CLI or GUI
@@ -51,7 +52,7 @@ public class ClientManager implements Runnable {
             clientBGThread.start();
             graphicHandler = new GuiGraphicHandler(clientBG);
             if (this.isFirstGame) {
-                GuiExecutor guiExecutor = new GuiExecutor();
+                guiExecutor = new GuiExecutor();
                 guiExecutorThread = new Thread(guiExecutor);
                 guiExecutorThread.start();
             }
@@ -60,9 +61,16 @@ public class ClientManager implements Runnable {
         //Added check on the life of guiExecutorThread
         while (isActive) {
             try {
-                if (guiExecutorThread.isAlive())
+                if (guiExecutor != null) {
+                    if (guiExecutorThread.isAlive()) {
+                        handleEvent();
+                    } else {
+                        throw new QuitPlayerException("Gui closed");
+                    }
+                } else {
                     handleEvent();
-                else throw new QuitPlayerException("Gui closed");
+                }
+
             } catch (QuitPlayerException e) {
                 clientBG.sendMessage(new LeaveGameMessage());
             } catch (InterruptedException e) {

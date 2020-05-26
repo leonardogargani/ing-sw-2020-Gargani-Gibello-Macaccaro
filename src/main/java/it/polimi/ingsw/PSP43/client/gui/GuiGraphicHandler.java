@@ -236,8 +236,6 @@ public class GuiGraphicHandler extends GraphicHandler {
             scene.getStylesheets().add(getClass().getResource("/CSS/game_init/style.css").toExternalForm());
 
             Platform.runLater(() -> {
-                stage.setMinHeight(700);
-                stage.setMinWidth(1000);
                 stage.centerOnScreen();
                 stage.setScene(scene);
             });
