@@ -72,10 +72,13 @@ public class BasicGodCard extends AbstractGodCard {
         CellsHandler cellsHandler = gameSession.getCellsHandler();
 
         Integer[] wIds = gameSession.getCurrentPlayer().getWorkersIdsArray();
+
+        // here I check if the player has won, taking care of verifying this condition
+        // only if the worker was moved on this turn (to avoid the problem about
+        // forcing an opponent to a third level space)
         for (Integer i : wIds) {
             Worker worker = workersHandler.getWorker(i);
             if (worker.isLatestMoved()) {
-
                 Coord workerCoordUpdated = worker.getCurrentPosition();
                 Cell workerCellUpdated = cellsHandler.getCell(workerCoordUpdated);
 

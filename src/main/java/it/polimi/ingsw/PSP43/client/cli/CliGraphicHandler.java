@@ -358,8 +358,9 @@ public class CliGraphicHandler extends GraphicHandler {
                 bottomMenu.setContent(Screens.WINNER.toString());
                 break;
             case LOSER:
-                String nick = message.getMessage();
-                bottomMenu.setContentWithNick(nick);
+                // TODO
+                //String nick = message.getMessage();
+                bottomMenu.setContent(Screens.LOSER.toString());
                 break;
             case DISCONNECTED:
                 bottomMenu.setContent(Screens.DISCONNECTED.toString());

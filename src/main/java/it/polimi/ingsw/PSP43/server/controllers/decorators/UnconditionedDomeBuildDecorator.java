@@ -48,7 +48,7 @@ public class UnconditionedDomeBuildDecorator extends PowerGodDecorator {
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildDome(GameSession gameSession) {
         CellsHandler cellsHandler = gameSession.getCellsHandler();
 
-        HashMap<Coord, ArrayList<Coord>> availablePositions = cellsHandler.findWorkersNeighbouringCoords(gameSession.getCurrentPlayer());
+        HashMap<Coord, ArrayList<Coord>> availablePositions = cellsHandler.findWorkersNeighbouringCoordsExclude(gameSession.getCurrentPlayer());
         for (Coord c : availablePositions.keySet()) {
             for (Iterator<Coord> coordIterator = availablePositions.get(c).iterator(); coordIterator.hasNext(); ) {
                 Coord actualCoord = coordIterator.next();

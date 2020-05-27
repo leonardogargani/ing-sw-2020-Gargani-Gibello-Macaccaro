@@ -4,7 +4,6 @@ import it.polimi.ingsw.PSP43.server.gameStates.GameSessionObservable;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.networkMessages.CellMessage;
 
-
 public class BoardObserver {
 
     private final GameSessionObservable gameSessionObservable;
@@ -28,5 +27,4 @@ public class BoardObserver {
         CellMessage message = new CellMessage(cellObserved);
         gameSessionObservable.sendBroadCast(message);
     }
-
 }

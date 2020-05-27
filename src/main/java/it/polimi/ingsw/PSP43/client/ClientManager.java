@@ -9,6 +9,7 @@ import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 /**
  * ClientManager class that starts the connection thread(ClientBG), and then handles updates on the CLI or the GUI
@@ -19,7 +20,7 @@ public class ClientManager implements Runnable {
     private ClientBG clientBG;
     private boolean isActive;
     private final ArrayList<ServerMessage> messageBox;
-    private boolean isFirstGame;
+    private final boolean isFirstGame;
     private Thread guiExecutorThread;
     private GuiExecutor guiExecutor = null;
 
@@ -59,12 +60,13 @@ public class ClientManager implements Runnable {
         }
 
         //Added check on the life of guiExecutorThread
-        while (isActive) {
+        while (isActive || messageBox.size() != 0) {
             try {
                 if (guiExecutor != null) {
                     if (guiExecutorThread.isAlive()) {
                         handleEvent();
-                    } else {
+                    }
+                    else {
                         throw new QuitPlayerException("Gui closed");
                     }
                 } else {
@@ -73,6 +75,11 @@ public class ClientManager implements Runnable {
 
             } catch (QuitPlayerException e) {
                 clientBG.sendMessage(new LeaveGameMessage());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            try {
+                TimeUnit.MILLISECONDS.sleep(1);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -85,7 +92,7 @@ public class ClientManager implements Runnable {
      *
      * @throws QuitPlayerException if a player in the input writes quit to leave the game
      */
-    public synchronized void handleEvent() throws QuitPlayerException, InterruptedException {
+    public void handleEvent() throws QuitPlayerException, InterruptedException {
 
         ServerMessage message = popMessageFromBox();
         {
@@ -99,9 +106,9 @@ public class ClientManager implements Runnable {
                 graphicHandler.updateMenuChange((ChangeNickRequest) message);
             } else if (message instanceof EndGameMessage) {
                 graphicHandler.updateMenuChange((EndGameMessage) message);
-                clientBG.setDisconnect(true);
-                clientBG.closer();
-                this.isActive = false;
+                //clientBG.setDisconnect(true);
+                //clientBG.closer();
+                //this.isActive = false;
             } else if (message instanceof InitialCardsRequest) {
                 graphicHandler.updateMenuChange((InitialCardsRequest) message);
             } else if (message instanceof PlayersNumberRequest) {
@@ -141,16 +148,6 @@ public class ClientManager implements Runnable {
     }
 
     /**
-     * Getter method for the messageBox, that is an ArrayList where messages are put when they are received
-     *
-     * @return messageBox
-     */
-    public ArrayList<ServerMessage> getMessageBox() {
-        return messageBox;
-    }
-
-
-    /**
      * Initial method called by the clientBG after the start of the connection, it asks a nick from the player and
      * send it to the server
      */
@@ -169,7 +166,6 @@ public class ClientManager implements Runnable {
 
     }
 
-
     /**
      * Synchronized method to add message in the message box
      *
@@ -180,6 +176,12 @@ public class ClientManager implements Runnable {
         notifyMessageArrived();
     }
 
+    /**
+     * Synchronized method to notify the arrivals of a message
+     */
+    public synchronized void notifyMessageArrived() {
+        notifyAll();
+    }
 
     /**
      * Synchronized method to remove a message from the message box
@@ -194,13 +196,5 @@ public class ClientManager implements Runnable {
         ServerMessage message = messageBox.get(0);
         messageBox.remove(message);
         return message;
-    }
-
-
-    /**
-     * Synchronized method to notify the arrivals of a message
-     */
-    public synchronized void notifyMessageArrived() {
-        notifyAll();
     }
 }

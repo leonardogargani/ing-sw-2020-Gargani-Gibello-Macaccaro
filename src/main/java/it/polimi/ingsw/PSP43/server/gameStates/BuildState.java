@@ -46,10 +46,12 @@ public class BuildState extends TurnState {
         for (String s : map.keySet()) {
             AbstractGodCard card = map.get(s);
 
-            if (!super.checkForWinner(card, game)) {
-                findNextState();
+            if (super.checkForWinner(card, game)) {
+                return;
             }
         }
+
+        findNextState();
     }
 
     /**

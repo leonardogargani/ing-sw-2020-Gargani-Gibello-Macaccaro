@@ -103,15 +103,17 @@ public class MoveState extends TurnState {
             return;
         } catch (GameLostException e) {
             Player nextPlayer = game.getPlayersHandler().getNextPlayer(currentPlayer.getNickname());
-            game.setCurrentPlayer(nextPlayer);
             game.eliminatePlayer(currentPlayer);
+            game.setCurrentPlayer(nextPlayer);
 
             this.sendAllWaitingMessage();
         }
 
-        if (!super.checkForWinner(playerCard, game)) {
-            findNextState();;
+        if (super.checkForWinner(playerCard, game)) {
+            return;
         }
+
+        findNextState();
     }
 
     /**

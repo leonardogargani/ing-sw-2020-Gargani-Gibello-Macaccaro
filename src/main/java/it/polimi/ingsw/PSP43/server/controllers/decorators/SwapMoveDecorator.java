@@ -15,6 +15,7 @@ import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 public class SwapMoveDecorator extends PowerGodDecorator {
     private static final long serialVersionUID = 1282873326963180012L;
@@ -52,15 +53,18 @@ public class SwapMoveDecorator extends PowerGodDecorator {
 
         HashMap<Coord, ArrayList<Coord>> availablePositions = cellsHandler.findWorkersNeighbouringCoords(gameSession.getCurrentPlayer());
 
-        for (Coord actualCoord : availablePositions.keySet()) {
-            Cell actualCell = cellsHandler.getCell(actualCoord);
-            ArrayList<Coord> neighbouringPositions = availablePositions.get(actualCoord);
+        for (Iterator<Map.Entry<Coord, ArrayList<Coord>>> keyIterator = availablePositions.entrySet().iterator(); keyIterator.hasNext(); ) {
+            Map.Entry<Coord, ArrayList<Coord>> currentKey = keyIterator.next();
+            Cell actualCell = cellsHandler.getCell(currentKey.getKey());
+            ArrayList<Coord> neighbouringPositions = currentKey.getValue();
             for (Iterator<Coord> coordIterator = neighbouringPositions.iterator(); coordIterator.hasNext(); ) {
                 Coord coordToCheck = coordIterator.next();
                 Cell cellToCheck = cellsHandler.getCell(coordToCheck);
                 if (cellToCheck.getOccupiedByDome() || (cellToCheck.getHeight() - actualCell.getHeight() > 1))
                     coordIterator.remove();
             }
+
+            if (neighbouringPositions.size() == 0) keyIterator.remove();
         }
         return availablePositions;
     }

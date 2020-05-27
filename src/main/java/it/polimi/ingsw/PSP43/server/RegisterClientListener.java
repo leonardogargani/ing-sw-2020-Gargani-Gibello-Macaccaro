@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  * ended gameSession
  */
 public class RegisterClientListener implements Runnable {
-    private static final ArrayList<GameSessionObservable> gameSessions = new ArrayList<>();
+    private static final ArrayList<GameSession> gameSessions = new ArrayList<>();
     private ClientListener player;
     private RegistrationMessage message;
 
@@ -100,8 +100,8 @@ public class RegisterClientListener implements Runnable {
      */
     public void notifyDisconnection(int idGameSession) {
         synchronized (gameSessions) {
-            for (Iterator<GameSessionObservable> gameSessionIterator = gameSessions.iterator(); gameSessionIterator.hasNext(); ) {
-                GameSessionObservable gameSession = gameSessionIterator.next();
+            for (Iterator<GameSession> gameSessionIterator = gameSessions.iterator(); gameSessionIterator.hasNext(); ) {
+                GameSession gameSession = gameSessionIterator.next();
                 if (gameSession.getIdGame() == idGameSession) {
                     gameSession.unregisterFromGame(new LeaveGameMessage(), player);
                     gameSessionIterator.remove();

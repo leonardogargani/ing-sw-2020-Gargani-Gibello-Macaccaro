@@ -31,6 +31,8 @@ public class BasicBuildBehaviour extends BasicGodCard implements BuildBehaviour 
         HashMap<Coord, ArrayList<Coord>> availablePositionsBuildBlock = abstractGodCard.findAvailablePositionsToBuildBlock(gameSession);
         HashMap<Coord, ArrayList<Coord>> availablePositionsBuildDome = abstractGodCard.findAvailablePositionsToBuildDome(gameSession);
 
+
+
         ResponseMessage response = new ResponseMessage(false);
         if (availablePositionsBuildDome.size() != 0) {
             RequestMessage request = new RequestMessage("Do you want to build a dome? Otherwise you will " +
@@ -42,7 +44,7 @@ public class BasicBuildBehaviour extends BasicGodCard implements BuildBehaviour 
         Worker workerToBuild;
         if (response.isResponse()) {
             String message = "Choose a position where to build your dome.";
-            actionResponse = askForBuild(gameSession, availablePositionsBuildBlock, message);
+            actionResponse = askForBuild(gameSession, availablePositionsBuildDome, message);
             workerToBuild = workersHandler.getWorker(actionResponse.getWorkerPosition());
             return new DataToBuild(gameSession, currentPlayer, workerToBuild, actionResponse.getPosition(), Boolean.TRUE);
         } else {

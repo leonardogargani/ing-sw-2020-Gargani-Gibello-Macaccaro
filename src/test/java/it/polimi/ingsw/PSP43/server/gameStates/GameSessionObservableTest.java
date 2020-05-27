@@ -230,7 +230,7 @@ public class GameSessionObservableTest {
 
         ActionResponse actionResponse = new ActionResponse();
         LeaveGameMessage leaveGameMessage = new LeaveGameMessage();
-        doReturn(actionResponse, leaveGameMessage).when(clientListenerMock).getMessage();
+        doReturn(actionResponse, leaveGameMessage).when(clientListenerMock).popMessageFromStack();
 
         boolean caught = false;
 

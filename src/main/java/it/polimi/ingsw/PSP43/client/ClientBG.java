@@ -6,19 +6,20 @@ import it.polimi.ingsw.PSP43.client.cli.QuitPlayerException;
 import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.PingMessage;
+import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.ServerMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.concurrent.TimeUnit;
 
 /**
  * ClientBG(client background) is the client network handler
  */
 public class ClientBG implements Runnable {
-
     private Socket serverSocket;
     private final ClientManager clientManager;
     private static final int SERVER_PORT = 50000;
@@ -27,7 +28,6 @@ public class ClientBG implements Runnable {
     private boolean disconnect = true;
     private ObjectInputStream input;
     private ObjectOutputStream output;
-
 
     /**
      * Not default constructor for the client background
@@ -38,7 +38,6 @@ public class ClientBG implements Runnable {
         this.clientManager = clientManager;
         this.messageArrived = new Object();
     }
-
 
     /**
      * Override of run method, here the connection with the server starts, after that clientBG starts the connection
@@ -88,14 +87,22 @@ public class ClientBG implements Runnable {
         while (!disconnect) {
             try {
                 receive();
-            } catch (IOException e) {
+            } catch (SocketTimeoutException e) {
+                EndGameMessage messageServerDown = new EndGameMessage("", EndGameMessage.EndGameHeader.DISCONNECTED);
+                clientManager.pushMessageInBox(messageServerDown);
                 handleDisconnection();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+            } catch (ClassNotFoundException | IOException ignored) {}
         }
     }
 
+    /**
+     * Setter method for serverIP String
+     *
+     * @param serverIP is the address of the server
+     */
+    public void setServerIP(String serverIP) {
+        this.serverIP = serverIP;
+    }
 
     /**
      * This method will be active for the entire duration of the game and when a message arrives (if it's not a ping)
@@ -107,13 +114,15 @@ public class ClientBG implements Runnable {
      *                                loadClass() methods and mentioned classes are not found in the classpath.
      */
     public void receive() throws IOException, ClassNotFoundException {
-        do {
-            input = new ObjectInputStream(serverSocket.getInputStream());
-            messageArrived = input.readObject();
-        } while (messageArrived instanceof PingMessage);
+        input = new ObjectInputStream(serverSocket.getInputStream());
+        messageArrived = input.readObject();
 
-
-        clientManager.pushMessageInBox((ServerMessage) messageArrived);
+        if (messageArrived instanceof EndGameMessage) {
+            clientManager.pushMessageInBox((ServerMessage) messageArrived);
+            handleDisconnection();
+        }
+        else if (!(messageArrived instanceof PingMessage))
+            clientManager.pushMessageInBox((ServerMessage) messageArrived);
     }
 
 
@@ -143,7 +152,9 @@ public class ClientBG implements Runnable {
             output.writeObject(message);
         } catch (IOException e) {
             handleDisconnection();
+            return;
         }
+
         handleDisconnection();
     }
 
@@ -157,17 +168,6 @@ public class ClientBG implements Runnable {
     public boolean isDisconnect() {
         return disconnect;
     }
-
-
-    /**
-     * Setter method for the boolean variable disconnected
-     *
-     * @param disconnect is a boolean variable that controls the exit from the while in the run at the end of the match
-     */
-    public void setDisconnect(boolean disconnect) {
-        this.disconnect = disconnect;
-    }
-
 
     /**
      * Method that close input and output streams and the socket at the end of the match
@@ -189,22 +189,19 @@ public class ClientBG implements Runnable {
      * This method put an EndGameMessage in the ClientManager's messageBox when you quit the match
      */
     public void handleDisconnection() {
-        if (clientManager.getMessageBox().size() == 0){
+        if (!disconnect){
+            disconnect = true;
             clientManager.setActive(false);
-            this.disconnect = true;
-            closer();
+
+            try {
+                if (input != null)
+                    input.close();
+                if (output != null)
+                    output.close();
+                serverSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        else
-            clientManager.notifyMessageArrived();
-    }
-
-
-    /**
-     * Setter method for serverIP String
-     *
-     * @param serverIP is the address of the server
-     */
-    public void setServerIP(String serverIP) {
-        this.serverIP = serverIP;
     }
 }

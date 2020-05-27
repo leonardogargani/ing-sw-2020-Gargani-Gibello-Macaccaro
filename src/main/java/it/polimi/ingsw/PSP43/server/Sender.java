@@ -10,8 +10,8 @@ import java.util.concurrent.Callable;
  * will be the response for the request
  */
 public class Sender implements Callable<ClientMessage> {
-    private ClientListener clientListener;
-    private ServerMessage messageToSend;
+    private final ClientListener clientListener;
+    private final ServerMessage messageToSend;
 
     /**
      * Not default constructor for Sender class
@@ -34,9 +34,10 @@ public class Sender implements Callable<ClientMessage> {
         clientListener.sendMessage(messageToSend);
         ClientMessage response;
 
-        response = clientListener.getMessage();
+        response = clientListener.popMessageFromStack();
 
-        clientListener.popMessageFromStack(response);
+        // TODO
+        //clientListener.popMessageFromStack(response);
 
         return response;
     }

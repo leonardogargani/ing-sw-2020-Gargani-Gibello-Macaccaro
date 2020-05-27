@@ -4,9 +4,7 @@
         <basicGodCard>
             <godName>Apollo</godName>
             <godDescription>God Of Music</godDescription>
-            <godPower>Your Move: Your Worker may move into an opponent Worker’s space by forcing their Worker to the
-                space yours just vacated.
-            </godPower>
+            <godPower>Your Move: Your Worker may move into an opponent Worker’s space by forcing their Worker to the space yours just vacated.</godPower>
             <moveBehaviour>
                 <basicMoveBehaviour/>
             </moveBehaviour>

@@ -46,21 +46,21 @@ public class BuildBeforeMoveBehaviour extends BasicMoveBehaviour {
         Worker workerMoved = workersHandler.getWorker(actionResponse.getWorkerPosition());
         Coord nextCoordChosen = actionResponse.getPosition();
         DataToMove dataToMove = new DataToMove(gameSession, currentPlayer, workerMoved, nextCoordChosen);
+        super.move(dataToMove);
 
         CellsHandler cellsHandler = gameSession.getCellsHandler();
         Cell nextCellChosen = cellsHandler.getCell(nextCoordChosen);
         Cell currentCell = cellsHandler.getCell(workerMoved.getCurrentPosition());
 
         if (nextCellChosen.getHeight() - currentCell.getHeight() == 0) {
-            RequestMessage requestMessage = new RequestMessage("Do you want to build before moving?");
+            RequestMessage requestMessage = new RequestMessage("Do you want to build two times " +
+                    "considering that your worker didn't rise to a higher level?");
             ResponseMessage responseMessage = gameSession.sendRequest(requestMessage, currentPlayer.getNickname(), ResponseMessage.class);
 
             if (responseMessage.isResponse()) {
                 buildBeforeMove(dataToMove);
             }
         }
-
-        super.move(dataToMove);
     }
 
     /**
@@ -125,8 +125,9 @@ public class BuildBeforeMoveBehaviour extends BasicMoveBehaviour {
             ArrayList<Coord> neighbouringPositions = currentEntry.getValue();
 
             ArrayList<Coord> availableNeighbouringPositions = gameSession.getCellsHandler().selectAllFreeCoords(neighbouringPositions);
-            availableNeighbouringPositions.removeIf(currentCoord -> (currentCoord.getY() == oldData.getNewPosition().getY() && currentCoord.getX() == oldData.getNewPosition().getX()) ||
-                    currentCoord.getY() == workerAllowedToBuild.getCurrentPosition().getY() && currentCoord.getX() == workerAllowedToBuild.getCurrentPosition().getX());
+            availableNeighbouringPositions.removeIf(currentCoord ->
+                    (currentCoord.getY() == workerAllowedToBuild.getCurrentPosition().getY() && currentCoord.getX() == workerAllowedToBuild.getCurrentPosition().getX()) ||
+                    currentCoord.getY() == workerAllowedToBuild.getPreviousPosition().getY() && currentCoord.getX() == workerAllowedToBuild.getPreviousPosition().getX());
 
             currentEntry.setValue(availableNeighbouringPositions);
         }

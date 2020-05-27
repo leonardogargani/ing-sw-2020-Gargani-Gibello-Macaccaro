@@ -60,6 +60,9 @@ public class Cell extends Observable {
      */
     public void setOccupiedByWorker(boolean occupiedByWorker) {
         this.occupiedByWorker = occupiedByWorker;
+
+        if (!(occupiedByWorker)) color = Color.ANSI_WHITE;
+
         super.getBoardObserver().notifyBoardChange(this);
     }
 

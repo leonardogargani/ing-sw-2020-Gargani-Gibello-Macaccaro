@@ -2,6 +2,7 @@ package it.polimi.ingsw.PSP43.server.gameStates;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 
 /**
  * This is an abstract class to represent a general structure of turns of a game.
@@ -66,12 +67,22 @@ public abstract class TurnState {
     public void findNextState() {}
 
     public boolean checkForWinner(AbstractGodCard card, GameSession gameSession) {
+        CardsHandler cardsHandler = gameSession.getCardsHandler();
+        String nickWinner = null;
+
         if (card.checkConditionsToWin(gameSession)) {
             WinState nextState;
+
+            for (String s : cardsHandler.getMapOwnersCard().keySet()) {
+                AbstractGodCard abstractGodCard = cardsHandler.getMapOwnersCard().get(s);
+                if (abstractGodCard.getGodName().equals(card.getGodName()))
+                    nickWinner = s;
+            }
+
             for (TurnState t : gameSession.getTurnStateMap()) {
                 if (TurnName.WIN_STATE == t.getTurnName()) {
                     nextState = (WinState) t;
-                    nextState.setWinner(gameSession.getCurrentPlayer().getNickname());
+                    nextState.setWinner(nickWinner);
                     gameSession.setNextState(t);
                 }
             }

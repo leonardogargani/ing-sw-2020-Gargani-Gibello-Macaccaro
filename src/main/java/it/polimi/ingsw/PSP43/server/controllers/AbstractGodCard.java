@@ -100,17 +100,20 @@ public abstract class AbstractGodCard implements Serializable {
         Cell actualCell;
         int actualHeight;
         int newHeight;
-        for (Map.Entry<Coord, ArrayList<Coord>> pair : neighbouringCoords.entrySet()) {
-            ArrayList<Coord> coordsAvailable = pair.getValue();
+        for (Iterator<Map.Entry<Coord, ArrayList<Coord>>> iter = neighbouringCoords.entrySet().iterator(); iter.hasNext(); ) {
+            Map.Entry<Coord, ArrayList<Coord>> currentEntry = iter.next();
+            ArrayList<Coord> coordsAvailable = currentEntry.getValue();
             for (Iterator<Coord> coordIterator = coordsAvailable.iterator(); coordIterator.hasNext(); ) {
                 Coord c1 = coordIterator.next();
                 if (!(cellsHandler.getCell(c1).getOccupiedByWorker()) && !(cellsHandler.getCell(c1).getOccupiedByDome())) {
-                    actualCell = cellsHandler.getCell(pair.getKey());
+                    actualCell = cellsHandler.getCell(currentEntry.getKey());
                     actualHeight = actualCell.getHeight();
                     newHeight = cellsHandler.getCell(c1).getHeight();
                     if (newHeight - actualHeight > 1) coordIterator.remove();
                 } else coordIterator.remove();
             }
+
+            if (coordsAvailable.size() == 0) iter.remove();
         }
         return neighbouringCoords;
     }
@@ -128,7 +131,7 @@ public abstract class AbstractGodCard implements Serializable {
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildBlock(GameSession gameSession) {
         CellsHandler cellsHandler = gameSession.getCellsHandler();
 
-        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = cellsHandler.findWorkersNeighbouringCoords(gameSession.getCurrentPlayer());
+        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = cellsHandler.findWorkersNeighbouringCoordsExclude(gameSession.getCurrentPlayer());
 
         Iterator<Map.Entry<Coord, ArrayList<Coord>>> iter = neighbouringCoords.entrySet().iterator();
         while (iter.hasNext()) {
@@ -147,7 +150,7 @@ public abstract class AbstractGodCard implements Serializable {
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildDome(GameSession gameSession) {
         CellsHandler cellsHandler = gameSession.getCellsHandler();
 
-        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = cellsHandler.findWorkersNeighbouringCoords(gameSession.getCurrentPlayer());
+        HashMap<Coord, ArrayList<Coord>> neighbouringCoords = cellsHandler.findWorkersNeighbouringCoordsExclude(gameSession.getCurrentPlayer());
         Iterator<Map.Entry<Coord, ArrayList<Coord>>> iter = neighbouringCoords.entrySet().iterator();
         while (iter.hasNext()) {
             Map.Entry<Coord, ArrayList<Coord>> currentEntry = iter.next();

@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ConnectionDetector implements Runnable {
     private static final int timeout = 20000;
-    private ClientListener clientListener;
+    private final ClientListener clientListener;
 
     /**
      * Not default constructor for ConnectionDetector class.It sets a socket timeout

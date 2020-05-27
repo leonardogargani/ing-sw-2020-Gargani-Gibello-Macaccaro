@@ -118,6 +118,22 @@ public class CellsHandler {
      * @return an HashMap in which the key value are the coordinates of the workers supplied by the caller and the values are all the neighbouring
      * cells of that worker
      */
+    public HashMap<Coord, ArrayList<Coord>> findWorkersNeighbouringCoordsExclude(Player player) {
+
+        Integer[] workerIds = player.getWorkersIdsArray();
+        List<Worker> workers = gameSession.getWorkersHandler().getWorkers(workerIds);
+
+        HashMap<Coord, ArrayList<Coord>> availablePositions = findWorkersNeighbouringCoords(player);
+
+        for (Worker w : workers) {
+            if (!(w.isLatestMoved())) {
+                availablePositions.remove(w.getCurrentPosition());
+            }
+        }
+        return availablePositions;
+
+    }
+
     public HashMap<Coord, ArrayList<Coord>> findWorkersNeighbouringCoords(Player player) {
 
         Integer[] workerIds = player.getWorkersIdsArray();
