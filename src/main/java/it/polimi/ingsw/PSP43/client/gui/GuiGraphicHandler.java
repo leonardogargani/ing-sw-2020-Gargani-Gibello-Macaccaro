@@ -54,6 +54,13 @@ public class GuiGraphicHandler extends GraphicHandler {
                 PlayersNumberChoiceController controller3 = loader.getController();
                 controller3.setClientBG(clientBG);
 
+                // setting ClientBG attribute in the CardsChoiceController
+                loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/FXML/game_init/cardsChoice.fxml"));
+                loader.load();
+                CardsChoiceController controller4 = loader.getController();
+                controller4.setClientBG(clientBG);
+
                 //TODO add settings for BoardController
             } catch (IOException e) {
                 e.printStackTrace();
