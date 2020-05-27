@@ -161,7 +161,7 @@
             <basicMoveBehaviour/>
         </moveBehaviour>
         <buildBehaviour>
-            <removeBlockFromNeighbourDecorator/>
+            <removeBlockFromNeighbourBehaviour/>
         </buildBehaviour>
     </basicGodCard>
     <basicGodCard>

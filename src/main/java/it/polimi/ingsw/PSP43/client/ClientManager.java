@@ -106,9 +106,6 @@ public class ClientManager implements Runnable {
                 graphicHandler.updateMenuChange((ChangeNickRequest) message);
             } else if (message instanceof EndGameMessage) {
                 graphicHandler.updateMenuChange((EndGameMessage) message);
-                //clientBG.setDisconnect(true);
-                //clientBG.closer();
-                //this.isActive = false;
             } else if (message instanceof InitialCardsRequest) {
                 graphicHandler.updateMenuChange((InitialCardsRequest) message);
             } else if (message instanceof PlayersNumberRequest) {

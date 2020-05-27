@@ -2,10 +2,14 @@ package it.polimi.ingsw.PSP43.server.controllers.decorators;
 
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Coord;
+import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
+import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
+
+import java.util.Map;
 
 /**
  * This decorator is used to give to the player the opportunity to win if his worker moves down two or more levels in a move
@@ -19,7 +23,21 @@ public class WinTwoFloorsFallDecorator extends PowerGodDecorator {
 
     public boolean checkConditionsToWin(GameSession gameSession) {
         WorkersHandler workersHandler = gameSession.getWorkersHandler();
-        Integer[] wIds = gameSession.getCurrentPlayer().getWorkersIdsArray();
+        PlayersHandler playersHandler = gameSession.getPlayersHandler();
+
+        String godName = super.getGodName();
+        Map<String, AbstractGodCard> mapPlayerCard = gameSession.getCardsHandler().getMapOwnersCard();
+        Player currentPlayer = null;
+
+        for (String s : mapPlayerCard.keySet()) {
+            AbstractGodCard abstractGodCard = mapPlayerCard.get(s);
+            if (abstractGodCard.getGodName().equals(godName)) {
+                currentPlayer = playersHandler.getPlayer(s);
+            }
+        }
+
+        assert currentPlayer != null;
+        Integer[] wIds = currentPlayer.getWorkersIdsArray();
         for (Integer i : wIds) {
             Worker worker = workersHandler.getWorker(i);
             if (worker.isLatestMoved()) {

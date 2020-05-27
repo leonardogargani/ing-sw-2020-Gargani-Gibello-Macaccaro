@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP43.server.controllers.behaviours.buildBehaviours;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
+import it.polimi.ingsw.PSP43.client.networkMessages.ResponseMessage;
 import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.controllers.BasicGodCard;
 import it.polimi.ingsw.PSP43.server.controllers.behaviours.moveBehaviours.BasicMoveBehaviour;
@@ -52,7 +53,7 @@ public class RemoveBlockFromNeighbourBehaviourTest {
     @Test
     public void initBuild() throws GameEndedException {
         Coord coordBuildAndRemove = new Coord(3, 3);
-        doReturn(new ActionResponse(firstWorker.getCurrentPosition(), coordBuildAndRemove),
+        doReturn(new ActionResponse(firstWorker.getCurrentPosition(), coordBuildAndRemove), new ResponseMessage(true),
                 new ActionResponse(firstWorker.getCurrentPosition(), coordBuildAndRemove))
                 .when(spyGame).sendRequest(any(), any(), any());
 

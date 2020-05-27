@@ -7,12 +7,14 @@ import it.polimi.ingsw.PSP43.server.model.*;
 import it.polimi.ingsw.PSP43.server.controllers.behaviours.buildBehaviours.BasicBuildBehaviour;
 import it.polimi.ingsw.PSP43.server.controllers.behaviours.moveBehaviours.BasicMoveBehaviour;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
+import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * AbstractGodCard is the class that represents the cards with God Powers, thus it is associated to a God and the
@@ -70,8 +72,21 @@ public class BasicGodCard extends AbstractGodCard {
     public boolean checkConditionsToWin(GameSession gameSession) {
         WorkersHandler workersHandler = gameSession.getWorkersHandler();
         CellsHandler cellsHandler = gameSession.getCellsHandler();
+        PlayersHandler playersHandler = gameSession.getPlayersHandler();
 
-        Integer[] wIds = gameSession.getCurrentPlayer().getWorkersIdsArray();
+        String godName = super.getGodName();
+        Map<String, AbstractGodCard> mapPlayerCard = gameSession.getCardsHandler().getMapOwnersCard();
+        Player currentPlayer = null;
+
+        for (String s : mapPlayerCard.keySet()) {
+            AbstractGodCard abstractGodCard = mapPlayerCard.get(s);
+                if (abstractGodCard.getGodName().equals(godName)) {
+                currentPlayer = playersHandler.getPlayer(s);
+            }
+        }
+
+        assert currentPlayer != null;
+        Integer[] wIds = currentPlayer.getWorkersIdsArray();
 
         // here I check if the player has won, taking care of verifying this condition
         // only if the worker was moved on this turn (to avoid the problem about

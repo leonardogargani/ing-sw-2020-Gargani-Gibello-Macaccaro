@@ -55,6 +55,7 @@ public class UnconditionedDomeBuildDecoratorTest {
     public void initBuild() throws GameEndedException {
         Coord coordBuildDome = new Coord(3, 3);
         Coord coordBuildBlock = new Coord(3, 4);
+        workerToBuild.setLatestMoved(true);
 
         doReturn(new ResponseMessage(true),
                 new ActionResponse(workerToBuild.getCurrentPosition(), coordBuildDome)).when(spyGame).sendRequest(any(), any(), any());

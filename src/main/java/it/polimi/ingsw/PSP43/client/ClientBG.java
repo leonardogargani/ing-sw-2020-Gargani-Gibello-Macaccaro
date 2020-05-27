@@ -170,22 +170,6 @@ public class ClientBG implements Runnable {
     }
 
     /**
-     * Method that close input and output streams and the socket at the end of the match
-     */
-    public void closer() {
-        try {
-            if (input != null)
-                input.close();
-            if (output != null)
-                output.close();
-            serverSocket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    /**
      * This method put an EndGameMessage in the ClientManager's messageBox when you quit the match
      */
     public void handleDisconnection() {

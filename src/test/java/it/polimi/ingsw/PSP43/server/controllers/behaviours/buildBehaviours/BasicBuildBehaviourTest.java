@@ -68,6 +68,7 @@ public class BasicBuildBehaviourTest {
         BasicBuildBehaviour basicBuildBehaviour = new BasicBuildBehaviour();
 
         Worker workerToBuild = spyGame.getWorkersHandler().getWorker(new Coord(4, 3));
+        workerToBuild.setLatestMoved(true);
         doReturn(new ResponseMessage(true),
                 new ActionResponse(workerToBuild.getCurrentPosition(), coordWhereToBuild)).when(spyGame).sendRequest(any(), any(), any());
         DataToBuild expectedDataToBuild = new DataToBuild(null, null, workerToBuild, coordWhereToBuild, Boolean.TRUE);
@@ -89,6 +90,7 @@ public class BasicBuildBehaviourTest {
         BasicBuildBehaviour basicBuildBehaviour = new BasicBuildBehaviour();
 
         Worker workerToBuild = spyGame.getWorkersHandler().getWorker(new Coord(4, 3));
+        workerToBuild.setLatestMoved(true);
         doReturn(new ResponseMessage(true),
                 new ActionResponse(workerToBuild.getCurrentPosition(), coordWhereToBuild)).when(spyGame).sendRequest(any(), any(), any());
 

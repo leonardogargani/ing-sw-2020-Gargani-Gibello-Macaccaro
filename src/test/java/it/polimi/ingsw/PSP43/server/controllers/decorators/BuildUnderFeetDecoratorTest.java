@@ -32,7 +32,7 @@ public class BuildUnderFeetDecoratorTest {
         currentPlayer = gameSessionForTest.getPlayersHandler().getPlayer(0);
         gameSessionForTest.setCurrentPlayer(currentPlayer);
 
-        abstractGodCard = new BuildUnderFeetDecorator(new BasicGodCard("","","",new BasicMoveBehaviour(), new BasicBuildBehaviour()));
+        abstractGodCard = new BuildUnderFeetDecorator(new BasicGodCard("","","", new BasicMoveBehaviour(), new BasicBuildBehaviour()));
         gameSessionForTest.getCardsHandler().setCardToPlayer(currentPlayer.getNickname(), abstractGodCard);
     }
 
@@ -42,6 +42,7 @@ public class BuildUnderFeetDecoratorTest {
         Integer[] wIds = currentPlayer.getWorkersIdsArray();
         ArrayList<Coord> workersCoord = new ArrayList<>();
         for (Integer i : wIds) {
+            workersHandler.getWorker(i).setLatestMoved(true);
             workersCoord.add(workersHandler.getWorker(i).getCurrentPosition());
         }
 

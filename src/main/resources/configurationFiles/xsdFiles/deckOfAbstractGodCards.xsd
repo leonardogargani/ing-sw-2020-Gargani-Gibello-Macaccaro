@@ -45,7 +45,7 @@
             <xs:element name="basicBuildBehaviour"/>
             <xs:element name="doubleDifferentSpaceBehaviour"/>
             <xs:element name="doubleSameSpaceBehaviour"/>
-            <xs:element name="removeBlockFromNeighbourDecorator"/>
+            <xs:element name="removeBlockFromNeighbourBehaviour"/>
         </xs:choice>
     </xs:complexType>
 

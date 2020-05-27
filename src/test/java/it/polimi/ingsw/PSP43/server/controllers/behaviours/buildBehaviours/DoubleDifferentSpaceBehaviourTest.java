@@ -45,6 +45,7 @@ public class DoubleDifferentSpaceBehaviourTest {
         spyGame.setCurrentPlayer(currentPlayer);
 
         workerToBuildTwice = spyGame.getWorkersHandler().getWorker(new Coord(4, 3));
+        workerToBuildTwice.setLatestMoved(true);
 
         abstractGodCard = new BasicGodCard("", "", "", new BasicMoveBehaviour(), new DoubleDifferentSpaceBehaviour());
         spyGame.getCardsHandler().setCardToPlayer(currentPlayer.getNickname(), abstractGodCard);
@@ -94,7 +95,7 @@ public class DoubleDifferentSpaceBehaviourTest {
             assertEquals(key, workerToBuildTwice.getCurrentPosition());
 
             for (Coord c : availablePositionsBuildBlock.get(key)) {
-                assertFalse(c.equals(coordFirstBuild));
+                assertNotEquals(c, coordFirstBuild);
             }
         }
     }

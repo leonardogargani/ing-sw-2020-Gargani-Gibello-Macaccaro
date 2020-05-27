@@ -1,5 +1,7 @@
 package it.polimi.ingsw.PSP43.server.controllers;
 
+import it.polimi.ingsw.PSP43.server.controllers.behaviours.buildBehaviours.BasicBuildBehaviour;
+import it.polimi.ingsw.PSP43.server.controllers.behaviours.moveBehaviours.BasicMoveBehaviour;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSessionForTest;
 import it.polimi.ingsw.PSP43.server.initialisers.GameInitialiser;
 import it.polimi.ingsw.PSP43.server.model.Cell;
@@ -31,7 +33,7 @@ public class BasicGodCardTest {
         currentPlayer = spyGame.getPlayersHandler().getPlayer("Gibi");
         spyGame.setCurrentPlayer(currentPlayer);
 
-        abstractGodCard = new BasicGodCard();
+        abstractGodCard = new BasicGodCard("", "", "", new BasicMoveBehaviour(), new BasicBuildBehaviour());
         spyGame.getCardsHandler().setCardToPlayer(currentPlayer.getNickname(), abstractGodCard);
     }
 
@@ -40,6 +42,7 @@ public class BasicGodCardTest {
         CellsHandler cellsHandler = spyGame.getCellsHandler();
         WorkersHandler workersHandler = spyGame.getWorkersHandler();
         Worker workerToMove = spyGame.getWorkersHandler().getWorker(new Coord(4, 3));
+        workerToMove.setLatestMoved(true);
 
         workersHandler.changePosition(workerToMove, new Coord(3,3));
 

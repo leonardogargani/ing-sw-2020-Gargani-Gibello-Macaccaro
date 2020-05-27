@@ -21,10 +21,10 @@ public class ForceToOppSideBehaviour extends BasicMoveBehaviour {
         Player currentPlayer = gameSession.getCurrentPlayer();
 
         Coord coordForcingWorker = askIfWantToForce(gameSession);
-        Worker forcingWorker = gameSession.getWorkersHandler().getWorker(coordForcingWorker);
 
         if (coordForcingWorker == null) super.handleInitMove(gameSession);
         else {
+            Worker forcingWorker = gameSession.getWorkersHandler().getWorker(coordForcingWorker);
             HashMap<Coord, ArrayList<Coord>> availablePositionsToMove = findAvailablePositionsToMove(gameSession);
             availablePositionsToMove.keySet().removeIf(keyCoord -> !(keyCoord.equals(coordForcingWorker)));
 
@@ -56,7 +56,7 @@ public class ForceToOppSideBehaviour extends BasicMoveBehaviour {
     }
 
     public HashMap<Coord, ArrayList<Coord>> selectPositionsWorkersToForce(CellsHandler cellsHandler, Player currentPlayer) {
-        HashMap<Coord, ArrayList<Coord>> neighbouringCoordsSelected = cellsHandler.findWorkersNeighbouringCoordsExclude(currentPlayer);
+        HashMap<Coord, ArrayList<Coord>> neighbouringCoordsSelected = cellsHandler.findWorkersNeighbouringCoords(currentPlayer);
 
         for (Iterator<Coord> coordKeyIterator = neighbouringCoordsSelected.keySet().iterator(); coordKeyIterator.hasNext(); ) {
             Coord coordForcer = coordKeyIterator.next();

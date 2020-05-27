@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP43.server.controllers.behaviours.buildBehaviours;
 
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
+import it.polimi.ingsw.PSP43.client.networkMessages.ResponseMessage;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
@@ -9,6 +10,7 @@ import it.polimi.ingsw.PSP43.server.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
+import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,15 +31,21 @@ public class RemoveBlockFromNeighbourBehaviour extends BasicBuildBehaviour {
     public void askBlockToRemove(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositions) throws GameEndedException {
         CellsHandler cellsHandler = gameSession.getCellsHandler();
 
-        ActionRequest actionRequest = new ActionRequest("Choose a block to remove.",
-                Collections.unmodifiableMap(new HashMap<>(availablePositions)));
-        ActionResponse actionResponse = gameSession.sendRequest(actionRequest,
-                gameSession.getCurrentPlayer().getNickname(), ActionResponse.class);
+        RequestMessage requestMessage = new RequestMessage("Do you want to remove a block with your unmoved player?");
+        ResponseMessage responseMessage = gameSession.sendRequest(requestMessage,
+                gameSession.getCurrentPlayer().getNickname(), ResponseMessage.class);
 
-        Coord coordToRemoveBlock = actionResponse.getPosition();
-        Cell cellToRemoveBlock = cellsHandler.getCell(coordToRemoveBlock);
-        cellToRemoveBlock.setHeight(cellToRemoveBlock.getHeight() - 1);
-        cellsHandler.changeStateOfCell(cellToRemoveBlock, coordToRemoveBlock);
+        if (responseMessage.isResponse()) {
+            ActionRequest actionRequest = new ActionRequest("Choose a block to remove.",
+                    Collections.unmodifiableMap(new HashMap<>(availablePositions)));
+            ActionResponse actionResponse = gameSession.sendRequest(actionRequest,
+                    gameSession.getCurrentPlayer().getNickname(), ActionResponse.class);
+
+            Coord coordToRemoveBlock = actionResponse.getPosition();
+            Cell cellToRemoveBlock = cellsHandler.getCell(coordToRemoveBlock);
+            cellToRemoveBlock.setHeight(cellToRemoveBlock.getHeight() - 1);
+            cellsHandler.changeStateOfCell(cellToRemoveBlock, coordToRemoveBlock);
+        }
     }
 
     public HashMap<Coord, ArrayList<Coord>> findPositionsToRemoveBlock(GameSession gameSession) {
