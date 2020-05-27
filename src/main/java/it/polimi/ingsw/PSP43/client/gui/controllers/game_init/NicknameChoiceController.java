@@ -33,7 +33,7 @@ public class NicknameChoiceController {
      * once it will be utilized.
      * @param clientBG clientBG of the current client
      */
-    public void setClientBG(ClientBG clientBG) {
+    public static void setClientBG(ClientBG clientBG) {
         NicknameChoiceController.clientBG = clientBG;
     }
 
@@ -43,7 +43,7 @@ public class NicknameChoiceController {
      * @param event event performed on the button
      */
     @FXML
-    private void handleConfirmButton(ActionEvent event) {
+    public void handleConfirmButton(ActionEvent event) {
 
         if (nicknameField.getText().isEmpty()) {
             buttonPressedLabel.setText("You must choose a nickname!");

@@ -1,7 +1,0 @@
-.arrow:pressed {
-    -fx-effect: dropshadow(three-pass-box, blue, 50, 0, 0, 0);
-}
-
-#confirm-image:pressed {
-    -fx-effect: dropshadow(three-pass-box, lawngreen, 50, 0, 0, 0);
-}

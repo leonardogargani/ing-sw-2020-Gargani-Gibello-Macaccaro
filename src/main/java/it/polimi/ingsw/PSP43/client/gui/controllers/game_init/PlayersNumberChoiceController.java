@@ -37,12 +37,11 @@ public class PlayersNumberChoiceController {
 
 
     /**
-     * Method that sets the ClientBG attribute of the controller, it will be invoked inside
-     * the GuiGraphicHandler constructor so that the controller will have already the attribute set
-     * once it will be utilized.
+     * Method that sets the ClientBG attribute of the controller, it will be invoked inside the GuiGraphicHandler
+     * constructor so that the controller will have already the attribute set once it will be utilized.
      * @param clientBG clientBG of the current client
      */
-    public void setClientBG(ClientBG clientBG) {
+    public static void setClientBG(ClientBG clientBG) {
         PlayersNumberChoiceController.clientBG = clientBG;
     }
 
@@ -52,7 +51,7 @@ public class PlayersNumberChoiceController {
      * @param event event performed on the button
      */
     @FXML
-    private void handleConfirmButton(ActionEvent event) {
+    public void handleConfirmButton(ActionEvent event) {
 
         int chosenNumber;
 

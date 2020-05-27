@@ -3,7 +3,6 @@ package it.polimi.ingsw.PSP43.client.gui.controllers.game_init;
 import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.networkMessages.ChosenCardsResponse;
 import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -37,9 +36,6 @@ public class CardsChoiceController {
     private int currentCardIndex = 0;
 
 
-    // TODO find a way to add the chosen cards to the border label (and also a way to remove a chosen card)
-
-
     /**
      * Method called as soon as the controlled fxml file gets loaded, here used to set css ids and classes.
      */
@@ -62,17 +58,19 @@ public class CardsChoiceController {
 
 
     /**
-     *
-     * @param clientBG
+     * Method that sets the ClientBG attribute of the controller, it will be invoked inside
+     * the GuiGraphicHandler constructor so that the controller will have already the attribute set
+     * once it will be utilized.
+     * @param clientBG clientBG of the current client
      */
-    public void setClientBG(ClientBG clientBG) {
+    public static void setClientBG(ClientBG clientBG) {
         CardsChoiceController.clientBG = clientBG;
     }
 
 
     /**
-     *
-     * @param card
+     * Method that, given a card, displays its name, description, power and image on the scene.
+     * @param card card to be displayed on the scene
      */
     private void displayCard(AbstractGodCard card) {
 
@@ -109,7 +107,7 @@ public class CardsChoiceController {
      * @param event mouse event performed on the image
      */
     @FXML
-    private void handleConfirmImage(MouseEvent event) {
+    public void handleConfirmImage(MouseEvent event) {
 
         AbstractGodCard currentCard = cardsList.get(currentCardIndex);
 
@@ -143,13 +141,13 @@ public class CardsChoiceController {
             }
         }
 
-
     }
 
 
     /**
-     *
-     * @return
+     * Method that stringifies all the chosen cards, creating a String with the names of the chosen gods
+     * each one on a separate line.
+     * @return String containing the names of the chosen gods (on separate lines)
      */
     private String stringifyChosenCards() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -162,49 +160,33 @@ public class CardsChoiceController {
 
 
     /**
-     * Method that handles a mouse event performed on the image to confirm all the cards chosen
-     * to be played in the current game session.
-     * @param event mouse event performed on the image
-     */
-    @FXML
-    private void handleConfirmAllButton(ActionEvent event) {
-
-        // TODO to be implemented
-
-    }
-
-
-    /**
      * Method that handles a mouse event performed on the image to show the next card, checking
      * if the currently displayed one is the last card or not.
      * @param event mouse event performed on the image
      */
     @FXML
-    private void handleRightArrowImage(MouseEvent event) {
-
+    public void handleRightArrowImage(MouseEvent event) {
         // if the displayed card is the last one do nothing, else display the next one
         if ((currentCardIndex + 1) < cardsList.size()) {
             currentCardIndex++;
             displayCard(cardsList.get(currentCardIndex));
         }
-
     }
 
 
     /**
      * Method that handles a mouse event performed on the image to show the previous card, checking
-     *      * if the currently displayed one is the first card or not.
+     * if the currently displayed one is the first card or not.
      * @param event mouse event performed on the image
      */
     @FXML
-    private void handleLeftArrowImage(MouseEvent event) {
-
+    public void handleLeftArrowImage(MouseEvent event) {
         // if the displayed card is the first one do nothing, else display the previous one
         if (currentCardIndex > 0) {
             currentCardIndex--;
             displayCard(cardsList.get(currentCardIndex));
         }
-
     }
+
 
 }

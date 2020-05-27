@@ -37,7 +37,7 @@ public class ServerIPChoiceController {
      * once it will be utilized.
      * @param clientBG clientBG of the current client
      */
-    public void setClientBG(ClientBG clientBG) {
+    public static void setClientBG(ClientBG clientBG) {
         ServerIPChoiceController.clientBG = clientBG;
     }
 

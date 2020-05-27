@@ -31,40 +31,13 @@ public class GuiGraphicHandler extends GraphicHandler {
         // (and the GuiGraphicHandler constructor is invoked before the Application.launch(GuiStarter.class))
         Platform.startup(() ->
         {
-            try {
+            ServerIPChoiceController.setClientBG(clientBG);
+            NicknameChoiceController.setClientBG(clientBG);
+            PlayersNumberChoiceController.setClientBG(clientBG);
+            CardsChoiceController.setClientBG(clientBG);
+            CardChoiceController.setClientBG(clientBG);
 
-                // setting ClientBG attribute in the ServerIPChoiceController
-                loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("/FXML/game_init/serverIPChoice.fxml"));
-                loader.load();
-                ServerIPChoiceController controller1 = loader.getController();
-                controller1.setClientBG(clientBG);
-
-                // setting ClientBG attribute in the NicknameChoiceController
-                loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("/FXML/game_init/nicknameChoice.fxml"));
-                loader.load();
-                NicknameChoiceController controller2 = loader.getController();
-                controller2.setClientBG(clientBG);
-
-                // setting ClientBG attribute in the PlayersNumberChoiceController
-                loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("/FXML/game_init/playersNumberChoice.fxml"));
-                loader.load();
-                PlayersNumberChoiceController controller3 = loader.getController();
-                controller3.setClientBG(clientBG);
-
-                // setting ClientBG attribute in the CardsChoiceController
-                loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("/FXML/game_init/cardsChoice.fxml"));
-                loader.load();
-                CardsChoiceController controller4 = loader.getController();
-                controller4.setClientBG(clientBG);
-
-                //TODO add settings for BoardController
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            //TODO add settings for BoardController
 
         });
 
@@ -81,19 +54,16 @@ public class GuiGraphicHandler extends GraphicHandler {
      *                       applied to the fxml
      */
     private void loadToPrimaryStage(String fxml, String... cssStylesheets) {
-
         loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(fxml));
 
         try {
-
             Stage stage = GuiStarter.getPrimaryStage();
             Scene scene = new Scene(loader.load());
 
             for (String stylesheet : cssStylesheets) {
                 scene.getStylesheets().add(getClass().getResource(stylesheet).toExternalForm());
             }
-
             // run the specified Runnable on the JavaFX Application Thread at some unspecified time in the future
             Platform.runLater(() -> stage.setScene(scene));
 
@@ -121,9 +91,7 @@ public class GuiGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(PlayersNumberRequest request) {
-
         loadToPrimaryStage("/FXML/game_init/playersNumberChoice.fxml", "/CSS/game_init/style.css");
-
     }
 
 
@@ -134,17 +102,14 @@ public class GuiGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(InitialCardsRequest request) {
-
-        loadToPrimaryStage("/FXML/game_init/cardsChoice.fxml", "/CSS/game_init/cardsChoice.css");
+        loadToPrimaryStage("/FXML/game_init/cardsChoice.fxml", "/CSS/game_init/style.css");
 
         // the controller is now the one associated to cardsChoice.fxml (since it has just been loaded)
         CardsChoiceController controller = loader.getController();
 
         controller.setCardsList(request.getCards());
         controller.setNumberOfPlayers(request.getNumberOfCard());
-
         controller.customInit();
-
     }
 
 
@@ -155,7 +120,10 @@ public class GuiGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(CardRequest request) {
-        // TODO implementation with JavaFX
+        loadToPrimaryStage("/FXML/game_init/cardChoice.fxml", "/CSS/game_init/style.css");
+        CardChoiceController controller = loader.getController();
+        controller.setAvailableCards(request.getCards());
+        controller.customInit();
     }
 
 

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" style="-fx-background-color: #666666;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP43.client.gui.controllers.game_init.CardChoiceController">
+    <top>
+        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="92.0" prefWidth="1000.0" spacing="50.0" BorderPane.alignment="CENTER">
+            <children>
+                <ImageView fitHeight="110.0" fitWidth="337.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../images/others/santorini_logo.png" />
+                    </image>
+                    <HBox.margin>
+                        <Insets bottom="10.0" top="20.0" />
+                    </HBox.margin>
+                </ImageView>
+            </children>
+            <BorderPane.margin>
+                <Insets />
+            </BorderPane.margin>
+        </HBox>
+    </top>
+    <center>
+        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="350.0" prefWidth="450.0" BorderPane.alignment="CENTER">
+            <children>
+                <ImageView fx:id="leftArrowImage" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#handleLeftArrowImage" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../images/icons/buttons/arrow_left_orange.png" />
+                    </image>
+                    <HBox.margin>
+                        <Insets />
+                    </HBox.margin>
+                </ImageView>
+                <ImageView fx:id="cardImage" fitHeight="350.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" />
+                <ImageView fx:id="rightArrowImage" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#handleRightArrowImage" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../images/icons/buttons/arrow_right_orange.png" />
+                    </image>
+                    <HBox.margin>
+                        <Insets />
+                    </HBox.margin>
+                </ImageView>
+            </children>
+         <BorderPane.margin>
+            <Insets right="280.0" />
+         </BorderPane.margin>
+        </HBox>
+    </center>
+    <bottom>
+        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label fx:id="bottomLabel" alignment="CENTER" contentDisplay="CENTER" lineSpacing="4.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="469.0" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                    <font>
+                        <Font size="25.0" />
+                    </font>
+                    <HBox.margin>
+                        <Insets left="120.0" />
+                    </HBox.margin>
+                </Label>
+                <ImageView fx:id="confirmImage" fitHeight="75.0" fitWidth="75.0" onMouseClicked="#handleConfirmImage" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../../images/icons/buttons/confirm.png" />
+                    </image>
+                    <HBox.margin>
+                        <Insets left="50.0" />
+                    </HBox.margin>
+                </ImageView>
+            </children>
+        </HBox>
+    </bottom>
+    <left>
+        <VBox alignment="CENTER" prefHeight="272.0" prefWidth="275.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label fx:id="leftLabel" alignment="CENTER" lineSpacing="2.0" prefHeight="389.0" prefWidth="290.0" textFill="WHITE" wrapText="true">
+                    <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                    </padding>
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+    </left>
+</BorderPane>
