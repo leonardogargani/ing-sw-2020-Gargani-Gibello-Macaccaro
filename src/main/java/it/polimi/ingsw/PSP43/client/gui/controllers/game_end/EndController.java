@@ -14,20 +14,16 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class EndController {
-    @FXML
-    ImageView homeButton;
-    @FXML
-    Label cloudLabel;
-    @FXML
-    Label homeButtonLabel;
-    @FXML
-    ImageView centralImage;
+    @FXML private ImageView homeButton;
+    @FXML private Label cloudLabel;
+    @FXML private Label homeButtonLabel;
+    @FXML private ImageView centralImage;
 
     @FXML
     private void initialize() {
-        cloudLabel.getStyleClass().add("cloud-label");
-        homeButtonLabel.getStyleClass().add("homeButton-label");
-        homeButton.getStyleClass().add("home-ImageView");
+        cloudLabel.setId("cloud-label");
+        homeButtonLabel.setId("home-label");
+        homeButton.setId("home-image");
     }
 
     /**
@@ -37,7 +33,7 @@ public class EndController {
         ClientManager clientManager = new ClientManager(2,false);
         Thread clientManagerThread = new Thread(clientManager);
         clientManagerThread.start();
-        //load home.fxml
+        //Load home.fxml
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/FXML/home.fxml"));
 
@@ -46,6 +42,8 @@ public class EndController {
             Stage stage = GuiStarter.getPrimaryStage();
             Scene scene = new Scene(loader.load());
             stage.setScene(scene);
+            //Added css
+            scene.getStylesheets().add(getClass().getResource("/CSS/game_init/home.css").toExternalForm());
             //set dimension of the stage and set it to not resizable
             stage.setHeight(650);
             stage.setWidth(650);
@@ -75,15 +73,15 @@ public class EndController {
      */
     public void setEndMessage(EndGameMessage message) {
         if(message.getEndGameHeader() == EndGameMessage.EndGameHeader.WINNER) {
-            centralImage.setImage(new Image(getClass().getResourceAsStream("winner.png")));
+            centralImage.setImage(new Image(getClass().getResource("/images/others/winner.png").toExternalForm()));
             cloudLabel.setText("You won the game!");
         }
         else if(message.getEndGameHeader() == EndGameMessage.EndGameHeader.LOSER){
-            centralImage.setImage(new Image(getClass().getResourceAsStream("loser.png")));
+            centralImage.setImage(new Image(getClass().getResource("/images/others/loser.png").toExternalForm()));
             cloudLabel.setText("You lost the game!");
         }
         else{
-            centralImage.setImage(new Image(getClass().getResourceAsStream("no_connection.png")));
+            centralImage.setImage(new Image(getClass().getResource("/images/others/no_connection.png").toExternalForm()));
             cloudLabel.setText("You disconnected from the game!");
         }
     }

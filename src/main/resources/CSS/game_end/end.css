@@ -11,19 +11,19 @@
     -fx-text-fill: #3399ff;
 }
 
-.cloud-label {
+#cloud-label {
     -fx-font-size: 18;
 }
 
-.homeButton-label {
+#home-label {
     -fx-font-size: 14;
 }
 
-.home-ImageView {
+#home-image {
     -fx-effect: dropshadow(three-pass-box, black, 70, 0.55, 150, 150);
 }
 
-.home-ImageView :pressed {
+#home-image :pressed {
     -fx-effect: dropshadow(three-pass-box, black, 70, 0.70, 150, 150);
 }
 

@@ -1,0 +1,60 @@
+.root {
+    -fx-background-color: #66ccff;
+}
+
+.label {
+    -fx-font-family: "Comic Sans Ms";
+    -fx-font-style: italic;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3399ff;
+}
+
+
+#top-label {
+    -fx-font-size: 24;
+}
+
+#bottom-label {
+    -fx-font-size: 14;
+}
+
+/*Can create one for hboxes*/
+#player1-label {
+    -fx-font-size: 14;
+}
+
+#player1CardDescription-label {
+    -fx-font-size: 14;
+}
+
+#player2-label {
+    -fx-font-size: 14;
+}
+
+#player3-label {
+    -fx-font-size: 14;
+}
+
+#decision-button {
+    -fx-effect: dropshadow(three-pass-box, black, 10, 0.40, 10, 10);
+}
+
+#decision-button:hover {
+    -fx-effect: dropshadow(three-pass-box, black, 10, 0.65, 10, 10);
+}
+
+#decision-button:pressed {
+    -fx-effect: dropshadow(three-pass-box, black, 10, 0.65, 10, 10);
+}
+
+#cell-button:hover {
+    -fx-effect: dropshadow(three-pass-box, grey, 10, 0.65, 10, 10);
+}
+
+#cell-button:pressed {
+    -fx-effect: dropshadow(three-pass-box, black, 10, 0.65, 10, 10);
+}
+
+#cellFree-image {
+    -fx-effect: dropshadow(three-pass-box, yellow, 5, 0.65, 5, 5);
+}
