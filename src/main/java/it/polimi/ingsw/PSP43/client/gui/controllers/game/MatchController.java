@@ -1,27 +1,21 @@
 package it.polimi.ingsw.PSP43.client.gui.controllers.game;
 
 import it.polimi.ingsw.PSP43.client.ClientBG;
-import it.polimi.ingsw.PSP43.client.gui.GuiStarter;
+import it.polimi.ingsw.PSP43.client.gui.controllers.AbstractController;
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
-import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.ResponseMessage;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class MatchController {
+public class MatchController extends AbstractController {
 
     @FXML private Label topMenu;
     @FXML private Label bottomMenu;
@@ -37,7 +31,7 @@ public class MatchController {
     @FXML private ImageView player3Worker;
     @FXML private ImageView confirm;
     @FXML private ImageView delete;
-    @FXML private ImageView exitButton;
+    @FXML private ImageView homeButton;
     @FXML private ImageView c00;
     @FXML private ImageView c10;
     @FXML private ImageView c20;
@@ -65,8 +59,8 @@ public class MatchController {
     @FXML private ImageView c44;
 
     private ClientBG clientBG;
-    private ActionRequest actionRequest = null;
-    private RequestMessage requestMessage = null;
+    private static ActionRequest actionRequest = null;
+    private static RequestMessage requestMessage = null;
     private BoardController boardController;
     private PlayersController playersController;
 
@@ -90,9 +84,10 @@ public class MatchController {
         for (int i=0;i<5;i++)
             for (int j=0;j<5;j++)
                 board[i][j].setId("cell-button");
-        exitButton.setId("decision-button");
+        homeButton.setId("decision-button");
         confirm.setId("decision-button");
         delete.setId("decision-button");
+        clientBG = AbstractController.getClientBG();
     }
 
 
@@ -154,7 +149,7 @@ public class MatchController {
      *
      */
     @FXML
-    public void onExitClicked() {
+    public void onHomeClicked() {
         bottomMenu.setText("Are you sure you want to exit ?");
         decision = Decision.NOT_DECIDED;
         while (decision == Decision.NOT_DECIDED) {
@@ -165,44 +160,29 @@ public class MatchController {
             }
         }
         if (decision == Decision.YES) {
-            clientBG.sendMessage(new LeaveGameMessage());
-            //load home.fxml
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/FXML/home.fxml"));
-
-            try {
-
-                Stage stage = GuiStarter.getPrimaryStage();
-                Scene scene = new Scene(loader.load());
-                stage.setScene(scene);
-                //Added css
-                scene.getStylesheets().add(getClass().getResource("/CSS/game_init/home.css").toExternalForm());
-                //set dimension of the stage and set it to not resizable
-                stage.setHeight(650);
-                stage.setWidth(650);
-                stage.setResizable(false);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            super.handleExit();
         }
         decision = Decision.NOT_DECIDED;
         clearLabel(bottomMenu);
     }
 
+
+    public void onCardClicked(MouseEvent event){
+        playersController.showGod((ImageView) event.getSource());
+    }
+
+
     /**
      *
-     * @param actionRequest
+     * @param request
      */
-    public void setActionRequest(ActionRequest actionRequest) {
-        this.actionRequest = actionRequest;
+    public void setActionRequest(ActionRequest request) {
+        actionRequest = request;
         bottomMenu.setText(actionRequest.getMessage());
-        //TODO call method that underlines available cells on boardController
         boardController.underlineAvailableCells(actionRequest);
     }
 
     //method to handle scene update when a playerListMessage arrives
-
     /**
      *
      * @param playersListMessage
@@ -266,11 +246,12 @@ public class MatchController {
         label.setText("");
     }
 
-    /**
-     *
-     * @param clientBG
-     */
-    public void setClientBG(ClientBG clientBG) {
-        this.clientBG = clientBG;
+    //Probably useless
+    public BoardController getBoardController() {
+        return boardController;
+    }
+
+    public PlayersController getPlayersController(){
+        return playersController;
     }
 }

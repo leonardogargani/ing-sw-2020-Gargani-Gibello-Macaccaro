@@ -1,18 +1,18 @@
 package it.polimi.ingsw.PSP43.client.gui.controllers.game;
 
 import it.polimi.ingsw.PSP43.Color;
+import it.polimi.ingsw.PSP43.client.gui.controllers.AbstractController;
 import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.networkMessages.PlayersListMessage;
-import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
-import java.security.Key;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class PlayersController {
@@ -27,11 +27,10 @@ public class PlayersController {
     private ImageView player1Worker;
     private ImageView player2Worker;
     private ImageView player3Worker;
-    private String ownNick;
+    private static String ownNick;
     private ArrayList<PlayerInformation> players;
-    private int ownPlayer;
 
-    public PlayersController(Label[] labels, ImageView[] images){
+    public PlayersController(Label[] labels, ImageView[] images) {
         this.player1Nick = labels[0];
         this.player2Nick = labels[1];
         this.player3Nick = labels[2];
@@ -45,44 +44,68 @@ public class PlayersController {
     }
 
 
-    public void showUpdate(PlayersListMessage playersListMessage){
+    public void showUpdate(PlayersListMessage playersListMessage) {
         //search for a nick equal to ownNick and show his information
+        clearImages();
         players.clear();
         Map<Player, AbstractGodCard> cards = playersListMessage.getPlayers();
         Map<Player, Color> colors = playersListMessage.getColor();
         //take Player with equal name
-        for(Player player : cards.keySet()){
+        for (Player player : cards.keySet()) {
             AbstractGodCard card = cards.get(player);
             Color color = colors.get(player);
-            players.add(new PlayerInformation(player,card,color));
-        }
-        //TODO check if gods images are .png or .jpg (probably .png)
-        //TODO rename workers images
-        boolean player2BoxFree = true;
-        for(int i = 0; i<players.size(); i++){
-            if(players.get(i).getPlayer().getNickname().equals(ownNick))
-            {
-                //player1Nick already shown
-                player1Card.setImage(new Image(getClass().getResource("/images/gods/"+ players.get(i).getGod().getGodName() +".png").toExternalForm()));
-                player1Worker.setImage(new Image(getClass().getResource("/images/workers/"+ players.get(i).getColor() +".png").toExternalForm()));
-                player1CardDescription.setText(players.get(i).getGod().getDescription());
-                ownPlayer = i;
-            }
-            else if(player2BoxFree){
-                player2Nick.setText(players.get(i).getPlayer().getNickname());
-                player2Card.setImage(new Image(getClass().getResource("/images/gods/"+ players.get(i).getGod().getGodName() +".png").toExternalForm()));
-                player2Worker.setImage(new Image(getClass().getResource("/images/workers/"+ players.get(i).getColor() +".png").toExternalForm()));
-                player2BoxFree = false;
-            }
+            if (player.getNickname().equals(ownNick))
+                players.add(0, new PlayerInformation(player, card, color));
             else {
-                player3Nick.setText(players.get(i).getPlayer().getNickname());
-                player3Card.setImage(new Image(getClass().getResource("/images/gods/"+ players.get(i).getGod().getGodName() +".png").toExternalForm()));
-                player3Worker.setImage(new Image(getClass().getResource("/images/workers/"+ players.get(i).getColor() +".png").toExternalForm()));
+                players.add(new PlayerInformation(player, card, color));
             }
+        }
+
+        player1Card.setImage(new Image(getClass().getResource("/images/gods/" + players.get(0).getGod().getGodName() + ".png").toExternalForm()));
+        player1Worker.setImage(new Image(getClass().getResource("/images/workers/worker_" + players.get(0).getColor() + "_1.png").toExternalForm()));
+        player1CardDescription.setText(players.get(0).getGod().getDescription());
+
+        player2Nick.setText(players.get(1).getPlayer().getNickname());
+        player2Card.setImage(new Image(getClass().getResource("/images/gods/" + players.get(1).getGod().getGodName() + ".png").toExternalForm()));
+        player2Worker.setImage(new Image(getClass().getResource("/images/workers/worker_" + players.get(1).getColor() + "_1.png").toExternalForm()));
+
+        if (players.size() == 3) {
+            player3Nick.setText(players.get(2).getPlayer().getNickname());
+            player3Card.setImage(new Image(getClass().getResource("/images/gods/" + players.get(2).getGod().getGodName() + ".png").toExternalForm()));
+            player3Worker.setImage(new Image(getClass().getResource("/images/workers/worker_" + players.get(2).getColor() + "_1.png").toExternalForm()));
         }
     }
 
+    public void showGod(ImageView source) {
+        Stage godStage = new Stage();
+        AnchorPane pane = new AnchorPane();
+        pane.getStyleClass().add("/CSS/game/god_descriptions.css");
+        godStage.setScene(new Scene(pane));
+        if (source == player2Card) {
+            pane.setId(players.get(1).getGod().getGodName() + "-pane");
+        } else if(players.size() == 3 & source == player3Card){
+            pane.setId(players.get(2).getGod().getGodName() + "-pane");
+        }
+
+        godStage.setWidth(800);
+        godStage.setHeight(400);
+        godStage.setResizable(false);
+        godStage.show();
+        godStage.setAlwaysOnTop(true);
+        godStage.centerOnScreen();
+    }
+
+    public void clearImages() {
+        player2Nick.setText("");
+        player2Card.setImage(null);
+        player2Worker.setImage(null);
+        player3Nick.setText("");
+        player3Card.setImage(null);
+        player3Worker.setImage(null);
+    }
+
     public void setOwnNick(String ownNick) {
-        this.ownNick = ownNick;
+        PlayersController.ownNick = ownNick;
+        player1Nick.setText(ownNick);
     }
 }

@@ -90,47 +90,49 @@ public class BoardController {
     public ActionResponse checkAction(Map<Coord, ArrayList<Coord>> cellsAvailable, ImageView img) {
         ArrayList<Coord> possibleStartPositions = new ArrayList<>();
         Coord chosenPosition = null;
-        {
-            int i, j;
-            for (i = 0; i < 4; i++)
-                for (j = 0; j < 4; j++) {
-                    if (img == board[i][j]) {
-                        chosenPosition = new Coord(i, j);
-                    }
-                }
-            for (Coord startPosition : cellsAvailable.keySet()) {
-                ArrayList<Coord> list = cellsAvailable.get(startPosition);
-                for (Coord coord : list) {
-                    assert chosenPosition != null;
-                    if (coord.getX() == chosenPosition.getX() && coord.getY() == chosenPosition.getY()) {
-                        possibleStartPositions.add(startPosition);
-                    }
-                }
-            }
-            ActionResponse response;
-            if (possibleStartPositions.size() == 0) return null;
-            else if (possibleStartPositions.size() == 1) {
-                return new ActionResponse(possibleStartPositions.get(0), chosenPosition);
-            } else {
-                bottomMenu.setText("Choose the worker you want to make the action perform: \n" +
-                        "-for worker in " + possibleStartPositions.get(0).getX() + "," + possibleStartPositions.get(0).getY() +
-                        " press V" +
-                        "\n-for worker in " + possibleStartPositions.get(1).getX() + "," + possibleStartPositions.get(1).getY() +
-                        " press X");
-                decision = MatchController.Decision.NOT_DECIDED;
-                while (decision == MatchController.Decision.NOT_DECIDED) {
-                    try {
-                        TimeUnit.SECONDS.sleep(1);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
 
+        int i, j;
+        for (i = 0; i < 5; i++)
+            for (j = 0; j < 5; j++) {
+                if (img == board[i][j]) {
+                    chosenPosition = new Coord(i, j);
+                }
             }
-            if (decision == MatchController.Decision.YES)
-                return new ActionResponse(possibleStartPositions.get(0), chosenPosition);
-            else return new ActionResponse(possibleStartPositions.get(1), chosenPosition);
+        for (Coord startPosition : cellsAvailable.keySet()) {
+            ArrayList<Coord> list = cellsAvailable.get(startPosition);
+            for (Coord coord : list) {
+                assert chosenPosition != null;
+                if (coord.getX() == chosenPosition.getX() && coord.getY() == chosenPosition.getY()) {
+                    possibleStartPositions.add(startPosition);
+                }
+            }
         }
+        if (possibleStartPositions.size() == 0) {
+            return null;
+        } else if (possibleStartPositions.size() == 1) {
+            return new ActionResponse(possibleStartPositions.get(0), chosenPosition);
+        } else {
+            bottomMenu.setText("Choose the worker you want to make the action perform: \n" +
+                    "-for worker in " + possibleStartPositions.get(0).getX() + "," + possibleStartPositions.get(0).getY() +
+                    " press V" +
+                    "\n-for worker in " + possibleStartPositions.get(1).getX() + "," + possibleStartPositions.get(1).getY() +
+                    " press X");
+            decision = MatchController.Decision.NOT_DECIDED;
+            while (decision == MatchController.Decision.NOT_DECIDED) {
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        if (decision == MatchController.Decision.YES) {
+            return new ActionResponse(possibleStartPositions.get(0), chosenPosition);
+        } else {
+            return new ActionResponse(possibleStartPositions.get(1), chosenPosition);
+        }
+
     }
 
     public void underlineAvailableCells(ActionRequest actionRequest) {
@@ -142,7 +144,7 @@ public class BoardController {
         }
     }
 
-    public void removeUnderline(){
+    public void removeUnderline() {
         for (Coord coord : cellsAvailable) board[coord.getX()][coord.getY()].setId(null);
         cellsAvailable.clear();
     }

@@ -30,9 +30,9 @@
                      </font>
                   </Label>
                   <Region maxWidth="-Infinity" prefHeight="200.0" prefWidth="260.0" />
-                  <ImageView fx:id="exitButton" fitHeight="100.0" fitWidth="80.0" onMouseClicked="#onExitClicked" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="homeButton" fitHeight="100.0" fitWidth="80.0" onMouseClicked="#onHomeClicked" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/icons/buttons/exit.png" />
+                        <Image url="@../images/icons/buttons/home.png" />
                      </image>
                   </ImageView>
                </children>
@@ -103,14 +103,14 @@
                      <children>
                         <Label fx:id="player3Nick" prefHeight="220.0" prefWidth="50.0" text="Updating" textFill="WHITE" />
                         <ImageView fx:id="player3Worker" fitHeight="220.0" fitWidth="140.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="player3Card" fitHeight="220.0" fitWidth="140.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="player3Card" fitHeight="220.0" fitWidth="140.0" onMouseClicked="#onCardClicked" pickOnBounds="true" preserveRatio="true" />
                      </children>
                   </HBox>
                   <HBox prefHeight="220.0" prefWidth="330.0">
                      <children>
                         <Label fx:id="player2Nick" prefHeight="220.0" prefWidth="50.0" text="Updating" textFill="WHITE" />
                         <ImageView fx:id="player2Worker" fitHeight="220.0" fitWidth="140.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="player2Card" fitHeight="220.0" fitWidth="140.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="player2Card" fitHeight="220.0" fitWidth="140.0" onMouseClicked="#onCardClicked" pickOnBounds="true" preserveRatio="true" />
                      </children>
                   </HBox>
                </children>
