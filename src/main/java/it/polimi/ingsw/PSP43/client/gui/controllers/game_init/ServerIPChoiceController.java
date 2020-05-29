@@ -47,6 +47,8 @@ public class ServerIPChoiceController {
     @FXML
     private void handleConfirmButton() {
 
+        confirmButton.setDisable(true);
+
         if (serverIPField.getText().isEmpty()) {
             buttonPressedLabel.setText("You must write the IP address!");
             return;

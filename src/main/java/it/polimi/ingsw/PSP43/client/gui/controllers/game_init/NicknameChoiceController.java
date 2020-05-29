@@ -47,6 +47,7 @@ public class NicknameChoiceController {
 
         if (nicknameField.getText().isEmpty()) {
             buttonPressedLabel.setText("You must choose a nickname!");
+            confirmButton.setDisable(false);
             return;
         }
 

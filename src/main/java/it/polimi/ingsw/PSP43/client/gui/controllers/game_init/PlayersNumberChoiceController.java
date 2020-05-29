@@ -51,10 +51,13 @@ public class PlayersNumberChoiceController {
     @FXML
     private void handleConfirmButton() {
 
+        confirmButton.setDisable(true);
+
         int chosenNumber;
 
         if (toggleGroup.getSelectedToggle() == null) {
             buttonPressedLabel.setText("You must choose a number!");
+            confirmButton.setDisable(false);
             return;
         }
 

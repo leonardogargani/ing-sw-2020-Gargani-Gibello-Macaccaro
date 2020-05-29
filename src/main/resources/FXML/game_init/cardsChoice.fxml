@@ -38,7 +38,10 @@
                   <Insets />
                </HBox.margin>
             </ImageView>
-            <ImageView fx:id="cardImage" fitHeight="350.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="cardImage" fitHeight="350.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+               <HBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </HBox.margin></ImageView>
             <ImageView fx:id="rightArrowImage" fitHeight="100.0" fitWidth="100.0" onMouseClicked="#handleRightArrowImage" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../images/icons/buttons/arrow_right_orange.png" />
@@ -55,7 +58,7 @@
          <children>
             <Label fx:id="bottomLabel" alignment="CENTER" contentDisplay="CENTER" lineSpacing="4.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="469.0" textAlignment="CENTER" textFill="WHITE" wrapText="true">
                <font>
-                  <Font size="25.0" />
+                  <Font size="28.0" />
                </font>
                <HBox.margin>
                   <Insets left="120.0" />
@@ -75,14 +78,19 @@
    <right>
       <VBox alignment="CENTER" prefHeight="360.0" prefWidth="292.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="rightLabel" maxHeight="-Infinity" prefHeight="272.0" prefWidth="275.0" textFill="#b0f88c">
+            <Label alignment="CENTER" prefHeight="38.0" prefWidth="217.0" text="Chosen cards:" textAlignment="CENTER">
                <font>
-                  <Font size="18.0" />
+                  <Font size="25.0" />
                </font>
             </Label>
-            <Label fx:id="infoLabel" alignment="CENTER" prefHeight="70.0" prefWidth="246.0" textAlignment="CENTER" textFill="RED" wrapText="true">
+            <Label fx:id="rightLabel" alignment="CENTER" maxHeight="-Infinity" prefHeight="246.0" prefWidth="241.0" textFill="#b0f88c">
                <font>
-                  <Font size="15.0" />
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="infoLabel" alignment="CENTER" prefHeight="70.0" prefWidth="246.0" textAlignment="CENTER" textFill="#fc0000" wrapText="true">
+               <font>
+                  <Font size="17.0" />
                </font></Label>
          </children>
          <padding>
@@ -98,7 +106,7 @@
                   <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                </padding>
                <font>
-                  <Font size="18.0" />
+                  <Font size="22.0" />
                </font>
             </Label>
          </children>

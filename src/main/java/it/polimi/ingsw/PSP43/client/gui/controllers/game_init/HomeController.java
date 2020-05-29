@@ -20,6 +20,7 @@ public class HomeController {
     @FXML
     private void initialize() {
         playImage.setId("play-image");
+        playImage.setPickOnBounds(false);
     }
 
 
