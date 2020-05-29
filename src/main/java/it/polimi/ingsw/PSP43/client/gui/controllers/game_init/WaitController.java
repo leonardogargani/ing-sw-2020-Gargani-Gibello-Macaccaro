@@ -6,7 +6,7 @@ import javafx.scene.control.Label;
 
 public class WaitController {
 
-    public Label labelToDisplay;
+    @FXML private Label labelToDisplay;
 
 
     /**

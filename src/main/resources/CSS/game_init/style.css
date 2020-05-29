@@ -28,6 +28,11 @@
 }
 
 
+.arrow:hover {
+    -fx-effect: dropshadow(three-pass-box, lightblue, 50, 0, 0, 0);
+}
+
+
 .arrow:pressed {
     -fx-effect: dropshadow(three-pass-box, blue, 50, 0, 0, 0);
 }

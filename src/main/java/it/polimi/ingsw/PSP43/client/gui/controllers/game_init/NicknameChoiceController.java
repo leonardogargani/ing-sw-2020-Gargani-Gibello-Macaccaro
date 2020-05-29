@@ -2,7 +2,6 @@ package it.polimi.ingsw.PSP43.client.gui.controllers.game_init;
 
 import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,9 +10,9 @@ import javafx.scene.control.TextField;
 
 public class NicknameChoiceController {
 
-    public TextField nicknameField;
-    public Button confirmButton;
-    public Label buttonPressedLabel;
+    @FXML private TextField nicknameField;
+    @FXML private Button confirmButton;
+    @FXML private Label buttonPressedLabel;
 
     private static ClientBG clientBG;
 
@@ -40,15 +39,15 @@ public class NicknameChoiceController {
 
     /**
      * Method that handles an event performed on the button to confirm the nickname.
-     * @param event event performed on the button
      */
     @FXML
-    public void handleConfirmButton(ActionEvent event) {
+    private void handleConfirmButton() {
 
         confirmButton.setDisable(true);
 
         if (nicknameField.getText().isEmpty()) {
             buttonPressedLabel.setText("You must choose a nickname!");
+            confirmButton.setDisable(false);
             return;
         }
 
