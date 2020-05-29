@@ -4,6 +4,7 @@ import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.gameStates.GameSessionObservable;
+import it.polimi.ingsw.PSP43.server.networkMessages.StartGameMessage;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -51,6 +52,9 @@ public class RegisterClientListener implements Runnable {
             while (idGame == -1 && gameSessions.size() > counter) {
                 GameSessionObservable gameSession = gameSessions.get(counter);
 
+                StartGameMessage startGameMessage = new StartGameMessage("\nWe are looking for an existent game for you. Otherwise " +
+                        "we will create a new game and you will decide the number of participants.");
+                player.sendMessage(startGameMessage);
 
                 // if the gameSession is in registration phase for the first player, I wait
                 while (gameSession.getMaxNumPlayers() == 1) {
@@ -94,9 +98,9 @@ public class RegisterClientListener implements Runnable {
 
     /**
      * This method notifies to the gameSession that a player left the game, other players must be notified and
-     * after that gameSession must be deleted
+     * after that gameSession must be deleted.
      *
-     * @param idGameSession is the id of the match that will be deleted
+     * @param idGameSession the id of the match that will be deleted
      */
     public void notifyDisconnection(int idGameSession) {
         synchronized (gameSessions) {

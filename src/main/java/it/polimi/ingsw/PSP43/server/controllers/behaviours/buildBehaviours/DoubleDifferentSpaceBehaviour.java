@@ -27,7 +27,7 @@ public class DoubleDifferentSpaceBehaviour extends BasicBuildBehaviour {
     /**
      * This method checks if the player wants to build another time
      *
-     * @param gameSession This is a reference to the center of the game database.
+     * @param gameSession This is a reference to the main access to the game database.
      */
     public void handleInitBuild(GameSession gameSession) throws GameEndedException {
         Player currentPlayer = gameSession.getCurrentPlayer();

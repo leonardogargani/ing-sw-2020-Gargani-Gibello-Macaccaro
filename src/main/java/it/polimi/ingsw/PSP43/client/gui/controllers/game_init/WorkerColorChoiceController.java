@@ -2,15 +2,21 @@ package it.polimi.ingsw.PSP43.client.gui.controllers.game_init;
 
 import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.client.ClientBG;
+import it.polimi.ingsw.PSP43.client.Screens;
+import it.polimi.ingsw.PSP43.client.gui.controllers.AbstractController;
 import it.polimi.ingsw.PSP43.client.networkMessages.WorkersColorResponse;
+import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.networkMessages.WorkersColorRequest;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
@@ -19,35 +25,42 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-public class WorkerColorChoice {
-    public ImageView confirmButton;
-    public ImageView leftArrow;
-    public ImageView rightArrow;
-    public ImageView workerImage;
-    public ImageView exitButton;
-
-    private static ClientBG clientBG;
+public class WorkerColorChoiceController extends AbstractController {
+    @FXML
+    private Label messageLabel;
+    @FXML
+    private ImageView confirmButton;
+    @FXML
+    private ImageView leftArrow;
+    @FXML
+    private ImageView rightArrow;
+    @FXML
+    private ImageView workerImage;
+    @FXML
+    private ImageView exitButton;
 
     private List<Color> colorsAvailable;
     private Color actualColorDisplayed;
 
-    private void initialise() {
+    /**
+     * Method called as soon as the controlled fxml file gets loaded, here used to set css ids and classes.
+     */
+    @FXML
+    private void initialize() {
         rightArrow.getStyleClass().add("arrow");
         leftArrow.getStyleClass().add("arrow");
         confirmButton.setId("confirm-button");
-    }
-
-    /**
-     * Method that sets the ClientBG attribute of the controller, it will be invoked inside
-     * the GuiGraphicHandler constructor so that the controller will have already the attribute set
-     * once it will be utilized.
-     * @param clientBG clientBG of the current client
-     */
-    public static void setClientBG(ClientBG clientBG) {
-        WorkerColorChoice.clientBG = clientBG;
+        messageLabel.setId("advise-label");
+        confirmButton.getStyleClass().add("confirm-button");
+        messageLabel.getStyleClass().add("advise-label");
+        workerImage.setId("worker-image");
+        workerImage.getStyleClass().add("worker-image");
     }
 
     public void handleChoiceOfWorkerColor(WorkersColorRequest workersColorRequest) {
+        messageLabel.setText("Choose a color for your workers");
+        messageLabel.setAlignment(Pos.CENTER);
+
         colorsAvailable = workersColorRequest.getColorsAvailable();
         actualColorDisplayed = colorsAvailable.get(0);
         displayWorker();
@@ -57,22 +70,17 @@ public class WorkerColorChoice {
      * This method displays the next color of the worker, that is saved in the private field of the
      * controller.
      */
-    public void displayWorker() {
-        try {
-            Image image;
-            switch (actualColorDisplayed) {
-                case ANSI_GREEN:
-                    image = new Image(new FileInputStream(String.valueOf(getClass().getResource("images/workers/worker_green_1.png"))));
-                    workerImage.setImage(image);
-                case ANSI_RED:
-                    image = new Image(new FileInputStream(String.valueOf(getClass().getResource("images/workers/worker_red_1.png"))));
-                    workerImage.setImage(image);
-                case ANSI_BLUE:
-                    image = new Image(new FileInputStream(String.valueOf(getClass().getResource("images/workers/worker_blue_1.png"))));
-                    workerImage.setImage(image);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+    private void displayWorker() {
+        switch (actualColorDisplayed) {
+            case ANSI_GREEN:
+                workerImage.setImage(new Image(getClass().getResource("/images/workers/worker_green_1.png").toExternalForm()));
+                break;
+            case ANSI_RED:
+                workerImage.setImage(new Image(getClass().getResource("/images/workers/worker_red_1.png").toExternalForm()));
+                break;
+            case ANSI_BLUE:
+                workerImage.setImage(new Image(getClass().getResource("/images/workers/worker_blue_1.png").toExternalForm()));
+                break;
         }
     }
 
@@ -81,15 +89,16 @@ public class WorkerColorChoice {
      * color of the worker, checking if the currently displayed one is the latest color or not.
      */
     @FXML
-    public void handleRightArrowImage() {
+    private void handleRightArrowImage() {
         for (Iterator<Color> colorIterator = colorsAvailable.iterator(); colorIterator.hasNext(); ) {
             Color color = colorIterator.next();
             if (actualColorDisplayed == color) {
-                if (colorsAvailable.indexOf(color) == colorsAvailable.size()) {
+                if (colorsAvailable.indexOf(color) == colorsAvailable.size() - 1) {
                     actualColorDisplayed = colorsAvailable.get(0);
-                }
-                else {
+                    break;
+                } else {
                     actualColorDisplayed = colorIterator.next();
+                    break;
                 }
             }
         }
@@ -102,15 +111,16 @@ public class WorkerColorChoice {
      * color of the worker, checking if the currently displayed one is the first color or not.
      */
     @FXML
-    public void handleLeftArrowImage() {
+    private void handleLeftArrowImage() {
         for (Color c : colorsAvailable) {
             if (actualColorDisplayed == c) {
                 if (colorsAvailable.indexOf(c) == 0) {
                     actualColorDisplayed = colorsAvailable.get(colorsAvailable.size() - 1);
-                }
-                else {
+                    break;
+                } else {
                     int indexCurrentColor = colorsAvailable.indexOf(c);
                     actualColorDisplayed = colorsAvailable.get(indexCurrentColor - 1);
+                    break;
                 }
             }
         }
@@ -120,25 +130,24 @@ public class WorkerColorChoice {
     /**
      * Method that handles a mouse event performed on the image to confirm that the current color
      * will be the one chosen by the player for this game session.
+     *
      * @param event mouse event performed on the image
      */
     @FXML
-    public void handleConfirmImage(MouseEvent event) {
+    private void handleConfirmImage(MouseEvent event) {
         WorkersColorResponse response = new WorkersColorResponse(actualColorDisplayed);
-        clientBG.sendMessage(response);
+        AbstractController.getClientBG().sendMessage(response);
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/FXML/miscellaneous/wait.fxml"));
+        loader.setLocation(getClass().getResource("/FXML/board.fxml"));
         try {
-            Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(loader.load());
 
-            WaitController controller = loader.getController();
-            controller.setLabelText("wait for other players to choose the color of their workers...");
-
-            scene.getStylesheets().add(getClass().getResource("/CSS/game_init/style.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/CSS/game_end/game.css").toExternalForm());
             stage.setScene(scene);
 
+            stage.centerOnScreen();
         } catch (IOException e) {
             e.printStackTrace();
         }

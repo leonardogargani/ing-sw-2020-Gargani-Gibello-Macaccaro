@@ -418,10 +418,11 @@ public class CliGraphicHandler extends GraphicHandler {
                     godsHashMap.get(player).getGodName() + " (" +
                     godsHashMap.get(player).getDescription() + ")");
         }
+        if (message.getMessage() != null) {
+            playersInfo.add(message.getMessage());
+        }
 
         middleMenu.setContentWithInfo(playersInfo);
-        if (message.getMessage() != null)
-            bottomMenu.setContent(message.getMessage());
 
         this.render();
         bottomMenu.clear();

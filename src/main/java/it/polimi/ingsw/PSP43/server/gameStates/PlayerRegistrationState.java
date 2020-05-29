@@ -51,7 +51,7 @@ public class PlayerRegistrationState extends TurnState {
     /**
      * This method asks to the first player of the game how many opponents does he want.
      *
-     * @param gameSession This is a reference to the center of the game database.
+     * @param gameSession This is a reference to the main access to the game database.
      * @param message     This is the message sent from the client.
      */
     protected int askNumberPlayers(GameSession gameSession, RegistrationMessage message) {

@@ -1,0 +1,57 @@
+/* selector for the root container (Pane) */
+.root {
+    -fx-background-image: url("../images/others/santorini_cover_transparent.png") no-repeat center center fixed;
+    -fx-background-size: 100% 100%;
+}
+
+.advise-label {
+    -fx-font-family: "Comic Sans Ms";
+    -fx-font-style: italic;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+    -fx-background-color: gold;
+    -fx-border-color: #010101;
+}
+
+.arrow:hover {
+    -fx-background-color: #d7f3ff;
+    -fx-effect: dropshadow(three-pass-box, black, 10, 0, 0, 0);
+}
+
+
+/* class selector */
+.confirm-button {
+    -fx-text-fill: #0251fc;
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 15;
+    -fx-alignment: center-right;
+    -fx-border-color: #3f3f3f;
+    -fx-border-radius: 15;
+    /* vertical and horizontal padding */
+    -fx-padding: 5 10;
+}
+
+
+.confirm-button:hover {
+    -fx-background-color: #d7f3ff;
+    -fx-effect: dropshadow(three-pass-box, black, 10, 0, 0, 0);
+}
+
+
+.confirm-button:pressed {
+    -fx-effect: dropshadow(three-pass-box, blue, 10, 0, 0, 0);
+}
+
+
+.arrow:pressed {
+    -fx-effect: dropshadow(three-pass-box, blue, 50, 0, 0, 0);
+}
+
+
+#confirm-button:pressed {
+    -fx-effect: dropshadow(three-pass-box, lawngreen, 50, 0, 0, 0);
+}
+
+.worker-image {
+    -fx-alignment: center;
+}

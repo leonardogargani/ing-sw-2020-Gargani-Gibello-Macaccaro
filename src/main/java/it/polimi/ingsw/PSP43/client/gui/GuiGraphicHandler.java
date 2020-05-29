@@ -2,6 +2,7 @@ package it.polimi.ingsw.PSP43.client.gui;
 
 import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.GraphicHandler;
+import it.polimi.ingsw.PSP43.client.gui.controllers.AbstractController;
 import it.polimi.ingsw.PSP43.client.gui.controllers.game_end.EndController;
 import it.polimi.ingsw.PSP43.client.gui.controllers.game_init.*;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
@@ -36,6 +37,9 @@ public class GuiGraphicHandler extends GraphicHandler {
             PlayersNumberChoiceController.setClientBG(clientBG);
             CardsChoiceController.setClientBG(clientBG);
             CardChoiceController.setClientBG(clientBG);
+
+            AbstractController.setClientBG(clientBG);
+
 
             //TODO add settings for BoardController
 
@@ -130,7 +134,10 @@ public class GuiGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(WorkersColorRequest request) {
-        // TODO implementation with JavaFX
+        System.out.println("arrived");
+        loadToPrimaryStage("/FXML/workers.fxml", "/CSS/workers.css");
+        WorkerColorChoiceController workerColorChoiceController = loader.getController();
+        Platform.runLater(() -> workerColorChoiceController.handleChoiceOfWorkerColor(request));
     }
 
 
@@ -162,7 +169,7 @@ public class GuiGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(EndGameMessage message) {
-        loadToPrimaryStage("/FXML/game_end/end.fxml", "/CSS/game_end/endStyle.css");
+        loadToPrimaryStage("/FXML/game_end/end.fxml", "/CSS/game_end/end.css");
         // at this point the controller is the one associated to nicknameChoice.fxml
         EndController controller = loader.getController();
         controller.setEndMessage(message);
@@ -218,15 +225,18 @@ public class GuiGraphicHandler extends GraphicHandler {
     @Override
     public void updateMenuChange(StartGameMessage message) {
 
+        loadToPrimaryStage("/FXML/miscellaneous/wait.fxml", "/CSS/game_init/style.css");
+
         loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/FXML/miscellaneous/wait.fxml"));
         try {
             Stage stage = GuiStarter.getPrimaryStage();
             Scene scene = new Scene(loader.load());
 
+            scene.getStylesheets().add(getClass().getResource("/CSS/game_init/style.css").toExternalForm());
+
             WaitController controller = loader.getController();
             controller.setLabelText(message.getMessage());
-            scene.getStylesheets().add(getClass().getResource("/CSS/game_init/style.css").toExternalForm());
 
             Platform.runLater(() -> {
                 stage.setMinHeight(700);

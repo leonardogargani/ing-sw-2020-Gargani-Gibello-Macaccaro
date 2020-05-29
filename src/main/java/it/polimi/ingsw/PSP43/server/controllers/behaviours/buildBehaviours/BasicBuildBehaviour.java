@@ -19,9 +19,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+/**
+ * This is a basic build behaviour. Having this as build behaviour means that the card
+ * will be able only to build blocks and domes according to the basic rules of a worker.
+ */
 public class BasicBuildBehaviour extends BasicGodCard implements BuildBehaviour {
     private static final long serialVersionUID = 4158958110907103295L;
 
+    /**
+     * This method is called for a generic ask to build. So it will be possible for the player to build either a dome or a block (according to rules).
+     * @param gameSession This is a reference to the main access to the game database.
+     * @return The data representing the choice where to build of the player. They are used by the controller to change the model.
+     * @throws GameEndedException   if the player that was asked to build something exits the game. This is treated as an exception because it should be a
+     *                              not-expected behaviour from the player.
+     */
     public DataToBuild genericAskForBuild(GameSession gameSession) throws GameEndedException {
         Player currentPlayer = gameSession.getCurrentPlayer();
         WorkersHandler workersHandler = gameSession.getWorkersHandler();

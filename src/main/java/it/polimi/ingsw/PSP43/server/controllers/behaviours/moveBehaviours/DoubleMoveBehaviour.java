@@ -27,7 +27,7 @@ public class DoubleMoveBehaviour extends BasicMoveBehaviour {
 
     /**
      * This method handles the move of the player's worker and gives him to move it twice, but not back to the previous position.
-     * @param gameSession This is a reference to the center of the game database.
+     * @param gameSession This is a reference to the main access to the game database.
      * @throws WinnerCaughtException if at the end of the move the worker satisfies one of the winning conditions.
      */
     public void handleInitMove(GameSession gameSession) throws GameEndedException, GameLostException {
@@ -57,7 +57,7 @@ public class DoubleMoveBehaviour extends BasicMoveBehaviour {
     /**
      * This method finds all the positions in which the workers passed as parameter can move for the second time, excluding
      * the previous position.
-     * @param gameSession This is a reference to the center of the game database.
+     * @param gameSession This is a reference to the main access to the game database.
      * @param coordToExclude The coordinates excluded from the possible ones in which the workers can move.
      * @return The HashMap that contains as a key value the coordinates of the current position of the worker and as values
      * all the coordinates in which the worker can move the second time.

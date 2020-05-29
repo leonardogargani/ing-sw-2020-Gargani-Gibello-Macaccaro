@@ -45,7 +45,7 @@ public class HomeController {
             stage.setMinWidth(600);
             stage.setResizable(true);
             stage.setScene(scene);
-            stage.centerOnScreen();
+            //stage.centerOnScreen();
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -9,23 +9,22 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.text.Font?>
 
-<fx:root minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" type="BorderPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP43.client.gui.controllers.game_init.WorkerColorChoice">
+<BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP43.client.gui.controllers.game_init.WorkerColorChoiceController">
    <top>
-      <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="1000.0"
-            BorderPane.alignment="CENTER">
-         <Region maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="350.0"/>
+      <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+         <Region maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="350.0" />
          <ImageView fitHeight="150.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
             <HBox.margin>
-               <Insets top="20.0"/>
+               <Insets top="20.0" />
             </HBox.margin>
-            <Image url="@../images/others/santorini_logo.png"/>
+            <Image url="@../images/others/santorini_logo.png" />
          </ImageView>
-         <Region maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="230.0"/>
+         <Region maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="230.0" />
          <ImageView fx:id="exitButton" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
             <HBox.margin>
-               <Insets top="20.0"/>
+               <Insets top="20.0" />
             </HBox.margin>
-            <Image url="@../images/icons/buttons/exit.png"/>
+            <Image url="@../images/icons/buttons/exit.png" />
          </ImageView>
       </HBox>
    </top>
@@ -33,41 +32,45 @@
       <ImageView fx:id="workerImage" fitHeight="344.0" fitWidth="264.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
    </center>
    <right>
-      <ImageView fx:id="rightArrow" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#handleRightArrowImage" pickOnBounds="true" preserveRatio="true"
-                 BorderPane.alignment="CENTER">
+      <ImageView fx:id="rightArrow" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#handleRightArrowImage" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
          <BorderPane.margin>
-            <Insets right="80.0"/>
+            <Insets right="80.0" />
          </BorderPane.margin>
-         <Image url="@../images/icons/buttons/arrow_right_orange.png"/>
+         <Image url="@../images/icons/buttons/arrow_right_orange.png" />
       </ImageView>
    </right>
    <left>
-      <ImageView fx:id="leftArrow" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#handleLeftArrowImage" pickOnBounds="true" preserveRatio="true"
-                 BorderPane.alignment="CENTER">
+      <ImageView fx:id="leftArrow" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#handleLeftArrowImage" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
          <BorderPane.margin>
-            <Insets left="80.0"/>
+            <Insets left="80.0" />
          </BorderPane.margin>
-         <Image url="@../images/icons/buttons/arrow_left_orange.png"/>
+         <Image url="@../images/icons/buttons/arrow_left_orange.png" />
       </ImageView>
    </left>
    <bottom>
-      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="68.0"
-                prefWidth="510.0" textAlignment="CENTER" textFill="WHITE">
-            <font>
-               <Font size="18.0"/>
-            </font>
-            <HBox.margin>
-               <Insets left="250.0" top="20.0"/>
-            </HBox.margin>
-         </Label>
-         <Region maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="150.0"/>
-         <ImageView fx:id="confirmButton" onMouseClicked="#handleConfirmImage" fitHeight="97.0" fitWidth="107.0">
-            <HBox.margin>
-               <Insets bottom="20.0" right="80.0" top="20.0"/>
-            </HBox.margin>
-            <Image url="@../images/icons/buttons/confirm.png"/>
-         </ImageView>
+      <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER">
+         <children>
+            <Region maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="138.0" prefWidth="300.0">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Region>
+            <Label fx:id="messageLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="75.0" prefWidth="331.0" text="Choose a player that you will own during" textAlignment="CENTER" textFill="#574d4d">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <HBox.margin>
+                  <Insets top="20.0" />
+               </HBox.margin>
+            </Label>
+            <Region maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="138.0" prefWidth="158.0" />
+            <ImageView fx:id="confirmButton" fitHeight="97.0" fitWidth="107.0" onMouseClicked="#handleConfirmImage">
+               <Image url="@../images/icons/buttons/confirm.png" />
+               <HBox.margin>
+                  <Insets bottom="20.0" right="20.0" top="20.0" />
+               </HBox.margin>
+            </ImageView>
+         </children>
       </HBox>
    </bottom>
-</fx:root>
+</BorderPane>
