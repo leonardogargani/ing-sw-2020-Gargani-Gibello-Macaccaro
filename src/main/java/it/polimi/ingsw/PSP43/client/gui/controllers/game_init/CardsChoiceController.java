@@ -1,16 +1,15 @@
 package it.polimi.ingsw.PSP43.client.gui.controllers.game_init;
 
 import it.polimi.ingsw.PSP43.client.ClientBG;
+import it.polimi.ingsw.PSP43.client.gui.GuiStarter;
 import it.polimi.ingsw.PSP43.client.networkMessages.ChosenCardsResponse;
 import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.networkMessages.InitialCardsRequest;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,14 +18,14 @@ import java.util.List;
 
 public class CardsChoiceController {
 
-    public Label rightLabel;
-    public Label leftLabel;
-    public Label bottomLabel;
-    public ImageView leftArrowImage;
-    public ImageView rightArrowImage;
-    public ImageView cardImage;
-    public ImageView confirmImage;
-    public Label infoLabel;
+    @FXML private Label rightLabel;
+    @FXML private Label leftLabel;
+    @FXML private Label bottomLabel;
+    @FXML private ImageView leftArrowImage;
+    @FXML private ImageView rightArrowImage;
+    @FXML private ImageView cardImage;
+    @FXML private ImageView confirmImage;
+    @FXML private Label infoLabel;
 
     private List<AbstractGodCard> cardsList;
     private int numberOfPlayers;
@@ -90,7 +89,7 @@ public class CardsChoiceController {
      * of the current game session (which is also the number of cards that must be chosen).
      * @param numberOfPlayers number of players of the current game session
      */
-    public void setNumberOfPlayers(int numberOfPlayers) {
+    private void setNumberOfPlayers(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
     }
 
@@ -107,10 +106,9 @@ public class CardsChoiceController {
     /**
      * Method that handles a mouse event performed on the image to confirm that the current card
      * will be one of the chosen ones for this game session.
-     * @param event mouse event performed on the image
      */
     @FXML
-    public void handleConfirmImage(MouseEvent event) {
+    private void handleConfirmImage() {
 
         AbstractGodCard currentCard = cardsList.get(currentCardIndex);
 
@@ -130,7 +128,7 @@ public class CardsChoiceController {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/FXML/miscellaneous/wait.fxml"));
             try {
-                Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+                Stage stage = GuiStarter.getPrimaryStage();
                 Scene scene = new Scene(loader.load());
 
                 WaitController controller = loader.getController();
@@ -165,10 +163,9 @@ public class CardsChoiceController {
     /**
      * Method that handles a mouse event performed on the image to show the next card, checking
      * if the currently displayed one is the last card or not.
-     * @param event mouse event performed on the image
      */
     @FXML
-    public void handleRightArrowImage(MouseEvent event) {
+    private void handleRightArrowImage() {
         // if the displayed card is the last one do nothing, else display the next one
         if ((currentCardIndex + 1) < cardsList.size()) {
             currentCardIndex++;
@@ -180,10 +177,9 @@ public class CardsChoiceController {
     /**
      * Method that handles a mouse event performed on the image to show the previous card, checking
      * if the currently displayed one is the first card or not.
-     * @param event mouse event performed on the image
      */
     @FXML
-    public void handleLeftArrowImage(MouseEvent event) {
+    private void handleLeftArrowImage() {
         // if the displayed card is the first one do nothing, else display the previous one
         if (currentCardIndex > 0) {
             currentCardIndex--;

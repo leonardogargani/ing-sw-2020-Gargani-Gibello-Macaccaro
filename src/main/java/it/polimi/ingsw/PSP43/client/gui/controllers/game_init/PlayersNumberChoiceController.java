@@ -2,11 +2,10 @@ package it.polimi.ingsw.PSP43.client.gui.controllers.game_init;
 
 import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.Screens;
+import it.polimi.ingsw.PSP43.client.gui.GuiStarter;
 import it.polimi.ingsw.PSP43.client.networkMessages.PlayersNumberResponse;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,11 +17,11 @@ import java.io.IOException;
 
 public class PlayersNumberChoiceController {
 
-    public Button confirmButton;
-    public ToggleGroup toggleGroup;
-    public RadioButton twoPlayersButton;
-    public RadioButton threePlayersButton;
-    public Label buttonPressedLabel;
+    @FXML private Button confirmButton;
+    @FXML private ToggleGroup toggleGroup;
+    @FXML private RadioButton twoPlayersButton;
+    @FXML private RadioButton threePlayersButton;
+    @FXML private Label buttonPressedLabel;
 
     private static ClientBG clientBG;
 
@@ -48,10 +47,9 @@ public class PlayersNumberChoiceController {
 
     /**
      * Method that handles an event performed on the button to confirm the number of players.
-     * @param event event performed on the button
      */
     @FXML
-    public void handleConfirmButton(ActionEvent event) {
+    private void handleConfirmButton() {
 
         int chosenNumber;
 
@@ -75,7 +73,7 @@ public class PlayersNumberChoiceController {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/FXML/miscellaneous/wait.fxml"));
         try {
-            Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+            Stage stage = GuiStarter.getPrimaryStage();
             Scene scene = new Scene(loader.load());
 
             WaitController controller = loader.getController();

@@ -1,10 +1,9 @@
 package it.polimi.ingsw.PSP43.client.gui.controllers.game_init;
 
 import it.polimi.ingsw.PSP43.client.ClientBG;
-import javafx.event.ActionEvent;
+import it.polimi.ingsw.PSP43.client.gui.GuiStarter;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,9 +14,9 @@ import java.io.IOException;
 
 public class ServerIPChoiceController {
 
-    public Button confirmButton;
-    public Label buttonPressedLabel;
-    public TextField serverIPField;
+    @FXML private Button confirmButton;
+    @FXML private Label buttonPressedLabel;
+    @FXML private TextField serverIPField;
 
     private static ClientBG clientBG;
 
@@ -44,10 +43,9 @@ public class ServerIPChoiceController {
 
     /**
      * Method that handles an event performed on the button to confirm the server IP.
-     * @param event event performed on the button
      */
     @FXML
-    private void handleConfirmButton(ActionEvent event) {
+    private void handleConfirmButton() {
 
         if (serverIPField.getText().isEmpty()) {
             buttonPressedLabel.setText("You must write the IP address!");
@@ -62,7 +60,7 @@ public class ServerIPChoiceController {
 
         try {
 
-            Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+            Stage stage = GuiStarter.getPrimaryStage();
             Scene scene = new Scene(loader.load());
 
             scene.getStylesheets().add(getClass().getResource("/CSS/game_init/style.css").toExternalForm());

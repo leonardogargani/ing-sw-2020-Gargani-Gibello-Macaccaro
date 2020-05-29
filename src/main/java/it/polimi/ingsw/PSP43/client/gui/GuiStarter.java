@@ -2,6 +2,7 @@ package it.polimi.ingsw.PSP43.client.gui;
 
 import it.polimi.ingsw.PSP43.client.cli.QuitPlayerException;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -71,7 +72,7 @@ public class GuiStarter extends Application {
     @Override
     public void stop() throws QuitPlayerException {
         //throw new QuitPlayerException("A player has decided to quit the game.");
-        System.exit(0);
+        Platform.exit();
     }
 
 }
