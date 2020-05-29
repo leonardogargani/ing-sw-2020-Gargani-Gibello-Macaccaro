@@ -3,6 +3,7 @@ package it.polimi.ingsw.PSP43.client.gui.controllers.game_init;
 import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.networkMessages.ChosenCardResponse;
 import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.networkMessages.CardRequest;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -46,8 +47,10 @@ public class CardChoiceController {
      * Method that displays the information about the first card (the only one visible).
      * It is called by GuiGraphicHandler and it's the first method to be executed (apart from initialize())
      * inside this controller.
+     * @param request
      */
-    public void customInit() {
+    public void customInit(CardRequest request) {
+        setAvailableCards(request.getCards());
         displayCard(availableCards.get(0));
     }
 

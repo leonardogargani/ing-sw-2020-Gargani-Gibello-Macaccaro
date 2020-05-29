@@ -103,13 +103,10 @@ public class GuiGraphicHandler extends GraphicHandler {
     @Override
     public void updateMenuChange(InitialCardsRequest request) {
         loadToPrimaryStage("/FXML/game_init/cardsChoice.fxml", "/CSS/game_init/style.css");
-
         // the controller is now the one associated to cardsChoice.fxml (since it has just been loaded)
         CardsChoiceController controller = loader.getController();
-
         controller.setCardsList(request.getCards());
-        controller.setNumberOfPlayers(request.getNumberOfCard());
-        controller.customInit();
+        Platform.runLater(() -> controller.customInit(request));
     }
 
 
@@ -122,8 +119,7 @@ public class GuiGraphicHandler extends GraphicHandler {
     public void updateMenuChange(CardRequest request) {
         loadToPrimaryStage("/FXML/game_init/cardChoice.fxml", "/CSS/game_init/style.css");
         CardChoiceController controller = loader.getController();
-        controller.setAvailableCards(request.getCards());
-        controller.customInit();
+        Platform.runLater(() -> controller.customInit(request));
     }
 
 
@@ -166,14 +162,10 @@ public class GuiGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(EndGameMessage message) {
-
         loadToPrimaryStage("/FXML/game_end/end.fxml", "/CSS/game_end/endStyle.css");
-
         // at this point the controller is the one associated to nicknameChoice.fxml
         EndController controller = loader.getController();
-
         controller.setEndMessage(message);
-
     }
 
 

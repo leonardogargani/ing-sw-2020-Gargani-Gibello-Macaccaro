@@ -45,6 +45,8 @@ public class NicknameChoiceController {
     @FXML
     public void handleConfirmButton(ActionEvent event) {
 
+        confirmButton.setDisable(true);
+
         if (nicknameField.getText().isEmpty()) {
             buttonPressedLabel.setText("You must choose a nickname!");
             return;
@@ -53,18 +55,6 @@ public class NicknameChoiceController {
         String nickname = nicknameField.getText();
 
         clientBG.sendMessage(new RegistrationMessage(nickname));
-
-        //buttonPressedLabel.setText("nickname not in use (work in progress)");
-
-
-        /*
-        Dovrò fare, in ordine, le seguenti operazioni:
-        - invio il RegistrationMessage   [fatto a riga 44]
-        - scrivi nella label "wait..."
-        - termina il metodo: verrà poi eseguita un update che notificherà l'arrivo di uno dei due seguenti casi
-        - ChangeNickRequest -> nick non valido, richiedi cambiamento (sono rimasto nella schermata  di inserimento nel frattempo)
-        - StartGameMessage -> stampa messaggio a tutto schermo in una nuova Scene con icona di caricamento
-         */
 
     }
 

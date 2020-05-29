@@ -70,7 +70,8 @@ public class GuiStarter extends Application {
      */
     @Override
     public void stop() throws QuitPlayerException {
-        throw new QuitPlayerException("A player has decided to quit the game.");
+        //throw new QuitPlayerException("A player has decided to quit the game.");
+        System.exit(0);
     }
 
 }
