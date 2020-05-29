@@ -184,10 +184,8 @@ public class GameSessionObservableTest {
         spyGame.registerToTheGame(new RegistrationMessage(secondNick), secondMock);
         spyGame.registerToTheGame(new RegistrationMessage(thirdNick), thirdMock);
 
-        ArrayList<String> nicksExcluded = new ArrayList<>();
-        nicksExcluded.add(firstNick);
         TextMessage textMessage = new TextMessage("");
-        spyGame.sendBroadCast(textMessage, nicksExcluded);
+        spyGame.sendBroadCast(textMessage, firstNick);
         verify(firstMock, times(0)).sendMessage(textMessage);
         verify(secondMock, times(1)).sendMessage(textMessage);
         verify(thirdMock, times(1)).sendMessage(textMessage);

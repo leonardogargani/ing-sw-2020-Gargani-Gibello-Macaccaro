@@ -42,9 +42,7 @@ public class ChooseCardState extends TurnState {
         Player current = game.getCurrentPlayer();
 
         StartGameMessage openingMessage = new StartGameMessage(Screens.CHOOSING_A_CARD.toString());
-        ArrayList<String> nicksExcluded = new ArrayList<>();
-        nicksExcluded.add(current.getNickname());
-        game.sendBroadCast(openingMessage, nicksExcluded);
+        game.sendBroadCast(openingMessage, current.getNickname());
 
         List<AbstractGodCard> available = game.getCardsHandler().getDeckOfAbstractGodCards();
         InitialCardsRequest cardsRequest = new InitialCardsRequest(available, game.getListenersHashMap().size());
@@ -58,6 +56,10 @@ public class ChooseCardState extends TurnState {
             }
         } while (responseCardMessage==null);
         cardsAvailable = responseCardMessage.getCardsName();
+
+        StartGameMessage startGameMessage = new StartGameMessage("\nNow other players are choosing a card within the ones you selected.\n");
+        game.sendMessage(startGameMessage, current.getNickname());
+
         this.executeState();
     }
 
@@ -92,7 +94,7 @@ public class ChooseCardState extends TurnState {
             Player current = gameSession.getCurrentPlayer();
             nicknameCurrentPlayer = current.getNickname();
 
-            CardRequest request = new CardRequest(Collections.unmodifiableList(new ArrayList<>(cardsAvailable)));
+            CardRequest request = new CardRequest(Collections.unmodifiableList(cardsAvailable));
             ChosenCardResponse response;
             do {
                 try {
@@ -109,6 +111,9 @@ public class ChooseCardState extends TurnState {
                 AbstractGodCard card = cardsIterator.next();
                 if (card.getGodName().equals(response.getCard().getGodName())) cardsIterator.remove();
             }
+
+            if (!nicknameGodLikePlayer.equals(nicknameCurrentPlayer))
+                gameSession.sendMessage(new StartGameMessage("\nPlease, wait until all the players will have chosen their card.\n"), current.getNickname());
 
             gameSession.setCurrentPlayer(playersHandler.getNextPlayer(nicknameCurrentPlayer));
         } while (!nicknameGodLikePlayer.equals(nicknameCurrentPlayer));

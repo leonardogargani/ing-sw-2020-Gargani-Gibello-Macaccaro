@@ -193,11 +193,11 @@ public class GameSessionObservable implements Runnable {
     /**
      * This method sends to all the players the message, excluded the ones in the list passed as parameter.
      * @param message The message to be sent.
-     * @param nicksExcluded The list of players excluded from receiving the message.
+     * @param nickExcluded The player's nickname excluded from receiving the message.
      */
-    public void sendBroadCast(ServerMessage message, ArrayList<String> nicksExcluded) {
+    public void sendBroadCast(ServerMessage message, String nickExcluded) {
         for (String s : getListenersHashMap().keySet()) {
-            if (!nicksExcluded.contains(s))
+            if (!nickExcluded.equals(s))
                 getListenersHashMap().get(s).sendMessage(message);
         }
     }

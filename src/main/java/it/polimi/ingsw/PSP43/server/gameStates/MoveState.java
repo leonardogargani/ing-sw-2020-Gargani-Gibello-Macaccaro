@@ -64,9 +64,7 @@ public class MoveState extends TurnState {
         Player currentPlayer = game.getCurrentPlayer();
 
         TextMessage broadcastMessage = new TextMessage(currentPlayer.getNickname());
-        ArrayList<String> nicksExcluded = new ArrayList<>();
-        nicksExcluded.add(currentPlayer.getNickname());
-        game.sendBroadCast(broadcastMessage, nicksExcluded);
+        game.sendBroadCast(broadcastMessage, currentPlayer.getNickname());
 
         setAllWorkersUnmoved();
     }

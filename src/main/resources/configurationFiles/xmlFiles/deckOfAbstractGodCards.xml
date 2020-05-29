@@ -38,9 +38,7 @@
     <basicGodCard>
         <godName>Athena</godName>
         <godDescription>Goddes of Wisdom</godDescription>
-        <godPower>Opponent’s Turn: If one of your Workers moved up on your last turn, opponent Workers cannot move up
-            this turn.
-        </godPower>
+        <godPower>Opponent’s Turn: If one of your Workers moved up on your last turn, opponent Workers cannot move up this turn.</godPower>
         <moveBehaviour>
             <blockOpponentRiseBehaviour/>
         </moveBehaviour>
@@ -51,8 +49,7 @@
     <basicGodCard>
         <godName>Hephaestus</godName>
         <godDescription>God of Blacksmiths</godDescription>
-        <godPower>Your Build: Your Worker may build one additional block (not dome) on top of your first block.
-        </godPower>
+        <godPower>Your Build: Your Worker may build one additional block (not dome) on top of your first block.</godPower>
         <moveBehaviour>
             <basicMoveBehaviour/>
         </moveBehaviour>
@@ -89,9 +86,7 @@
             <basicGodCard>
                 <godName>Minotaur</godName>
                 <godDescription>Bull-headed Monster</godDescription>
-                <godPower>Your Move: Your Worker may move into an opponent Worker’s space, if their Worker can be forced
-                    one space straight backwards to an unoccupied space at any level.
-                </godPower>
+                <godPower>Your Move: Your Worker may move into an opponent Worker’s space, if their Worker can be forced one space straight backwards to an unoccupied space at any level.</godPower>
                 <moveBehaviour>
                     <basicMoveBehaviour/>
                 </moveBehaviour>
@@ -143,8 +138,7 @@
     <basicGodCard>
         <godName>Triton</godName>
         <godDescription>God of the Waves</godDescription>
-        <godPower>Your move : Each time your Worker moves into a perimeter space, it may immediately move again.
-        </godPower>
+        <godPower>Your move : Each time your Worker moves into a perimeter space, it may immediately move again.</godPower>
         <moveBehaviour>
             <infiniteMovesOnPerimeterBehaviour/>
         </moveBehaviour>
@@ -155,8 +149,7 @@
     <basicGodCard>
         <godName>Ares</godName>
         <godDescription>God of War</godDescription>
-        <godPower>End of Your Turn : You may remove an unoccupied block (not dome) neighboring your unmoved Worker.
-        </godPower>
+        <godPower>End of Your Turn : You may remove an unoccupied block (not dome) neighboring your unmoved Worker.</godPower>
         <moveBehaviour>
             <basicMoveBehaviour/>
         </moveBehaviour>

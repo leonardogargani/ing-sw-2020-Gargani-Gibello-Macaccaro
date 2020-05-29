@@ -9,72 +9,65 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" style="-fx-background-color: #666666;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1000.0" type="BorderPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP43.client.gui.controllers.game_init.WorkerColorChoice">
    <top>
-      <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
-         <children>
-            <Region maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="350.0" />
-            <ImageView fitHeight="150.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/others/santorini_logo.png" />
-               </image>
-            </ImageView>
-            <Region maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="230.0" />
-            <ImageView fx:id="exitButton" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/icons/buttons/exit.png" />
-               </image>
-               <HBox.margin>
-                  <Insets top="20.0" />
-               </HBox.margin>
-            </ImageView>
-         </children>
+      <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="1000.0"
+            BorderPane.alignment="CENTER">
+         <Region maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="350.0"/>
+         <ImageView fitHeight="150.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+            <HBox.margin>
+               <Insets top="20.0"/>
+            </HBox.margin>
+            <Image url="@../images/others/santorini_logo.png"/>
+         </ImageView>
+         <Region maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="230.0"/>
+         <ImageView fx:id="exitButton" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+            <HBox.margin>
+               <Insets top="20.0"/>
+            </HBox.margin>
+            <Image url="@../images/icons/buttons/exit.png"/>
+         </ImageView>
       </HBox>
    </top>
    <center>
-      <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-         <children>
-            <ImageView fx:id="blueWorker" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/workers/worker_blue_2.png" />
-               </image>
-               <HBox.margin>
-                  <Insets top="100.0" />
-               </HBox.margin>
-            </ImageView>
-            <ImageView fx:id="greenWorker" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/workers/worker_green_2.png" />
-               </image>
-               <HBox.margin>
-                  <Insets top="100.0" />
-               </HBox.margin>
-            </ImageView>
-            <ImageView fx:id="redWorker" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/workers/worker_red_2.png" />
-               </image>
-               <HBox.margin>
-                  <Insets top="100.0" />
-               </HBox.margin>
-            </ImageView>
-         </children>
-      </HBox>
+      <ImageView fx:id="workerImage" fitHeight="344.0" fitWidth="264.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
    </center>
-   <left>
-      <Region maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="400.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-   </left>
    <right>
-      <Region maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="400.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <ImageView fx:id="rightArrow" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#handleRightArrowImage" pickOnBounds="true" preserveRatio="true"
+                 BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets right="80.0"/>
+         </BorderPane.margin>
+         <Image url="@../images/icons/buttons/arrow_right_orange.png"/>
+      </ImageView>
    </right>
+   <left>
+      <ImageView fx:id="leftArrow" fitHeight="150.0" fitWidth="200.0" onMouseClicked="#handleLeftArrowImage" pickOnBounds="true" preserveRatio="true"
+                 BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets left="80.0"/>
+         </BorderPane.margin>
+         <Image url="@../images/icons/buttons/arrow_left_orange.png"/>
+      </ImageView>
+   </left>
    <bottom>
-      <Label maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="1000.0" text="Label" textFill="WHITE" BorderPane.alignment="CENTER">
-         <font>
-            <Font size="18.0" />
-         </font>
-         <padding>
-            <Insets left="300.0" />
-         </padding>
-      </Label>
+      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="68.0"
+                prefWidth="510.0" textAlignment="CENTER" textFill="WHITE">
+            <font>
+               <Font size="18.0"/>
+            </font>
+            <HBox.margin>
+               <Insets left="250.0" top="20.0"/>
+            </HBox.margin>
+         </Label>
+         <Region maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="150.0"/>
+         <ImageView fx:id="confirmButton" onMouseClicked="#handleConfirmImage" fitHeight="97.0" fitWidth="107.0">
+            <HBox.margin>
+               <Insets bottom="20.0" right="80.0" top="20.0"/>
+            </HBox.margin>
+            <Image url="@../images/icons/buttons/confirm.png"/>
+         </ImageView>
+      </HBox>
    </bottom>
-</BorderPane>
+</fx:root>

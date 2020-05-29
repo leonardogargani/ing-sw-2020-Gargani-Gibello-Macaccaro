@@ -93,7 +93,7 @@ public class ChooseWorkerState extends TurnState {
                 hashAvailablePositions = new HashMap<>();
                 hashAvailablePositions.put(new Coord(0, 0), availablePositions);
                 placementRequest = new ActionRequest("Choose where to place your worker " + i + " .",
-                        Collections.unmodifiableMap(new HashMap<>(hashAvailablePositions)));
+                        Collections.unmodifiableMap(hashAvailablePositions));
                 do {
                     try {
                         response = game.sendRequest(placementRequest, nicknameCurrentPlayer, ActionResponse.class);
@@ -109,6 +109,11 @@ public class ChooseWorkerState extends TurnState {
 
             int latestPosition = playersHandler.getNumOfPlayers()-1;
             latestPlayer = playersHandler.getPlayer(latestPosition).getNickname();
+
+            if (!latestPlayer.equals(currentPlayer.getNickname()))
+                game.sendMessage(new StartGameMessage("\nWait for other players that are " +
+                        "choosing the color and positions for their workers.\n"), currentPlayer.getNickname());
+
             game.setCurrentPlayer(playersHandler.getNextPlayer(currentPlayer.getNickname()));
         } while (!latestPlayer.equals(currentPlayer.getNickname()));
 

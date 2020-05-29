@@ -122,15 +122,15 @@ public enum Screens {
     ),
 
     CONNECTING_WITH_OTHERS(
-            "Wait for other players to connect..."
+            "\nWait for other players to connect...\n"
     ),
 
     CHOOSING_A_CARD(
-            "You're going to choose a God Card..."
+            "\nYou're going to choose a God Card...\n"
     ),
 
     CHOOSING_INITIAL_POSITION(
-            "You're going to choose color and initial position..."
+            "\nYou're going to choose color and initial position of your worker...\n"
     );
 
 

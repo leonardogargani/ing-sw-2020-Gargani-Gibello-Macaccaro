@@ -358,8 +358,6 @@ public class CliGraphicHandler extends GraphicHandler {
                 bottomMenu.setContent(Screens.WINNER.toString());
                 break;
             case LOSER:
-                // TODO
-                //String nick = message.getMessage();
                 bottomMenu.setContent(Screens.LOSER.toString());
                 break;
             case DISCONNECTED:
@@ -409,9 +407,6 @@ public class CliGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(PlayersListMessage message) {
-
-        // TODO use the String message field to print who lose in the cliBottomMenu
-
         Map<Player, AbstractGodCard> godsHashMap = message.getPlayers();
         Map<Player, Color> colorsHashmap = message.getColor();
 
@@ -425,8 +420,11 @@ public class CliGraphicHandler extends GraphicHandler {
         }
 
         middleMenu.setContentWithInfo(playersInfo);
-        this.render();
+        if (message.getMessage() != null)
+            bottomMenu.setContent(message.getMessage());
 
+        this.render();
+        bottomMenu.clear();
     }
 
 
