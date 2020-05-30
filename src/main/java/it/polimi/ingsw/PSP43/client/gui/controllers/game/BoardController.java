@@ -24,6 +24,7 @@ public class BoardController {
         this.board = board;
         this.bottomMenu = bottomMenu;
         this.decision = decision;
+        cellsAvailable = new ArrayList<>();
     }
 
 
@@ -136,7 +137,9 @@ public class BoardController {
     }
 
     public void underlineAvailableCells(ActionRequest actionRequest) {
-        cellsAvailable.clear();
+        if (cellsAvailable.size() > 0) {
+            cellsAvailable.clear();
+        }
         Map<Coord, ArrayList<Coord>> cells = actionRequest.getCellsAvailable();
         for (Map.Entry<Coord, ArrayList<Coord>> entry : cells.entrySet()) {
             cellsAvailable.addAll(entry.getValue());

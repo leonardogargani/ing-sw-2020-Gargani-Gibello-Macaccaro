@@ -32,6 +32,7 @@ public class PlayersController {
 
     public PlayersController(Label[] labels, ImageView[] images) {
         this.player1Nick = labels[0];
+        ownNick = player1Nick.getText();
         this.player2Nick = labels[1];
         this.player3Nick = labels[2];
         this.player1CardDescription = labels[3];
@@ -104,8 +105,8 @@ public class PlayersController {
         player3Worker.setImage(null);
     }
 
-    public void setOwnNick(String ownNick) {
-        PlayersController.ownNick = ownNick;
+    /*public static void setOwnNick(String nick) {
+        ownNick = nick;
         player1Nick.setText(ownNick);
-    }
+    }*/
 }

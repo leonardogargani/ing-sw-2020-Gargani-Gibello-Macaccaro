@@ -58,14 +58,18 @@ public class MatchController extends AbstractController {
     @FXML private ImageView c34;
     @FXML private ImageView c44;
 
-    private ClientBG clientBG;
+    private static ClientBG clientBG;
     private static ActionRequest actionRequest = null;
     private static RequestMessage requestMessage = null;
-    private BoardController boardController;
-    private PlayersController playersController;
+    private static CellMessage cellMessage = null;
+    private static BoardController boardController;
+    private static PlayersController playersController;
 
     enum Decision {NOT_DECIDED, YES, NO}
-    private Decision decision;
+    private static Decision decision;
+    //
+    private static Label topLabel;
+    private static Label bottomLabel;
 
     /**
      * Initialize method for this controller
@@ -88,6 +92,10 @@ public class MatchController extends AbstractController {
         confirm.setId("decision-button");
         delete.setId("decision-button");
         clientBG = AbstractController.getClientBG();
+        //
+        topLabel = topMenu;
+        bottomLabel = bottomMenu;
+        player1Nick.setText(getNick());
     }
 
 
@@ -176,9 +184,9 @@ public class MatchController extends AbstractController {
      *
      * @param request
      */
-    public void setActionRequest(ActionRequest request) {
+    public static void setActionRequest(ActionRequest request) {
         actionRequest = request;
-        bottomMenu.setText(actionRequest.getMessage());
+        bottomLabel.setText(request.getMessage());
         boardController.underlineAvailableCells(actionRequest);
     }
 
@@ -187,7 +195,7 @@ public class MatchController extends AbstractController {
      *
      * @param playersListMessage
      */
-    public void updateScene(PlayersListMessage playersListMessage){
+    public static void updateScene(PlayersListMessage playersListMessage){
         playersController.showUpdate(playersListMessage);
     }
 
@@ -195,9 +203,10 @@ public class MatchController extends AbstractController {
 
     /**
      *
-     * @param cellMessage
+     * @param message
      */
-    public void updateBoard(CellMessage cellMessage) {
+    public static void updateBoard(CellMessage message) {
+        cellMessage = message;
         boardController.updateCell(cellMessage);
     }
 
@@ -207,8 +216,8 @@ public class MatchController extends AbstractController {
      *
      * @param textMessage
      */
-    public void showInTopMenu(TextMessage textMessage) {
-        topMenu.setText(textMessage.getMessage());
+    public static void showInTopMenu(TextMessage textMessage) {
+        topLabel.setText(textMessage.getMessage());
     }
 
     //Method for request messages
@@ -217,9 +226,9 @@ public class MatchController extends AbstractController {
      *
      * @param message
      */
-    public void askQuestion(RequestMessage message) {
+    public static void askQuestion(RequestMessage message) {
         requestMessage = message;
-        bottomMenu.setText(requestMessage.getMessage());
+        bottomLabel.setText(requestMessage.getMessage());
         decision = Decision.NOT_DECIDED;
         while (decision == Decision.NOT_DECIDED) {
             try {
@@ -233,7 +242,7 @@ public class MatchController extends AbstractController {
         } else {
             clientBG.sendMessage(new ResponseMessage(false));
         }
-        clearLabel(topMenu);
+        clearLabel(topLabel);
         decision = Decision.NOT_DECIDED;
         requestMessage = null;
     }
@@ -242,7 +251,7 @@ public class MatchController extends AbstractController {
      *
      * @param label
      */
-    public void clearLabel(Label label) {
+    public static void clearLabel(Label label) {
         label.setText("");
     }
 
