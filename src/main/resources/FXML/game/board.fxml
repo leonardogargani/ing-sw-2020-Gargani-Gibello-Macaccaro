@@ -24,7 +24,7 @@
                      </image>
                   </ImageView>
                   <Region maxWidth="-Infinity" prefHeight="200.0" prefWidth="180.0" />
-                  <Label fx:id="topMenu" prefHeight="100.0" prefWidth="400.0" text="Updating..." textFill="WHITE">
+                  <Label fx:id="topMenu" prefHeight="100.0" prefWidth="400.0" text="Updating..." textFill="WHITE" wrapText="true">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -48,7 +48,7 @@
             <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
                <children>
                   <Region maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="300.0" />
-                  <Label fx:id="bottomMenu" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="600.0" text="Updating" textFill="WHITE">
+                  <Label fx:id="bottomMenu" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="600.0" text="Updating" textAlignment="CENTER" textFill="WHITE" wrapText="true">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -89,7 +89,7 @@
                         <ImageView fx:id="player1Card" fitHeight="245.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true" />
                      </children>
                   </HBox>
-                  <Label fx:id="player1CardDescription" prefHeight="170.0" prefWidth="330.0" text="Updating" textFill="WHITE" />
+                  <Label fx:id="player1CardDescription" prefHeight="170.0" prefWidth="330.0" text="Updating" textFill="WHITE" wrapText="true" />
                </children>
             </VBox>
          </left>

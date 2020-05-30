@@ -41,7 +41,19 @@ public class PlayerInformation {
      * Getter method for color
      * @return color
      */
+    //useless
     public Color getColor() {
         return color;
+    }
+
+    public String getColorName(){
+        if(color == Color.ANSI_RED)
+            return "red";
+        else if(color == Color.ANSI_BLUE)
+            return "blue";
+        else if(color == Color.ANSI_GREEN)
+            return "green";
+        else
+            return null;
     }
 }

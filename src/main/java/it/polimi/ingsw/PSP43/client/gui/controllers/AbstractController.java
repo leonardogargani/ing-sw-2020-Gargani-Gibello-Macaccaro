@@ -12,21 +12,12 @@ import java.io.IOException;
 
 public abstract class AbstractController {
     private static ClientBG clientBG;
-    private static String nick;
 
     public static void setClientBG(ClientBG clientBG) {
         AbstractController.clientBG = clientBG;
     }
 
     public static ClientBG getClientBG() { return clientBG; }
-
-    public static void setNick(String nick) {
-        AbstractController.nick = nick;
-    }
-
-    public static String getNick() {
-        return nick;
-    }
 
     public void handleExit() {
         clientBG.sendMessage(new LeaveGameMessage());

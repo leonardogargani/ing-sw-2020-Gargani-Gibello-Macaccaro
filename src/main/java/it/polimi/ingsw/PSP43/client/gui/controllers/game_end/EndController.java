@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP43.client.gui.controllers.game_end;
 
-import it.polimi.ingsw.PSP43.client.ClientManager;
 import it.polimi.ingsw.PSP43.client.gui.controllers.AbstractController;
 import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
 import javafx.fxml.FXML;

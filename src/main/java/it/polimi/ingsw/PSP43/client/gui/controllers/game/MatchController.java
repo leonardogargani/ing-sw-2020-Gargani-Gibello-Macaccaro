@@ -60,16 +60,20 @@ public class MatchController extends AbstractController {
 
     private static ClientBG clientBG;
     private static ActionRequest actionRequest = null;
-    private static RequestMessage requestMessage = null;
-    private static CellMessage cellMessage = null;
     private static BoardController boardController;
     private static PlayersController playersController;
+    private static String nick;
 
     enum Decision {NOT_DECIDED, YES, NO}
     private static Decision decision;
     //
+    private static boolean DecisionActive = false;
     private static Label topLabel;
     private static Label bottomLabel;
+
+    private int counter = 0;
+    private int number = 0;
+    private Coord startPosition;
 
     /**
      * Initialize method for this controller
@@ -84,7 +88,7 @@ public class MatchController extends AbstractController {
         boardController = new BoardController(board,bottomMenu,decision);
         Label[] labels = new Label[]{player1Nick, player2Nick, player3Nick, player1CardDescription};
         ImageView[] images = new ImageView[]{player1Card, player2Card, player3Card, player1Worker, player2Worker, player3Worker};
-        playersController = new PlayersController(labels, images);
+        playersController = new PlayersController(labels, images, nick);
         for (int i=0;i<5;i++)
             for (int j=0;j<5;j++)
                 board[i][j].setId("cell-button");
@@ -95,7 +99,7 @@ public class MatchController extends AbstractController {
         //
         topLabel = topMenu;
         bottomLabel = bottomMenu;
-        player1Nick.setText(getNick());
+        player1Nick.setText(nick);
     }
 
 
@@ -103,37 +107,44 @@ public class MatchController extends AbstractController {
 
     /**
      * Mouse event catcher for board cells
+     *
      * @param event is a generic mouse event on a cell of the board
      */
     @FXML
-    public synchronized void onCellClicked(MouseEvent event) {
+    public void onCellClicked(MouseEvent event) {
         if (actionRequest != null) {
             Map<Coord, ArrayList<Coord>> hashMap = actionRequest.getCellsAvailable();
             ImageView img = (ImageView) event.getSource();
-            ActionResponse actionResponse = boardController.checkAction(hashMap, img);
-            if (actionResponse != null) {
-                bottomMenu.setText("Are you sure?");
-                while (decision == Decision.NOT_DECIDED) {
-                    try {
-                        TimeUnit.SECONDS.sleep(1);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (decision == Decision.YES) {
-                    clientBG.sendMessage(actionResponse);
-                    boardController.removeUnderline();
-                    actionRequest = null;
+            if (counter == 0 & number > 1) {
+                startPosition = boardController.checkWorkerChosen(hashMap, img);
+                if (startPosition != null) {
+                    bottomLabel.setText(actionRequest.getMessage());
+                    counter++;
                 } else {
-                    bottomMenu.setText("Choose another cell to move your worker");
+                    bottomLabel.setText("You haven't a worker in the selected cell !");
                 }
-                decision = Decision.NOT_DECIDED;
+            } else if (number <=1) {
+                ActionResponse response = boardController.checkAvailability(hashMap, img);
+                if (response != null) {
+                    clientBG.sendMessage(response);
+                    number++;
+                } else bottomLabel.setText("You can't go there !");
             } else {
-                bottomMenu.setText("You can't go there !");
+                Coord response = boardController.checkAction(hashMap, img, startPosition);
+                if (response != null) {
+                    clientBG.sendMessage(new ActionResponse(startPosition, response));
+                    counter = 0;
+                    boardController.removeUnderline(actionRequest);
+                    actionRequest = null;
+                    number++;
+                } else {
+                    bottomLabel.setText("You can't go there !");
+                }
             }
         } else {
             bottomMenu.setText("Wait for your turn !");
         }
+        //clearLabel(bottomMenu);
     }
 
     /**
@@ -142,15 +153,16 @@ public class MatchController extends AbstractController {
      */
     @FXML
     public void onDecisionTake(javafx.scene.input.MouseEvent event) {
-        if (actionRequest != null | requestMessage != null) {
+        if (DecisionActive) {
             if (event.getSource() == confirm) {
-                decision = Decision.YES;
-            } else if(event.getSource() == delete) {
-                decision = Decision.NO;
+                    clientBG.sendMessage(new ResponseMessage(true));
+            } else if (event.getSource() == delete) {
+                    clientBG.sendMessage(new ResponseMessage(false));
             } else bottomMenu.setText("You can only chose V or X now");
         } else {
             bottomMenu.setText("Wait for your turn !");
         }
+        DecisionActive = false;
     }
 
     /**
@@ -158,20 +170,7 @@ public class MatchController extends AbstractController {
      */
     @FXML
     public void onHomeClicked() {
-        bottomMenu.setText("Are you sure you want to exit ?");
-        decision = Decision.NOT_DECIDED;
-        while (decision == Decision.NOT_DECIDED) {
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        if (decision == Decision.YES) {
-            super.handleExit();
-        }
-        decision = Decision.NOT_DECIDED;
-        clearLabel(bottomMenu);
+        super.handleExit();
     }
 
 
@@ -186,13 +185,14 @@ public class MatchController extends AbstractController {
      */
     public static void setActionRequest(ActionRequest request) {
         actionRequest = request;
+        //bottomLabel.setText("Choose the worker you want for the action");
         bottomLabel.setText(request.getMessage());
         boardController.underlineAvailableCells(actionRequest);
     }
 
     //method to handle scene update when a playerListMessage arrives
     /**
-     *
+     * OK!
      * @param playersListMessage
      */
     public static void updateScene(PlayersListMessage playersListMessage){
@@ -202,18 +202,18 @@ public class MatchController extends AbstractController {
     //This method calls the updateCell method of the boardController
 
     /**
-     *
+     * OK!
      * @param message
      */
     public static void updateBoard(CellMessage message) {
-        cellMessage = message;
-        boardController.updateCell(cellMessage);
+        if(boardController!=null)
+            boardController.updateCell(message);
     }
 
     //Update method for TextMessages
 
     /**
-     *
+     * OK!
      * @param textMessage
      */
     public static void showInTopMenu(TextMessage textMessage) {
@@ -227,40 +227,12 @@ public class MatchController extends AbstractController {
      * @param message
      */
     public static void askQuestion(RequestMessage message) {
-        requestMessage = message;
-        bottomLabel.setText(requestMessage.getMessage());
-        decision = Decision.NOT_DECIDED;
-        while (decision == Decision.NOT_DECIDED) {
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        if (decision == Decision.YES) {
-            clientBG.sendMessage(new ResponseMessage(true));
-        } else {
-            clientBG.sendMessage(new ResponseMessage(false));
-        }
-        clearLabel(topLabel);
-        decision = Decision.NOT_DECIDED;
-        requestMessage = null;
+        bottomLabel.setText(message.getMessage());
+        DecisionActive = true;
     }
 
-    /**
-     *
-     * @param label
-     */
-    public static void clearLabel(Label label) {
-        label.setText("");
+    public static void setNick(String nick) {
+        MatchController.nick = nick;
     }
 
-    //Probably useless
-    public BoardController getBoardController() {
-        return boardController;
-    }
-
-    public PlayersController getPlayersController(){
-        return playersController;
-    }
 }
