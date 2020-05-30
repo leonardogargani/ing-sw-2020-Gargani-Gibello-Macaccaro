@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP43.client.gui.controllers;
 
 import it.polimi.ingsw.PSP43.client.ClientBG;
+import it.polimi.ingsw.PSP43.client.ClientManager;
 import it.polimi.ingsw.PSP43.client.gui.GuiStarter;
 import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import javafx.fxml.FXMLLoader;
@@ -21,8 +22,12 @@ public abstract class AbstractController {
     public void handleExit() {
         clientBG.sendMessage(new LeaveGameMessage());
 
+        ClientManager clientManager = new ClientManager(2, false);
+        Thread clientManagerThread = new Thread(clientManager);
+        clientManagerThread.start();
+
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/FXML/miscellaneous/home.fxml"));
+        loader.setLocation(getClass().getResource("/FXML/game_init/home.fxml"));
         try {
             Stage stage = GuiStarter.getPrimaryStage();
             Scene scene = new Scene(loader.load());

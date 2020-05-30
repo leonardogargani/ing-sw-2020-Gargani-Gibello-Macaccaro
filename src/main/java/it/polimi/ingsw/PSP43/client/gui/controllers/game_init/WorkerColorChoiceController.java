@@ -16,11 +16,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
@@ -55,6 +52,8 @@ public class WorkerColorChoiceController extends AbstractController {
         messageLabel.getStyleClass().add("advise-label");
         workerImage.setId("worker-image");
         workerImage.getStyleClass().add("worker-image");
+        exitButton.setId("exit-button");
+        exitButton.getStyleClass().add("exit-button");
     }
 
     public void handleChoiceOfWorkerColor(WorkersColorRequest workersColorRequest) {
@@ -139,17 +138,22 @@ public class WorkerColorChoiceController extends AbstractController {
         AbstractController.getClientBG().sendMessage(response);
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/FXML/board.fxml"));
+        loader.setLocation(getClass().getResource("/FXML/game/board.fxml"));
         try {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(loader.load());
 
-            scene.getStylesheets().add(getClass().getResource("/CSS/game_end/game.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/CSS/game/game.css").toExternalForm());
             stage.setScene(scene);
 
             stage.centerOnScreen();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void handleExitClick(MouseEvent event) {
+        super.handleExit();
     }
 }

@@ -239,7 +239,7 @@ public class GuiGraphicHandler extends GraphicHandler {
             controller.setLabelText(message.getMessage());
 
             Platform.runLater(() -> {
-                stage.setMinHeight(700);
+                stage.setMinHeight(650);
                 stage.setMinWidth(1000);
                 stage.centerOnScreen();
                 stage.setScene(scene);

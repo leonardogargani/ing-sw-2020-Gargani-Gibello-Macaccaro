@@ -20,7 +20,7 @@
             <Image url="@../images/others/santorini_logo.png" />
          </ImageView>
          <Region maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="230.0" />
-         <ImageView fx:id="exitButton" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+         <ImageView fx:id="exitButton" onMouseClicked="#handleExitClick" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
             <HBox.margin>
                <Insets top="20.0" />
             </HBox.margin>
