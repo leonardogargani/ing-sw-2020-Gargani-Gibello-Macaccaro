@@ -1,6 +1,8 @@
 package it.polimi.ingsw.PSP43.client.gui.controllers.game_init;
 
 import it.polimi.ingsw.PSP43.client.ClientBG;
+import it.polimi.ingsw.PSP43.client.gui.controllers.AbstractController;
+import it.polimi.ingsw.PSP43.client.gui.controllers.game.MatchController;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -8,7 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 
-public class NicknameChoiceController {
+public class NicknameChoiceController extends AbstractController {
 
     @FXML private TextField nicknameField;
     @FXML private Button confirmButton;
@@ -52,7 +54,7 @@ public class NicknameChoiceController {
         }
 
         String nickname = nicknameField.getText();
-
+        MatchController.setNick(nickname);
         clientBG.sendMessage(new RegistrationMessage(nickname));
 
     }

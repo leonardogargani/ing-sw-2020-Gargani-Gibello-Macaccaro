@@ -44,10 +44,10 @@ public class CardChoiceController {
 
 
     /**
-     * Method that displays the information about the first card (the only one visible).
-     * It is called by GuiGraphicHandler and it's the first method to be executed (apart from initialize())
-     * inside this controller.
-     * @param request
+     * Method that displays the information about the first card (the only one visible) and dispatches the
+     * request message extracting its filed. It is called by GuiGraphicHandler and it's the first method to
+     * be executed (apart from initialize()) inside this controller.
+     * @param request request message sent by the server
      */
     public void customInit(CardRequest request) {
         setAvailableCards(request.getCards());
