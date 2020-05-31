@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 
 
 public class NicknameChoiceController extends AbstractController {
@@ -28,6 +29,12 @@ public class NicknameChoiceController extends AbstractController {
         confirmButton.getStyleClass().add("confirm-button");
         exitImage.setPickOnBounds(false);
         exitImage.getStyleClass().add("exit-image");
+
+        nicknameField.setOnKeyPressed(ke -> {
+            if (ke.getCode().equals(KeyCode.ENTER)) {
+                handleConfirmButton();
+            }
+        });
     }
 
 

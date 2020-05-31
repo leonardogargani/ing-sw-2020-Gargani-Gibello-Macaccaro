@@ -20,7 +20,7 @@
                   <Image url="@../../images/icons/buttons/exit.png" />
                </image>
             </ImageView>
-               <Label fx:id="labelToDisplay" alignment="CENTER" contentDisplay="CENTER" prefHeight="97.0" prefWidth="557.0" textAlignment="CENTER" wrapText="true">
+               <Label fx:id="labelToDisplay" alignment="CENTER" contentDisplay="CENTER" prefHeight="121.0" prefWidth="733.0" textAlignment="CENTER" wrapText="true">
                <font>
                   <Font size="30.0" />
                </font>

@@ -2,13 +2,13 @@ package it.polimi.ingsw.PSP43.client.gui.controllers.game_init;
 
 import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.gui.GuiStarter;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import java.io.IOException;
 
@@ -28,6 +28,12 @@ public class ServerIPChoiceController {
     @FXML
     private void initialize() {
         confirmButton.getStyleClass().add("confirm-button");
+
+        serverIPField.setOnKeyPressed(ke -> {
+            if (ke.getCode().equals(KeyCode.ENTER)) {
+                handleConfirmButton();
+            }
+        });
     }
 
 
