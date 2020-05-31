@@ -10,8 +10,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
 
 /**
  * ClientListener is the server network handler
@@ -26,7 +27,7 @@ public class ClientListener implements Runnable {
     ObjectOutputStream output;
 
     /**
-     * Not default constructor for the ClientListener class.
+     * Not-default constructor for the ClientListener class.
      * @param clientSocket is the socket that is opened between a client and this ClientListener
      */
     public ClientListener(Socket clientSocket) {
@@ -58,9 +59,21 @@ public class ClientListener implements Runnable {
                 if (message != null) {
                     handleMessage(message);
                 }
-            } catch (SocketTimeoutException e) {
-                handleDisconnection(true);
-            } catch (InterruptedException | IOException | ClassNotFoundException ignored) {}
+            } catch (IOException e) {
+                /* This block is called only if the player has "killed" the program and so the socket has been closed.
+                This means that the client won't be available anymore. For this reason the ClientListener is stopped and
+                the socket closed.
+                * */
+                handleDisconnection(true, LeaveGameMessage.TypeDisconnectionHeader.IRREVERSIBLE_DISCONNECTION);
+
+                // TODO
+                try {
+                    TimeUnit.SECONDS.sleep(3);
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
+            } catch (InterruptedException | ClassNotFoundException ignored) {
+            }
         }
     }
 
@@ -71,30 +84,34 @@ public class ClientListener implements Runnable {
      * @throws ClassNotFoundException occurs when you try to load a class at run time using Class .forName() or
      *                                loadClass() methods and mentioned classes are not found in the classpath.
      */
-    public synchronized ClientMessage receive() throws IOException, ClassNotFoundException, InterruptedException {
+    public ClientMessage receive() throws IOException, ClassNotFoundException, InterruptedException {
         Object objectArrived;
 
         input = new ObjectInputStream(clientSocket.getInputStream());
         objectArrived = input.readObject();
 
-        if (objectArrived instanceof RegistrationMessage)
+        if (objectArrived instanceof RegistrationMessage) {
+            /* This is made to flush possible messages from the previous game ended (e.g. the LeaveGameMessage
+            inserted in the stack to give to the GameSession the knowledge that the game has ended if it was expecting
+            an answer from the player linked to that CLientListener.
+             * */
+            flushStack();
             return (ClientMessage) objectArrived;
-
-        else if (objectArrived instanceof LeaveGameMessage) {
-            handleDisconnection(true);
+        } else if (objectArrived instanceof LeaveGameMessage) {
+            /* If this message arrives it means that the player has decided to quit the game, but he has not disconnected.
+            For this reason the socket is not closed but the GameSession is informed (in this way the game is stopped).
+            * */
+            handleDisconnection(true, ((LeaveGameMessage) objectArrived).getTypeDisconnectionHeader());
             return null;
         } else if (!(objectArrived instanceof PingMessage)) {
-            stackMessages.add((ClientMessage) objectArrived);
-            notifyAll();
-            wait();
+            pushMessageOnStack((ClientMessage) objectArrived);
             return null;
-        }
-        else return null;
+        } else return null;
     }
 
     /**
      * Method used to send messages to the client.
-     * @param message that will be sent
+     * @param message The message that will be sent.
      */
     public void sendMessage(Object message) {
         try {
@@ -102,13 +119,11 @@ public class ClientListener implements Runnable {
                 output = new ObjectOutputStream(clientSocket.getOutputStream());
                 output.writeObject(message);
             }
-        } catch (IOException e) {
-            handleDisconnection(true);
-        }
+        } catch (IOException ignored) {}
     }
 
     /**
-     * Method used to send EndGameMessages, after the  delivery it calls the handleDisconnection method.
+     * Method used to send EndGameMessages. After the  delivery it calls the handleDisconnection method.
      * @param message is the EndGameMessage that will be sent
      */
     public void sendMessage(EndGameMessage message) {
@@ -117,17 +132,17 @@ public class ClientListener implements Runnable {
                 output = new ObjectOutputStream(clientSocket.getOutputStream());
                 output.writeObject(message);
             }
-        } catch (IOException ignored) {
-            handleDisconnection(false);
-            return;
-        }
-        handleDisconnection(false);
+        } catch (IOException ignored) {}
+
+        //   The handleDisconnection() is called in this case only because it could be possible that the
+        //   GameSession was expecting an answer from the Client linked to this ClientListener.
+        handleDisconnection(false, LeaveGameMessage.TypeDisconnectionHeader.GAME_DISCONNECTION);
     }
 
     /**
      * This method checks the kind of message and then if it is a RegistrationMessage it creates and starts a
      * RegisterClientListener, that is a thread for the registration in a match.
-     * @param message is received from the receive method and then handleMessage takes it
+     * @param message The message that is received from the "receive" method.
      */
     public void handleMessage(ClientMessage message) {
         if (message instanceof RegistrationMessage) {
@@ -135,6 +150,17 @@ public class ClientListener implements Runnable {
             Thread newRegisterThread = new Thread(register);
             newRegisterThread.start();
         }
+    }
+
+    /**
+     * This method is used to push a message on the stack of the ClientListener when it arrives. In that way I notify
+     * the thread that was waiting for a response from the client.
+     * @param clientMessage The message arrived from the client.
+     */
+    public synchronized void pushMessageOnStack(ClientMessage clientMessage) throws InterruptedException {
+        stackMessages.add(clientMessage);
+        notifyAll();
+        wait();
     }
 
     /**
@@ -158,20 +184,35 @@ public class ClientListener implements Runnable {
     }
 
     /**
-     * This method is called when for some reason(ex. connection problem) the match has to end, so it closes input
-     * and output streams, the socket and then it creates a RegisterClientListener to call the unregister method on
-     * this GameSession.
+     * This method is used to flush all the messages from the stack when it is necessary.
      */
-    public synchronized void handleDisconnection(boolean mode) {
+    public void flushStack() {
+        for (Iterator<ClientMessage> clientMessageIterator = stackMessages.iterator(); clientMessageIterator.hasNext(); ) {
+            clientMessageIterator.next();
+            clientMessageIterator.remove();
+        }
+    }
+
+    /**
+     * This method is used to handle a disconnection in different ways, regarding different scenarios.
+     * 1)   The client has "killed" the program. So he won't be available anymore. In this case the method will
+     * close the socket, put a LeaveGameMessage in the stack and start the process of disconnection through RegisterClientListener;
+     * 2)   The client was a player in a game that ended. In this case the client will be still available. For this reason
+     * the socket won't be closed. If the client has been the first to disconnect, he will start the process of
+     * disconnection through the RegisterClientListener.
+     */
+    public synchronized void handleDisconnection(boolean isFirstToDisconnect, LeaveGameMessage.TypeDisconnectionHeader typeDisconnectionHeader) {
         try {
             if (!this.disconnected) {
-                this.disconnected = true;
+                if (typeDisconnectionHeader == LeaveGameMessage.TypeDisconnectionHeader.IRREVERSIBLE_DISCONNECTION) {
+                    this.disconnected = true;
 
-                clientSocket.close();
-                if (input != null)
-                    input.close();
-                if (output != null)
-                    output.close();
+                    clientSocket.close();
+                    if (input != null)
+                        input.close();
+                    if (output != null)
+                        output.close();
+                }
 
                 // This adds a message of type LeaveGameMessage in the stack to inform the GameSession
                 // of the disconnection of the client, if it was expecting a response from him.
@@ -181,7 +222,7 @@ public class ClientListener implements Runnable {
 
                 // I do not execute the following code if the method was called due to the disconnection of another
                 // player. In this case I have not to worry about notify a disconnection to the GameSession.
-                if (mode) {
+                if (isFirstToDisconnect) {
                     if (this.idGame != -1) {
                         RegisterClientListener notifier = new RegisterClientListener(this, null);
                         notifier.notifyDisconnection(this.idGame);
@@ -194,20 +235,19 @@ public class ClientListener implements Runnable {
     }
 
     /**
-     * Setter method for the integer variable idGame.
-     * @param idGame is the identifier of the match
+     * Setter method for the integer variable idGame, that will be the reference of the game for the ClientListener.
+     * @param idGame is the identifier of the match.
      */
     public void setIdGame(Integer idGame) {
         this.idGame = idGame;
     }
 
     /**
-     * Getter method for the boolean variable disconnected, when this variable becomes true this thread and the
+     * Getter method for the boolean variable disconnected. When this variable becomes true this thread and the
      * ConnectionDetector thread are stopped.
-     * @return disconnected
+     * @return The value of the boolean disconnected. It is true if the connection from the client was lost, true otherwise.
      */
     public boolean isDisconnected() {
         return disconnected;
     }
-
 }

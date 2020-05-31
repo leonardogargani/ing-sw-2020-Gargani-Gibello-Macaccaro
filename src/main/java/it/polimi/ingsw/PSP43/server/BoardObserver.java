@@ -4,10 +4,12 @@ import it.polimi.ingsw.PSP43.server.gameStates.GameSessionObservable;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.networkMessages.CellMessage;
 
+/**
+ * This class is responsible for observing all the cells of the board of the Game and to notify
+ * the players if there was a change on them.
+ */
 public class BoardObserver {
-
     private final GameSessionObservable gameSessionObservable;
-
 
     /**
      * Non default constructor that initializes the gameSessionObservable attribute.
@@ -16,7 +18,6 @@ public class BoardObserver {
     public BoardObserver(GameSessionObservable gameSessionObservable) {
         this.gameSessionObservable = gameSessionObservable;
     }
-
 
     /**
      * This method receives a cell that has changed its state in the model,

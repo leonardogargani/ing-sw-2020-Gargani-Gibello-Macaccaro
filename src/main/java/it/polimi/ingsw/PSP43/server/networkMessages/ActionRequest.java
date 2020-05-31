@@ -17,7 +17,7 @@ public class ActionRequest extends TextMessage {
      * @param cellsAvailable represents the cells where workers can go in
      */
     public ActionRequest(String message, Map<Coord, ArrayList<Coord>> cellsAvailable){
-        super(message);
+        super(message, TextMessage.PositionInScreen.LOW_CENTER);
         this.cellsAvailable = cellsAvailable;
     }
 

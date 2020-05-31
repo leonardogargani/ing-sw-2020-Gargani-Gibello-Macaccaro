@@ -50,7 +50,7 @@ public class BuildBeforeMoveBehaviour extends BasicMoveBehaviour {
 
         CellsHandler cellsHandler = gameSession.getCellsHandler();
         Cell nextCellChosen = cellsHandler.getCell(nextCoordChosen);
-        Cell currentCell = cellsHandler.getCell(workerMoved.getCurrentPosition());
+        Cell currentCell = cellsHandler.getCell(workerMoved.getPreviousPosition());
 
         if (nextCellChosen.getHeight() - currentCell.getHeight() == 0) {
             RequestMessage requestMessage = new RequestMessage("Do you want to build two times " +

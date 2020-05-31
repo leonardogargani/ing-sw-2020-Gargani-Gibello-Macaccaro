@@ -10,7 +10,7 @@ public class RequestMessage extends TextMessage {
      * Not default constructor for RequestMessage.
      * @param message is the string that will be shown to the recipient
      */
-    public RequestMessage(String message){super(message);}
+    public RequestMessage(String message){super(message, TextMessage.PositionInScreen.LOW_CENTER);}
 
 
     /**

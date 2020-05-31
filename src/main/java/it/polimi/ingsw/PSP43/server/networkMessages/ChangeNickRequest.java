@@ -7,7 +7,7 @@ public class ChangeNickRequest extends TextMessage {
      * Not default constructor for ChangeNickRequest message.
      * @param message is the string that will be shown to the recipient
      */
-    public ChangeNickRequest(String message){super(message);}
+    public ChangeNickRequest(String message){super(message, TextMessage.PositionInScreen.LOW_CENTER);}
 
 
     /**

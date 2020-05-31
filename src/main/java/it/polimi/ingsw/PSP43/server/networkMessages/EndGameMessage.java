@@ -6,7 +6,8 @@ public class EndGameMessage extends TextMessage {
     public enum EndGameHeader {
         WINNER,
         LOSER,
-        DISCONNECTED;
+        SERVER_CRASHED,
+        PLAYER_DISCONNECTED;
     }
 
     private static final long serialVersionUID = 8430836759594606501L;
@@ -19,7 +20,7 @@ public class EndGameMessage extends TextMessage {
      * @param endGameHeader
      */
     public EndGameMessage(String message, EndGameHeader endGameHeader){
-        super(message);
+        super(message, TextMessage.PositionInScreen.LOW_CENTER);
         this.endGameHeader = endGameHeader;
     }
 

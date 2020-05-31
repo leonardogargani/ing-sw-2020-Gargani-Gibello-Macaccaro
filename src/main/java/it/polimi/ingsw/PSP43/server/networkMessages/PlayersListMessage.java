@@ -25,7 +25,7 @@ public class PlayersListMessage extends TextMessage {
      * @param gameSession
      */
     public PlayersListMessage(String message, GameSession gameSession){
-        super(message);
+        super(message, TextMessage.PositionInScreen.LOW_CENTER);
 
         PlayersHandler playersHandler = gameSession.getPlayersHandler();
         CardsHandler cardsHandler = gameSession.getCardsHandler();

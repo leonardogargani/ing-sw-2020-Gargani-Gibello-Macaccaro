@@ -11,7 +11,7 @@ public class StartGameMessage extends TextMessage {
      * @param message is the string that will be shown to the recipient
      */
     public StartGameMessage(String message) {
-        super(message);
+        super(message, TextMessage.PositionInScreen.LOW_CENTER);
     }
 
 

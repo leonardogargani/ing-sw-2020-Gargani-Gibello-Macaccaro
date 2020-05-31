@@ -23,32 +23,28 @@ public class RegisterClientListener implements Runnable {
     private RegistrationMessage message;
 
     /**
-     * Not default constructor for RegisterClientListener class
-     *
-     * @param player  that is creating this RegisterClientListener
-     * @param message is the registration message with the nick inside
+     * Not default constructor for RegisterClientListener class.
+     * @param player The reference to the ClientListener that is creating this RegisterClientListener.
+     * @param message The registration message with the nick of the player.
      */
     public RegisterClientListener(ClientListener player, RegistrationMessage message) {
         this.player = player;
         this.message = message;
     }
 
-    /**
-     * Constructor without parameters
-     */
-    public RegisterClientListener() {
-    }
+    public RegisterClientListener() {}
 
     /**
-     * Override of the run method, it contains the algorithms that checks if there is a game that hasn't started yet or if
-     * a new game session is needed
+     * Override of the run method. It contains the algorithm that checks if there is a game that hasn't started yet or if
+     * a new game session is needed.
      */
     @Override
     public void run() {
         try {
             int idGame = -1, counter = 0;
 
-            // until there are available gameSessions to inspect in the list I check them if they are available
+            // Until there are available gameSessions to inspect in the list, check them if they are available.
+            // If it is like that, try to register to that game.
             while (idGame == -1 && gameSessions.size() > counter) {
                 GameSessionObservable gameSession = gameSessions.get(counter);
 
@@ -56,7 +52,8 @@ public class RegisterClientListener implements Runnable {
                         "we will create a new game and you will decide the number of participants.");
                 player.sendMessage(startGameMessage);
 
-                // if the gameSession is in registration phase for the first player, I wait
+                // If the gameSession is in PlayerRegistrationState with another first player, wait until the player
+                // has decided the maximum number of players.
                 while (gameSession.getMaxNumPlayers() == 1) {
                     TimeUnit.SECONDS.sleep(1);
                 }
@@ -71,7 +68,7 @@ public class RegisterClientListener implements Runnable {
                 counter++;
             }
 
-            // if there is not a gameSession available, I create a new one
+            // If there is not a gameSession available, create a new one
             if (idGame == -1 & !player.isDisconnected()) {
                 GameSession game = new GameSession(gameSessions.size());
                 gameSessions.add(game);
@@ -88,19 +85,17 @@ public class RegisterClientListener implements Runnable {
     }
 
     /**
-     * Synchronized method to remove a gameSession
-     *
-     * @param idGameSession is the id of the gameSession we are going to remove
+     * Synchronized method to remove a gameSession.
+     * @param idGameSession This is the id of the gameSession that is going to be removed.
      */
     public synchronized void removeGameSession(int idGameSession) {
         gameSessions.removeIf(gameSessionObservable -> gameSessionObservable.getIdGame() == idGameSession);
     }
 
     /**
-     * This method notifies to the gameSession that a player left the game, other players must be notified and
+     * This method notifies to the gameSession that a player left the game. Other players must be notified and
      * after that gameSession must be deleted.
-     *
-     * @param idGameSession the id of the match that will be deleted
+     * @param idGameSession The id of the match that will be deleted.
      */
     public void notifyDisconnection(int idGameSession) {
         synchronized (gameSessions) {

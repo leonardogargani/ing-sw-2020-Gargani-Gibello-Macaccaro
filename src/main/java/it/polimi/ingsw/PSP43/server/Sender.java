@@ -25,9 +25,9 @@ public class Sender implements Callable<ClientMessage> {
     }
 
     /**
-     * Override of the call method, that sends a request and after that it takes the response from the clientListener
-     *
-     * @return response
+     * Override of the call method. It sends a request and after that it takes the response from the clientListener
+     * (when available).
+     * @return the response from the client that is saved in the stack of the ClientListener.
      */
     @Override
     public ClientMessage call() {
@@ -35,9 +35,6 @@ public class Sender implements Callable<ClientMessage> {
         ClientMessage response;
 
         response = clientListener.popMessageFromStack();
-
-        // TODO
-        //clientListener.popMessageFromStack(response);
 
         return response;
     }

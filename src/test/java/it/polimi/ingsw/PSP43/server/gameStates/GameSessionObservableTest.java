@@ -13,10 +13,7 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.MockitoAnnotations;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -100,22 +97,6 @@ public class GameSessionObservableTest {
     }
 
     @Test
-    public void eliminatePlayerTest() throws IOException, SAXException, ParserConfigurationException {
-        /*PlayerRegistrationState spyState = spy(new PlayerRegistrationState(spyGame));
-        spyGame.setCurrentState(spyState);
-        doNothing().when(spyState).executeState(any());
-
-        spyGame.registerToTheGame(new RegistrationMessage(firstNick), clientListenerFirstPlayer);
-        spyGame.maxNumPlayers = 3;
-        spyGame.registerToTheGame(new RegistrationMessage(secondNick), clientListenerSecondPlayer);
-        spyGame.registerToTheGame(new RegistrationMessage(thirdNick), clientListenerThirdPlayer);
-
-        spyGame.eliminatePlayer(spyGame.getPlayersHandler().getPlayer(firstNick));
-        assertTrue(spyGame.getNumOfPlayers() == 2 && spyGame.getListenersHashMap().get(firstNick) == null);
-*/
-    }
-
-    @Test
     public void sendMessageEndTest() {
         PlayerRegistrationState spyState = spy(new PlayerRegistrationState(spyGame));
         spyGame.setCurrentState(spyState);
@@ -141,7 +122,7 @@ public class GameSessionObservableTest {
         spyGame.registerToTheGame(new RegistrationMessage(secondNick), clientListenerMock);
         spyGame.registerToTheGame(new RegistrationMessage(thirdNick), clientListenerMock);
 
-        TextMessage textMessage = new TextMessage("");
+        TextMessage textMessage = new TextMessage("", TextMessage.PositionInScreen.LOW_CENTER);
         spyGame.sendMessage(textMessage, firstNick);
         verify(clientListenerMock, times(1)).sendMessage(textMessage);
     }
@@ -161,7 +142,7 @@ public class GameSessionObservableTest {
         spyGame.registerToTheGame(new RegistrationMessage(secondNick), secondMock);
         spyGame.registerToTheGame(new RegistrationMessage(thirdNick), thirdMock);
 
-        TextMessage textMessage = new TextMessage("");
+        TextMessage textMessage = new TextMessage("", TextMessage.PositionInScreen.LOW_CENTER);
 
         spyGame.sendBroadCast(textMessage);
         verify(firstMock, times(1)).sendMessage(textMessage);
@@ -184,7 +165,7 @@ public class GameSessionObservableTest {
         spyGame.registerToTheGame(new RegistrationMessage(secondNick), secondMock);
         spyGame.registerToTheGame(new RegistrationMessage(thirdNick), thirdMock);
 
-        TextMessage textMessage = new TextMessage("");
+        TextMessage textMessage = new TextMessage("", TextMessage.PositionInScreen.LOW_CENTER);
         spyGame.sendBroadCast(textMessage, firstNick);
         verify(firstMock, times(0)).sendMessage(textMessage);
         verify(secondMock, times(1)).sendMessage(textMessage);
@@ -208,7 +189,7 @@ public class GameSessionObservableTest {
 
         ArrayList<String> nicksExcluded = new ArrayList<>();
         nicksExcluded.add(firstNick);
-        EndGameMessage endGameMessage = new EndGameMessage(null, EndGameMessage.EndGameHeader.DISCONNECTED);
+        EndGameMessage endGameMessage = new EndGameMessage(null, EndGameMessage.EndGameHeader.PLAYER_DISCONNECTED);
         spyGame.sendBroadCast(endGameMessage, nicksExcluded);
         verify(firstMock, times(0)).sendMessage(endGameMessage);
         verify(secondMock, times(1)).sendMessage(endGameMessage);

@@ -11,6 +11,7 @@ import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.networkMessages.CardRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.InitialCardsRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.StartGameMessage;
+import it.polimi.ingsw.PSP43.server.networkMessages.TextMessage;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,7 +58,7 @@ public class ChooseCardState extends TurnState {
         } while (responseCardMessage==null);
         cardsAvailable = responseCardMessage.getCardsName();
 
-        StartGameMessage startGameMessage = new StartGameMessage("\nNow other players are choosing a card within the ones you selected.\n");
+        TextMessage startGameMessage = new TextMessage("\nNow other players are choosing a card within the ones you selected.\n", TextMessage.PositionInScreen.LOW_CENTER);
         game.sendMessage(startGameMessage, current.getNickname());
 
         this.executeState();

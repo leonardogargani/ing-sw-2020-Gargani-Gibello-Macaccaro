@@ -77,9 +77,6 @@ public class GameSession extends GameSessionObservable {
                 this.transitToNextState();
             }
         }
-
-        RegisterClientListener ending = new RegisterClientListener();
-        ending.removeGameSession(super.getIdGame());
     }
 
     /**

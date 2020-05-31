@@ -63,7 +63,7 @@ public class MoveState extends TurnState {
         GameSession game = super.getGameSession();
         Player currentPlayer = game.getCurrentPlayer();
 
-        TextMessage broadcastMessage = new TextMessage(currentPlayer.getNickname());
+        TextMessage broadcastMessage = new TextMessage(currentPlayer.getNickname(), TextMessage.PositionInScreen.HIGH_CENTER);
         game.sendBroadCast(broadcastMessage, currentPlayer.getNickname());
 
         setAllWorkersUnmoved();

@@ -4,11 +4,15 @@ import it.polimi.ingsw.PSP43.client.cli.CliGraphicHandler;
 import it.polimi.ingsw.PSP43.client.cli.CliInputHandler;
 import it.polimi.ingsw.PSP43.client.cli.QuitPlayerException;
 import it.polimi.ingsw.PSP43.client.gui.GuiGraphicHandler;
+import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -17,7 +21,6 @@ import java.util.concurrent.TimeUnit;
 public class ClientManager implements Runnable {
     private final int chosenInterface;
     private GraphicHandler graphicHandler;
-    private ClientBG clientBG;
     private boolean isActive;
     private final ArrayList<ServerMessage> messageBox;
     private final boolean isFirstGame;
@@ -25,9 +28,8 @@ public class ClientManager implements Runnable {
     private static GuiExecutor guiExecutor;
 
     /**
-     * Not default constructor for ClientManager class that initializes the game on your chosen interface CLI or GUI
-     *
-     * @param chosenInterface can be 1 for the CLI or 2 for the GUI
+     * Not default constructor for ClientManager class that initializes the game on your chosen interface CLI or GUI.
+     * @param chosenInterface It can be 1 for the CLI or 2 for the GUI.
      */
     public ClientManager(int chosenInterface, boolean isFirstGame) {
         this.chosenInterface = chosenInterface;
@@ -42,13 +44,15 @@ public class ClientManager implements Runnable {
      */
     @Override
     public void run() {
-
-        clientBG = new ClientBG(this);
+        ClientBG clientBG = new ClientBG(this);
         Thread clientBGThread = new Thread(clientBG);
 
+        // Here the chosen interface is started
         if (chosenInterface == 1) {
-            graphicHandler = new CliGraphicHandler(clientBG);
             clientBGThread.start();
+            graphicHandler = new CliGraphicHandler(clientBG);
+            Thread cliGraphicHandlerThread = new Thread((CliGraphicHandler) graphicHandler);
+            cliGraphicHandlerThread.start();
         } else {
             clientBGThread.start();
             if (this.isFirstGame) {
@@ -59,14 +63,14 @@ public class ClientManager implements Runnable {
             }
         }
 
-        //Added check on the life of guiExecutorThread
+        // Here begins a infinite loop where the ClientManager waits for messages to handle from the server.
+        // This loop ends only if the player decides to shut down the application by setting isActive to false.
         while (isActive || messageBox.size() != 0) {
             try {
                 if (guiExecutor != null) {
                     if (guiExecutorThread.isAlive()) {
                         handleEvent();
-                    }
-                    else {
+                    } else {
                         throw new QuitPlayerException("Gui closed");
                     }
                 } else {
@@ -74,10 +78,17 @@ public class ClientManager implements Runnable {
                 }
 
             } catch (QuitPlayerException e) {
-                clientBG.sendMessage(new LeaveGameMessage());
+                // This block is only called if the player clicks on the "home button" in the GUI or if he writes
+                // "quit" in the cli. Here is given the possibility to re-join another game by not closing the socket.
+                // Here a message of DISCONNECTION is sent to make the Server conscious of the disconnection and to
+                // inform all other players of the fact.
+                LeaveGameMessage leaveGameMessage = new LeaveGameMessage();
+                leaveGameMessage.setTypeDisconnectionHeader(LeaveGameMessage.TypeDisconnectionHeader.GAME_DISCONNECTION);
+                clientBG.sendMessage(leaveGameMessage);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
             try {
                 TimeUnit.MILLISECONDS.sleep(1);
             } catch (InterruptedException e) {
@@ -88,12 +99,10 @@ public class ClientManager implements Runnable {
 
     /**
      * This method checks if there are messages in the messageBox and if there are some of these it calls the update
-     * on the graphic handler
-     *
-     * @throws QuitPlayerException if a player in the input writes quit to leave the game
+     * on the graphic handler.
+     * @throws QuitPlayerException if a player in the input writes quit to leave the game.
      */
     public void handleEvent() throws QuitPlayerException, InterruptedException {
-
         ServerMessage message = popMessageFromBox();
         {
             if (message instanceof CellMessage) {
@@ -124,20 +133,8 @@ public class ClientManager implements Runnable {
         }
     }
 
-
     /**
-     * Getter method for the graphic handler
-     *
-     * @return graphic handler that can be a CliGraphicHandler or a GuiGraphicHandler
-     */
-    public GraphicHandler getGraphicHandler() {
-        return graphicHandler;
-    }
-
-
-    /**
-     * Setter method for the boolean variable isActive
-     *
+     * Setter method for the boolean variable isActive.
      * @param active false to stop the run of the thread
      */
     public void setActive(boolean active) {
@@ -145,45 +142,48 @@ public class ClientManager implements Runnable {
     }
 
     /**
-     * Initial method called by the clientBG after the start of the connection, it asks a nick from the player and
-     * send it to the server
-     */
-    public void execute() {
-        System.out.println(Screens.WELCOME);
-
-        try {
-            System.out.print("Choose a nickname:\n");
-            CliInputHandler inputHandler = new CliInputHandler();
-            String nickname = inputHandler.requestInputString();
-            RegistrationMessage message = new RegistrationMessage(nickname);
-            clientBG.sendMessage(message);
-        } catch (QuitPlayerException e) {
-            clientBG.sendMessage(new LeaveGameMessage());
-        }
-
-    }
-
-    /**
-     * Synchronized method to add message in the message box
-     *
-     * @param message is the added message
+     * Synchronized method to add message in the message box.
+     * @param message It is the message that will be pushed on the stack of the ClientManager.
      */
     public synchronized void pushMessageInBox(ServerMessage message) {
-        messageBox.add(message);
-        notifyMessageArrived();
+        if (!containsEndGameMessage()){
+            messageBox.add(message);
+            notifyMessageArrived();
+        }
     }
 
     /**
-     * Synchronized method to notify the arrivals of a message
+     * Synchronized method to notify the arrival of a message.
      */
     public synchronized void notifyMessageArrived() {
         notifyAll();
     }
 
     /**
-     * Synchronized method to remove a message from the message box
-     *
-     * @return the removed message
+     * This method is used to check if there already EndGameMessages on the stack.
+     * @return true if there are already EndGameMessages on the stack, false otherwise.
+     */
+    public synchronized boolean containsEndGameMessage() {
+        for (ServerMessage s : messageBox) {
+            if (s instanceof EndGameMessage) return true;
+        }
+        return false;
+    }
+
+    /**
+     * This method is used to eliminate all the messages from the stack. This is done in case it could be
+     * necessary to eliminate all previous and useless messages arrived.
+     */
+    public synchronized void flushStack() {
+        for (Iterator<ServerMessage> messageIterator = messageBox.iterator(); messageIterator.hasNext(); ) {
+            messageIterator.next();
+            messageIterator.remove();
+        }
+    }
+
+    /**
+     * Synchronized method to remove a message from the message box.
+     * @return the removed message.
      */
     public synchronized ServerMessage popMessageFromBox() throws InterruptedException {
         while (messageBox.size() == 0) {
@@ -191,7 +191,10 @@ public class ClientManager implements Runnable {
         }
 
         ServerMessage message = messageBox.get(0);
-        messageBox.remove(message);
+
+        if (!(message instanceof EndGameMessage)) {
+            messageBox.remove(message);
+        }
         return message;
     }
 }

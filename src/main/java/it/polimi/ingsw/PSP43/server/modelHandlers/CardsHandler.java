@@ -80,8 +80,10 @@ public class CardsHandler {
      * @param nickOwner data stored about a player into the list of players
      */
     public void removeCardToPlayer(String nickOwner) {
-        for (String key : mapOwnersCard.keySet()) {
-            if (nickOwner.equals(key)) mapOwnersCard.remove(nickOwner);
+        for (Iterator<Map.Entry<String, AbstractGodCard>> iterator = mapOwnersCard.entrySet().iterator(); iterator.hasNext(); ) {
+            Map.Entry<String, AbstractGodCard> entry = iterator.next();
+            String currentNickOwner = entry.getKey();
+            if (nickOwner.equals(currentNickOwner)) iterator.remove();
         }
     }
 

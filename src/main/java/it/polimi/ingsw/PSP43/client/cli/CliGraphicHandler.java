@@ -13,9 +13,10 @@ import it.polimi.ingsw.PSP43.server.networkMessages.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 
-public class CliGraphicHandler extends GraphicHandler {
+public class CliGraphicHandler extends GraphicHandler implements Runnable {
 
     private final CliBoard board = new CliBoard();
     private final CliTopMenu topMenu = new CliTopMenu();
@@ -23,6 +24,7 @@ public class CliGraphicHandler extends GraphicHandler {
     private final CliBottomMenu bottomMenu = new CliBottomMenu();
     private final CliInputHandler inputHandler = new CliInputHandler();
 
+    private String nickname;
 
     /**
      * Non default constructor that sets the clientGB attribute.
@@ -32,6 +34,38 @@ public class CliGraphicHandler extends GraphicHandler {
         super(clientBG);
     }
 
+
+    @Override
+    public void run() {
+        CliInputHandler cliInputHandler = new CliInputHandler();
+        String serverIp;
+        nickname = null;
+
+        try {
+            serverIp = cliInputHandler.requestServerIP();
+        } catch (QuitPlayerException e) {
+            return;
+        }
+        getClientBG().setServerIP(serverIp);
+
+        while (!getClientBG().isConnected()) {
+            try {
+                TimeUnit.MILLISECONDS.sleep(200);
+            } catch (InterruptedException e) { e.printStackTrace(); }
+        }
+
+        System.out.println("\n\n" + Screens.WELCOME + "\n\n");
+
+        try {
+            nickname = cliInputHandler.requestNickname();
+        } catch (QuitPlayerException e) {
+            LeaveGameMessage leaveGameMessage = new LeaveGameMessage();
+            leaveGameMessage.setTypeDisconnectionHeader(LeaveGameMessage.TypeDisconnectionHeader.IRREVERSIBLE_DISCONNECTION);
+            getClientBG().sendMessage(leaveGameMessage);
+            getClientBG().handleDisconnection();
+        }
+        getClientBG().sendMessage(new RegistrationMessage(nickname));
+    }
 
     /**
      * This method returns the whole board of the cli.
@@ -144,15 +178,18 @@ public class CliGraphicHandler extends GraphicHandler {
 
         bottomMenu.setContent(Screens.CARD_REQUEST.toString());
 
+        System.out.println("\n\n");
+        bottomMenu.show();
         for (AbstractGodCard card : availableCards) {
             // the name of every God is preceded by its index in the ArrayList
             System.out.printf(" [%d] - ", availableCards.indexOf(card));
             card.print();
         }
+        System.out.println("\n");
+
 
         int chosenIndex;
         while (true) {
-            bottomMenu.show();
             chosenIndex = inputHandler.requestInputInt();
             if (0 <= chosenIndex && chosenIndex < availableCards.size()) {
                 // in this case the chosen index is valid, I want to keep its value
@@ -161,7 +198,7 @@ public class CliGraphicHandler extends GraphicHandler {
             System.out.println("The number you wrote is not valid");
         }
 
-        System.out.println("Perfect, you have chosen " + availableCards.get(chosenIndex).getGodName() + "!");
+        System.out.println("\nPerfect, you have chosen " + availableCards.get(chosenIndex).getGodName() + "!");
 
         bottomMenu.clear();
         ChosenCardResponse response = new ChosenCardResponse(availableCards.get(chosenIndex));
@@ -360,14 +397,44 @@ public class CliGraphicHandler extends GraphicHandler {
             case LOSER:
                 bottomMenu.setContent(Screens.LOSER.toString());
                 break;
-            case DISCONNECTED:
+            case PLAYER_DISCONNECTED:
                 bottomMenu.setContent(Screens.DISCONNECTED.toString());
                 break;
+            case SERVER_CRASHED:
+                bottomMenu.setContent("\n\nWe are sorry, due to problems in server, retry to run the application later.\n\n");
+                bottomMenu.show();
+                return;
             default:
                 System.out.println("An error occurred");
         }
 
         bottomMenu.show();
+
+        System.out.println("\n\n\n Do you want to player another game? Otherwise the application will exit.\n (0 for yes, 1 for no)\n");
+        try {
+            int response = inputHandler.requestInputInt();
+            if (response == 1) {
+                LeaveGameMessage leaveGameMessage = new LeaveGameMessage();
+                leaveGameMessage.setTypeDisconnectionHeader(LeaveGameMessage.TypeDisconnectionHeader.IRREVERSIBLE_DISCONNECTION);
+                getClientBG().sendMessage(leaveGameMessage);
+                System.out.println("We are sorry ");
+                getClientBG().handleDisconnection();
+            }
+            else {
+                System.out.println("Do you want to change your nickname? (1 for yes, 0 for no)");
+                response = inputHandler.requestInputInt();
+                if (response == 1) {
+                    CliInputHandler cliInputHandler = new CliInputHandler();
+                    nickname = cliInputHandler.requestNickname();
+                }
+                getClientBG().sendMessage(new RegistrationMessage(nickname));
+            }
+        } catch (QuitPlayerException e) {
+            LeaveGameMessage leaveGameMessage = new LeaveGameMessage();
+            leaveGameMessage.setTypeDisconnectionHeader(LeaveGameMessage.TypeDisconnectionHeader.IRREVERSIBLE_DISCONNECTION);
+            getClientBG().sendMessage(leaveGameMessage);
+            getClientBG().handleDisconnection();
+        }
     }
 
 
@@ -395,7 +462,13 @@ public class CliGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(TextMessage message) {
-        topMenu.setContentWithNick(message.getMessage());
+        if (message.getPositionInScreen() == TextMessage.PositionInScreen.LOW_CENTER) {
+            bottomMenu.setContent(message.getMessage());
+            topMenu.setContent("");
+        }
+        if (message.getPositionInScreen() == TextMessage.PositionInScreen.HIGH_CENTER)
+            topMenu.setContentWithNick(message.getMessage());
+
         this.render();
     }
 
@@ -451,6 +524,4 @@ public class CliGraphicHandler extends GraphicHandler {
         board.show();
         bottomMenu.show();
     }
-
-
 }

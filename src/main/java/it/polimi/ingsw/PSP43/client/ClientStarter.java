@@ -4,13 +4,12 @@ import it.polimi.ingsw.PSP43.client.cli.CliInputHandler;
 import it.polimi.ingsw.PSP43.client.cli.QuitPlayerException;
 
 /**
- * This is the starter class, here a player chooses CLI or GUI
+ * This is the starter class, here a player chooses CLI or GUI.
  */
 
 public class ClientStarter {
 
     public static void main(String[] args) {
-
         int chosenMode;
         System.out.println("Choose a mode:\n [1] CLI\n [2] GUI");
         CliInputHandler inputHandler = new CliInputHandler();
@@ -33,11 +32,8 @@ public class ClientStarter {
             ClientManager clientManager = new ClientManager(chosenMode, true);
             Thread clientManagerThread = new Thread(clientManager);
             clientManagerThread.start();
-
         } catch (QuitPlayerException e) {
             System.exit(0);
         }
-
     }
-
 }

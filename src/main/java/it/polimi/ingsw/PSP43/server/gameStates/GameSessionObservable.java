@@ -109,7 +109,7 @@ public class GameSessionObservable implements Runnable {
      *               the EndGameMessage.
      */
     public synchronized void unregisterFromGame(LeaveGameMessage message, ClientListener player) {
-        EndGameMessage endGameMessage = new EndGameMessage(null, EndGameMessage.EndGameHeader.DISCONNECTED);
+        EndGameMessage endGameMessage = new EndGameMessage(null, EndGameMessage.EndGameHeader.PLAYER_DISCONNECTED);
         String nicknameLeft = null;
         for (String s : listenersHashMap.keySet()) {
             if (listenersHashMap.get(s).equals(player)) nicknameLeft = s;
@@ -234,7 +234,6 @@ public class GameSessionObservable implements Runnable {
                 return typeExpected.cast(messageArrived);
             }
             else if (messageArrived instanceof LeaveGameMessage) {
-                sendBroadCast(new EndGameMessage(null, EndGameMessage.EndGameHeader.DISCONNECTED));
                 throw new GameEndedException();
             }
         }
