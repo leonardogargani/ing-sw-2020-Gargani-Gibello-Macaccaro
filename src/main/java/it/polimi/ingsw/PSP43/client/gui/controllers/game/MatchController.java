@@ -13,7 +13,6 @@ import javafx.scene.input.MouseEvent;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class MatchController extends AbstractController {
 
@@ -62,12 +61,7 @@ public class MatchController extends AbstractController {
     private static ActionRequest actionRequest = null;
     private static BoardController boardController;
     private static PlayersController playersController;
-    private static String nick;
-
-    enum Decision {NOT_DECIDED, YES, NO}
-    private static Decision decision;
-    //
-    private static boolean DecisionActive = false;
+    private static boolean decisionActive = false;
     private static Label topLabel;
     private static Label bottomLabel;
 
@@ -85,10 +79,10 @@ public class MatchController extends AbstractController {
         board[2] = new ImageView[]{c02, c12, c22, c32, c42};
         board[3] = new ImageView[]{c03, c13, c23, c33, c43};
         board[4] = new ImageView[]{c04, c14, c24, c34, c44};
-        boardController = new BoardController(board,bottomMenu,decision);
+        boardController = new BoardController(board,bottomMenu);
         Label[] labels = new Label[]{player1Nick, player2Nick, player3Nick, player1CardDescription};
         ImageView[] images = new ImageView[]{player1Card, player2Card, player3Card, player1Worker, player2Worker, player3Worker};
-        playersController = new PlayersController(labels, images, nick);
+        playersController = new PlayersController(labels, images, getNick());
         for (int i=0;i<5;i++)
             for (int j=0;j<5;j++)
                 board[i][j].setId("cell-button");
@@ -96,10 +90,8 @@ public class MatchController extends AbstractController {
         confirm.setId("decision-button");
         delete.setId("decision-button");
         clientBG = AbstractController.getClientBG();
-        //
         topLabel = topMenu;
         bottomLabel = bottomMenu;
-        player1Nick.setText(nick);
     }
 
 
@@ -153,7 +145,7 @@ public class MatchController extends AbstractController {
      */
     @FXML
     public void onDecisionTake(javafx.scene.input.MouseEvent event) {
-        if (DecisionActive) {
+        if (decisionActive) {
             if (event.getSource() == confirm) {
                     clientBG.sendMessage(new ResponseMessage(true));
             } else if (event.getSource() == delete) {
@@ -162,7 +154,7 @@ public class MatchController extends AbstractController {
         } else {
             bottomMenu.setText("Wait for your turn !");
         }
-        DecisionActive = false;
+        decisionActive = false;
     }
 
     /**
@@ -228,11 +220,6 @@ public class MatchController extends AbstractController {
      */
     public static void askQuestion(RequestMessage message) {
         bottomLabel.setText(message.getMessage());
-        DecisionActive = true;
+        decisionActive = true;
     }
-
-    public static void setNick(String nick) {
-        MatchController.nick = nick;
-    }
-
 }

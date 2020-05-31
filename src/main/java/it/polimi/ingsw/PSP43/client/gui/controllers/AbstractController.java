@@ -12,6 +12,7 @@ import java.io.IOException;
 
 public abstract class AbstractController {
     private static ClientBG clientBG;
+    private static String nick;
 
     public static void setClientBG(ClientBG clientBG) {
         AbstractController.clientBG = clientBG;
@@ -19,13 +20,15 @@ public abstract class AbstractController {
 
     public static ClientBG getClientBG() { return clientBG; }
 
+    public static void setNick(String nick) {
+        AbstractController.nick = nick;
+    }
+
+    public static String getNick() {
+        return nick;
+    }
+
     public void handleExit() {
-        clientBG.sendMessage(new LeaveGameMessage());
-
-        ClientManager clientManager = new ClientManager(2, false);
-        Thread clientManagerThread = new Thread(clientManager);
-        clientManagerThread.start();
-
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/FXML/game_init/home.fxml"));
         try {

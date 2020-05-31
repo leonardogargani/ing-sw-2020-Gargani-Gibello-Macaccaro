@@ -18,13 +18,11 @@ import java.util.Map;
 public class BoardController {
     private ImageView[][] board;
     private Label bottomLabel;
-    private MatchController.Decision decision;
     private ArrayList<Coord> cellsAvailable;
 
-    public BoardController(ImageView[][] board, Label bottomMenu, MatchController.Decision decision) {
+    public BoardController(ImageView[][] board, Label bottomMenu) {
         this.board = board;
         this.bottomLabel = bottomMenu;
-        this.decision = decision;
         cellsAvailable = new ArrayList<>();
     }
 
@@ -95,9 +93,9 @@ public class BoardController {
 
         for (Map.Entry<Coord, ArrayList<Coord>> entry : map.entrySet()){
             assert chosenPosition != null;
-            if (entry.getKey().getX() == chosenPosition.getX() & entry.getKey().getY() == chosenPosition.getY())
-            {
+            if (entry.getKey().getX() == chosenPosition.getX() & entry.getKey().getY() == chosenPosition.getY()) {
                 workerOk = true;
+                break;
             }
         }
         if (workerOk){
