@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP43.client.gui.controllers.game_init;
 
 import it.polimi.ingsw.PSP43.client.gui.GuiStarter;
+import it.polimi.ingsw.PSP43.client.gui.controllers.AbstractController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -9,7 +10,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 
-public class HomeController {
+public class HomeController extends AbstractController {
 
     @FXML private ImageView playImage;
 
@@ -30,6 +31,11 @@ public class HomeController {
     @FXML
     private void handlePlayImage() {
 
+
+        // TODO load serverIPChoice if ClientBG.getConnected() is false, otherwise load nicknameChoice
+        // TODO with the already chosen nickname as default (check if it is null)
+
+
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/FXML/game_init/serverIPChoice.fxml"));
 
@@ -44,7 +50,6 @@ public class HomeController {
             stage.setMinWidth(600);
             stage.setResizable(true);
             stage.setScene(scene);
-            //stage.centerOnScreen();
 
         } catch (IOException e) {
             e.printStackTrace();

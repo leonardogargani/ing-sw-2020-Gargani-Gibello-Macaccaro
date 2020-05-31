@@ -2,7 +2,9 @@ package it.polimi.ingsw.PSP43.client.gui.controllers.game_init;
 
 import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.gui.GuiStarter;
+import it.polimi.ingsw.PSP43.client.gui.controllers.AbstractController;
 import it.polimi.ingsw.PSP43.client.networkMessages.ChosenCardResponse;
+import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.networkMessages.CardRequest;
 import javafx.fxml.FXML;
@@ -16,7 +18,7 @@ import java.io.IOException;
 import java.util.List;
 
 
-public class CardChoiceController {
+public class CardChoiceController extends AbstractController {
 
     @FXML private Label leftLabel;
     @FXML private Label bottomLabel;
@@ -24,6 +26,7 @@ public class CardChoiceController {
     @FXML private ImageView rightArrowImage;
     @FXML private ImageView cardImage;
     @FXML private ImageView confirmImage;
+    @FXML private ImageView exitImage;
 
     private List<AbstractGodCard> availableCards;
 
@@ -40,6 +43,8 @@ public class CardChoiceController {
         leftArrowImage.getStyleClass().add("arrow");
         rightArrowImage.getStyleClass().add("arrow");
         confirmImage.setId("confirm-image");
+        exitImage.setPickOnBounds(false);
+        exitImage.getStyleClass().add("exit-image");
     }
 
 
@@ -146,6 +151,16 @@ public class CardChoiceController {
             e.printStackTrace();
         }
 
+    }
+
+
+    /**
+     * Method that handles an event performed on the image to exit and return back to the home screen.
+     */
+    @FXML
+    private void handleExitImage() {
+        getClientBG().sendMessage(new LeaveGameMessage());
+        super.handleExit();
     }
 
 }

@@ -3,6 +3,8 @@ package it.polimi.ingsw.PSP43.client.gui.controllers.game_init;
 import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.Screens;
 import it.polimi.ingsw.PSP43.client.gui.GuiStarter;
+import it.polimi.ingsw.PSP43.client.gui.controllers.AbstractController;
+import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.PlayersNumberResponse;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,17 +13,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import java.io.IOException;
 
 
-public class PlayersNumberChoiceController {
+public class PlayersNumberChoiceController extends AbstractController {
 
     @FXML private Button confirmButton;
     @FXML private ToggleGroup toggleGroup;
     @FXML private RadioButton twoPlayersButton;
     @FXML private RadioButton threePlayersButton;
     @FXML private Label buttonPressedLabel;
+    @FXML private ImageView exitImage;
 
     private static ClientBG clientBG;
 
@@ -32,6 +36,8 @@ public class PlayersNumberChoiceController {
     @FXML
     private void initialize() {
         confirmButton.getStyleClass().add("confirm-button");
+        exitImage.setPickOnBounds(false);
+        exitImage.getStyleClass().add("exit-image");
     }
 
 
@@ -96,5 +102,14 @@ public class PlayersNumberChoiceController {
         }
     }
 
+
+    /**
+     * Method that handles an event performed on the image to exit and return back to the home screen.
+     */
+    @FXML
+    private void handleExitImage() {
+        getClientBG().sendMessage(new LeaveGameMessage());
+        super.handleExit();
+    }
 
 }

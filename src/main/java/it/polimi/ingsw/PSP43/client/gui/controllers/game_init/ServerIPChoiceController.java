@@ -2,6 +2,7 @@ package it.polimi.ingsw.PSP43.client.gui.controllers.game_init;
 
 import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.gui.GuiStarter;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -59,6 +60,8 @@ public class ServerIPChoiceController {
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/FXML/game_init/nicknameChoice.fxml"));
+        NicknameChoiceController controller = loader.getController();
+        controller.customInit();
 
         try {
 

@@ -5,6 +5,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -14,6 +16,14 @@
 <children>
     <VBox alignment="CENTER" fillWidth="false" layoutX="249.0" layoutY="77.0" prefHeight="400.0" prefWidth="600.0" spacing="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <children>
+            <ImageView fx:id="exitImage" fitHeight="70.0" fitWidth="57.0" onMouseClicked="#handleExitImage" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/icons/buttons/exit.png" />
+               </image>
+               <VBox.margin>
+                  <Insets right="-500.0" top="-20.0" />
+               </VBox.margin>
+            </ImageView>
             <Label text="Choose the number of players">
                 <font>
                     <Font size="30.0" />

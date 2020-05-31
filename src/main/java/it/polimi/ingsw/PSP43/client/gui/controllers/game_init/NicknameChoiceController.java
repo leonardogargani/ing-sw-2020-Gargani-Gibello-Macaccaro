@@ -2,12 +2,12 @@ package it.polimi.ingsw.PSP43.client.gui.controllers.game_init;
 
 import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.gui.controllers.AbstractController;
-import it.polimi.ingsw.PSP43.client.gui.controllers.game.MatchController;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 
 
 public class NicknameChoiceController extends AbstractController {
@@ -15,6 +15,7 @@ public class NicknameChoiceController extends AbstractController {
     @FXML private TextField nicknameField;
     @FXML private Button confirmButton;
     @FXML private Label buttonPressedLabel;
+    @FXML private ImageView exitImage;
 
     private static ClientBG clientBG;
 
@@ -25,6 +26,19 @@ public class NicknameChoiceController extends AbstractController {
     @FXML
     private void initialize() {
         confirmButton.getStyleClass().add("confirm-button");
+        exitImage.setPickOnBounds(false);
+        exitImage.getStyleClass().add("exit-image");
+    }
+
+
+    /**
+     * Method that suggest the already in use nickname (if present) to the player,
+     * compiling the nicknameField with that.
+     */
+    public void customInit() {
+        if (getNick() != null) {
+            nicknameField.setText(getNick());
+        }
     }
 
 
@@ -54,7 +68,8 @@ public class NicknameChoiceController extends AbstractController {
         }
 
         String nickname = nicknameField.getText();
-        MatchController.setNick(nickname);
+        //MatchController.setNick(nickname);
+        AbstractController.setNick(nickname);
         clientBG.sendMessage(new RegistrationMessage(nickname));
 
     }
@@ -67,6 +82,15 @@ public class NicknameChoiceController extends AbstractController {
      */
     public void setLabelText(String textToDisplay) {
         buttonPressedLabel.setText(textToDisplay);
+    }
+
+
+    /**
+     * Method that handles an event performed on the image to exit and return back to the home screen.
+     */
+    @FXML
+    private void handleExitImage() {
+        super.handleExit();
     }
 
 }

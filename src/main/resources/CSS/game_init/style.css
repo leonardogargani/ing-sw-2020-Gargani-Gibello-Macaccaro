@@ -42,3 +42,18 @@
     -fx-effect: dropshadow(three-pass-box, lawngreen, 50, 0, 0, 0);
 }
 
+
+.exit-image {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 15;
+}
+
+
+.exit-image:hover {
+    -fx-effect: dropshadow(three-pass-box, black, 50, 0, 0, 0);
+}
+
+
+.exit-image:pressed {
+    -fx-effect: dropshadow(three-pass-box, blue, 50, 0, 0, 0);
+}

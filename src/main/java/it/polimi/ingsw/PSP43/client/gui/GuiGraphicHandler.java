@@ -178,7 +178,6 @@ public class GuiGraphicHandler extends GraphicHandler {
     @Override
     public void updateMenuChange(EndGameMessage message) {
         loadToPrimaryStage("/FXML/game_end/end.fxml", "/CSS/game_end/end.css");
-        // at this point the controller is the one associated to nicknameChoice.fxml
         //fix with static and runLater
         EndController controller = loader.getController();
         Platform.runLater(() -> controller.setEndMessage(message));
@@ -198,7 +197,7 @@ public class GuiGraphicHandler extends GraphicHandler {
 
         // at this point the controller is the one associated to nicknameChoice.fxml
         NicknameChoiceController controller = loader.getController();
-
+        controller.customInit();
         controller.setLabelText("already in use, choose another nickname");
 
     }
