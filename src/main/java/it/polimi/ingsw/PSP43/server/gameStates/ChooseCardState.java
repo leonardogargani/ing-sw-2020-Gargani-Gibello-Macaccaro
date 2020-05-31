@@ -58,7 +58,7 @@ public class ChooseCardState extends TurnState {
         } while (responseCardMessage==null);
         cardsAvailable = responseCardMessage.getCardsName();
 
-        TextMessage startGameMessage = new TextMessage("\nNow other players are choosing a card within the ones you selected.\n", TextMessage.PositionInScreen.LOW_CENTER);
+        StartGameMessage startGameMessage = new StartGameMessage("\nNow other players are choosing a card within the ones you selected.\n");
         game.sendMessage(startGameMessage, current.getNickname());
 
         this.executeState();

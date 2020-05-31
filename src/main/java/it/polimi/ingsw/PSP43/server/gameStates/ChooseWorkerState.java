@@ -111,8 +111,8 @@ public class ChooseWorkerState extends TurnState {
             latestPlayer = playersHandler.getPlayer(latestPosition).getNickname();
 
             if (!latestPlayer.equals(currentPlayer.getNickname()))
-                game.sendMessage(new StartGameMessage("\nWait for other players that are " +
-                        "choosing the color and positions for their workers.\n"), currentPlayer.getNickname());
+                game.sendMessage(new TextMessage("\nWait for other players that are " +
+                        "choosing the color and positions for their workers.\n", TextMessage.PositionInScreen.LOW_CENTER), currentPlayer.getNickname());
 
             game.setCurrentPlayer(playersHandler.getNextPlayer(currentPlayer.getNickname()));
         } while (!latestPlayer.equals(currentPlayer.getNickname()));
