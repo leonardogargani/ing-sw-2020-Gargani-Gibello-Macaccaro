@@ -60,13 +60,14 @@ public class ServerIPChoiceController {
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/FXML/game_init/nicknameChoice.fxml"));
-        NicknameChoiceController controller = loader.getController();
-        controller.customInit();
 
         try {
 
             Stage stage = GuiStarter.getPrimaryStage();
             Scene scene = new Scene(loader.load());
+
+            NicknameChoiceController controller = loader.getController();
+            controller.customInit();
 
             scene.getStylesheets().add(getClass().getResource("/CSS/game_init/style.css").toExternalForm());
             stage.setScene(scene);
@@ -74,7 +75,6 @@ public class ServerIPChoiceController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
     }
 

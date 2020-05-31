@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public abstract class AbstractController {
     private static ClientBG clientBG;
-    private static String nick;
+    private static String nick = null;
 
     public static void setClientBG(ClientBG clientBG) {
         AbstractController.clientBG = clientBG;
@@ -38,11 +38,13 @@ public abstract class AbstractController {
             scene.getStylesheets().add(getClass().getResource("/CSS/game_init/home.css").toExternalForm());
             stage.setScene(scene);
 
+            stage.setHeight(650);
+            stage.setWidth(650);
             stage.setMinHeight(650);
             stage.setMinWidth(650);
-            stage.setResizable(false);
 
             stage.centerOnScreen();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
