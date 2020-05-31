@@ -8,9 +8,11 @@ import it.polimi.ingsw.PSP43.server.networkMessages.StartGameMessage;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Source;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -43,14 +45,14 @@ public class RegisterClientListener implements Runnable {
         try {
             int idGame = -1, counter = 0;
 
+            StartGameMessage startGameMessage = new StartGameMessage("\nWe are looking for an existent game for you. Otherwise " +
+                    "we will create a new game and you will decide the number of participants.");
+            player.sendMessage(startGameMessage);
+
             // Until there are available gameSessions to inspect in the list, check them if they are available.
             // If it is like that, try to register to that game.
             while (idGame == -1 && gameSessions.size() > counter) {
                 GameSessionObservable gameSession = gameSessions.get(counter);
-
-                StartGameMessage startGameMessage = new StartGameMessage("\nWe are looking for an existent game for you. Otherwise " +
-                        "we will create a new game and you will decide the number of participants.");
-                player.sendMessage(startGameMessage);
 
                 // If the gameSession is in PlayerRegistrationState with another first player, wait until the player
                 // has decided the maximum number of players.
@@ -70,7 +72,7 @@ public class RegisterClientListener implements Runnable {
 
             // If there is not a gameSession available, create a new one
             if (idGame == -1 & !player.isDisconnected()) {
-                GameSession game = new GameSession(gameSessions.size());
+                GameSession game = new GameSession(getRandIdGame());
                 gameSessions.add(game);
                 Thread gameThread = new Thread(game);
                 gameThread.start();
@@ -104,6 +106,24 @@ public class RegisterClientListener implements Runnable {
                 if (gameSession.getIdGame() == idGameSession) {
                     gameSession.unregisterFromGame(new LeaveGameMessage(), player);
                     gameSessionIterator.remove();
+                }
+            }
+        }
+    }
+
+    public synchronized int getRandIdGame() {
+        int randId;
+        Random r = new Random();
+
+        while (true) {
+            randId = r.nextInt(1000);
+
+            if (gameSessions.size() == 0) return randId;
+
+            for (Iterator<GameSession> gameSessionIterator = gameSessions.iterator(); gameSessionIterator.hasNext(); ) {
+                GameSession gameSession = gameSessionIterator.next();
+                if (!(gameSessionIterator.hasNext()) && gameSession.getIdGame() != randId) {
+                    return randId;
                 }
             }
         }

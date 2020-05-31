@@ -154,8 +154,7 @@ public class WorkerColorChoiceController extends AbstractController {
 
     @FXML
     private void handleExitClick(MouseEvent event) {
-        System.out.println("entered");
+        // TODO add send leave
         super.handleExit();
-        System.out.println("exit");
     }
 }

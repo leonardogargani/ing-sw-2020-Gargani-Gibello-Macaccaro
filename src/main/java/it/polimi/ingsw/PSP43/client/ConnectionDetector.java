@@ -33,7 +33,6 @@ public class ConnectionDetector implements Runnable {
     public void run() {
         while (true) {
             try {
-                //System.out.println(this.toString() + " still here");
                 TimeUnit.SECONDS.sleep(10);
                 if (!clientBG.isConnected())
                     return;

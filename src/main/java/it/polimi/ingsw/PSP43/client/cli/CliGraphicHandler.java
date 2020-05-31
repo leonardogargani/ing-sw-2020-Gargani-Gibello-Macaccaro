@@ -10,6 +10,8 @@ import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
+
+import javax.xml.transform.Source;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,18 +43,15 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
         String serverIp;
         nickname = null;
 
-        try {
-            serverIp = cliInputHandler.requestServerIP();
-        } catch (QuitPlayerException e) {
-            return;
-        }
-        getClientBG().setServerIP(serverIp);
-
-        while (!getClientBG().isConnected()) {
+        do {
             try {
-                TimeUnit.MILLISECONDS.sleep(200);
-            } catch (InterruptedException e) { e.printStackTrace(); }
-        }
+                serverIp = cliInputHandler.requestServerIP();
+            } catch (QuitPlayerException e) {
+                return;
+            }
+            getClientBG().setServerIP(serverIp);
+            getClientBG().waitUntilConnected();
+        } while (!(getClientBG().isConnected()));
 
         System.out.println("\n\n" + Screens.WELCOME + "\n\n");
 
@@ -416,8 +415,7 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
             if (response == 1) {
                 LeaveGameMessage leaveGameMessage = new LeaveGameMessage();
                 leaveGameMessage.setTypeDisconnectionHeader(LeaveGameMessage.TypeDisconnectionHeader.IRREVERSIBLE_DISCONNECTION);
-                getClientBG().sendMessage(leaveGameMessage);
-                System.out.println("We are sorry ");
+                System.out.println("We are sorry you leave us. Hope to see you again!");
                 getClientBG().handleDisconnection();
             }
             else {
@@ -463,13 +461,13 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
     @Override
     public void updateMenuChange(TextMessage message) {
         if (message.getPositionInScreen() == TextMessage.PositionInScreen.LOW_CENTER) {
-            bottomMenu.setContent(message.getMessage());
-            topMenu.setContent("");
+            topMenu.setContent(message.getMessage());
+            topMenu.show();
         }
-        if (message.getPositionInScreen() == TextMessage.PositionInScreen.HIGH_CENTER)
+        if (message.getPositionInScreen() == TextMessage.PositionInScreen.HIGH_CENTER) {
             topMenu.setContentWithNick(message.getMessage());
-
-        this.render();
+            this.render();
+        }
     }
 
 

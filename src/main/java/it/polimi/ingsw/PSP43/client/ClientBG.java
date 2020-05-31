@@ -6,11 +6,13 @@ import it.polimi.ingsw.PSP43.client.networkMessages.PingMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
 import it.polimi.ingsw.PSP43.server.networkMessages.ServerMessage;
+import it.polimi.ingsw.PSP43.server.networkMessages.TextMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -28,6 +30,7 @@ public class ClientBG implements Runnable {
 
     /**
      * Not default constructor for the client background.
+     *
      * @param clientManager Thi is the reference to the client manager thread.
      */
     public ClientBG(ClientManager clientManager) {
@@ -53,9 +56,10 @@ public class ClientBG implements Runnable {
 
             try {
                 serverSocket = new Socket(this.serverIP, SERVER_PORT);
-                this.connected = true;
+                setConnected(true);
             } catch (IOException e) {
                 System.out.println("Server Unreachable");
+                setConnected(false);
             }
         } while (!this.connected);
 
@@ -73,15 +77,18 @@ public class ClientBG implements Runnable {
             } catch (IOException e) {
                 // If this exception is thrown the Server in not reachable anymore. For this reason the socket will be closed
                 // and the player will be informed of the problem. The application will end the execution.
+                handleDisconnection();
+
                 EndGameMessage messageServerDown = new EndGameMessage("", EndGameMessage.EndGameHeader.SERVER_CRASHED);
                 clientManager.pushMessageInBox(messageServerDown);
-                handleDisconnection();
-            } catch (ClassNotFoundException ignored) {}
+            } catch (ClassNotFoundException ignored) {
+            }
         }
     }
 
     /**
      * Setter method for serverIP String.
+     *
      * @param serverIP It is the address of the server.
      */
     public void setServerIP(String serverIP) {
@@ -92,12 +99,14 @@ public class ClientBG implements Runnable {
      * This method will be active for the entire duration of the game and when a message arrives (if it's not a ping)
      * the receive cast it to a ServerMessage and then puts the message in the messageBox, that is an ArrayList of
      * message placed in the ClientManager class.
+     *
      * @throws IOException            signals that an I/O exception of some sort has occurred.
      * @throws ClassNotFoundException occurs when you try to load a class at run time using Class .forName() or
      *                                loadClass() methods and mentioned classes are not found in the classpath.
      */
     public void receive() throws IOException, ClassNotFoundException {
         input = new ObjectInputStream(serverSocket.getInputStream());
+
         messageArrived = input.readObject();
 
         if (messageArrived instanceof EndGameMessage) {
@@ -117,19 +126,22 @@ public class ClientBG implements Runnable {
 
     /**
      * Method used to send messages to the server.
+     *
      * @param message The message that will be sent to the server.
      */
     public void sendMessage(ClientMessage message) {
         try {
-            if (!(clientManager.containsEndGameMessage())) {
+            if (!(clientManager.containsEndGameMessage()) || message instanceof PingMessage) {
                 output = new ObjectOutputStream(serverSocket.getOutputStream());
                 output.writeObject(message);
             }
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
     }
 
     /**
      * Method used to send a message of registration to the server.
+     *
      * @param message The message that will be sent to the server.
      */
     public void sendMessage(RegistrationMessage message) {
@@ -137,11 +149,13 @@ public class ClientBG implements Runnable {
             clientManager.flushStack();
             output = new ObjectOutputStream(serverSocket.getOutputStream());
             output.writeObject(message);
-        } catch (IOException e) {}
+        } catch (IOException ignored) {
+        }
     }
 
     /**
      * Method used to send only LeaveGameMessages. After sending, it calls the handleDisconnection method.
+     *
      * @param message The message that will be sent to the server.
      */
     public void sendMessage(LeaveGameMessage message) {
@@ -150,17 +164,34 @@ public class ClientBG implements Runnable {
                 output = new ObjectOutputStream(serverSocket.getOutputStream());
                 output.writeObject(message);
             }
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
     }
 
 
     /**
      * Getter method for the boolean variable disconnected, that controls the exit from the while in the run method
      * to get down the connection to the server.
+     *
      * @return the value of the boolean variable disconnected.
      */
     public boolean isConnected() {
         return connected;
+    }
+
+    public synchronized void waitUntilConnected() {
+        while (!connected) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public synchronized void setConnected(boolean connected) {
+        this.connected = connected;
+        notifyAll();
     }
 
     /**
@@ -168,6 +199,7 @@ public class ClientBG implements Runnable {
      */
     public void handleDisconnection() {
         if (connected) {
+            clientManager.flushStack();
             connected = false;
             clientManager.setActive(false);
 

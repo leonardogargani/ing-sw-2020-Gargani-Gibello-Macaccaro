@@ -65,7 +65,7 @@ public class ClientManager implements Runnable {
 
         // Here begins a infinite loop where the ClientManager waits for messages to handle from the server.
         // This loop ends only if the player decides to shut down the application by setting isActive to false.
-        while (isActive || messageBox.size() != 0) {
+        while (isActive /*|| messageBox.size() != 0*/) {
             try {
                 if (guiExecutor != null) {
                     if (guiExecutorThread.isAlive()) {
@@ -85,6 +85,7 @@ public class ClientManager implements Runnable {
                 LeaveGameMessage leaveGameMessage = new LeaveGameMessage();
                 leaveGameMessage.setTypeDisconnectionHeader(LeaveGameMessage.TypeDisconnectionHeader.GAME_DISCONNECTION);
                 clientBG.sendMessage(leaveGameMessage);
+                clientBG.handleDisconnection();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -148,15 +149,8 @@ public class ClientManager implements Runnable {
     public synchronized void pushMessageInBox(ServerMessage message) {
         if (!containsEndGameMessage()){
             messageBox.add(message);
-            notifyMessageArrived();
+            notifyAll();
         }
-    }
-
-    /**
-     * Synchronized method to notify the arrival of a message.
-     */
-    public synchronized void notifyMessageArrived() {
-        notifyAll();
     }
 
     /**
@@ -191,7 +185,6 @@ public class ClientManager implements Runnable {
         }
 
         ServerMessage message = messageBox.get(0);
-
         if (!(message instanceof EndGameMessage)) {
             messageBox.remove(message);
         }

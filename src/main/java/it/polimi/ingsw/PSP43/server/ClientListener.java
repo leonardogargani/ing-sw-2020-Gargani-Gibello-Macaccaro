@@ -66,14 +66,12 @@ public class ClientListener implements Runnable {
                 * */
                 handleDisconnection(true, LeaveGameMessage.TypeDisconnectionHeader.IRREVERSIBLE_DISCONNECTION);
 
-                // TODO
                 try {
                     TimeUnit.SECONDS.sleep(3);
                 } catch (InterruptedException interruptedException) {
                     interruptedException.printStackTrace();
                 }
-            } catch (InterruptedException | ClassNotFoundException ignored) {
-            }
+            } catch (InterruptedException | ClassNotFoundException ignored) {}
         }
     }
 
@@ -218,7 +216,6 @@ public class ClientListener implements Runnable {
                 // of the disconnection of the client, if it was expecting a response from him.
                 // (In other cases this wil be a "useless" statement).
                 stackMessages.add(new LeaveGameMessage());
-                notifyAll();
 
                 // I do not execute the following code if the method was called due to the disconnection of another
                 // player. In this case I have not to worry about notify a disconnection to the GameSession.
@@ -228,6 +225,8 @@ public class ClientListener implements Runnable {
                         notifier.notifyDisconnection(this.idGame);
                     }
                 }
+
+                notifyAll();
             }
         } catch (IOException e) {
             e.printStackTrace();
