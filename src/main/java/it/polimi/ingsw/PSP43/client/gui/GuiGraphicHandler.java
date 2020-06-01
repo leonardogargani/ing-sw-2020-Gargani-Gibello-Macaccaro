@@ -135,10 +135,14 @@ public class GuiGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(WorkersColorRequest request) {
-        System.out.println("arrived");
-        loadToPrimaryStage("/FXML/workers.fxml", "/CSS/workers.css");
-        WorkerColorChoiceController workerColorChoiceController = loader.getController();
-        Platform.runLater(() -> workerColorChoiceController.handleChoiceOfWorkerColor(request));
+        if (request.getWorkersColorRequestHeader() == WorkersColorRequest.WorkersColorRequestHeader.CHOICE){
+            loadToPrimaryStage("/FXML/workers.fxml", "/CSS/workers.css");
+            WorkerColorChoiceController workerColorChoiceController = loader.getController();
+            Platform.runLater(() -> workerColorChoiceController.handleChoiceOfWorkerColor(request));
+        }
+        else {
+            loadToPrimaryStage("/FXML/game/board.fxml", "/CSS/game/game.css");
+        }
     }
 
 

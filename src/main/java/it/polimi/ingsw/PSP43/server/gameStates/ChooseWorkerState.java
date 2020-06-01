@@ -89,7 +89,7 @@ public class ChooseWorkerState extends TurnState {
         // In this while cycle all the players are asked to choose the color of their workers, beginning from the Starter
         do {
             if (availableColors.size() != 1) {
-                WorkersColorRequest colorRequest = new WorkersColorRequest(Collections.unmodifiableList(availableColors));
+                WorkersColorRequest colorRequest = new WorkersColorRequest(Collections.unmodifiableList(availableColors), WorkersColorRequest.WorkersColorRequestHeader.CHOICE);
                 WorkersColorResponse colorResponse;
                 do {
                     try {
@@ -113,6 +113,11 @@ public class ChooseWorkerState extends TurnState {
                 game.sendMessage(new TextMessage("\nWait for other players that are choosing the color of their workers.\n", TextMessage.PositionInScreen.LOW_CENTER),
                         currentPlayer.getNickname());
             } else {
+                // I send this request to skip the choice in the latest player
+                WorkersColorRequest workersColorRequest =
+                        new WorkersColorRequest(new ArrayList<>(), WorkersColorRequest.WorkersColorRequestHeader.SKIP_CHOICE);
+                game.sendMessage(workersColorRequest, currentPlayer.getNickname());
+
                 for (int i = 0; i < 2; i++) {
                     workersIds[i] = workersHandler.addNewWorker(availableColors.get(FIRST_POSITION));
                 }

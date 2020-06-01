@@ -219,30 +219,32 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
      */
     @Override
     public void updateMenuChange(WorkersColorRequest request) throws QuitPlayerException {
-        List<Color> availableColors = request.getColorsAvailable();
+        if (request.getWorkersColorRequestHeader() != WorkersColorRequest.WorkersColorRequestHeader.SKIP_CHOICE){
+            List<Color> availableColors = request.getColorsAvailable();
 
-        bottomMenu.setContent(Screens.WORKERS_COLOR_REQUEST.toString());
+            bottomMenu.setContent(Screens.WORKERS_COLOR_REQUEST.toString());
 
-        for (Color color : availableColors) {
-            // the name of every color is preceded by its index in the ArrayList
-            System.out.printf(" [%d] - ", availableColors.indexOf(color));
-            Color.printName(color);
-        }
-
-        int chosenIndex;
-        while (true) {
-            bottomMenu.show();
-            chosenIndex = inputHandler.requestInputInt();
-            if (0 <= chosenIndex && chosenIndex < availableColors.size()) {
-                // in this case the chosen index is valid, I want to keep its value
-                break;
+            for (Color color : availableColors) {
+                // the name of every color is preceded by its index in the ArrayList
+                System.out.printf(" [%d] - ", availableColors.indexOf(color));
+                Color.printName(color);
             }
-            System.out.println("The number you wrote is not valid");
-        }
 
-        bottomMenu.clear();
-        WorkersColorResponse response = new WorkersColorResponse(availableColors.get(chosenIndex));
-        super.getClientBG().sendMessage(response);
+            int chosenIndex;
+            while (true) {
+                bottomMenu.show();
+                chosenIndex = inputHandler.requestInputInt();
+                if (0 <= chosenIndex && chosenIndex < availableColors.size()) {
+                    // in this case the chosen index is valid, I want to keep its value
+                    break;
+                }
+                System.out.println("The number you wrote is not valid");
+            }
+
+            bottomMenu.clear();
+            WorkersColorResponse response = new WorkersColorResponse(availableColors.get(chosenIndex));
+            super.getClientBG().sendMessage(response);
+        }
 
     }
 
