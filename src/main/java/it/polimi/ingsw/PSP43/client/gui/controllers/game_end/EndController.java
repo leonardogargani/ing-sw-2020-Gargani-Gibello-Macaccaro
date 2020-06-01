@@ -6,16 +6,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 
 public class EndController extends AbstractController {
     @FXML private ImageView homeButton;
     @FXML private Label cloudLabel;
     @FXML private Label homeButtonLabel;
     @FXML private ImageView centralImage;
-    @FXML private AnchorPane anchor;
-
-    private boolean buttonActive = true;
 
     @FXML
     private void initialize() {
@@ -28,8 +24,7 @@ public class EndController extends AbstractController {
      * This method handles homeButton, it restarts the game
      */
     public void onHomeButtonClicked() {
-        if(homeButton.isVisible()){
-        super.handleExit();}
+        super.handleExit();
     }
 
     /**

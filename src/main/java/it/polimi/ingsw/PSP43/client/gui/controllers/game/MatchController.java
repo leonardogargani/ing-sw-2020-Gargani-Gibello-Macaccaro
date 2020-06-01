@@ -3,6 +3,7 @@ package it.polimi.ingsw.PSP43.client.gui.controllers.game;
 import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.gui.controllers.AbstractController;
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
+import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.ResponseMessage;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
@@ -30,7 +31,7 @@ public class MatchController extends AbstractController {
     @FXML private ImageView player3Worker;
     @FXML private ImageView confirm;
     @FXML private ImageView delete;
-    @FXML private ImageView homeButton;
+    @FXML private ImageView exitButton;
     @FXML private ImageView c00;
     @FXML private ImageView c10;
     @FXML private ImageView c20;
@@ -66,7 +67,7 @@ public class MatchController extends AbstractController {
     private static Label bottomLabel;
 
     private int counter = 0;
-    private int number = 0;
+    private static int numberOfActionRequestArrived = 0;
     private Coord startPosition;
 
     /**
@@ -74,32 +75,28 @@ public class MatchController extends AbstractController {
      */
     public void initialize() {
         ImageView[][] board = new ImageView[5][5];
-        board[0] = new ImageView[]{c00, c10, c20, c30, c40};
-        board[1] = new ImageView[]{c01, c11, c21, c31, c41};
-        board[2] = new ImageView[]{c02, c12, c22, c32, c42};
-        board[3] = new ImageView[]{c03, c13, c23, c33, c43};
-        board[4] = new ImageView[]{c04, c14, c24, c34, c44};
-        boardController = new BoardController(board,bottomMenu);
+        board[0] = new ImageView[]{c00, c01, c02, c03, c04};
+        board[1] = new ImageView[]{c10, c11, c12, c13, c14};
+        board[2] = new ImageView[]{c20, c21, c22, c23, c24};
+        board[3] = new ImageView[]{c30, c31, c32, c33, c34};
+        board[4] = new ImageView[]{c40, c41, c42, c43, c44};
+        boardController = new BoardController(board);
         Label[] labels = new Label[]{player1Nick, player2Nick, player3Nick, player1CardDescription};
         ImageView[] images = new ImageView[]{player1Card, player2Card, player3Card, player1Worker, player2Worker, player3Worker};
         playersController = new PlayersController(labels, images, getNick());
-        for (int i=0;i<5;i++)
-            for (int j=0;j<5;j++)
-                board[i][j].setId("cell-button");
-        homeButton.setId("decision-button");
+        exitButton.setId("decision-button");
         confirm.setId("decision-button");
         delete.setId("decision-button");
+        player2Card.setId("decision-button");
+        player3Card.setId("decision-button");
         clientBG = AbstractController.getClientBG();
         topLabel = topMenu;
         bottomLabel = bottomMenu;
     }
 
 
-    //This method calls checkAction on mouse clicked event on a cell of the board
-
     /**
      * Mouse event catcher for board cells
-     *
      * @param event is a generic mouse event on a cell of the board
      */
     @FXML
@@ -107,36 +104,39 @@ public class MatchController extends AbstractController {
         if (actionRequest != null) {
             Map<Coord, ArrayList<Coord>> hashMap = actionRequest.getCellsAvailable();
             ImageView img = (ImageView) event.getSource();
-            if (counter == 0 & number > 1) {
+            if (counter == 0 & numberOfActionRequestArrived > 1) {
                 startPosition = boardController.checkWorkerChosen(hashMap, img);
                 if (startPosition != null) {
+                    boardController.removeUnderlineWorkers(hashMap);
                     bottomLabel.setText(actionRequest.getMessage());
                     counter++;
+                    boardController.underlineMoves(hashMap, startPosition);
                 } else {
-                    bottomLabel.setText("You haven't a worker in the selected cell !");
+                    bottomLabel.setText("You haven't a worker in the selected cell!\nSelect one of your workers!");
                 }
-            } else if (number <=1) {
+            } else if (numberOfActionRequestArrived <= 1) {
                 ActionResponse response = boardController.checkAvailability(hashMap, img);
                 if (response != null) {
                     clientBG.sendMessage(response);
-                    number++;
-                } else bottomLabel.setText("You can't go there !");
+                    bottomLabel.setText("");
+                    numberOfActionRequestArrived++;
+                } else bottomLabel.setText("You can't go there!\nChose another position to place your worker");
             } else {
                 Coord response = boardController.checkAction(hashMap, img, startPosition);
                 if (response != null) {
                     clientBG.sendMessage(new ActionResponse(startPosition, response));
                     counter = 0;
-                    boardController.removeUnderline(actionRequest);
+                    boardController.removeUnderlineMoves(hashMap, startPosition);
                     actionRequest = null;
-                    number++;
+                    numberOfActionRequestArrived++;
+                    bottomLabel.setText("");
                 } else {
-                    bottomLabel.setText("You can't go there !");
+                    bottomLabel.setText("This cell isn't available for your action!\nChoose another cell!");
                 }
             }
         } else {
             bottomMenu.setText("Wait for your turn !");
         }
-        //clearLabel(bottomMenu);
     }
 
     /**
@@ -147,9 +147,9 @@ public class MatchController extends AbstractController {
     public void onDecisionTake(javafx.scene.input.MouseEvent event) {
         if (decisionActive) {
             if (event.getSource() == confirm) {
-                    clientBG.sendMessage(new ResponseMessage(true));
+                clientBG.sendMessage(new ResponseMessage(true));
             } else if (event.getSource() == delete) {
-                    clientBG.sendMessage(new ResponseMessage(false));
+                clientBG.sendMessage(new ResponseMessage(false));
             } else bottomMenu.setText("You can only chose V or X now");
         } else {
             bottomMenu.setText("Wait for your turn !");
@@ -158,65 +158,73 @@ public class MatchController extends AbstractController {
     }
 
     /**
-     *
+     * Event method called when you click on the exit button, it sends a LeaveGameMessage and then sets the home scene
      */
     @FXML
-    public void onHomeClicked() {
+    public void onExitClicked() {
+        clientBG.sendMessage(new LeaveGameMessage());
         super.handleExit();
     }
 
-
-    public void onCardClicked(MouseEvent event){
+    /**
+     * Event method called when you click on an opponent player's god card
+     * @param event is the MouseEvent generated when you click on an opponent player's god card
+     */
+    public void onCardClicked(MouseEvent event) {
         playersController.showGod((ImageView) event.getSource());
     }
 
 
     /**
-     *
-     * @param request
+     * This method when an ActionRequest arrives, puts it in the local variable request.
+     * After that it sets the text of the label and it underlines the workers that you can use
+     * @param request is the ActionRequest message that contains cells that are available for the move or the build
      */
     public static void setActionRequest(ActionRequest request) {
         actionRequest = request;
-        //bottomLabel.setText("Choose the worker you want for the action");
-        bottomLabel.setText(request.getMessage());
-        boardController.underlineAvailableCells(actionRequest);
+        topLabel.setText("It's your turn");
+        if (numberOfActionRequestArrived <= 1) {
+            bottomLabel.setText("Place your worker " + numberOfActionRequestArrived);
+        } else {
+            bottomLabel.setText("Choose the worker you want for the action");
+            boardController.underlineWorkers(request.getCellsAvailable());
+        }
     }
 
-    //method to handle scene update when a playerListMessage arrives
+
     /**
-     * OK!
-     * @param playersListMessage
+     * This method, when a playerListMessage arrives calls the showUpdate method on the playersController
+     * to show players information updates
+     * @param playersListMessage contains players information that are nickname, card and color for each one
      */
-    public static void updateScene(PlayersListMessage playersListMessage){
+    public static void updateScene(PlayersListMessage playersListMessage) {
         playersController.showUpdate(playersListMessage);
     }
 
-    //This method calls the updateCell method of the boardController
 
     /**
-     * OK!
-     * @param message
+     * This method, when a CellMessage arrives, calls the updateCell method on the board controller to update the cell
+     * @param message contains the cell to be updated
      */
     public static void updateBoard(CellMessage message) {
-        if(boardController!=null)
-            boardController.updateCell(message);
+        boardController.updateCell(message);
     }
 
-    //Update method for TextMessages
 
     /**
-     * OK!
-     * @param textMessage
+     * This method, when a TextMessage arrives, shows its content on the top label
+     * @param textMessage contains a String message to be shown
      */
     public static void showInTopMenu(TextMessage textMessage) {
-        topLabel.setText(textMessage.getMessage());
+        if (textMessage.getPositionInScreen() == TextMessage.PositionInScreen.LOW_CENTER)
+            topLabel.setText(textMessage.getMessage());
+        else topLabel.setText("It's " + textMessage.getMessage() + "'s turn");
     }
 
-    //Method for request messages
 
     /**
-     *
-     * @param message
+     * This method, when a RequestMessage arrives , shows its content on the bottom label
+     * @param message contains a String message to be shown
      */
     public static void askQuestion(RequestMessage message) {
         bottomLabel.setText(message.getMessage());

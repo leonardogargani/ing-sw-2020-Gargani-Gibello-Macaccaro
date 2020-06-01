@@ -1,6 +1,7 @@
 package it.polimi.ingsw.PSP43.client.gui.controllers.game;
 
 import it.polimi.ingsw.PSP43.Color;
+import it.polimi.ingsw.PSP43.client.gui.controllers.AbstractController;
 import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.networkMessages.PlayersListMessage;
@@ -15,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class PlayersController {
-    //I can pass these parameters like a List of Label and a List of Imageview
     private Label player1Nick;
     private Label player2Nick;
     private Label player3Nick;
@@ -30,6 +30,7 @@ public class PlayersController {
     private ArrayList<PlayerInformation> players;
 
     public PlayersController(Label[] labels, ImageView[] images, String nick) {
+        //I can pass these parameters like a List of Label and a List of ImageView
         this.player1Nick = labels[0];
         this.ownNick = nick;
         this.player2Nick = labels[1];
@@ -42,7 +43,7 @@ public class PlayersController {
         this.player2Worker = images[4];
         this.player3Worker = images[5];
         players = new ArrayList<>();
-        player1Nick.setText(ownNick);
+        player3Nick.setVisible(false);
     }
 
 
@@ -65,15 +66,18 @@ public class PlayersController {
             }
         }
 
+        ownNick = AbstractController.getNick();
+        player1Nick.setText(ownNick);
         player1Card.setImage(new Image(getClass().getResource("/images/cards/" + players.get(0).getGod().getGodName() + ".png").toExternalForm()));
         player1Worker.setImage(new Image(getClass().getResource("/images/workers/worker_" + players.get(0).getColorName() + "_1.png").toExternalForm()));
-        player1CardDescription.setText(players.get(0).getGod().getPower());
+        player1CardDescription.setText(players.get(0).getGod().getDescription() + "\n" + players.get(0).getGod().getPower());
 
         player2Nick.setText(players.get(1).getPlayer().getNickname());
         player2Card.setImage(new Image(getClass().getResource("/images/cards/" + players.get(1).getGod().getGodName() + ".png").toExternalForm()));
         player2Worker.setImage(new Image(getClass().getResource("/images/workers/worker_" + players.get(1).getColorName() + "_1.png").toExternalForm()));
 
         if (players.size() == 3) {
+            player3Nick.setVisible(true);
             player3Nick.setText(players.get(2).getPlayer().getNickname());
             player3Card.setImage(new Image(getClass().getResource("/images/cards/" + players.get(2).getGod().getGodName() + ".png").toExternalForm()));
             player3Worker.setImage(new Image(getClass().getResource("/images/workers/worker_" + players.get(2).getColorName() + "_1.png").toExternalForm()));
@@ -83,21 +87,15 @@ public class PlayersController {
     public void showGod(ImageView source) {
         Stage godStage = new Stage();
         AnchorPane pane = new AnchorPane();
-        //pane.getStyleClass().add("/CSS/game/god_descriptions.css");
 
         if (source == player2Card) {
-            //pane.setId(players.get(1).getGod().getGodName() + "-pane");
             ImageView view = new ImageView(new Image(getClass().getResourceAsStream("/images/card_descriptions/"+players.get(1).getGod().getGodName()+"_description.png")));
             pane.getChildren().add(view);
         } else if(players.size() == 3 & source == player3Card){
-            //pane.setId(players.get(2).getGod().getGodName() + "-pane");
             ImageView view = new ImageView(new Image(getClass().getResourceAsStream("/images/card_descriptions/"+players.get(2).getGod().getGodName()+"_description.png")));
             pane.getChildren().add(view);
         }
 
-        /*godStage.setWidth(800);
-        godStage.setHeight(400);*/
-        //pane.setBackground(bg);
         godStage.setScene(new Scene(pane,800,400));
         godStage.setResizable(false);
         godStage.show();

@@ -4,9 +4,7 @@ import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
 import it.polimi.ingsw.PSP43.server.model.Cell;
 import it.polimi.ingsw.PSP43.server.model.Coord;
-import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
 import it.polimi.ingsw.PSP43.server.networkMessages.CellMessage;
-import javafx.scene.control.Label;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -17,22 +15,20 @@ import java.util.Map;
 
 public class BoardController {
     private ImageView[][] board;
-    private Label bottomLabel;
     private ArrayList<Coord> cellsAvailable;
+    private DropShadow effect;
 
-    public BoardController(ImageView[][] board, Label bottomMenu) {
+    public BoardController(ImageView[][] board) {
         this.board = board;
-        this.bottomLabel = bottomMenu;
         cellsAvailable = new ArrayList<>();
+        effect = new DropShadow(BlurType.THREE_PASS_BOX, javafx.scene.paint.Color.DARKORANGE, 10, 0.50, 0, 0);
     }
 
 
     public void updateCell(CellMessage cellMessage) {
         Cell cell = cellMessage.getCell();
-        int i, j;
-        i = cell.getCoord().getX();
-        j = cell.getCoord().getY();
-        ImageView imageView = board[i][j];
+
+        ImageView imageView = board[cellMessage.getCell().getCoord().getX()][cellMessage.getCell().getCoord().getY()];
 
         if (cell.getOccupiedByWorker()) {
             switch (cell.getHeight()) {
@@ -93,7 +89,7 @@ public class BoardController {
 
         for (Map.Entry<Coord, ArrayList<Coord>> entry : map.entrySet()){
             assert chosenPosition != null;
-            if (entry.getKey().getX() == chosenPosition.getX() & entry.getKey().getY() == chosenPosition.getY()) {
+            if (entry.getKey().getX() == chosenPosition.getX() && entry.getKey().getY() == chosenPosition.getY()) {
                 workerOk = true;
                 break;
             }
@@ -113,7 +109,7 @@ public class BoardController {
 
         for (Map.Entry<Coord, ArrayList<Coord>> entry : map.entrySet()) {
             for(int i = 0; i<entry.getValue().size();i++){
-                if (entry.getValue().get(i).getX() == chosenPosition.getX() & entry.getValue().get(i).getY() == chosenPosition.getY()) {
+                if (entry.getValue().get(i).getX() == chosenPosition.getX() && entry.getValue().get(i).getY() == chosenPosition.getY()) {
                     found = true;
                     break;
                 }
@@ -131,10 +127,10 @@ public class BoardController {
         boolean moveOk = false;
 
         for (Map.Entry<Coord, ArrayList<Coord>> entry : cellsAvailable.entrySet()) {
-            if (entry.getKey().getX() == starterPosition.getX() & entry.getKey().getY() == starterPosition.getY())
+            if (entry.getKey().getX() == starterPosition.getX() && entry.getKey().getY() == starterPosition.getY())
                 for (int c = 0; c < entry.getValue().size(); c++) {
                     assert chosenPosition != null;
-                    if (entry.getValue().get(c).getX() == chosenPosition.getX() & entry.getValue().get(c).getY() == chosenPosition.getY()) {
+                    if (entry.getValue().get(c).getX() == chosenPosition.getX() && entry.getValue().get(c).getY() == chosenPosition.getY()) {
                         moveOk = true;
                         break;
                     }
@@ -159,21 +155,52 @@ public class BoardController {
         return chosenPosition;
     }
 
-    public void underlineAvailableCells(ActionRequest actionRequest) {
+    public void underlineWorkers(Map<Coord,ArrayList<Coord>> cells) {
         if (cellsAvailable.size() > 0) {
             cellsAvailable.clear();
         }
-        Map<Coord, ArrayList<Coord>> cells = actionRequest.getCellsAvailable();
         for (Map.Entry<Coord, ArrayList<Coord>> entry : cells.entrySet()) {
             cellsAvailable.addAll(entry.getValue());
-            for (Coord coord : cells.keySet()) board[coord.getX()][coord.getY()].setEffect(new DropShadow(BlurType.THREE_PASS_BOX, javafx.scene.paint.Color.DARKORANGE, 10, 0.65, 10, 10));
+            for (Coord coord : cells.keySet()) board[coord.getX()][coord.getY()].setEffect(effect);
         }
     }
 
-    public void removeUnderline(ActionRequest actionRequest) {
-        Map<Coord, ArrayList<Coord>> cells = actionRequest.getCellsAvailable();
-        for (Coord coord : cells.keySet()) board[coord.getX()][coord.getY()].setEffect(null);
+    public void removeUnderlineWorkers(Map<Coord, ArrayList<Coord>> cells) {
+        for (Coord coord : cells.keySet()) {
+            board[coord.getX()][coord.getY()].setEffect(null);
+        }
         cellsAvailable.clear();
+    }
+
+    public void underlineMoves(Map<Coord, ArrayList<Coord>> cells, Coord startPosition) {
+        Image image = new Image(getClass().getResource("/images/workers/cell_empty.png").toExternalForm());
+        for (Map.Entry<Coord, ArrayList<Coord>> entry : cells.entrySet()) {
+            if (entry.getKey().getX() == startPosition.getX() && entry.getKey().getY() == startPosition.getY()) {
+                for (int i = 0; i < entry.getValue().size(); i++) {
+                    if (board[entry.getValue().get(i).getX()][entry.getValue().get(i).getY()].getImage() == null) {
+                        board[entry.getValue().get(i).getX()][entry.getValue().get(i).getY()].setImage(image);
+                        cellsAvailable.add(new Coord(entry.getValue().get(i).getX(),entry.getValue().get(i).getY()));
+                    }
+                    board[entry.getValue().get(i).getX()][entry.getValue().get(i).getY()].setEffect(effect);
+                }
+            }
+        }
+    }
+
+    public void removeUnderlineMoves(Map<Coord, ArrayList<Coord>> cells, Coord startPosition) {
+        for (Map.Entry<Coord, ArrayList<Coord>> entry : cells.entrySet()) {
+            if (entry.getKey().getX() == startPosition.getX() & entry.getKey().getY() == startPosition.getY()) {
+                for (int i = 0; i < entry.getValue().size(); i++) {
+                    board[entry.getValue().get(i).getX()][entry.getValue().get(i).getY()].setEffect(null);
+                    for (Coord coord : cellsAvailable) {
+                        if (entry.getValue().get(i).getX() == coord.getX() && entry.getValue().get(i).getY() == coord.getY()) {
+                            board[entry.getValue().get(i).getX()][entry.getValue().get(i).getY()].setImage(null);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
