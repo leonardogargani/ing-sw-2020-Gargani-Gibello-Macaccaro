@@ -10,14 +10,11 @@ import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
 import it.polimi.ingsw.PSP43.server.networkMessages.TextMessage;
 
-import java.util.ArrayList;
-
 /**
  * This is the State of the game where the current player is asked to make a move
  * according to the powers of his god.
  */
 public class MoveState extends TurnState {
-    private static final int FIRSTPOSITION = 0;
     protected int initFirst = -1;
 
     public MoveState(GameSession gameSession) {
@@ -45,8 +42,13 @@ public class MoveState extends TurnState {
         Player nextPlayer;
 
         if (initFirst == -1) {
-            game.setCurrentPlayer(playersHandler.getPlayer(FIRSTPOSITION + 1));
-            initFirst = FIRSTPOSITION + 1;
+            for (TurnState t : game.getTurnStateMap()) {
+                if (t.getTurnName() == TurnName.CHOOSE_WORKER_STATE) {
+                    ChooseWorkerState chooseWorkerState = (ChooseWorkerState) t;
+                    game.setCurrentPlayer(playersHandler.getPlayer(((ChooseWorkerState) t).starterPlayer));
+                }
+            }
+            initFirst = 0;
         } else {
             currentPlayer = game.getCurrentPlayer();
             nextPlayer = playersHandler.getNextPlayer(currentPlayer.getNickname());

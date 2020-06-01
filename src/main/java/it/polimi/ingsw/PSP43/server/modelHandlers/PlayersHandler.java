@@ -3,6 +3,8 @@ package it.polimi.ingsw.PSP43.server.modelHandlers;
 import it.polimi.ingsw.PSP43.server.model.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * This is a class intended to handle all the requests to store informations about players in game
@@ -81,5 +83,17 @@ public class PlayersHandler {
      */
     public void deletePlayer(String nick) {
         gamePlayers.removeIf(p -> p.getNickname().equals(nick));
+    }
+
+    public List<String> getNickNames(String nickExcluded) {
+        ArrayList<String> nicks = new ArrayList<>();
+
+        for (int i = 0; i < getNumOfPlayers(); i++) {
+            String currentNickName = getPlayer(i).getNickname();
+            if (!(currentNickName.equals(nickExcluded))) {
+                nicks.add(currentNickName);
+            }
+        }
+        return Collections.unmodifiableList(new ArrayList<>(nicks));
     }
 }

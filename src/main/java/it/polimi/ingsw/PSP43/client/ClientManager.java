@@ -7,6 +7,7 @@ import it.polimi.ingsw.PSP43.client.gui.GuiGraphicHandler;
 import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
+import it.polimi.ingsw.PSP43.client.networkMessages.StarterResponse;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class ClientManager implements Runnable {
 
     /**
      * Not default constructor for ClientManager class that initializes the game on your chosen interface CLI or GUI.
+     *
      * @param chosenInterface It can be 1 for the CLI or 2 for the GUI.
      */
     public ClientManager(int chosenInterface, boolean isFirstGame) {
@@ -102,6 +104,7 @@ public class ClientManager implements Runnable {
     /**
      * This method checks if there are messages in the messageBox and if there are some of these it calls the update
      * on the graphic handler.
+     *
      * @throws QuitPlayerException if a player in the input writes quit to leave the game.
      */
     public void handleEvent() throws QuitPlayerException, InterruptedException {
@@ -129,6 +132,8 @@ public class ClientManager implements Runnable {
                 graphicHandler.updateMenuChange((StartGameMessage) message);
             } else if (message instanceof WorkersColorRequest) {
                 graphicHandler.updateMenuChange((WorkersColorRequest) message);
+            } else if (message instanceof ChooseStarterMessage) {
+                graphicHandler.updateMenuChange((ChooseStarterMessage) message);
             } else if (message instanceof TextMessage) {
                 graphicHandler.updateMenuChange((TextMessage) message);
             }
@@ -137,6 +142,7 @@ public class ClientManager implements Runnable {
 
     /**
      * Setter method for the boolean variable isActive.
+     *
      * @param active false to stop the run of the thread
      */
     public void setActive(boolean active) {
@@ -145,10 +151,11 @@ public class ClientManager implements Runnable {
 
     /**
      * Synchronized method to add message in the message box.
+     *
      * @param message It is the message that will be pushed on the stack of the ClientManager.
      */
     public synchronized void pushMessageInBox(ServerMessage message) {
-        if (!containsEndGameMessage()){
+        if (!containsEndGameMessage()) {
             messageBox.add(message);
             notifyAll();
         }
@@ -156,6 +163,7 @@ public class ClientManager implements Runnable {
 
     /**
      * This method is used to check if there already EndGameMessages on the stack.
+     *
      * @return true if there are already EndGameMessages on the stack, false otherwise.
      */
     public synchronized boolean containsEndGameMessage() {
@@ -178,6 +186,7 @@ public class ClientManager implements Runnable {
 
     /**
      * Synchronized method to remove a message from the message box.
+     *
      * @return the removed message.
      */
     public synchronized ServerMessage popMessageFromBox() throws InterruptedException {

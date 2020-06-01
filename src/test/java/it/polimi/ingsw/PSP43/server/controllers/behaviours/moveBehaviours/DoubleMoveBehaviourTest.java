@@ -47,7 +47,7 @@ public class DoubleMoveBehaviourTest {
      * This method tests if the two sub-sequent moves are done in the right way.
      */
     @Test
-    public void handleMove() throws GameEndedException, WinnerCaughtException, GameLostException {
+    public void handleMove() throws GameEndedException, GameLostException {
         Coord initialWorkerCoord = new Coord(4,3);
         Worker workerToMoveTwice = gameSession.getWorkersHandler().getWorker(initialWorkerCoord);
 
@@ -79,7 +79,8 @@ public class DoubleMoveBehaviourTest {
 
         gameSession.getWorkersHandler().changePosition(workerToMoveTwice, new Coord(3,3));
         Worker updatedWorkerToMoveTwice = spyGame.getWorkersHandler().getWorker(workerToMoveTwice.getId());
-        HashMap<Coord, ArrayList<Coord>> actualHashMap = doubleMoveBehaviour.findAvailablePositionsToMove(spyGame, initialWorkerCoord);
+        HashMap<Coord, ArrayList<Coord>> actualHashMap =
+                doubleMoveBehaviour.findAvailablePositionsToMove(spyGame, initialWorkerCoord, workerToMoveTwice.getCurrentPosition());
 
         for (Coord keyCoord : actualHashMap.keySet()) {
             ArrayList<Coord> positions = actualHashMap.get(keyCoord);

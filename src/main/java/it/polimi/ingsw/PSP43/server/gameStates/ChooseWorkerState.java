@@ -3,6 +3,7 @@ package it.polimi.ingsw.PSP43.server.gameStates;
 import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.client.Screens;
 import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
+import it.polimi.ingsw.PSP43.client.networkMessages.StarterResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.WorkersColorResponse;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Player;
@@ -14,6 +15,7 @@ import it.polimi.ingsw.PSP43.server.networkMessages.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * This is the method where the players are asked to choose a color to assign to thei workers
@@ -22,6 +24,7 @@ import java.util.HashMap;
 public class ChooseWorkerState extends TurnState {
     private static final int FIRST_POSITION = 0;
     private final ArrayList<Color> availableColors;
+    protected String starterPlayer;
 
     public ChooseWorkerState(GameSession gameSession) {
         super(gameSession, TurnName.CHOOSE_WORKER_STATE);
@@ -38,19 +41,33 @@ public class ChooseWorkerState extends TurnState {
     public void initState() {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
-        game.setCurrentPlayer(playersHandler.getPlayer(FIRST_POSITION + 1));
+        game.setCurrentPlayer(playersHandler.getPlayer(FIRST_POSITION)); // the most god-like player is the first arrived ;)
         Player currentPlayer = game.getCurrentPlayer();
-
         StartGameMessage openingMessage = new StartGameMessage(Screens.CHOOSING_INITIAL_POSITION.toString());
         game.sendBroadCast(openingMessage, currentPlayer.getNickname());
 
-        ArrayList<String> nicks = new ArrayList<>();
-        for (int i = 0; i < playersHandler.getNumOfPlayers(); i++) {
-            nicks.add(playersHandler.getPlayer(i).getNickname());
+        List<String> nicks = playersHandler.getNickNames(currentPlayer.getNickname());
+
+        if (nicks.size() != 1){
+            ChooseStarterMessage chooseStarterMessage =
+                    new ChooseStarterMessage(nicks, Screens.STARTER_REQUEST.toString(), TextMessage.PositionInScreen.LOW_CENTER);
+            StarterResponse starterResponse;
+            try {
+                starterResponse = game.sendRequest(chooseStarterMessage, currentPlayer.getNickname(), StarterResponse.class);
+            } catch (GameEndedException e) {
+                game.setActive();
+                return;
+            }
+            starterPlayer = starterResponse.getStarterPlayerName();
         }
-        ChooseStarterMessage chooseStarterMessage =
-                new ChooseStarterMessage(nicks, Screens.STARTER_REQUEST.toString(), TextMessage.PositionInScreen.LOW_CENTER);
-        // TODO add choose card response
+        else {
+            starterPlayer = nicks.get(0);
+        }
+
+        game.sendMessage(openingMessage, currentPlayer.getNickname());
+
+        currentPlayer = playersHandler.getPlayer(starterPlayer);
+        game.setCurrentPlayer(currentPlayer);
 
         executeState();
     }
@@ -64,16 +81,14 @@ public class ChooseWorkerState extends TurnState {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
         WorkersHandler workersHandler = game.getWorkersHandler();
-        String latestPlayer = playersHandler.getPlayer(FIRST_POSITION).getNickname();
-        ;
         Player currentPlayer = game.getCurrentPlayer();
         String nicknameCurrentPlayer = currentPlayer.getNickname();
-        Player godLikePlayer = playersHandler.getPlayer(FIRST_POSITION);
+        String latestPlayer = currentPlayer.getNickname();
 
         Integer[] workersIds = new Integer[2];
         // In this while cycle all the players are asked to choose the color of their workers, beginning from the Starter
         do {
-            if (!latestPlayer.equals(currentPlayer.getNickname())) {
+            if (availableColors.size() != 1) {
                 WorkersColorRequest colorRequest = new WorkersColorRequest(Collections.unmodifiableList(availableColors));
                 WorkersColorResponse colorResponse;
                 do {
@@ -101,24 +116,19 @@ public class ChooseWorkerState extends TurnState {
                 for (int i = 0; i < 2; i++) {
                     workersIds[i] = workersHandler.addNewWorker(availableColors.get(FIRST_POSITION));
                 }
-                godLikePlayer.setWorkersIdsArray(workersIds);
+                currentPlayer.setWorkersIdsArray(workersIds);
 
                 game.sendMessage(new StartGameMessage("\nWait for other players that are " +
-                        "choosing the positions of their workers.\n"), currentPlayer.getNickname());
-                break;
+                        "choosing the color of their workers.\n"), currentPlayer.getNickname());
             }
 
             game.setCurrentPlayer(playersHandler.getNextPlayer(currentPlayer.getNickname()));
             currentPlayer = game.getCurrentPlayer();
             nicknameCurrentPlayer = currentPlayer.getNickname();
-        } while (true);
+        } while (!(latestPlayer.equals(nicknameCurrentPlayer)));
 
-        game.setCurrentPlayer(playersHandler.getPlayer(FIRST_POSITION + 1));
         // In this while cycle all the players are asked to place their workers, beginning from the Starter
         do {
-            currentPlayer = playersHandler.getPlayer(game.getCurrentPlayer().getNickname());
-            nicknameCurrentPlayer = currentPlayer.getNickname();
-
             workersIds = currentPlayer.getWorkersIdsArray();
 
             HashMap<Coord, ArrayList<Coord>> hashAvailablePositions;
@@ -151,6 +161,8 @@ public class ChooseWorkerState extends TurnState {
                     "choosing the positions for their workers.\n"), currentPlayer.getNickname());
 
             game.setCurrentPlayer(playersHandler.getNextPlayer(currentPlayer.getNickname()));
+            currentPlayer = game.getCurrentPlayer();
+            nicknameCurrentPlayer = currentPlayer.getNickname();
         } while (!latestPlayer.equals(game.getCurrentPlayer().getNickname()));
 
         findNextState();

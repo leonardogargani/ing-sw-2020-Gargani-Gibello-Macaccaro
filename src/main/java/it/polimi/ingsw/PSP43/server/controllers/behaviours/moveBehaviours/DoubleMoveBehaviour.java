@@ -17,6 +17,8 @@ import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * This class is made to give run-time the possibility to a card
@@ -45,7 +47,8 @@ public class DoubleMoveBehaviour extends BasicMoveBehaviour {
         ResponseMessage responseMessage = gameSession.sendRequest(requestMessage, currentPlayer.getNickname(), ResponseMessage.class);
 
         if (responseMessage.isResponse()) {
-            HashMap<Coord, ArrayList<Coord>> availablePositionsNextMove = findAvailablePositionsToMove(gameSession, workerMoved.getPreviousPosition());
+            HashMap<Coord, ArrayList<Coord>> availablePositionsNextMove =
+                    findAvailablePositionsToMove(gameSession, workerMoved.getPreviousPosition(), workerMoved.getCurrentPosition());
 
             response = askForMove(gameSession, availablePositionsNextMove);
 
@@ -62,7 +65,7 @@ public class DoubleMoveBehaviour extends BasicMoveBehaviour {
      * @return The HashMap that contains as a key value the coordinates of the current position of the worker and as values
      * all the coordinates in which the worker can move the second time.
      */
-    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(GameSession gameSession, Coord coordToExclude) {
+    public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(GameSession gameSession, Coord coordToExclude, Coord coordWorkerMoved) {
         CardsHandler cardsHandler = gameSession.getCardsHandler();
         AbstractGodCard abstractGodCard = cardsHandler.getPlayerCard(gameSession.getCurrentPlayer().getNickname());
 
@@ -72,6 +75,18 @@ public class DoubleMoveBehaviour extends BasicMoveBehaviour {
                     -> c1.getY() == coordToExclude.getY() && c1.getX() == coordToExclude.getX());
         }
 
+        excludeCoordWorkerNotMoved(availablePositions, coordWorkerMoved);
+
         return availablePositions;
+    }
+
+    private void excludeCoordWorkerNotMoved(HashMap<Coord, ArrayList<Coord>> availablePositions, Coord coordNotEliminate) {
+        for (Iterator<Map.Entry<Coord, ArrayList<Coord>>> entryIterator = availablePositions.entrySet().iterator(); entryIterator.hasNext(); ) {
+            Map.Entry<Coord, ArrayList<Coord>> currentEntry = entryIterator.next();
+            Coord actualWorkerPosition = currentEntry.getKey();
+
+            if (!(actualWorkerPosition.equals(coordNotEliminate)))
+                entryIterator.remove();
+        }
     }
 }

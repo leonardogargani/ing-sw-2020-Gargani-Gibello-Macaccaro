@@ -28,6 +28,7 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
 
     /**
      * Non default constructor that sets the clientGB attribute.
+     *
      * @param clientBG clientBG attribute of the client
      */
     public CliGraphicHandler(ClientBG clientBG) {
@@ -66,6 +67,7 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
 
     /**
      * This method returns the whole board of the cli.
+     *
      * @return whole board of the cli
      */
     public CliBoard getBoard() {
@@ -76,6 +78,7 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
     /**
      * This method updates the cli board changing the symbol of a cell, based
      * on the fact that a worker can build on a cell.
+     *
      * @param cellMessage message containing the cell that has changed (a worker has built on it)
      */
     @Override
@@ -91,6 +94,7 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
     /**
      * This method updates the graphics of the client displaying the message of the players number
      * request, waiting and sending the response through the ClientBG object.
+     *
      * @param request message containing the request for the number of the players
      * @throws QuitPlayerException exception thrown if a player writes "quit" (ignore capitalization) in the cli
      */
@@ -113,6 +117,7 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
     /**
      * This method updates the graphics of the client displaying the message of the initial cards
      * request, waiting and sending the response through the ClientBG object.
+     *
      * @param request message containing the request for the cards chosen for this game
      */
     @Override
@@ -167,6 +172,7 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
     /**
      * This method updates the graphics of the client displaying the message of the single card
      * request, waiting and sending the response through the ClientBG object.
+     *
      * @param request message containing the request for the card chosen by a player
      */
     @Override
@@ -208,6 +214,7 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
     /**
      * This method updates the graphics of the client displaying the message of the workers color
      * request, waiting and sending the response through the ClientBG object.
+     *
      * @param request message containing the request for the color of player's workers
      */
     @Override
@@ -243,6 +250,7 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
     /**
      * This method updates the graphics of the client displaying the message of the action
      * request, waiting and sending the response through the ClientBG object.
+     *
      * @param request message containing the request for the action a player wants to make
      */
     @Override
@@ -264,73 +272,74 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
         bottomMenu.setContent(request.getMessage());
         topMenu.setContent(Screens.YOUR_TURN.toString());
 
-            // graphically render all the received coordinates as free (yellow background)
+        // graphically render all the received coordinates as free (yellow background)
+        for (Coord startCoord : hashMap.keySet()) {
+            for (Coord endCoord : hashMap.get(startCoord)) {
+                board.getCell(endCoord).markAsFree(true);
+            }
+        }
+        this.render();
+
+        int chosenX;
+        int chosenY;
+        Coord chosenCoord;
+        // obtain the second coordinate of the requested couple
+        loop:
+        while (true) {
+            System.out.print("x: ");
+            chosenX = inputHandler.requestInputInt();
+            System.out.print("y: ");
+            chosenY = inputHandler.requestInputInt();
             for (Coord startCoord : hashMap.keySet()) {
                 for (Coord endCoord : hashMap.get(startCoord)) {
-                    board.getCell(endCoord).markAsFree(true);
-                }
-            }
-            this.render();
-
-            int chosenX;
-            int chosenY;
-            Coord chosenCoord;
-            // obtain the second coordinate of the requested couple
-            loop: while (true) {
-                System.out.print("x: ");
-                chosenX = inputHandler.requestInputInt();
-                System.out.print("y: ");
-                chosenY = inputHandler.requestInputInt();
-                for (Coord startCoord : hashMap.keySet()) {
-                    for (Coord endCoord : hashMap.get(startCoord)) {
-                        if (chosenX == endCoord.getX() && chosenY == endCoord.getY()) {
-                            chosenCoord = new Coord(chosenX, chosenY);
-                            break loop;
-                        }
-                    }
-                }
-                System.out.println("The coordinates you wrote are not valid, try again!");
-            }
-
-            // create an ArrayList with the possible values for the first coordinate of the couple
-            ArrayList<Coord> possibleStartCoords = new ArrayList<>();
-            for (Coord startCoord : hashMap.keySet()) {
-                ArrayList<Coord> currentArraylist = hashMap.get(startCoord);
-                for (Coord coord : currentArraylist) {
-                    if (coord.getX() == chosenCoord.getX() && coord.getY() == chosenCoord.getY()) {
-                        possibleStartCoords.add(startCoord);
+                    if (chosenX == endCoord.getX() && chosenY == endCoord.getY()) {
+                        chosenCoord = new Coord(chosenX, chosenY);
+                        break loop;
                     }
                 }
             }
+            System.out.println("The coordinates you wrote are not valid, try again!");
+        }
 
-            // obtain the first coordinate of the couple (among the 1 or 2 possible ones)
-            ActionResponse response;
-            if (possibleStartCoords.size() == 1) {
-                response = new ActionResponse(possibleStartCoords.get(0), chosenCoord);
-            } else {
-                System.out.println("Choose the worker you want to make the action perform:");
-                for (Coord start : possibleStartCoords) {
-                    System.out.printf(" [%d] - (%d, %d)\n", possibleStartCoords.indexOf(start),
-                            start.getX(), start.getY());
-                }
-                int chosenIndex;
-                while (true) {
-                    chosenIndex = inputHandler.requestInputInt();
-                    if (0 <= chosenIndex && chosenIndex < possibleStartCoords.size()) {
-                        break;
-                    }
-                    System.out.println("The number you wrote is not valid, try again!");
-                }
-                response = new ActionResponse(possibleStartCoords.get(chosenIndex), chosenCoord);
-            }
-
-            // graphically render back all the received coordinates as normal
-            for (Coord startCoord : hashMap.keySet()) {
-                for (Coord endCoord : hashMap.get(startCoord)) {
-                    board.getCell(endCoord).markAsFree(false);
+        // create an ArrayList with the possible values for the first coordinate of the couple
+        ArrayList<Coord> possibleStartCoords = new ArrayList<>();
+        for (Coord startCoord : hashMap.keySet()) {
+            ArrayList<Coord> currentArraylist = hashMap.get(startCoord);
+            for (Coord coord : currentArraylist) {
+                if (coord.getX() == chosenCoord.getX() && coord.getY() == chosenCoord.getY()) {
+                    possibleStartCoords.add(startCoord);
                 }
             }
-            bottomMenu.clear();
+        }
+
+        // obtain the first coordinate of the couple (among the 1 or 2 possible ones)
+        ActionResponse response;
+        if (possibleStartCoords.size() == 1) {
+            response = new ActionResponse(possibleStartCoords.get(0), chosenCoord);
+        } else {
+            System.out.println("Choose the worker you want to make the action perform:");
+            for (Coord start : possibleStartCoords) {
+                System.out.printf(" [%d] - (%d, %d)\n", possibleStartCoords.indexOf(start),
+                        start.getX(), start.getY());
+            }
+            int chosenIndex;
+            while (true) {
+                chosenIndex = inputHandler.requestInputInt();
+                if (0 <= chosenIndex && chosenIndex < possibleStartCoords.size()) {
+                    break;
+                }
+                System.out.println("The number you wrote is not valid, try again!");
+            }
+            response = new ActionResponse(possibleStartCoords.get(chosenIndex), chosenCoord);
+        }
+
+        // graphically render back all the received coordinates as normal
+        for (Coord startCoord : hashMap.keySet()) {
+            for (Coord endCoord : hashMap.get(startCoord)) {
+                board.getCell(endCoord).markAsFree(false);
+            }
+        }
+        bottomMenu.clear();
         super.getClientBG().sendMessage(response);
 
     }
@@ -339,6 +348,7 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
     /**
      * This method updates the graphics of the client displaying the message of the generic request
      * that needs a boolean as a response, waiting and sending the response through the ClientBG object.
+     *
      * @param request message containing the generic boolean request
      */
     @Override
@@ -377,6 +387,7 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
 
     /**
      * This method updates the cli menu displaying a message that notifies players the game has ended.
+     *
      * @param message message containing the sentence to display
      */
     @Override
@@ -415,8 +426,7 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
                 leaveGameMessage.setTypeDisconnectionHeader(LeaveGameMessage.TypeDisconnectionHeader.IRREVERSIBLE_DISCONNECTION);
                 System.out.println("We are sorry you leave us. Hope to see you again!");
                 getClientBG().handleDisconnection();
-            }
-            else {
+            } else {
                 board = new CliBoard();
                 topMenu = new CliTopMenu();
                 middleMenu = new CliMiddleMenu();
@@ -442,6 +452,7 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
     /**
      * This method updates the graphics of the client displaying the message of the request
      * for a change of the nick, since the chosen one is already in use.
+     *
      * @param request message that notifies the client that the nick he has just chosen
      *                is already taken
      */
@@ -459,6 +470,7 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
     /**
      * This method updates the graphics of the client displaying the message at the top
      * of the screen (used to write that it's someone else's turn).
+     *
      * @param message message to be displayed at the top of the screen
      */
     @Override
@@ -477,6 +489,7 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
     /**
      * This method updates the graphics of the client displaying players' nicknames,
      * the Gods they've chosen and their workers' color.
+     *
      * @param message message containing workers, their colors and the chosen gods
      */
     @Override
@@ -489,8 +502,8 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
         for (Player player : colorsHashmap.keySet()) {
             playersInfo.add(
                     colorsHashmap.get(player) + player.getNickname() + Color.RESET + ": " +
-                    godsHashMap.get(player).getGodName() + " (" +
-                    godsHashMap.get(player).getDescription() + ")");
+                            godsHashMap.get(player).getGodName() + " (" +
+                            godsHashMap.get(player).getDescription() + ")");
         }
         if (message.getMessage() != null) {
             playersInfo.add(message.getMessage());
@@ -506,6 +519,7 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
     /**
      * This method updates the graphics of the client displaying, at the beginning of
      * the game, some useful information about the state of the game preparation.
+     *
      * @param message message to be displayed
      */
     @Override
@@ -519,15 +533,35 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
     /**
      * This method updates the graphics of the client displaying the request for the player
      * who will be chosen to be the one starting the game.
+     *
      * @param message message containing the request for the player who will start the game
      */
     @Override
     public void updateMenuChange(ChooseStarterMessage message) {
+        bottomMenu.setContent(message.getMessage());
+        bottomMenu.show();
 
-        // TODO implement this method
+        List<String> nicks = message.getPlayersList();
+        int counter = 0, chosenNumber = 0, maxIndex = nicks.size() - 1;
+        for (String s : nicks) {
+            System.out.printf("%d :    " + s + "\n", counter);
+            counter++;
+        }
+        System.out.println("\n");
 
+        CliInputHandler cliInputHandler = new CliInputHandler();
+        do {
+            try {
+                chosenNumber = cliInputHandler.requestInputInt();
+            } catch (QuitPlayerException e) {
+                e.printStackTrace();
+            }
+        } while (chosenNumber < 0 || chosenNumber > maxIndex);
+        System.out.println("\n\nThank you! " + nicks.get(chosenNumber) + " will begin the game!\n\n");
+
+        StarterResponse starterResponse = new StarterResponse(nicks.get(chosenNumber));
+        getClientBG().sendMessage(starterResponse);
     }
-
 
     /**
      * This method renders all the graphic aspects of the cli.
