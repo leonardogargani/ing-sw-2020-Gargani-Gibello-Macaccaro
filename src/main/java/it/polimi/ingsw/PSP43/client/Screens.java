@@ -56,69 +56,47 @@ public enum Screens {
     ),
 
     PLAYERS_NUMBER_REQUEST(
-            Color.ANSI_WHITE +
-                    "Choose between a 2 or 3 game: " +
-                    Color.RESET
+                    "Choose between a 2 or 3 game: "
     ),
 
     INITIAL_2_CARDS_REQUEST(
-            Color.ANSI_WHITE +
-                    "Choose 2 cards (you will receive the latest not chosen by other players):\n" +
-                    Color.RESET
+                    "Choose 2 cards (you will receive the latest not chosen by other players):\n"
     ),
 
     INITIAL_3_CARDS_REQUEST(
-            Color.ANSI_WHITE +
-                    "Choose 3 cards (you will receive the latest not chosen by other players):\n" +
-                    Color.RESET
+                    "Choose 3 cards (you will receive the latest not chosen by other players):\n"
     ),
 
     CARD_REQUEST(
-            Color.ANSI_WHITE +
-                    "Choose a card:\n" +
-                    Color.RESET
+                    "Choose a card:\n"
     ),
 
     WORKERS_COLOR_REQUEST(
-            Color.ANSI_WHITE +
-            "Choose a color for your workers:\n" +
-            Color.RESET
+            "Choose a color for your workers:\n"
     ),
 
     BLOCK_POSITION_REQUEST(
-            Color.ANSI_WHITE +
-            "Choose a position where to build a block:\n" +
-            Color.RESET
+            "Choose a position where to build a block:\n"
     ),
 
     WORKER_PLACEMENT_REQUEST(
-            Color.ANSI_WHITE +
-            "Choose a position to place your worker in:\n" +
-            Color.RESET
+            "\nChoose a position to place your worker in:\n"
     ),
 
     WORKER_MOVE_REQUEST(
-            Color.ANSI_WHITE +
-                    "Choose a position where to place your worker next:\n" +
-                    Color.RESET
+                    "\nChoose a position where to place your worker next:\n"
     ),
 
     WORKER_SECOND_MOVE_REQUEST(
-            Color.ANSI_WHITE +
-                    "Choose a position where to place your worker next (second move):\n" +
-                    Color.RESET
+                    "\nChoose a position where to place your worker next (second move):\n"
     ),
 
     DOME_POSITION_REQUEST(
-            Color.ANSI_WHITE +
-                    "Choose a position where to build a dome:\n" +
-                    Color.RESET
+                    "\nChoose a position where to build a dome:\n"
     ),
 
     FORCE_OPPONENT_REQUEST(
-            Color.ANSI_WHITE +
-            "Choose a position where to force your opponent:\n" +
-            Color.RESET
+            "\nChoose a position where to force your opponent:\n"
     ),
 
     CONNECTING_WITH_OTHERS(
