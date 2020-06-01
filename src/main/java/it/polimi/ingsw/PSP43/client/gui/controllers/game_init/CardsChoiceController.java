@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP43.client.gui.controllers.game_init;
 
-import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.gui.GuiStarter;
 import it.polimi.ingsw.PSP43.client.gui.controllers.AbstractController;
 import it.polimi.ingsw.PSP43.client.networkMessages.ChosenCardsResponse;
@@ -34,8 +33,6 @@ public class CardsChoiceController extends AbstractController {
     private List<AbstractGodCard> cardsList;
     private int numberOfPlayers;
 
-    private static ClientBG clientBG;
-
     private final ArrayList<AbstractGodCard> chosenCards = new ArrayList<>();
     private int currentCardIndex = 0;
 
@@ -64,17 +61,6 @@ public class CardsChoiceController extends AbstractController {
     public void customInit(InitialCardsRequest request) {
         setNumberOfPlayers(request.getNumberOfCard());
         displayCard(cardsList.get(0));
-    }
-
-
-    /**
-     * Method that sets the ClientBG attribute of the controller, it will be invoked inside
-     * the GuiGraphicHandler constructor so that the controller will have already the attribute set
-     * once it will be utilized.
-     * @param clientBG clientBG of the current client
-     */
-    public static void setClientBG(ClientBG clientBG) {
-        CardsChoiceController.clientBG = clientBG;
     }
 
 
@@ -132,7 +118,7 @@ public class CardsChoiceController extends AbstractController {
         // if the number of the chosen cards has reached the number of the players, send the response to the server
         if (chosenCards.size() == numberOfPlayers) {
             ChosenCardsResponse response = new ChosenCardsResponse(chosenCards);
-            clientBG.sendMessage(response);
+            getClientBG().sendMessage(response);
 
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/FXML/miscellaneous/wait.fxml"));

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP43.client.gui.controllers.game_init;
 
-import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.gui.controllers.AbstractController;
 import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
 import javafx.fxml.FXML;
@@ -17,8 +16,6 @@ public class NicknameChoiceController extends AbstractController {
     @FXML private Button confirmButton;
     @FXML private Label buttonPressedLabel;
     @FXML private ImageView exitImage;
-
-    private static ClientBG clientBG;
 
 
     /**
@@ -50,17 +47,6 @@ public class NicknameChoiceController extends AbstractController {
 
 
     /**
-     * Method that sets the ClientBG attribute of the controller, it will be invoked inside
-     * the GuiGraphicHandler constructor so that the controller will have already the attribute set
-     * once it will be utilized.
-     * @param clientBG clientBG of the current client
-     */
-    public static void setClientBG(ClientBG clientBG) {
-        NicknameChoiceController.clientBG = clientBG;
-    }
-
-
-    /**
      * Method that handles an event performed on the button to confirm the nickname.
      */
     @FXML
@@ -77,7 +63,7 @@ public class NicknameChoiceController extends AbstractController {
         String nickname = nicknameField.getText();
         //MatchController.setNick(nickname);
         AbstractController.setNick(nickname);
-        clientBG.sendMessage(new RegistrationMessage(nickname));
+        getClientBG().sendMessage(new RegistrationMessage(nickname));
 
     }
 

@@ -6,7 +6,6 @@ import it.polimi.ingsw.PSP43.client.gui.controllers.AbstractController;
 import it.polimi.ingsw.PSP43.client.gui.controllers.game.MatchController;
 import it.polimi.ingsw.PSP43.client.gui.controllers.game_end.EndController;
 import it.polimi.ingsw.PSP43.client.gui.controllers.game_init.*;
-import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -86,8 +85,6 @@ public class GuiGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateBoardChange(CellMessage cellMessage) {
-        // TODO implementation with JavaFX
-        //Done
         Platform.runLater(() -> MatchController.updateBoard(cellMessage));
     }
 
@@ -152,8 +149,6 @@ public class GuiGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(ActionRequest request) {
-        // TODO implementation with JavaFX
-        //Done
         Platform.runLater(() -> MatchController.setActionRequest(request));
     }
 
@@ -165,8 +160,6 @@ public class GuiGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(RequestMessage request) {
-        // TODO implementation with JavaFX
-        //Done
         Platform.runLater(() -> MatchController.askQuestion(request));
     }
 
@@ -210,8 +203,6 @@ public class GuiGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(TextMessage message) {
-        // TODO implementation with JavaFX
-        //Done
         Platform.runLater(() -> MatchController.showInTopMenu(message));
     }
 
@@ -223,8 +214,6 @@ public class GuiGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(PlayersListMessage message) {
-        // TODO implementation with JavaFX
-        //Done
         Platform.runLater(() -> MatchController.updateScene(message));
     }
 
@@ -263,5 +252,16 @@ public class GuiGraphicHandler extends GraphicHandler {
 
     }
 
+    /**
+     * This method updates the graphics of the client displaying the request for the player
+     * who will be chosen to be the one starting the game.
+     * @param message message containing the request for the player who will start the game
+     */
+    @Override
+    public void updateMenuChange(ChooseStarterMessage message) {
+        loadToPrimaryStage("/FXML/game_init/starterChoice.fxml", "/CSS/game_init/style.css");
+        StarterChoiceController controller = loader.getController();
+        Platform.runLater(() -> controller.customInit(message));
+    }
 
 }

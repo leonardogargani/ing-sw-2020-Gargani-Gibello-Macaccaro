@@ -516,6 +516,18 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
         bottomMenu.show();
     }
 
+    /**
+     * This method updates the graphics of the client displaying the request for the player
+     * who will be chosen to be the one starting the game.
+     * @param message message containing the request for the player who will start the game
+     */
+    @Override
+    public void updateMenuChange(ChooseStarterMessage message) {
+
+        // TODO implement this method
+
+    }
+
 
     /**
      * This method renders all the graphic aspects of the cli.

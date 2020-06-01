@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PSP43.client.gui.controllers.game_init;
 
-import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.gui.GuiStarter;
+import it.polimi.ingsw.PSP43.client.gui.controllers.AbstractController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -13,13 +13,11 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 
-public class ServerIPChoiceController {
+public class ServerIPChoiceController extends AbstractController {
 
     @FXML private Button confirmButton;
     @FXML private Label buttonPressedLabel;
     @FXML private TextField serverIPField;
-
-    private static ClientBG clientBG;
 
 
     /**
@@ -38,17 +36,6 @@ public class ServerIPChoiceController {
 
 
     /**
-     * Method that sets the ClientBG attribute of the controller, it will be invoked inside
-     * the GuiGraphicHandler constructor so that the controller will have already the attribute set
-     * once it will be utilized.
-     * @param clientBG clientBG of the current client
-     */
-    public static void setClientBG(ClientBG clientBG) {
-        ServerIPChoiceController.clientBG = clientBG;
-    }
-
-
-    /**
      * Method that handles an event performed on the button to confirm the server IP.
      */
     @FXML
@@ -62,7 +49,7 @@ public class ServerIPChoiceController {
         }
 
         String serverIP = serverIPField.getText();
-        clientBG.setServerIP(serverIP);
+        getClientBG().setServerIP(serverIP);
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/FXML/game_init/nicknameChoice.fxml"));

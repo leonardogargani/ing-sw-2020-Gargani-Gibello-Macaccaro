@@ -140,4 +140,12 @@ public abstract class GraphicHandler {
     public abstract void updateMenuChange(StartGameMessage message);
 
 
+    /**
+     * This method updates the graphics of the client displaying the request for the player
+     * who will be chosen to be the one starting the game.
+     * @param message message containing the request for the player who will start the game
+     */
+    public abstract void updateMenuChange(ChooseStarterMessage message);
+
+
 }

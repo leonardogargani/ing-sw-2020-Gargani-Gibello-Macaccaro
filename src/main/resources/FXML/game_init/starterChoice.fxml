@@ -12,20 +12,19 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane fx:id="pane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP43.client.gui.controllers.game_init.PlayersNumberChoiceController">
+<AnchorPane fx:id="pane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.PSP43.client.gui.controllers.game_init.StarterChoiceController">
 <children>
     <VBox alignment="CENTER" fillWidth="false" layoutX="249.0" layoutY="77.0" prefHeight="400.0" prefWidth="600.0" spacing="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <children>
             <ImageView fx:id="exitImage" fitHeight="70.0" fitWidth="57.0" onMouseClicked="#handleExitImage" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../images/icons/buttons/exit.png" />
-               </image>
-               <VBox.margin>
-                  <Insets right="-500.0" top="-20.0" />
-               </VBox.margin>
+                <image>
+                    <Image url="@../../images/icons/buttons/exit.png" />
+                </image>
+                <VBox.margin>
+                    <Insets right="-500.0" top="-20.0" />
+                </VBox.margin>
             </ImageView>
-            <Label text="Choose the number of players">
+            <Label text="Choose the player who will start">
                 <font>
                     <Font size="30.0" />
                 </font>
@@ -33,21 +32,21 @@
                     <Insets />
                 </VBox.margin>
             </Label>
-            <HBox alignment="CENTER" prefHeight="40.0" prefWidth="272.0" spacing="100.0">
-               <children>
-                  <RadioButton fx:id="twoPlayersButton" mnemonicParsing="false" text="2">
-                     <toggleGroup>
-                        <ToggleGroup fx:id="toggleGroup" />
-                     </toggleGroup>
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </RadioButton>
-                  <RadioButton fx:id="threePlayersButton" mnemonicParsing="false" text="3" toggleGroup="$toggleGroup">
-                     <font>
-                        <Font size="18.0" />
-                     </font></RadioButton>
-               </children>
+            <HBox alignment="CENTER" prefHeight="40.0" prefWidth="404.0" spacing="50.0">
+                <children>
+                    <RadioButton fx:id="player1Button" mnemonicParsing="false" prefHeight="24.0" prefWidth="120.0">
+                        <toggleGroup>
+                            <ToggleGroup fx:id="toggleGroup" />
+                        </toggleGroup>
+                        <font>
+                            <Font size="18.0" />
+                        </font>
+                    </RadioButton>
+                    <RadioButton fx:id="player2Button" mnemonicParsing="false" prefHeight="24.0" prefWidth="120.0" toggleGroup="$toggleGroup">
+                        <font>
+                            <Font size="18.0" />
+                        </font></RadioButton>
+                </children>
             </HBox>
             <Button fx:id="confirmButton" alignment="TOP_RIGHT" mnemonicParsing="false" onAction="#handleConfirmButton" text="Confirm">
                 <font>
