@@ -11,19 +11,17 @@ import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.networkMessages.*;
 
-import javax.xml.transform.Source;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 
 public class CliGraphicHandler extends GraphicHandler implements Runnable {
 
-    private final CliBoard board = new CliBoard();
-    private final CliTopMenu topMenu = new CliTopMenu();
-    private final CliMiddleMenu middleMenu = new CliMiddleMenu();
-    private final CliBottomMenu bottomMenu = new CliBottomMenu();
+    private CliBoard board = new CliBoard();
+    private CliTopMenu topMenu = new CliTopMenu();
+    private CliMiddleMenu middleMenu = new CliMiddleMenu();
+    private CliBottomMenu bottomMenu = new CliBottomMenu();
     private final CliInputHandler inputHandler = new CliInputHandler();
 
     private String nickname;
@@ -419,6 +417,11 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
                 getClientBG().handleDisconnection();
             }
             else {
+                board = new CliBoard();
+                topMenu = new CliTopMenu();
+                middleMenu = new CliMiddleMenu();
+                bottomMenu = new CliBottomMenu();
+
                 System.out.println("Do you want to change your nickname? (1 for yes, 0 for no)");
                 response = inputHandler.requestInputInt();
                 if (response == 1) {
@@ -507,6 +510,8 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
      */
     @Override
     public void updateMenuChange(StartGameMessage message) {
+        topMenu.setContent("");
+        topMenu.show();
         bottomMenu.setContent(message.getMessage());
         bottomMenu.show();
     }

@@ -43,19 +43,19 @@ public class ChooseWorkerStateTest {
 
         spyState.initState();
 
-        assertEquals("Gibi", spyGame.getCurrentPlayer().getNickname());
+        assertEquals(spyGame.getPlayersHandler().getPlayer(1).getNickname(), spyGame.getCurrentPlayer().getNickname());
     }
 
     @Test
     public void executeState() throws GameEndedException {
+        spyGame.setCurrentPlayer(gameSession.getPlayersHandler().getPlayer(1));
         Mockito.doReturn(new WorkersColorResponse(Color.ANSI_BLUE), new ActionResponse(new Coord(0, 0), new Coord(1, 1)),
                          new ActionResponse(new Coord(0, 0), new Coord(1, 3)),
-                         new WorkersColorResponse(Color.ANSI_RED), new ActionResponse(new Coord(0,0), new Coord(4,2)),
+                         new ActionResponse(new Coord(0,0), new Coord(4,2)),
                          new ActionResponse(new Coord(0,0), new Coord(4,3)))
                 .when(spyGame).sendRequest(any(), any(), any());
         Mockito.doNothing().when(spyState).findNextState();
 
-        spyGame.setCurrentPlayer(gameSession.getPlayersHandler().getPlayer("Gibi"));
         GameInitialiser.initialiseCards(spyGame);
 
         spyState.executeState();

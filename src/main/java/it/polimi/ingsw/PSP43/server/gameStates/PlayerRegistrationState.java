@@ -42,7 +42,7 @@ public class PlayerRegistrationState extends TurnState {
 
         if (game.maxNumPlayers == numberOfPlayers) {
             this.findNextState();
-        } else {
+        } else if (game.maxNumPlayers != -1) {
             StartGameMessage clientMessage = new StartGameMessage(Screens.CONNECTING_WITH_OTHERS.toString());
             game.sendMessage(clientMessage, message.getNick());
         }

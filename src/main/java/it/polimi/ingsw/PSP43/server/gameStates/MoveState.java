@@ -45,8 +45,8 @@ public class MoveState extends TurnState {
         Player nextPlayer;
 
         if (initFirst == -1) {
-            game.setCurrentPlayer(playersHandler.getPlayer(FIRSTPOSITION));
-            initFirst = FIRSTPOSITION;
+            game.setCurrentPlayer(playersHandler.getPlayer(FIRSTPOSITION + 1));
+            initFirst = FIRSTPOSITION + 1;
         } else {
             currentPlayer = game.getCurrentPlayer();
             nextPlayer = playersHandler.getNextPlayer(currentPlayer.getNickname());

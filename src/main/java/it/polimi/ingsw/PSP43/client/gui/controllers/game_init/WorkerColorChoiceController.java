@@ -4,6 +4,7 @@ import it.polimi.ingsw.PSP43.Color;
 import it.polimi.ingsw.PSP43.client.ClientBG;
 import it.polimi.ingsw.PSP43.client.Screens;
 import it.polimi.ingsw.PSP43.client.gui.controllers.AbstractController;
+import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.networkMessages.WorkersColorResponse;
 import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.networkMessages.WorkersColorRequest;
@@ -57,7 +58,7 @@ public class WorkerColorChoiceController extends AbstractController {
     }
 
     public void handleChoiceOfWorkerColor(WorkersColorRequest workersColorRequest) {
-        messageLabel.setText("Choose a color for your workers");
+        messageLabel.setText(Screens.WORKERS_COLOR_REQUEST.toString());
         messageLabel.setAlignment(Pos.CENTER);
 
         colorsAvailable = workersColorRequest.getColorsAvailable();
@@ -154,7 +155,7 @@ public class WorkerColorChoiceController extends AbstractController {
 
     @FXML
     private void handleExitClick(MouseEvent event) {
-        // TODO add send leave
+        getClientBG().sendMessage(new LeaveGameMessage());
         super.handleExit();
     }
 }

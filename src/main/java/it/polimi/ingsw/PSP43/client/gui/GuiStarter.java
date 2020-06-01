@@ -34,6 +34,10 @@ public class GuiStarter extends Application {
     }
 
 
+    public static void setPrimaryStage(Stage primaryStage) {
+        GuiStarter.primaryStage = primaryStage;
+    }
+
     /**
      * First method to be executed, it loads the FXML file with the choice between cli and gui.
      * @param primaryStage stage automatically generated from JavaFX
@@ -72,7 +76,8 @@ public class GuiStarter extends Application {
     @Override
     public void stop() throws QuitPlayerException {
         //throw new QuitPlayerException("A player has decided to quit the game.");
-        Platform.exit();
+        //Platform.exit();
+        System.exit(-1);
     }
 
 }

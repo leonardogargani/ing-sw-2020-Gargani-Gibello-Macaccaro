@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP43.server.gameStates;
 
-import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandlerForTesting;
 import org.xml.sax.SAXException;
 

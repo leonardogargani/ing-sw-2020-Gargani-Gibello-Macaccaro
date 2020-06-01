@@ -96,6 +96,7 @@ public class ClientManager implements Runnable {
                 e.printStackTrace();
             }
         }
+        System.out.println("ended");
     }
 
     /**
@@ -185,9 +186,11 @@ public class ClientManager implements Runnable {
         }
 
         ServerMessage message = messageBox.get(0);
-        if (!(message instanceof EndGameMessage)) {
+        /*if (!(message instanceof EndGameMessage)) {
             messageBox.remove(message);
-        }
+        }*/
+
+        messageBox.remove(message);
         return message;
     }
 }

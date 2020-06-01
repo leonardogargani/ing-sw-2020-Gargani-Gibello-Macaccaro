@@ -1,7 +1,6 @@
 package it.polimi.ingsw.PSP43.server.modelHandlers;
 
 import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
-import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -11,8 +10,7 @@ public class CardsHandlerForTesting extends CardsHandler {
     /**
      * Non default constructor that initializes the attributes of the object
      */
-    public CardsHandlerForTesting() throws ParserConfigurationException, SAXException, IOException { super();
-    }
+    public CardsHandlerForTesting() throws ParserConfigurationException, SAXException, IOException { super(); }
 
     /**
      * Method that assigns a God card to the player who has chosen it.

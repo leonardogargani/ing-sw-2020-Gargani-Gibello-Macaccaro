@@ -47,8 +47,8 @@ public class MoveStateTest {
         spyState.initState();
 
         PlayersHandler playersHandler = spyGame.getPlayersHandler();
-        Player godLikePlayer = playersHandler.getPlayer(0);
-        assertEquals(spyGame.getCurrentPlayer().getNickname(), godLikePlayer.getNickname());
+        String godLikePlayer = playersHandler.getPlayer(0).getNickname();
+        assertEquals(spyGame.getCurrentPlayer().getNickname(), playersHandler.getNextPlayer(godLikePlayer).getNickname());
 
         WorkersHandler workersHandler = spyGame.getWorkersHandler();
         for (Worker w : workersHandler.getWorkers()) {

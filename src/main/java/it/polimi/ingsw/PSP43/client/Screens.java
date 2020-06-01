@@ -56,19 +56,23 @@ public enum Screens {
     ),
 
     PLAYERS_NUMBER_REQUEST(
-                    "Choose between a 2 or 3 game: "
+            "Choose between a 2 or 3 game: "
     ),
 
     INITIAL_2_CARDS_REQUEST(
-                    "Choose 2 cards (you will receive the latest not chosen by other players):\n"
+            "Choose 2 cards (you will receive the latest not chosen by other players):\n"
     ),
 
     INITIAL_3_CARDS_REQUEST(
-                    "Choose 3 cards (you will receive the latest not chosen by other players):\n"
+            "Choose 3 cards (you will receive the latest not chosen by other players):\n"
     ),
 
     CARD_REQUEST(
-                    "Choose a card:\n"
+            "Choose a card:\n"
+    ),
+
+    STARTER_REQUEST(
+            "Choose the first player who will begin the game!"
     ),
 
     WORKERS_COLOR_REQUEST(
@@ -84,15 +88,15 @@ public enum Screens {
     ),
 
     WORKER_MOVE_REQUEST(
-                    "\nChoose a position where to place your worker next:\n"
+            "\nChoose a position where to place your worker next:\n"
     ),
 
     WORKER_SECOND_MOVE_REQUEST(
-                    "\nChoose a position where to place your worker next (second move):\n"
+            "\nChoose a position where to place your worker next (second move):\n"
     ),
 
     DOME_POSITION_REQUEST(
-                    "\nChoose a position where to build a dome:\n"
+            "\nChoose a position where to build a dome:\n"
     ),
 
     FORCE_OPPONENT_REQUEST(
@@ -123,6 +127,7 @@ public enum Screens {
     /**
      * toString() method overridden in order to print the message by simply
      * adding it to the println()
+     *
      * @return message to print out in the cli/gui
      */
     @Override

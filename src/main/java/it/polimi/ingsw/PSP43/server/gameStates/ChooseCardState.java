@@ -87,37 +87,42 @@ public class ChooseCardState extends TurnState {
      */
     private void askForCards(GameSession gameSession) {
         PlayersHandler playersHandler = gameSession.getPlayersHandler();
-        String nicknameGodLikePlayer = playersHandler.getPlayer(FIRSTPOSITION).getNickname();
-        String nicknameCurrentPlayer;
+        String latestPlayer = playersHandler.getPlayer(FIRSTPOSITION).getNickname();
+        Player current = gameSession.getCurrentPlayer();
+        String nicknameCurrentPlayer = current.getNickname();
         CardsHandler cardsHandler = gameSession.getCardsHandler();
 
         do {
-            Player current = gameSession.getCurrentPlayer();
-            nicknameCurrentPlayer = current.getNickname();
+            if (!latestPlayer.equals(nicknameCurrentPlayer)) {
+                CardRequest request = new CardRequest(Collections.unmodifiableList(cardsAvailable));
+                ChosenCardResponse response;
+                do {
+                    try {
+                        response = gameSession.sendRequest(request, nicknameCurrentPlayer, ChosenCardResponse.class);
+                    } catch (GameEndedException e) {
+                        gameSession.setActive();
+                        return;
+                    }
+                } while (response == null);
 
-            CardRequest request = new CardRequest(Collections.unmodifiableList(cardsAvailable));
-            ChosenCardResponse response;
-            do {
-                try {
-                    response = gameSession.sendRequest(request, nicknameCurrentPlayer, ChosenCardResponse.class);
-                } catch (GameEndedException e) {
-                    gameSession.setActive();
-                    return;
+                cardsHandler.setCardToPlayer(nicknameCurrentPlayer, response.getCard().getGodName());
+
+                for (Iterator<AbstractGodCard> cardsIterator = cardsAvailable.iterator(); cardsIterator.hasNext(); ) {
+                    AbstractGodCard card = cardsIterator.next();
+                    if (card.getGodName().equals(response.getCard().getGodName())) cardsIterator.remove();
                 }
-            } while (response == null);
-
-            cardsHandler.setCardToPlayer(nicknameCurrentPlayer, response.getCard().getGodName());
-
-            for (Iterator<AbstractGodCard> cardsIterator = cardsAvailable.iterator(); cardsIterator.hasNext(); ) {
-                AbstractGodCard card = cardsIterator.next();
-                if (card.getGodName().equals(response.getCard().getGodName())) cardsIterator.remove();
+                gameSession.sendMessage(
+                        new StartGameMessage("\nPlease, wait until all the players will have chosen their card.\n"), current.getNickname());
+            }
+            else {
+                cardsHandler.setCardToPlayer(latestPlayer, cardsAvailable.get(0).getGodName());
+                break;
             }
 
-            if (!nicknameGodLikePlayer.equals(nicknameCurrentPlayer))
-                gameSession.sendMessage(new StartGameMessage("\nPlease, wait until all the players will have chosen their card.\n"), current.getNickname());
-
             gameSession.setCurrentPlayer(playersHandler.getNextPlayer(nicknameCurrentPlayer));
-        } while (!nicknameGodLikePlayer.equals(nicknameCurrentPlayer));
+            current = gameSession.getCurrentPlayer();
+            nicknameCurrentPlayer = current.getNickname();
+        } while (true);
     }
 
     /**

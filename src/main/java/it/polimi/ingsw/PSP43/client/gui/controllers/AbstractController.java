@@ -1,9 +1,7 @@
 package it.polimi.ingsw.PSP43.client.gui.controllers;
 
 import it.polimi.ingsw.PSP43.client.ClientBG;
-import it.polimi.ingsw.PSP43.client.ClientManager;
 import it.polimi.ingsw.PSP43.client.gui.GuiStarter;
-import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -31,20 +29,26 @@ public abstract class AbstractController {
     public void handleExit() {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/FXML/game_init/home.fxml"));
+
+        Stage stage;
         try {
-            Stage stage = GuiStarter.getPrimaryStage();
+            stage = GuiStarter.getPrimaryStage();
             Scene scene = new Scene(loader.load());
 
+            Stage newStage = new Stage();
+            GuiStarter.setPrimaryStage(newStage);
+
+            //newStage.setHeight(650);
+            //newStage.setWidth(650);
+            newStage.setMinHeight(650);
+            newStage.setMinWidth(650);
+            newStage.setResizable(false);
+            newStage.centerOnScreen();
+
+            newStage.setScene(scene);
             scene.getStylesheets().add(getClass().getResource("/CSS/game_init/home.css").toExternalForm());
-            stage.setScene(scene);
-
-            stage.setHeight(650);
-            stage.setWidth(650);
-            stage.setMinHeight(650);
-            stage.setMinWidth(650);
-
-            stage.centerOnScreen();
-
+            stage.close();
+            newStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }

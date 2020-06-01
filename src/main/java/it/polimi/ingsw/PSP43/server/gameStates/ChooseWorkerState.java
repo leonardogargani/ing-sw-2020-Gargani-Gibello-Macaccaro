@@ -20,7 +20,7 @@ import java.util.HashMap;
  * and to choose the initial positions of those workers.
  */
 public class ChooseWorkerState extends TurnState {
-    private static final int FIRSTPOSITION = 0;
+    private static final int FIRST_POSITION = 0;
     private final ArrayList<Color> availableColors;
 
     public ChooseWorkerState(GameSession gameSession) {
@@ -38,10 +38,19 @@ public class ChooseWorkerState extends TurnState {
     public void initState() {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
-        game.setCurrentPlayer(playersHandler.getPlayer(FIRSTPOSITION));
+        game.setCurrentPlayer(playersHandler.getPlayer(FIRST_POSITION + 1));
+        Player currentPlayer = game.getCurrentPlayer();
 
         StartGameMessage openingMessage = new StartGameMessage(Screens.CHOOSING_INITIAL_POSITION.toString());
-        game.sendBroadCast(openingMessage);
+        game.sendBroadCast(openingMessage, currentPlayer.getNickname());
+
+        ArrayList<String> nicks = new ArrayList<>();
+        for (int i = 0; i < playersHandler.getNumOfPlayers(); i++) {
+            nicks.add(playersHandler.getPlayer(i).getNickname());
+        }
+        ChooseStarterMessage chooseStarterMessage =
+                new ChooseStarterMessage(nicks, Screens.STARTER_REQUEST.toString(), TextMessage.PositionInScreen.LOW_CENTER);
+        // TODO add choose card response
 
         executeState();
     }
@@ -55,39 +64,68 @@ public class ChooseWorkerState extends TurnState {
         GameSession game = super.getGameSession();
         PlayersHandler playersHandler = game.getPlayersHandler();
         WorkersHandler workersHandler = game.getWorkersHandler();
-        String latestPlayer;
-        Player currentPlayer;
+        String latestPlayer = playersHandler.getPlayer(FIRST_POSITION).getNickname();
+        ;
+        Player currentPlayer = game.getCurrentPlayer();
+        String nicknameCurrentPlayer = currentPlayer.getNickname();
+        Player godLikePlayer = playersHandler.getPlayer(FIRST_POSITION);
 
+        Integer[] workersIds = new Integer[2];
+        // In this while cycle all the players are asked to choose the color of their workers, beginning from the Starter
         do {
-            currentPlayer = game.getCurrentPlayer();
-            String nicknameCurrentPlayer = currentPlayer.getNickname();
-            WorkersColorRequest colorRequest = new WorkersColorRequest(Collections.unmodifiableList(availableColors));
-            WorkersColorResponse colorResponse;
-            do {
-                try {
-                    colorResponse = game.sendRequest(colorRequest, nicknameCurrentPlayer, WorkersColorResponse.class);
-                } catch (GameEndedException e) {
-                    game.setActive();
-                    return;
+            if (!latestPlayer.equals(currentPlayer.getNickname())) {
+                WorkersColorRequest colorRequest = new WorkersColorRequest(Collections.unmodifiableList(availableColors));
+                WorkersColorResponse colorResponse;
+                do {
+                    try {
+                        colorResponse = game.sendRequest(colorRequest, nicknameCurrentPlayer, WorkersColorResponse.class);
+                    } catch (GameEndedException e) {
+                        game.setActive();
+                        return;
+                    }
+                } while (colorResponse == null);
+
+                // here all the new workers of the player are added into the workersHandler with the color chosen, then the color
+                // is removed from available colors
+                for (int i = 0; i < 2; i++) {
+                    workersIds[i] = workersHandler.addNewWorker(colorResponse.getColor());
                 }
-            } while (colorResponse == null);
+                availableColors.remove(colorResponse.getColor());
 
-            // here all the new workers of the player are added into the workersHandler with the color chosen, then the color
-            // is removed from available colors
-            Integer[] workersIds = new Integer[2];
-            for (int i=0; i<2; i++) {
-                workersIds[i] = workersHandler.addNewWorker(colorResponse.getColor());
+                // then the ids of the workers are set into the related owner
+                currentPlayer.setWorkersIdsArray(workersIds);
+
+                game.sendMessage(new StartGameMessage("\nWait for other players that are " +
+                        "choosing the color of their workers.\n"), currentPlayer.getNickname());
+            } else {
+                for (int i = 0; i < 2; i++) {
+                    workersIds[i] = workersHandler.addNewWorker(availableColors.get(FIRST_POSITION));
+                }
+                godLikePlayer.setWorkersIdsArray(workersIds);
+
+                game.sendMessage(new StartGameMessage("\nWait for other players that are " +
+                        "choosing the positions of their workers.\n"), currentPlayer.getNickname());
+                break;
             }
-            availableColors.remove(colorResponse.getColor());
 
-            // then the ids of the workers are set into the related owner
-            currentPlayer.setWorkersIdsArray(workersIds);
+            game.setCurrentPlayer(playersHandler.getNextPlayer(currentPlayer.getNickname()));
+            currentPlayer = game.getCurrentPlayer();
+            nicknameCurrentPlayer = currentPlayer.getNickname();
+        } while (true);
+
+        game.setCurrentPlayer(playersHandler.getPlayer(FIRST_POSITION + 1));
+        // In this while cycle all the players are asked to place their workers, beginning from the Starter
+        do {
+            currentPlayer = playersHandler.getPlayer(game.getCurrentPlayer().getNickname());
+            nicknameCurrentPlayer = currentPlayer.getNickname();
+
+            workersIds = currentPlayer.getWorkersIdsArray();
 
             HashMap<Coord, ArrayList<Coord>> hashAvailablePositions;
             ActionRequest placementRequest;
 
             // here I ask to the player where he wants to place his workers (one at a time I ask him)
-            for (int i = 0; i<workersIds.length; i++) {
+            for (int i = 0; i < workersIds.length; i++) {
                 ActionResponse response;
                 ArrayList<Coord> availablePositions = game.getCellsHandler().findAllFreeCoords();
                 hashAvailablePositions = new HashMap<>();
@@ -101,21 +139,19 @@ public class ChooseWorkerState extends TurnState {
                         game.setActive();
                         return;
                     }
-                } while(response==null);
+                } while (response == null);
                 Coord coordChosen = response.getPosition();
 
                 game.getWorkersHandler().setInitialPosition(workersIds[i], coordChosen);
             }
 
-            int latestPosition = playersHandler.getNumOfPlayers()-1;
-            latestPlayer = playersHandler.getPlayer(latestPosition).getNickname();
+            latestPlayer = playersHandler.getPlayer(FIRST_POSITION + 1).getNickname();
 
-            if (!latestPlayer.equals(currentPlayer.getNickname()))
-                game.sendMessage(new TextMessage("\nWait for other players that are " +
-                        "choosing the color and positions for their workers.\n", TextMessage.PositionInScreen.LOW_CENTER), currentPlayer.getNickname());
+            game.sendMessage(new StartGameMessage("\nWait for other players that are " +
+                    "choosing the positions for their workers.\n"), currentPlayer.getNickname());
 
             game.setCurrentPlayer(playersHandler.getNextPlayer(currentPlayer.getNickname()));
-        } while (!latestPlayer.equals(currentPlayer.getNickname()));
+        } while (!latestPlayer.equals(game.getCurrentPlayer().getNickname()));
 
         findNextState();
     }
