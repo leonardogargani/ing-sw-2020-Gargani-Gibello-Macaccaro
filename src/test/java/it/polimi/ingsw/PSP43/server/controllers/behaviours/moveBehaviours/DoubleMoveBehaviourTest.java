@@ -84,6 +84,7 @@ public class DoubleMoveBehaviourTest {
 
         for (Coord keyCoord : actualHashMap.keySet()) {
             ArrayList<Coord> positions = actualHashMap.get(keyCoord);
+            assertEquals(keyCoord, workerToMoveTwice.getCurrentPosition());
             for (Coord c : positions) assertNotEquals(c, updatedWorkerToMoveTwice.getPreviousPosition());
         }
     }

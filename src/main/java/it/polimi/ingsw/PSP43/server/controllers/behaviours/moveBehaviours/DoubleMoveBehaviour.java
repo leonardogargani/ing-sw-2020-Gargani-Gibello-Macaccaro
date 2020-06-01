@@ -12,7 +12,6 @@ import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
-import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
 import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
 
 import java.util.ArrayList;
@@ -30,7 +29,6 @@ public class DoubleMoveBehaviour extends BasicMoveBehaviour {
     /**
      * This method handles the move of the player's worker and gives him to move it twice, but not back to the previous position.
      * @param gameSession This is a reference to the main access to the game database.
-     * @throws WinnerCaughtException if at the end of the move the worker satisfies one of the winning conditions.
      */
     public void handleInitMove(GameSession gameSession) throws GameEndedException, GameLostException {
         Player currentPlayer = gameSession.getCurrentPlayer();
@@ -80,6 +78,13 @@ public class DoubleMoveBehaviour extends BasicMoveBehaviour {
         return availablePositions;
     }
 
+    /**
+     * This method is created to support the method findAvailablePositionsToMove(...) of this class to find all the
+     * available positions in which the player can move twice, eliminating the positions related to
+     * the unmoved worker.
+     * @param availablePositions The available positions finded in a basic way by findAvailablePositionsToMove(...).
+     * @param coordNotEliminate The coord of the worker that can move in this turn (because it has just been moved).
+     */
     private void excludeCoordWorkerNotMoved(HashMap<Coord, ArrayList<Coord>> availablePositions, Coord coordNotEliminate) {
         for (Iterator<Map.Entry<Coord, ArrayList<Coord>>> entryIterator = availablePositions.entrySet().iterator(); entryIterator.hasNext(); ) {
             Map.Entry<Coord, ArrayList<Coord>> currentEntry = entryIterator.next();

@@ -110,16 +110,16 @@ public class ChooseWorkerState extends TurnState {
                 // then the ids of the workers are set into the related owner
                 currentPlayer.setWorkersIdsArray(workersIds);
 
-                game.sendMessage(new StartGameMessage("\nWait for other players that are " +
-                        "choosing the color of their workers.\n"), currentPlayer.getNickname());
+                game.sendMessage(new TextMessage("\nWait for other players that are choosing the color of their workers.\n", TextMessage.PositionInScreen.LOW_CENTER),
+                        currentPlayer.getNickname());
             } else {
                 for (int i = 0; i < 2; i++) {
                     workersIds[i] = workersHandler.addNewWorker(availableColors.get(FIRST_POSITION));
                 }
                 currentPlayer.setWorkersIdsArray(workersIds);
 
-                game.sendMessage(new StartGameMessage("\nWait for other players that are " +
-                        "choosing the color of their workers.\n"), currentPlayer.getNickname());
+                game.sendMessage(new TextMessage("\nWait for other players that are choosing the color of their workers.\n", TextMessage.PositionInScreen.LOW_CENTER),
+                        currentPlayer.getNickname());
             }
 
             game.setCurrentPlayer(playersHandler.getNextPlayer(currentPlayer.getNickname()));
@@ -157,8 +157,8 @@ public class ChooseWorkerState extends TurnState {
 
             latestPlayer = playersHandler.getPlayer(FIRST_POSITION + 1).getNickname();
 
-            game.sendMessage(new StartGameMessage("\nWait for other players that are " +
-                    "choosing the positions for their workers.\n"), currentPlayer.getNickname());
+            game.sendMessage(new TextMessage("\nWait for other players that are choosing the positions for their workers.\n", TextMessage.PositionInScreen.LOW_CENTER),
+                    currentPlayer.getNickname());
 
             game.setCurrentPlayer(playersHandler.getNextPlayer(currentPlayer.getNickname()));
             currentPlayer = game.getCurrentPlayer();
