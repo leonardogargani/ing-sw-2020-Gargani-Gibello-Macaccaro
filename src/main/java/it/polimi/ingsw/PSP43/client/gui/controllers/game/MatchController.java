@@ -32,6 +32,7 @@ public class MatchController extends AbstractController {
     @FXML private ImageView confirm;
     @FXML private ImageView delete;
     @FXML private ImageView exitButton;
+    @FXML private ImageView helperButton;
     @FXML private ImageView c00;
     @FXML private ImageView c10;
     @FXML private ImageView c20;
@@ -85,6 +86,7 @@ public class MatchController extends AbstractController {
         ImageView[] images = new ImageView[]{player1Card, player2Card, player3Card, player1Worker, player2Worker, player3Worker};
         playersController = new PlayersController(labels, images, getNick());
         exitButton.setId("decision-button");
+        helperButton.setId("decision-button");
         confirm.setId("decision-button");
         delete.setId("decision-button");
         player2Card.setId("decision-button");
@@ -173,6 +175,9 @@ public class MatchController extends AbstractController {
     public void onCardClicked(MouseEvent event) {
         playersController.showGod((ImageView) event.getSource());
     }
+
+
+    public void onHelpClicked(){ playersController.showRules();}
 
 
     /**

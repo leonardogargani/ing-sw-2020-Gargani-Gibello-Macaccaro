@@ -5,6 +5,7 @@ import it.polimi.ingsw.PSP43.client.gui.controllers.AbstractController;
 import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.networkMessages.PlayersListMessage;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -12,6 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -101,6 +103,22 @@ public class PlayersController {
         godStage.show();
         godStage.setAlwaysOnTop(true);
         godStage.centerOnScreen();
+    }
+
+    public void showRules(){
+        Stage rules = new Stage();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/FXML/game/rules.fxml"));
+        try {
+            rules.setScene(new Scene(loader.load()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        rules.setWidth(1000);
+        rules.setHeight(650);
+        rules.setResizable(false);
+        rules.setAlwaysOnTop(true);
+        rules.show();
     }
 
     public void clearImages() {

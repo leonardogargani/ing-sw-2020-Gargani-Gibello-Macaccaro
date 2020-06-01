@@ -30,7 +30,7 @@
                      </font>
                   </Label>
                   <Region maxWidth="-Infinity" prefHeight="200.0" prefWidth="170.0" />
-            <ImageView fx:id="helperButton" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="helperButton" fitHeight="80.0" fitWidth="80.0" onMouseClicked="#onHelpClicked" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../images/icons/buttons/helper_button.png" />
                </image>
