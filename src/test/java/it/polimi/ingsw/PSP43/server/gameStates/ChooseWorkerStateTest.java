@@ -5,6 +5,7 @@ import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
 import it.polimi.ingsw.PSP43.client.networkMessages.WorkersColorResponse;
 import it.polimi.ingsw.PSP43.server.initialisers.GameInitialiser;
 import it.polimi.ingsw.PSP43.server.model.Coord;
+import it.polimi.ingsw.PSP43.server.modelHandlers.PlayersHandler;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.modelHandlersException.NicknameAlreadyInUseException;
 import org.junit.Before;
@@ -30,14 +31,13 @@ public class ChooseWorkerStateTest {
     public void setUp() throws ClassNotFoundException, ParserConfigurationException, NicknameAlreadyInUseException, SAXException, IOException {
         gameSession = GameInitialiser.initialiseGame();
         GameInitialiser.initialisePlayers(gameSession);
-        GameInitialiser.initialiseWorkers(gameSession);
         spyGame = Mockito.spy(gameSession);
         state = new ChooseWorkerState(spyGame);
         spyState = Mockito.spy(state);
     }
 
     @Test
-    public void initState() {
+    public void initStateTest() {
         Mockito.doNothing().when(spyGame).sendBroadCast(any());
         Mockito.doNothing().when(spyState).executeState();
 
@@ -46,15 +46,9 @@ public class ChooseWorkerStateTest {
         assertEquals(spyGame.getPlayersHandler().getPlayer(1).getNickname(), spyGame.getCurrentPlayer().getNickname());
     }
 
-    @Test
-    public void executeState() throws GameEndedException {
+
+    public void executeStateTest() {
         spyGame.setCurrentPlayer(gameSession.getPlayersHandler().getPlayer(1));
-        Mockito.doReturn(new WorkersColorResponse(Color.ANSI_BLUE), new ActionResponse(new Coord(0, 0), new Coord(1, 1)),
-                         new ActionResponse(new Coord(0, 0), new Coord(1, 3)),
-                         new ActionResponse(new Coord(0,0), new Coord(4,2)),
-                         new ActionResponse(new Coord(0,0), new Coord(4,3)))
-                .when(spyGame).sendRequest(any(), any(), any());
-        Mockito.doNothing().when(spyState).findNextState();
 
         GameInitialiser.initialiseCards(spyGame);
 
@@ -63,15 +57,15 @@ public class ChooseWorkerStateTest {
         // checks that every player has a different worker ids from the others
         // because that is a fact not true at the instantiation of the array of workers during
         // the instantiation of each player
-        ArrayList<Integer> idsWorkers =  new ArrayList<>();
-        for (int i=0; i<gameSession.getPlayersHandler().getNumOfPlayers(); i++) {
+        ArrayList<Integer> idsWorkers = new ArrayList<>();
+        for (int i = 0; i < gameSession.getPlayersHandler().getNumOfPlayers(); i++) {
             Integer[] workers = gameSession.getPlayersHandler().getPlayer(i).getWorkersIdsArray();
             idsWorkers.addAll(Arrays.asList(workers));
         }
 
         boolean equal = true;
-        for (int i = 0; i<idsWorkers.size() - 1; i++) {
-            for (int j = i+1; j<idsWorkers.size(); j++) {
+        for (int i = 0; i < idsWorkers.size() - 1; i++) {
+            for (int j = i + 1; j < idsWorkers.size(); j++) {
                 if (idsWorkers.get(i).equals(idsWorkers.get(j))) {
                     equal = false;
                     break;
@@ -83,7 +77,42 @@ public class ChooseWorkerStateTest {
     }
 
     @Test
-    public void findNextState() {
+    public void executeStateWith3PlayersTest() throws GameEndedException {
+        PlayersHandler playersHandler = gameSession.getPlayersHandler();
+        String newPlayer = "Leo";
+        playersHandler.createNewPlayer(newPlayer);
+
+        Mockito.doReturn(new WorkersColorResponse(Color.ANSI_BLUE),
+                new WorkersColorResponse(Color.ANSI_GREEN),
+                new ActionResponse(new Coord(0, 0), new Coord(1, 1)),
+                new ActionResponse(new Coord(0, 0), new Coord(1, 3)),
+                new ActionResponse(new Coord(0, 0), new Coord(4, 2)),
+                new ActionResponse(new Coord(0, 0), new Coord(4, 3)),
+                new ActionResponse(new Coord(0, 0), new Coord(4, 4)),
+                new ActionResponse(new Coord(0, 0), new Coord(0, 3)))
+                .when(spyGame).sendRequest(any(), any(), any());
+        Mockito.doNothing().when(spyState).findNextState();
+
+        executeStateTest();
+    }
+
+    @Test
+    public void executeStateWith2PlayersTest() throws GameEndedException {
+        Mockito.doReturn(new WorkersColorResponse(Color.ANSI_BLUE),
+                new WorkersColorResponse(Color.ANSI_RED),
+                new ActionResponse(new Coord(0, 0), new Coord(1, 1)),
+                new ActionResponse(new Coord(0, 0), new Coord(1, 3)),
+                new ActionResponse(new Coord(0, 0), new Coord(4, 2)),
+                new ActionResponse(new Coord(0, 0), new Coord(4, 3)))
+                .when(spyGame).sendRequest(any(), any(), any());
+        Mockito.doNothing().when(spyState).findNextState();
+
+        executeStateTest();
+    }
+
+    @Test
+    public void findNextStateTest() {
+        GameInitialiser.initialiseWorkers(gameSession);
         Mockito.doNothing().when(spyGame).transitToNextState();
         Mockito.doNothing().when(spyGame).sendBroadCast(any());
 

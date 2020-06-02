@@ -41,14 +41,20 @@ public class MoveStateTest {
 
     @Test
     public void initStateFirstExecution() {
+        PlayersHandler playersHandler = spyGame.getPlayersHandler();
         doNothing().when(spyGame).sendBroadCast(any());
         doNothing().when(spyState).executeState();
 
+        for (TurnState t : spyGame.getTurnStateMap()) {
+            if (t.getTurnName() == TurnState.TurnName.CHOOSE_WORKER_STATE) {
+                ChooseWorkerState chooseCardState = (ChooseWorkerState) t;
+                chooseCardState.starterPlayer = playersHandler.getPlayer(1).getNickname();
+            }
+        }
+
         spyState.initState();
 
-        PlayersHandler playersHandler = spyGame.getPlayersHandler();
-        String godLikePlayer = playersHandler.getPlayer(0).getNickname();
-        assertEquals(spyGame.getCurrentPlayer().getNickname(), playersHandler.getNextPlayer(godLikePlayer).getNickname());
+        assertEquals(spyGame.getCurrentPlayer().getNickname(), playersHandler.getPlayer(1).getNickname());
 
         WorkersHandler workersHandler = spyGame.getWorkersHandler();
         for (Worker w : workersHandler.getWorkers()) {

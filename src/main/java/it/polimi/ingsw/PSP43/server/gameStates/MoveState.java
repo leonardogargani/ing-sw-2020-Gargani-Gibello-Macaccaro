@@ -44,7 +44,6 @@ public class MoveState extends TurnState {
         if (initFirst == -1) {
             for (TurnState t : game.getTurnStateMap()) {
                 if (t.getTurnName() == TurnName.CHOOSE_WORKER_STATE) {
-                    ChooseWorkerState chooseWorkerState = (ChooseWorkerState) t;
                     game.setCurrentPlayer(playersHandler.getPlayer(((ChooseWorkerState) t).starterPlayer));
                 }
             }
@@ -106,7 +105,20 @@ public class MoveState extends TurnState {
             game.eliminatePlayer(currentPlayer);
             game.setCurrentPlayer(nextPlayer);
 
-            this.sendAllWaitingMessage();
+            if (game.getPlayersHandler().getNumOfPlayers() == 1) {
+                for (TurnState t : game.getTurnStateMap()) {
+                    if (t.getTurnName() == TurnName.WIN_STATE) {
+                        WinState winState = (WinState) t;
+                        winState.winner = game.getCurrentPlayer().getNickname();
+                        game.setNextState(t);
+                        return;
+                    }
+                }
+            }
+            else {
+                this.sendAllWaitingMessage();
+                return;
+            }
         }
 
         if (super.checkForWinner(playerCard, game)) {

@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * This is the State of the game where the winner of the game is told to all the players.
  */
 public class WinState extends TurnState {
-    String winner;
+    protected String winner;
 
     public WinState(GameSession gameSession) {
         super(gameSession, TurnName.WIN_STATE);

@@ -27,7 +27,7 @@ public class BlockOpponentRiseBehaviour extends BasicMoveBehaviour {
      * @param gameSession The reference to the active game database.
      */
     private void disablePowers(GameSession gameSession) {
-        gameSession.getCardsHandler().removeDecorator(this.getGodName(), "it.polimi.ingsw.PSP43.server.model.card.decorators.BlockRiseDecorator");
+        gameSession.getCardsHandler().removeDecorator(this.getGodName(), "it.polimi.ingsw.PSP43.server.controllers.decorators.BlockRiseDecorator");
     }
 
     /**

@@ -20,7 +20,7 @@ import java.util.Iterator;
 
 import static org.junit.Assert.*;
 
-public class CellsHandlerTest {
+public class    CellsHandlerTest {
     GameSessionForTest gameSession;
     GameSessionForTest spyGame;
     Player currentPlayer;
