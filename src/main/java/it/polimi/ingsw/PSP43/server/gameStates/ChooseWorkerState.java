@@ -160,8 +160,6 @@ public class ChooseWorkerState extends TurnState {
                 game.getWorkersHandler().setInitialPosition(workersIds[i], coordChosen);
             }
 
-            latestPlayer = playersHandler.getPlayer(FIRST_POSITION + 1).getNickname();
-
             game.sendMessage(new TextMessage("\nWait for other players that are choosing the positions for their workers.\n", TextMessage.PositionInScreen.LOW_CENTER),
                     currentPlayer.getNickname());
 

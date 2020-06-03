@@ -25,8 +25,7 @@ public class DoubleDifferentSpaceBehaviour extends BasicBuildBehaviour {
     private static final long serialVersionUID = 5472654096820247816L;
 
     /**
-     * This method checks if the player wants to build another time
-     *
+     * This method checks if the player wants to build another time.
      * @param gameSession This is a reference to the main access to the game database.
      */
     public void handleInitBuild(GameSession gameSession) throws GameEndedException {
@@ -48,7 +47,6 @@ public class DoubleDifferentSpaceBehaviour extends BasicBuildBehaviour {
 
     /**
      * This method is used to give the possibility to the player to build twice, but not on the same space.
-     *
      * @param oldDataToBuild The data of the previous build, used to check and not to give the possibility to the player
      *                       to build in the same position of the previous one.
      */

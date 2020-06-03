@@ -90,8 +90,10 @@ public class RegisterClientListener implements Runnable {
      * Synchronized method to remove a gameSession.
      * @param idGameSession This is the id of the gameSession that is going to be removed.
      */
-    public synchronized void removeGameSession(int idGameSession) {
-        gameSessions.removeIf(gameSessionObservable -> gameSessionObservable.getIdGame() == idGameSession);
+    public void removeGameSession(int idGameSession) {
+        synchronized (gameSessions){
+            gameSessions.removeIf(gameSessionObservable -> gameSessionObservable.getIdGame() == idGameSession);
+        }
     }
 
     /**

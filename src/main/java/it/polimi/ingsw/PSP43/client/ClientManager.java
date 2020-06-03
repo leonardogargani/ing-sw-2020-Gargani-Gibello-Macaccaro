@@ -98,7 +98,6 @@ public class ClientManager implements Runnable {
                 e.printStackTrace();
             }
         }
-        System.out.println("ended");
     }
 
     /**

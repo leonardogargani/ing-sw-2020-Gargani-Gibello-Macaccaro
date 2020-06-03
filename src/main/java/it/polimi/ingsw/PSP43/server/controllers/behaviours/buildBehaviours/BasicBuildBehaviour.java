@@ -66,6 +66,14 @@ public class BasicBuildBehaviour extends BasicGodCard implements BuildBehaviour 
         }
     }
 
+    /**
+     * This method asks to the player where he wants to build, choosing within the cells passed as parameter of the method.
+     * @param gameSession This is a reference to the main access to the game database.
+     * @param availablePositionsBuildBlock The positions where the workers can build.
+     * @param message The message sent to the client and used to ask him where he wants to build.
+     * @return The response arrived from the client with the position where to build.
+     * @throws GameEndedException if the player decides to leave the game during his turn.
+     */
     public ActionResponse askForBuild(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositionsBuildBlock, String message) throws GameEndedException {
         Player currentPlayer = gameSession.getCurrentPlayer();
 
@@ -74,6 +82,11 @@ public class BasicBuildBehaviour extends BasicGodCard implements BuildBehaviour 
         return gameSession.sendRequest(actionRequest, currentPlayer.getNickname(), ActionResponse.class);
     }
 
+    /**
+     * This method is used for a basic build behaviour, that is the one without use of god cards.
+     * @param gameSession This is a reference to the main access to the game database.
+     * @throws GameEndedException if the player decides to leave the game during his turn.
+     */
     public void handleInitBuild(GameSession gameSession) throws GameEndedException {
         DataToBuild dataToBuild = genericAskForBuild(gameSession);
 
