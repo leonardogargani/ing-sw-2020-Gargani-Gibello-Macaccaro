@@ -60,21 +60,25 @@ public class MatchController extends AbstractController {
     @FXML private ImageView c44;
 
     private static ClientBG clientBG;
-    private static ActionRequest actionRequest = null;
+    private static ActionRequest actionRequest;
     private static BoardController boardController;
     private static PlayersController playersController;
-    private static boolean decisionActive = false;
+    private static boolean decisionActive;
     private static Label topLabel;
     private static Label bottomLabel;
-
-    private int counter = 0;
-    private static int numberOfActionRequestArrived = 0;
+    //Initialization moved in initialize method
+    private int counter;
+    private static int numberOfActionRequestArrived;
     private Coord startPosition;
 
     /**
      * Initialize method for this controller
      */
     public void initialize() {
+        actionRequest = null;
+        decisionActive = false;
+        numberOfActionRequestArrived = 0;
+        counter = 0;
         ImageView[][] board = new ImageView[5][5];
         board[0] = new ImageView[]{c00, c01, c02, c03, c04};
         board[1] = new ImageView[]{c10, c11, c12, c13, c14};
@@ -106,7 +110,14 @@ public class MatchController extends AbstractController {
         if (actionRequest != null) {
             Map<Coord, ArrayList<Coord>> hashMap = actionRequest.getCellsAvailable();
             ImageView img = (ImageView) event.getSource();
-            if (counter == 0 & numberOfActionRequestArrived > 1) {
+            if (numberOfActionRequestArrived <= 1) {
+                ActionResponse response = boardController.checkAvailability(hashMap, img);
+                if (response != null) {
+                    clientBG.sendMessage(response);
+                    bottomLabel.setText("");
+                    numberOfActionRequestArrived++;
+                } else bottomLabel.setText("You can't go there!\nChose another position to place your worker");
+            } else if (counter == 0) {
                 startPosition = boardController.checkWorkerChosen(hashMap, img);
                 if (startPosition != null) {
                     boardController.removeUnderlineWorkers(hashMap);
@@ -116,13 +127,6 @@ public class MatchController extends AbstractController {
                 } else {
                     bottomLabel.setText("You haven't a worker in the selected cell!\nSelect one of your workers!");
                 }
-            } else if (numberOfActionRequestArrived <= 1) {
-                ActionResponse response = boardController.checkAvailability(hashMap, img);
-                if (response != null) {
-                    clientBG.sendMessage(response);
-                    bottomLabel.setText("");
-                    numberOfActionRequestArrived++;
-                } else bottomLabel.setText("You can't go there!\nChose another position to place your worker");
             } else {
                 Coord response = boardController.checkAction(hashMap, img, startPosition);
                 if (response != null) {
@@ -164,6 +168,8 @@ public class MatchController extends AbstractController {
      */
     @FXML
     public void onExitClicked() {
+        //TODO deleted and added in initialize method the following entry
+        //numberOfActionRequestArrived = 0;
         clientBG.sendMessage(new LeaveGameMessage());
         super.handleExit();
     }
