@@ -49,7 +49,7 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
                 return;
             }
             getClientBG().setServerIP(serverIp);
-            getClientBG().waitUntilConnected();
+            getClientBG().waitForChangeConnected();
         } while (!(getClientBG().isConnected()));
 
         System.out.println("\n\n" + Screens.WELCOME + "\n\n");

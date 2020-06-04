@@ -16,10 +16,11 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
+import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * This class is used to parse the XML configuration file and to initialise the deck of cards of the game.
@@ -36,17 +37,10 @@ public class DOMCardsParser {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
 
-        // TODO (try to) change the following part in order to make the jar correctly access the xml file
+        InputStream inputStream = new BufferedInputStream(Objects.requireNonNull(
+                DOMCardsParser.class.getClassLoader().getResourceAsStream("configurationFiles/xmlFiles/deckOfAbstractGodCards.xml")));
 
-        ClassLoader classLoader = DOMCardsParser.class.getClassLoader();
-        URL resource = classLoader.getResource("configurationFiles/xmlFiles/deckOfAbstractGodCards.xml");
-        File file;
-        if (resource == null) {
-            throw new IllegalArgumentException("file is not found!");
-        } else {
-            file = new File(resource.getFile());
-        }
-        Document document = builder.parse(file);
+        Document document = builder.parse(inputStream);
         Element deck = document.getDocumentElement();
         NodeList cards = deck.getChildNodes();
         return buildCompleteDeck(cards);

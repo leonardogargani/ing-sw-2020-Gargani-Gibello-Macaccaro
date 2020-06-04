@@ -50,7 +50,7 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
             Coord currentWorkerPosition = workerMoved.getCurrentPosition();
 
             ActionRequest request = new ActionRequest("Choose a position where to force your opponent.",
-                    Map.of(new Coord(0, 0), directionAvailableCoords(cellsHandler, currentWorkerPosition, actionResponse.getPosition())));
+                    Map.of(actionResponse.getPosition(), directionAvailableCoords(cellsHandler, currentWorkerPosition, actionResponse.getPosition())));
             response = gameSession.sendRequest(request, gameSession.getCurrentPlayer().getNickname(), ActionResponse.class);
             coordToForce = response.getPosition();
         }
@@ -127,7 +127,7 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
         ArrayList<Cell> cellsInDirection = handler.getCells(coordsInDirection);
         Cell cellOpponent = handler.getCell(newPosition);
 
-        cellsInDirection.removeIf(c -> c.getHeight() != cellOpponent.getHeight());
+        cellsInDirection.removeIf(c -> c.getHeight() != cellOpponent.getHeight() || c.getOccupiedByWorker());
 
         return cellsInDirection;
     }
@@ -143,7 +143,7 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
         ArrayList<Coord> coordsInDirection = handler.findSameDirectionCoords(oldPosition, newPosition);
         int heightOpponent = handler.getCell(newPosition).getHeight();
 
-        coordsInDirection.removeIf(coord -> handler.getCell(coord).getHeight() != heightOpponent);
+        coordsInDirection.removeIf(coord -> handler.getCell(coord).getHeight() != heightOpponent || handler.getCell(coord).getOccupiedByWorker());
 
         return coordsInDirection;
     }

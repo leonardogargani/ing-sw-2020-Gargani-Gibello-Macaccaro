@@ -48,7 +48,7 @@ public class ClientBG implements Runnable {
         do {
             while (this.serverIP == null) {
                 try {
-                    TimeUnit.SECONDS.sleep(1);
+                    TimeUnit.MILLISECONDS.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -59,6 +59,7 @@ public class ClientBG implements Runnable {
                 setConnected(true);
             } catch (IOException e) {
                 System.out.println("Server Unreachable");
+                serverIP = null;
                 setConnected(false);
             }
         } while (!this.connected);
@@ -179,13 +180,11 @@ public class ClientBG implements Runnable {
         return connected;
     }
 
-    public synchronized void waitUntilConnected() {
-        while (!connected) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+    public synchronized void waitForChangeConnected() {
+        try {
+            wait();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
