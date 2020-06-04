@@ -36,6 +36,8 @@ public class DOMCardsParser {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
 
+        // TODO (try to) change the following part in order to make the jar correctly access the xml file
+
         ClassLoader classLoader = DOMCardsParser.class.getClassLoader();
         URL resource = classLoader.getResource("configurationFiles/xmlFiles/deckOfAbstractGodCards.xml");
         File file;
