@@ -74,14 +74,14 @@
 
 <div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.gameStates;
 <i>2</i>&nbsp;
-<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.ClientMessage;
-<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.LeaveGameMessage;
-<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.RegistrationMessage;
+<i>3</i>&nbsp;import ClientMessage;
+<i>4</i>&nbsp;import LeaveGameMessage;
+<i>5</i>&nbsp;import RegistrationMessage;
 <i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.ClientListener;
 <i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.RegisterClientListener;
 <i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.Sender;
 <i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Player;
-<i>10</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+<i>10</i>&nbsp;import GameEndedException;
 <i>11</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.ChangeNickRequest;
 <i>12</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.EndGameMessage;
 <i>13</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.ServerMessage;

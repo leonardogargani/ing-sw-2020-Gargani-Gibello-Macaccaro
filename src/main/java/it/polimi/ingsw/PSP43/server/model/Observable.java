@@ -1,6 +1,5 @@
 package it.polimi.ingsw.PSP43.server.model;
 
-import it.polimi.ingsw.PSP43.server.BoardObserver;
 import java.io.Serializable;
 
 

@@ -1,8 +1,6 @@
 package it.polimi.ingsw.PSP43.server.model;
 
-import it.polimi.ingsw.PSP43.Color;
-import it.polimi.ingsw.PSP43.server.BoardObserver;
-import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
+import it.polimi.ingsw.PSP43.server.controller.gameStates.GameSession;
 import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;

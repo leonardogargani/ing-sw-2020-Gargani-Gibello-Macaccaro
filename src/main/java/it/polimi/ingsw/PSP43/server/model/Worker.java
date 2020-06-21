@@ -1,8 +1,5 @@
 package it.polimi.ingsw.PSP43.server.model;
 
-import it.polimi.ingsw.PSP43.Color;
-import it.polimi.ingsw.PSP43.server.BoardObserver;
-
 
 /**
  * Worker is the class that represents a worker, which is the piece players can control.

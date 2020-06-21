@@ -1,6 +1,6 @@
 package it.polimi.ingsw.PSP43.server.model;
 
-import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
+import it.polimi.ingsw.PSP43.server.controller.gameStates.GameSession;
 
 
 public class DataToBuild extends DataToMove {

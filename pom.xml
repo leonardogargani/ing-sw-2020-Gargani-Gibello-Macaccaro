@@ -131,7 +131,7 @@
                                 <configuration>
                                     <transformers>
                                         <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                            <mainClass>it.polimi.ingsw.PSP43.server.ServerSocket</mainClass>
+                                            <mainClass>it.polimi.ingsw.PSP43.server.network.ServerSocket</mainClass>
                                         </transformer>
                                     </transformers>
                                 </configuration>

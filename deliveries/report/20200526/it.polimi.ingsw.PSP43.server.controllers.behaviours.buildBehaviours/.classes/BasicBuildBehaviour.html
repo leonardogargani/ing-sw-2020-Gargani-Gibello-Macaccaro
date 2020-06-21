@@ -17,10 +17,11 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.controllers.behaviours.buildBehaviours</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.controller.cards.behaviours.buildBehaviours</a> ]
 </div>
 
-<h1>Coverage Summary for Class: BasicBuildBehaviour (it.polimi.ingsw.PSP43.server.controllers.behaviours.buildBehaviours)</h1>
+<h1>Coverage Summary for Class: BasicBuildBehaviour
+  (it.polimi.ingsw.PSP43.server.controller.cards.behaviours.buildBehaviours)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -72,20 +73,20 @@
 <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.controllers.behaviours.buildBehaviours;
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.controller.behaviours.buildBehaviours;
 <i>2</i>&nbsp;
-<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.ActionResponse;
-<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.networkMessages.ResponseMessage;
+<i>3</i>&nbsp;import ActionResponse;
+<i>4</i>&nbsp;import ResponseMessage;
 <i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.DataToBuild;
-<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
+<i>6</i>&nbsp;import GameSession;
 <i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
 <i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Player;
 <i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Worker;
-<i>10</i>&nbsp;import it.polimi.ingsw.PSP43.server.controllers.AbstractGodCard;
-<i>11</i>&nbsp;import it.polimi.ingsw.PSP43.server.controllers.BasicGodCard;
-<i>12</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlers.CardsHandler;
-<i>13</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlers.WorkersHandler;
-<i>14</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.AbstractGodCard;
+<i>11</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.BasicGodCard;
+<i>12</i>&nbsp;import CardsHandler;
+<i>13</i>&nbsp;import WorkersHandler;
+<i>14</i>&nbsp;import GameEndedException;
 <i>15</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.ActionRequest;
 <i>16</i>&nbsp;import it.polimi.ingsw.PSP43.server.networkMessages.RequestMessage;
 <i>17</i>&nbsp;

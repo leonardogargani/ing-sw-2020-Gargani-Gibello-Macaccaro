@@ -17,10 +17,10 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.controllers.behaviours.moveBehaviours</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.controller.cards.behaviours.moveBehaviours</a> ]
 </div>
 
-<h1>Coverage Summary for Class: MoveBehavior (it.polimi.ingsw.PSP43.server.controllers.behaviours.moveBehaviours)</h1>
+<h1>Coverage Summary for Class: MoveBehavior (it.polimi.ingsw.PSP43.server.controller.cards.behaviours.moveBehaviours)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -36,12 +36,12 @@
 <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.controllers.behaviours.moveBehaviours;
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.controller.behaviours.moveBehaviours;
 <i>2</i>&nbsp;
-<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.server.gameStates.GameSession;
-<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.GameEndedException;
-<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.GameLostException;
-<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.modelHandlersException.WinnerCaughtException;
+<i>3</i>&nbsp;import GameSession;
+<i>4</i>&nbsp;import GameEndedException;
+<i>5</i>&nbsp;import GameLostException;
+<i>6</i>&nbsp;import WinnerCaughtException;
 <i>7</i>&nbsp;
 <i>8</i>&nbsp;public interface MoveBehavior {
 <i>9</i>&nbsp;    void handleInitMove(GameSession gameSession) throws GameEndedException, WinnerCaughtException, GameLostException;

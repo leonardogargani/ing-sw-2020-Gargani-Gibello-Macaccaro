@@ -1,8 +1,5 @@
 package it.polimi.ingsw.PSP43.server.model;
 
-import it.polimi.ingsw.PSP43.Color;
-import it.polimi.ingsw.PSP43.server.BoardObserver;
-
 
 /**
  * Cell is the class that represents a single board square. It can be occupied either by a worker or a dome.

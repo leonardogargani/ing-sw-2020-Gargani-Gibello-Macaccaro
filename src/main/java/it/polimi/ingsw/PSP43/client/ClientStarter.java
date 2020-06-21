@@ -1,7 +1,8 @@
 package it.polimi.ingsw.PSP43.client;
 
-import it.polimi.ingsw.PSP43.client.cli.CliInputHandler;
-import it.polimi.ingsw.PSP43.client.cli.QuitPlayerException;
+import it.polimi.ingsw.PSP43.client.graphic.cli.CliInputHandler;
+import it.polimi.ingsw.PSP43.client.graphic.cli.QuitPlayerException;
+import it.polimi.ingsw.PSP43.client.network.ClientManager;
 
 /**
  * This is the starter class, here a player chooses CLI or GUI.
