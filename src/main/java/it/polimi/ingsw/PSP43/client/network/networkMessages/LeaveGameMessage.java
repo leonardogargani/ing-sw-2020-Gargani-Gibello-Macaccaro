@@ -15,20 +15,32 @@ public class LeaveGameMessage extends ClientMessage {
 
     private TypeDisconnectionHeader typeDisconnectionHeader;
 
+    /**
+     * LeaveGameMessage constructor without parameters.
+     */
     public LeaveGameMessage() {
     }
 
     /**
-     * LeaveGameMessage constructor.
+     * Not default constructor for LeaveGameMessage.
      */
     public LeaveGameMessage(TypeDisconnectionHeader typeDisconnectionHeader) {
         this.typeDisconnectionHeader = typeDisconnectionHeader;
     }
 
+    /**
+     * Getter method for typeDisconnectionHeader.
+     * @return typeDisconnectionHeader that is an enum with two possible values, IRREVERSIBLE_DISCONNECTION and
+     * GAME_DISCONNECTION
+     */
     public TypeDisconnectionHeader getTypeDisconnectionHeader() {
         return typeDisconnectionHeader;
     }
 
+    /**
+     * Setter method for enum variable typeDisconnectionHeader.
+     * @param typeDisconnectionHeader is the enum variable to set
+     */
     public void setTypeDisconnectionHeader(TypeDisconnectionHeader typeDisconnectionHeader) {
         this.typeDisconnectionHeader = typeDisconnectionHeader;
     }

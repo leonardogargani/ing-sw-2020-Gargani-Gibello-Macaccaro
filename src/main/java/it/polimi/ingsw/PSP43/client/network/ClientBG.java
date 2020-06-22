@@ -29,7 +29,7 @@ public class ClientBG implements Runnable {
     /**
      * Not default constructor for the client background.
      *
-     * @param clientManager Thi is the reference to the client manager thread.
+     * @param clientManager This is the reference to the client manager thread
      */
     public ClientBG(ClientManager clientManager) {
         this.clientManager = clientManager;
@@ -88,7 +88,7 @@ public class ClientBG implements Runnable {
     /**
      * Setter method for serverIP String.
      *
-     * @param serverIP It is the address of the server.
+     * @param serverIP It is the address of the server
      */
     public void setServerIP(String serverIP) {
         this.serverIP = serverIP;
@@ -99,9 +99,9 @@ public class ClientBG implements Runnable {
      * the receive cast it to a ServerMessage and then puts the message in the messageBox, that is an ArrayList of
      * message placed in the ClientManager class.
      *
-     * @throws IOException            signals that an I/O exception of some sort has occurred.
+     * @throws IOException            signals that an I/O exception of some sort has occurred
      * @throws ClassNotFoundException occurs when you try to load a class at run time using Class .forName() or
-     *                                loadClass() methods and mentioned classes are not found in the classpath.
+     *                                loadClass() methods and mentioned classes are not found in the classpath
      */
     public void receive() throws IOException, ClassNotFoundException {
         input = new ObjectInputStream(serverSocket.getInputStream());
@@ -126,7 +126,7 @@ public class ClientBG implements Runnable {
     /**
      * Method used to send messages to the server.
      *
-     * @param message The message that will be sent to the server.
+     * @param message The message that will be sent to the server
      */
     public void sendMessage(ClientMessage message) {
         try {
@@ -141,7 +141,7 @@ public class ClientBG implements Runnable {
     /**
      * Method used to send a message of registration to the server.
      *
-     * @param message The message that will be sent to the server.
+     * @param message The message that will be sent to the server
      */
     public void sendMessage(RegistrationMessage message) {
         try {
@@ -155,7 +155,7 @@ public class ClientBG implements Runnable {
     /**
      * Method used to send only LeaveGameMessages. After sending, it calls the handleDisconnection method.
      *
-     * @param message The message that will be sent to the server.
+     * @param message The message that will be sent to the server
      */
     public void sendMessage(LeaveGameMessage message) {
         try {
@@ -172,7 +172,7 @@ public class ClientBG implements Runnable {
      * Getter method for the boolean variable disconnected, that controls the exit from the while in the run method
      * to get down the connection to the server.
      *
-     * @return the value of the boolean variable disconnected.
+     * @return the value of the boolean variable disconnected
      */
     public boolean isConnected() {
         return connected;
@@ -186,6 +186,10 @@ public class ClientBG implements Runnable {
         }
     }
 
+    /**
+     * Setter method for the boolean variable connected.
+     * @param connected is true if the connection to the server is established
+     */
     public synchronized void setConnected(boolean connected) {
         this.connected = connected;
         notifyAll();

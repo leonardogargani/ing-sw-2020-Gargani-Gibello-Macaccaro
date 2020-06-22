@@ -63,20 +63,20 @@ public class MatchController extends AbstractController {
     private static ActionRequest actionRequest;
     private static BoardController boardController;
     private static PlayersController playersController;
-    private static boolean decisionActive;
     private static Label topLabel;
     private static Label bottomLabel;
     //Initialization moved in initialize method
     private int counter;
     private static int numberOfActionRequestArrived;
     private Coord startPosition;
+    private static ImageView confirmButton;
+    private static ImageView deleteButton;
 
     /**
-     * Initialize method for this controller
+     * Initialize method for this controller.
      */
     public void initialize() {
         actionRequest = null;
-        decisionActive = false;
         numberOfActionRequestArrived = 0;
         counter = 0;
         ImageView[][] board = new ImageView[5][5];
@@ -96,13 +96,23 @@ public class MatchController extends AbstractController {
         player2Card.setId("decision-button");
         player3Card.setId("decision-button");
         clientBG = AbstractController.getClientBG();
+        topMenu.setId("top-label");
+        bottomMenu.setId("bottom-label");
+        player1Nick.setId("player1-label");
+        player2Nick.setId("player2-label");
+        player3Nick.setId("player3-label");
+        player1CardDescription.setId("player1CardDescription-label");
+        confirmButton = confirm;
+        confirm.setDisable(true);
+        deleteButton = delete;
+        delete.setDisable(true);
         topLabel = topMenu;
         bottomLabel = bottomMenu;
     }
 
 
     /**
-     * Mouse event catcher for board cells
+     * Mouse event catcher for board cells.
      * @param event is a generic mouse event on a cell of the board
      */
     @FXML
@@ -116,6 +126,7 @@ public class MatchController extends AbstractController {
                     clientBG.sendMessage(response);
                     bottomLabel.setText("");
                     numberOfActionRequestArrived++;
+                    actionRequest=null;
                 } else bottomLabel.setText("You can't go there!\nChose another position to place your worker");
             } else if (counter == 0) {
                 startPosition = boardController.checkWorkerChosen(hashMap, img);
@@ -141,41 +152,46 @@ public class MatchController extends AbstractController {
                 }
             }
         } else {
-            bottomMenu.setText("Wait for your turn !");
+            //String prev = bottomMenu.getText();
+            //bottomMenu.setText("Wait for your turn!\n" + prev);
+            bottomMenu.setText("Wait for your turn!");
         }
     }
 
     /**
-     * Mouse event catcher for decisions take by confirm and delete button
+     * Mouse event catcher for decisions take by confirm and delete button.
      * @param event is a generic mouse event on one of that two images
      */
     @FXML
     public void onDecisionTake(javafx.scene.input.MouseEvent event) {
-        if (decisionActive) {
+        if(!confirm.isDisable() && !delete.isDisable()){
             if (event.getSource() == confirm) {
                 clientBG.sendMessage(new ResponseMessage(true));
+                confirmButton.setDisable(true);
+                deleteButton.setDisable(true);
+                bottomLabel.setText("");
             } else if (event.getSource() == delete) {
                 clientBG.sendMessage(new ResponseMessage(false));
-            } else bottomMenu.setText("You can only chose V or X now");
-        } else {
-            bottomMenu.setText("Wait for your turn !");
+                confirmButton.setDisable(true);
+                deleteButton.setDisable(true);
+                bottomLabel.setText("");
+            } else {
+                String prev = bottomMenu.getText();
+                bottomMenu.setText("You can only chose V or X now\n" + prev);}
         }
-        decisionActive = false;
     }
 
     /**
-     * Event method called when you click on the exit button, it sends a LeaveGameMessage and then sets the home scene
+     * Event method called when you click on the exit button, it sends a LeaveGameMessage and then sets the home scene.
      */
     @FXML
     public void onExitClicked() {
-        //TODO deleted and added in initialize method the following entry
-        //numberOfActionRequestArrived = 0;
         clientBG.sendMessage(new LeaveGameMessage());
         super.handleExit();
     }
 
     /**
-     * Event method called when you click on an opponent player's god card
+     * Event method called when you click on an opponent player's god card.
      * @param event is the MouseEvent generated when you click on an opponent player's god card
      */
     public void onCardClicked(MouseEvent event) {
@@ -188,7 +204,7 @@ public class MatchController extends AbstractController {
 
     /**
      * This method when an ActionRequest arrives, puts it in the local variable request.
-     * After that it sets the text of the label and it underlines the workers that you can use
+     * After that it sets the text of the label and it underlines the workers that you can use.
      * @param request is the ActionRequest message that contains cells that are available for the move or the build
      */
     public static void setActionRequest(ActionRequest request) {
@@ -205,7 +221,7 @@ public class MatchController extends AbstractController {
 
     /**
      * This method, when a playerListMessage arrives calls the showUpdate method on the playersController
-     * to show players information updates
+     * to show players information updates.
      * @param playersListMessage contains players information that are nickname, card and color for each one
      */
     public static void updateScene(PlayersListMessage playersListMessage) {
@@ -214,7 +230,7 @@ public class MatchController extends AbstractController {
 
 
     /**
-     * This method, when a CellMessage arrives, calls the updateCell method on the board controller to update the cell
+     * This method, when a CellMessage arrives, calls the updateCell method on the board controller to update the cell.
      * @param message contains the cell to be updated
      */
     public static void updateBoard(CellMessage message) {
@@ -223,7 +239,7 @@ public class MatchController extends AbstractController {
 
 
     /**
-     * This method, when a TextMessage arrives, shows its content on the top label
+     * This method, when a TextMessage arrives, shows its content on the top label.
      * @param textMessage contains a String message to be shown
      */
     public static void showInTopMenu(TextMessage textMessage) {
@@ -234,11 +250,12 @@ public class MatchController extends AbstractController {
 
 
     /**
-     * This method, when a RequestMessage arrives , shows its content on the bottom label
+     * This method, when a RequestMessage arrives , shows its content on the bottom label.
      * @param message contains a String message to be shown
      */
     public static void askQuestion(RequestMessage message) {
         bottomLabel.setText(message.getMessage());
-        decisionActive = true;
+        confirmButton.setDisable(false);
+        deleteButton.setDisable(false);
     }
 }

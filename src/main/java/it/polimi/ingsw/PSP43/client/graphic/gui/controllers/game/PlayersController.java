@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -31,6 +32,12 @@ public class PlayersController {
     private String ownNick;
     private ArrayList<PlayerInformation> players;
 
+    /**
+     * Not default constructor for the PlayersController class.
+     * @param labels is an array containing the references of all the board's labels
+     * @param images is an array containing the references of ImageViews helpful to show players' information
+     * @param nick is a string content the nickname of the player
+     */
     public PlayersController(Label[] labels, ImageView[] images, String nick) {
         //I can pass these parameters like a List of Label and a List of ImageView
         this.player1Nick = labels[0];
@@ -38,6 +45,7 @@ public class PlayersController {
         this.player2Nick = labels[1];
         this.player3Nick = labels[2];
         this.player1CardDescription = labels[3];
+        player1CardDescription.setTextAlignment(TextAlignment.LEFT);
         this.player1Card = images[0];
         this.player2Card = images[1];
         this.player3Card = images[2];
@@ -48,7 +56,10 @@ public class PlayersController {
         player3Nick.setVisible(false);
     }
 
-
+    /**
+     * This method updates information shown
+     * @param playersListMessage contains information to show
+     */
     public void showUpdate(PlayersListMessage playersListMessage) {
         //search for a nick equal to ownNick and show his information
         clearImages();
@@ -72,7 +83,7 @@ public class PlayersController {
         player1Nick.setText(ownNick);
         player1Card.setImage(new Image(getClass().getResource("/images/cards/" + players.get(0).getGod().getGodName() + ".png").toExternalForm()));
         player1Worker.setImage(new Image(getClass().getResource("/images/workers/worker_" + players.get(0).getColorName() + "_1.png").toExternalForm()));
-        player1CardDescription.setText(players.get(0).getGod().getDescription() + "\n" + players.get(0).getGod().getPower());
+        player1CardDescription.setText(players.get(0).getGod().getDescription() + "\n\n" + players.get(0).getGod().getPower());
 
         player2Nick.setText(players.get(1).getPlayer().getNickname());
         player2Card.setImage(new Image(getClass().getResource("/images/cards/" + players.get(1).getGod().getGodName() + ".png").toExternalForm()));
@@ -86,6 +97,11 @@ public class PlayersController {
         }
     }
 
+    /**
+     * This method is called when the player clicks on an opponent's god card to show in another window the information
+     * about the card
+     * @param source is the god card selected
+     */
     public void showGod(ImageView source) {
         Stage godStage = new Stage();
         AnchorPane pane = new AnchorPane();
@@ -105,6 +121,9 @@ public class PlayersController {
         godStage.centerOnScreen();
     }
 
+    /**
+     * This method is called when the player clicks on the helper icons, it shows in another window the rules of the game
+     */
     public void showRules(){
         Stage rules = new Stage();
         FXMLLoader loader = new FXMLLoader();
@@ -121,6 +140,10 @@ public class PlayersController {
         rules.show();
     }
 
+    /**
+     * This method is called during the match before showing of information arrived in a PlayersListMessage, it removes
+     * old information
+     */
     public void clearImages() {
         player2Nick.setText("");
         player2Card.setImage(null);

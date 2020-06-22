@@ -9,8 +9,8 @@ public class StarterResponse extends ClientMessage {
 
 
     /**
-     *
-     * @param starterPlayerName
+     * Not default constructor for StarterResponse.
+     * @param starterPlayerName is a String contains the nick of chosen first player
      */
     public StarterResponse(String starterPlayerName) {
         this.starterPlayerName = starterPlayerName;
@@ -18,8 +18,8 @@ public class StarterResponse extends ClientMessage {
 
 
     /**
-     *
-     * @return
+     * Getter method for starterPlayerName String variable.
+     * @return starterPlayerName
      */
     public String getStarterPlayerName() {
         return starterPlayerName;
