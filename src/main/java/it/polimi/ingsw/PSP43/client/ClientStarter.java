@@ -10,7 +10,7 @@ import it.polimi.ingsw.PSP43.client.network.ClientManager;
 
 public class ClientStarter {
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         int chosenMode;
         System.out.println("Choose a mode:\n [1] CLI\n [2] GUI");
         CliInputHandler inputHandler = new CliInputHandler();
@@ -36,8 +36,8 @@ public class ClientStarter {
         } catch (QuitPlayerException e) {
             System.exit(0);
         }
-    }
-    /*public static void main(String[] args) {
+    }*/
+    public static void main(String[] args) {
         if (args.length == 1)
             if (args[0].toLowerCase().equals("-cli")) {
                 ClientManager clientManager = new ClientManager(1);
@@ -56,5 +56,5 @@ public class ClientStarter {
             Thread clientManagerThread = new Thread(clientManager);
             clientManagerThread.start();
         }
-    }*/
+    }
 }
