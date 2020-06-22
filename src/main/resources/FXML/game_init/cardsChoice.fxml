@@ -86,7 +86,7 @@
    <right>
       <VBox alignment="CENTER" prefHeight="360.0" prefWidth="292.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" prefHeight="38.0" prefWidth="217.0" text="Chosen cards:" textAlignment="CENTER">
+            <Label alignment="CENTER" prefHeight="38.0" prefWidth="217.0" text="Chosen cards:" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font size="25.0" />
                </font>

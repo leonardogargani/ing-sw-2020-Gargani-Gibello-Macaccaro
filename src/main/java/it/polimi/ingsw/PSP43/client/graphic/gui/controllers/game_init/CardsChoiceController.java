@@ -165,6 +165,7 @@ public class CardsChoiceController extends AbstractController {
         if ((currentCardIndex + 1) < cardsList.size()) {
             currentCardIndex++;
             displayCard(cardsList.get(currentCardIndex));
+            infoLabel.setText("");
         }
     }
 
@@ -179,6 +180,7 @@ public class CardsChoiceController extends AbstractController {
         if (currentCardIndex > 0) {
             currentCardIndex--;
             displayCard(cardsList.get(currentCardIndex));
+            infoLabel.setText("");
         }
     }
 

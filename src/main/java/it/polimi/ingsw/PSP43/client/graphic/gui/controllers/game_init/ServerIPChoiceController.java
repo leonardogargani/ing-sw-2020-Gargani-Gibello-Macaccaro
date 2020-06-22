@@ -45,6 +45,7 @@ public class ServerIPChoiceController extends AbstractController {
 
         if (serverIPField.getText().isEmpty()) {
             buttonPressedLabel.setText("You must write the IP address!");
+            confirmButton.setDisable(false);
             return;
         }
 
