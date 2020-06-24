@@ -32,6 +32,7 @@ public class DoubleDifferentSpaceBehaviour extends BasicBuildBehaviour {
         Player currentPlayer = gameSession.getCurrentPlayer();
         CellsHandler cellsHandler = gameSession.getCellsHandler();
         DataToBuild dataToBuild = genericAskForBuild(gameSession);
+        if (dataToBuild == null) return;
 
         build(dataToBuild);
 

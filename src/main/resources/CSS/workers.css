@@ -9,8 +9,11 @@
     -fx-font-style: italic;
     -fx-font-weight: bold;
     -fx-text-fill: black;
-    -fx-background-color: gold;
-    -fx-border-color: #010101;
+    -fx-background-color: #cc9966;
+    -fx-border-color: #996666;
+    -fx-border-radius: 20px 20px 20px 20px;
+    -fx-background-radius: 20px 20px 20px 20px;
+    -fx-padding: 3;
 }
 
 .arrow:hover {

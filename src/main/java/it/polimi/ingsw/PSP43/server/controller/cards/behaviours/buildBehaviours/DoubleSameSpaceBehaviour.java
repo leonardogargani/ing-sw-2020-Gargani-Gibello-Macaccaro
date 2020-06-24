@@ -14,6 +14,7 @@ public class DoubleSameSpaceBehaviour extends BasicBuildBehaviour {
     public void handleInitBuild(GameSession gameSession) throws GameEndedException {
         Player currentPlayer = gameSession.getCurrentPlayer();
         DataToBuild dataToBuild = genericAskForBuild(gameSession);
+        if (dataToBuild == null) return;
 
         if (dataToBuild.getBuildDome()) build(dataToBuild);
         else {

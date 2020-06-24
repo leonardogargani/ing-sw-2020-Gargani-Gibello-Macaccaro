@@ -14,6 +14,7 @@ import it.polimi.ingsw.PSP43.server.controller.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.controller.modelHandlers.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.network.networkMessages.ActionRequest;
 import it.polimi.ingsw.PSP43.server.network.networkMessages.RequestMessage;
+import it.polimi.ingsw.PSP43.server.network.networkMessages.TextMessage;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,10 +60,17 @@ public class BasicBuildBehaviour extends BasicGodCard implements BuildBehaviour 
             workerToBuild = workersHandler.getWorker(actionResponse.getWorkerPosition());
             return new DataToBuild(gameSession, currentPlayer, workerToBuild, actionResponse.getPosition(), Boolean.TRUE);
         } else {
-            String message = "Choose a position where to build your block.";
-            actionResponse = askForBuild(gameSession, availablePositionsBuildBlock, message);
-            workerToBuild = workersHandler.getWorker(actionResponse.getWorkerPosition());
-            return new DataToBuild(gameSession, currentPlayer, workerToBuild, actionResponse.getPosition(), Boolean.FALSE);
+            if (availablePositionsBuildBlock.size() != 0) {
+                String message = "Choose a position where to build your block.";
+                actionResponse = askForBuild(gameSession, availablePositionsBuildBlock, message);
+                workerToBuild = workersHandler.getWorker(actionResponse.getWorkerPosition());
+                return new DataToBuild(gameSession, currentPlayer, workerToBuild, actionResponse.getPosition(), Boolean.FALSE);
+            }
+            else {
+                TextMessage textMessage = new TextMessage("We are sorry, but you can't build a block anywhere.", TextMessage.PositionInScreen.LOW_CENTER);
+                gameSession.sendMessage(textMessage, currentPlayer.getNickname());
+                return null;
+            }
         }
     }
 
@@ -89,6 +97,7 @@ public class BasicBuildBehaviour extends BasicGodCard implements BuildBehaviour 
      */
     public void handleInitBuild(GameSession gameSession) throws GameEndedException {
         DataToBuild dataToBuild = genericAskForBuild(gameSession);
+        if (dataToBuild == null) return;
 
         Coord nextPositionChosen = dataToBuild.getNewPosition();
         Worker workerMoved = dataToBuild.getWorker();
