@@ -13,6 +13,7 @@ import it.polimi.ingsw.PSP43.server.network.networkMessages.RequestMessage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 
 public class ForceToOppSideBehaviour extends BasicMoveBehaviour {
     private static final long serialVersionUID = -8412302139395339178L;
@@ -57,6 +58,10 @@ public class ForceToOppSideBehaviour extends BasicMoveBehaviour {
 
     public HashMap<Coord, ArrayList<Coord>> selectPositionsWorkersToForce(CellsHandler cellsHandler, Player currentPlayer) {
         HashMap<Coord, ArrayList<Coord>> neighbouringCoordsSelected = cellsHandler.findWorkersNeighbouringCoords(currentPlayer);
+        ArrayList<Coord> key = new ArrayList<>();
+        for (Coord c : neighbouringCoordsSelected.keySet()) {
+            key.add(c.clone());
+        }
 
         for (Iterator<Coord> coordKeyIterator = neighbouringCoordsSelected.keySet().iterator(); coordKeyIterator.hasNext(); ) {
             Coord coordForcer = coordKeyIterator.next();
@@ -70,7 +75,7 @@ public class ForceToOppSideBehaviour extends BasicMoveBehaviour {
                     coordIterator.remove();
                 }
                 else {
-                    if (!(cellsHandler.isOppositeCoordFree(coordForcer, coordForced))) {
+                    if (!(cellsHandler.isOppositeCoordFree(coordForcer, coordForced)) || key.contains(coordForced)) {
                         coordIterator.remove();
                     }
                 }

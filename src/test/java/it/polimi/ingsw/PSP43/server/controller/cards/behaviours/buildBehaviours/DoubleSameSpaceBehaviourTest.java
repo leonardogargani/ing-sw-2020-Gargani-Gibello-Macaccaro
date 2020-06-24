@@ -55,6 +55,8 @@ public class DoubleSameSpaceBehaviourTest {
             i++;
         } while (i < workers.length && !(workerToBuildTwice.getCurrentPosition().equals(new Coord(4, 3))));
 
+        workerToBuildTwice.setLatestMoved(true);
+
         Coord coordToBuildTwice = new Coord(3, 3);
 
         doReturn(new ActionResponse(workerToBuildTwice.getCurrentPosition(), coordToBuildTwice),
