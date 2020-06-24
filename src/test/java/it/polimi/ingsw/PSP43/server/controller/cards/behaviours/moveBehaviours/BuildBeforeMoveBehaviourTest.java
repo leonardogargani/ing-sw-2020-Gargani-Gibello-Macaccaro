@@ -82,7 +82,7 @@ public class BuildBeforeMoveBehaviourTest {
      * already checked in the superclass method "move(...)".
      */
     @Test
-    public void handleInitMoveWithBuildDome() throws WinnerCaughtException, GameEndedException, GameLostException {
+    public void handleInitMoveWithBuildDome() throws GameEndedException, GameLostException {
         Player currentPlayer = spyGame.getPlayersHandler().getPlayer(0);
         Integer[] playerWorkers = currentPlayer.getWorkersIdsArray();
         Worker workerToBuild = null;
@@ -104,7 +104,6 @@ public class BuildBeforeMoveBehaviourTest {
         BuildBeforeMoveBehaviour spyBehaviour = spy(new BuildBeforeMoveBehaviour());
         AbstractGodCard spyCard = spy(new BasicGodCard("", "", "", spyBehaviour, new BasicBuildBehaviour()));
 
-        doReturn(new HashMap<Coord, ArrayList<Coord>>()).when(spyBehaviour).findAvailablePositionsToBuildBlock(any(), any());
         doReturn(new HashMap<Coord, ArrayList<Coord>>()).when(spyBehaviour).findAvailablePositionsToMove(any());
 
         assert spyCard != null;
