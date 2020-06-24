@@ -17,6 +17,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -138,6 +139,26 @@ public class BuildBeforeMoveBehaviourTest {
             ArrayList<Coord> positions = hashMap.get(key);
             assertFalse(positions.contains(new Coord(4, 4)));
             assertFalse(positions.contains(new Coord(4, 3)));
+        }
+    }
+
+    @Test
+    public void findIfNotAvailablePositionsTest() {
+        Worker worker = spyGame.getWorkersHandler().getWorker(new Coord(4, 3));
+        Coord coordWhereToMove = new Coord(4, 4);
+        DataToMove dataToMove = new DataToMove(spyGame, currentPlayer, worker, coordWhereToMove);
+
+        ArrayList<Coord> neighbouring = spyGame.getCellsHandler().findNeighbouringCoords(worker.getCurrentPosition());
+        for (Coord actualCoord : neighbouring) {
+            spyGame.getCellsHandler().getCell(actualCoord).setOccupiedByDome(true);
+        }
+
+        BuildBeforeMoveBehaviour buildBeforeMoveBehaviour = new BuildBeforeMoveBehaviour();
+        HashMap<Coord, ArrayList<Coord>> hashMap = buildBeforeMoveBehaviour.findAvailablePositionsToBuildBlock(spyGame, dataToMove);
+
+        for (Coord key : hashMap.keySet()) {
+            ArrayList<Coord> positions = hashMap.get(key);
+            assertNull(positions);
         }
     }
 }

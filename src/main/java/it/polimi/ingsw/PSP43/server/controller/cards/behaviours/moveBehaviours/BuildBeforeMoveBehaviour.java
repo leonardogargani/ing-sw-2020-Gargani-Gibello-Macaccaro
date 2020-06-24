@@ -48,19 +48,7 @@ public class BuildBeforeMoveBehaviour extends BasicMoveBehaviour {
         DataToMove dataToMove = new DataToMove(gameSession, currentPlayer, workerMoved, nextCoordChosen);
         super.move(dataToMove);
 
-        CellsHandler cellsHandler = gameSession.getCellsHandler();
-        Cell nextCellChosen = cellsHandler.getCell(nextCoordChosen);
-        Cell currentCell = cellsHandler.getCell(workerMoved.getPreviousPosition());
-
-        if (nextCellChosen.getHeight() - currentCell.getHeight() == 0) {
-            RequestMessage requestMessage = new RequestMessage("Do you want to build two times " +
-                    "considering that your worker didn't rise to a higher level?");
-            ResponseMessage responseMessage = gameSession.sendRequest(requestMessage, currentPlayer.getNickname(), ResponseMessage.class);
-
-            if (responseMessage.isResponse()) {
-                buildBeforeMove(dataToMove);
-            }
-        }
+        buildBeforeMove(dataToMove);
     }
 
     /**
@@ -79,24 +67,42 @@ public class BuildBeforeMoveBehaviour extends BasicMoveBehaviour {
         HashMap<Coord, ArrayList<Coord>> hashMapPositionsToBuildBlock = findAvailablePositionsToBuildBlock(gameSession, oldData);
         HashMap<Coord, ArrayList<Coord>> hashMapPositionsToBuildDome = findAvailablePositionsToBuildDome(gameSession, oldData);
 
-        ResponseMessage responseMessage = new ResponseMessage(false);
-        if (hashMapPositionsToBuildDome.size() != 0) {
-            RequestMessage requestMessage = new RequestMessage("Do you want to build a dome? Otherwise you will build a block.");
-            responseMessage = gameSession.sendRequest(requestMessage, gameSession.getCurrentPlayer().getNickname(), ResponseMessage.class);
-        }
+        ResponseMessage responseMessage;
+        if (hashMapPositionsToBuildBlock.size() != 0 || hashMapPositionsToBuildDome.size() !=0) {
+            CellsHandler cellsHandler = gameSession.getCellsHandler();
+            Cell current = cellsHandler.getCell(oldData.getNewPosition());
+            Cell previous = cellsHandler.getCell(oldData.getWorker().getPreviousPosition());
 
-        String message;
-        if (responseMessage.isResponse()) {
-            message = "Choose a position where to build a dome.";
-            AbstractGodCard currentCard = cardsHandler.getPlayerCard(currentPlayer.getNickname());
-            ActionResponse actionResponse = currentCard.askForBuild(gameSession, hashMapPositionsToBuildDome, message);
-            build(new DataToBuild(gameSession, gameSession.getCurrentPlayer(), oldData.getWorker(), actionResponse.getPosition(), Boolean.TRUE));
-        }
-        else {
-            message = "Choose a position where to build a block.";
-            AbstractGodCard currentCard = cardsHandler.getPlayerCard(currentPlayer.getNickname());
-            ActionResponse actionResponse = currentCard.askForBuild(gameSession, hashMapPositionsToBuildBlock, message);
-            build(new DataToBuild(gameSession, gameSession.getCurrentPlayer(), oldData.getWorker(), actionResponse.getPosition(), Boolean.FALSE));
+            if (current.getHeight() - previous.getHeight() == 0) {
+                RequestMessage requestMessage = new RequestMessage("Do you want to build two times " +
+                        "considering that your worker didn't rise to a higher level?");
+                responseMessage = gameSession.sendRequest(requestMessage, currentPlayer.getNickname(), ResponseMessage.class);
+
+                if (responseMessage.isResponse()) {
+                    if (hashMapPositionsToBuildDome.size() != 0 && hashMapPositionsToBuildBlock.size() !=0) {
+                        requestMessage = new RequestMessage("Do you want to build a dome? Otherwise you will build a block.");
+                        responseMessage = gameSession.sendRequest(requestMessage, gameSession.getCurrentPlayer().getNickname(), ResponseMessage.class);
+                    }
+                    else if (hashMapPositionsToBuildBlock.size() == 0) responseMessage = new ResponseMessage(true);
+                    else responseMessage = new ResponseMessage(false);
+
+                    String message;
+                    if (responseMessage.isResponse()) {
+                        message = "Choose a position where to build a dome.";
+                        AbstractGodCard currentCard = cardsHandler.getPlayerCard(currentPlayer.getNickname());
+                        ActionResponse actionResponse = currentCard.askForBuild(gameSession, hashMapPositionsToBuildDome, message);
+                        build(new DataToBuild(gameSession, gameSession.getCurrentPlayer(), oldData.getWorker(), actionResponse.getPosition(), Boolean.TRUE));
+                    }
+                    else {
+                        if (hashMapPositionsToBuildBlock.size() != 0) {
+                            message = "Choose a position where to build a block.";
+                            AbstractGodCard currentCard = cardsHandler.getPlayerCard(currentPlayer.getNickname());
+                            ActionResponse actionResponse = currentCard.askForBuild(gameSession, hashMapPositionsToBuildBlock, message);
+                            build(new DataToBuild(gameSession, gameSession.getCurrentPlayer(), oldData.getWorker(), actionResponse.getPosition(), Boolean.FALSE));
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -130,6 +136,8 @@ public class BuildBeforeMoveBehaviour extends BasicMoveBehaviour {
                     currentCoord.getY() == workerAllowedToBuild.getPreviousPosition().getY() && currentCoord.getX() == workerAllowedToBuild.getPreviousPosition().getX());
 
             currentEntry.setValue(availableNeighbouringPositions);
+
+            if (availableNeighbouringPositions.size() == 0) iter.remove();
         }
 
         return positionsToFilter;
