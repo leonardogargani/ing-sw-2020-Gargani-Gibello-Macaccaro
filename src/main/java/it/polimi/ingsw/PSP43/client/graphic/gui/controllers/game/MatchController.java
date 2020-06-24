@@ -66,7 +66,7 @@ public class MatchController extends AbstractController {
     private static Label topLabel;
     private static Label bottomLabel;
     //Initialization moved in initialize method
-    private int counter;
+    private static int counter;
     private static int numberOfActionRequestArrived;
     private Coord startPosition;
     private static ImageView confirmButton;

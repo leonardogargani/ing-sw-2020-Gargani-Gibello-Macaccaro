@@ -90,7 +90,7 @@
                   <Insets left="50.0" />
                </BorderPane.margin>
                <children>
-                  <Label fx:id="player1Nick" prefHeight="30.0" prefWidth="100.0" text="Updating" textFill="WHITE">
+                  <Label fx:id="player1Nick" alignment="CENTER" prefHeight="30.0" prefWidth="100.0" text="Updating" textAlignment="CENTER" textFill="WHITE">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -116,14 +116,14 @@
                <children>
                   <HBox prefHeight="220.0" prefWidth="330.0">
                      <children>
-                        <Label fx:id="player3Nick" alignment="TOP_LEFT" prefHeight="20.0" prefWidth="80.0" text="Updating" textFill="WHITE" />
+                        <Label fx:id="player3Nick" alignment="CENTER" prefHeight="20.0" prefWidth="80.0" text="Updating" textAlignment="CENTER" textFill="WHITE" />
                         <ImageView fx:id="player3Worker" fitHeight="220.0" fitWidth="125.0" pickOnBounds="true" preserveRatio="true" />
                         <ImageView fx:id="player3Card" fitHeight="220.0" fitWidth="125.0" onMouseClicked="#onCardClicked" pickOnBounds="true" preserveRatio="true" />
                      </children>
                   </HBox>
                   <HBox prefHeight="220.0" prefWidth="330.0">
                      <children>
-                        <Label fx:id="player2Nick" alignment="TOP_LEFT" prefHeight="20.0" prefWidth="80.0" text="Updating" textFill="WHITE" />
+                        <Label fx:id="player2Nick" alignment="CENTER" prefHeight="20.0" prefWidth="80.0" text="Updating" textAlignment="CENTER" textFill="WHITE" />
                         <ImageView fx:id="player2Worker" fitHeight="220.0" fitWidth="125.0" pickOnBounds="true" preserveRatio="true" />
                         <ImageView fx:id="player2Card" fitHeight="220.0" fitWidth="125.0" onMouseClicked="#onCardClicked" pickOnBounds="true" preserveRatio="true" />
                      </children>

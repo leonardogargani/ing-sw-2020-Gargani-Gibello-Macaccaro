@@ -33,7 +33,7 @@
 }
 
 #player1CardDescription-label {
-    -fx-font-size: 14;
+    -fx-font-size: 12;
     -fx-border-radius: 20px 20px 20px 20px;
     -fx-background-radius: 20px 20px 20px 20px;
 }
