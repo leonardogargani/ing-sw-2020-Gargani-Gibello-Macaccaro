@@ -7,7 +7,8 @@ public class EndGameMessage extends TextMessage {
         WINNER,
         LOSER,
         SERVER_CRASHED,
-        PLAYER_DISCONNECTED;
+        PLAYER_DISCONNECTED,
+        QUIT
     }
 
     private static final long serialVersionUID = 8430836759594606501L;

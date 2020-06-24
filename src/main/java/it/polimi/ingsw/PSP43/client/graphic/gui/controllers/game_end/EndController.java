@@ -55,7 +55,8 @@ public class EndController extends AbstractController {
             centralImage.setImage(new Image(getClass().getResource("/images/others/loser.png").toExternalForm()));
             cloudLabel.setText("You lost the game!");
         }
-        else if(message.getEndGameHeader() == EndGameMessage.EndGameHeader.SERVER_CRASHED){
+        else if(message.getEndGameHeader() == EndGameMessage.EndGameHeader.SERVER_CRASHED ||
+                message.getEndGameHeader() == EndGameMessage.EndGameHeader.QUIT){
             homeButton.setVisible(false);
             homeButton.setDisable(true);
             homeButtonLabel.setVisible(false);

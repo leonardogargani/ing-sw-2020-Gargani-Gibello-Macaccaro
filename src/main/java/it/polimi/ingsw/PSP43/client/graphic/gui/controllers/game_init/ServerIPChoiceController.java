@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 
 
@@ -19,6 +20,8 @@ public class ServerIPChoiceController extends AbstractController {
     @FXML private Label buttonPressedLabel;
     @FXML private TextField serverIPField;
 
+    private static Label staticButtonLabel;
+    private static Button staticConfirmButton;
 
     /**
      * Method called as soon as the controlled fxml file gets loaded, here used to set css ids and classes.
@@ -26,6 +29,8 @@ public class ServerIPChoiceController extends AbstractController {
     @FXML
     private void initialize() {
         confirmButton.getStyleClass().add("confirm-button");
+        staticButtonLabel = buttonPressedLabel;
+        staticConfirmButton = confirmButton;
 
         serverIPField.setOnKeyPressed(ke -> {
             if (ke.getCode().equals(KeyCode.ENTER)) {
@@ -52,7 +57,7 @@ public class ServerIPChoiceController extends AbstractController {
         String serverIP = serverIPField.getText();
         getClientBG().setServerIP(serverIP);
 
-        FXMLLoader loader = new FXMLLoader();
+        /*FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/FXML/game_init/nicknameChoice.fxml"));
 
         try {
@@ -68,8 +73,33 @@ public class ServerIPChoiceController extends AbstractController {
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
+    }
+
+    public static void connectionUp() {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(ServerIPChoiceController.class.getResource("/FXML/game_init/nicknameChoice.fxml"));
+
+        try {
+
+            Stage stage = GuiStarter.getPrimaryStage();
+            Scene scene = new Scene(loader.load());
+
+            NicknameChoiceController controller = loader.getController();
+            controller.customInit();
+
+            scene.getStylesheets().add(ServerIPChoiceController.class.getResource("/CSS/game_init/style.css").toExternalForm());
+            stage.setScene(scene);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void connectionDenied() {
+        staticButtonLabel.setText("The IP address is wrong!");
+        staticConfirmButton.setDisable(false);
     }
 
 

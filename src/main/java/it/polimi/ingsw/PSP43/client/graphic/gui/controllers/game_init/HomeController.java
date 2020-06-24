@@ -30,29 +30,28 @@ public class HomeController extends AbstractController {
      */
     @FXML
     private void handlePlayImage() {
+        if (!getClientBG().isConnected()) {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/FXML/game_init/serverIPChoice.fxml"));
 
+            try {
 
-        // TODO load serverIPChoice if ClientBG.getConnected() is false, otherwise load nicknameChoice
-        // TODO with the already chosen nickname as default (check if it is null)
+                Stage stage = GuiStarter.getPrimaryStage();
+                Scene scene = new Scene(loader.load());
 
+                scene.getStylesheets().add(getClass().getResource("/CSS/game_init/style.css").toExternalForm());
 
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/FXML/game_init/serverIPChoice.fxml"));
+                stage.setMinHeight(400);
+                stage.setMinWidth(600);
+                stage.setResizable(true);
+                stage.setScene(scene);
 
-        try {
-
-            Stage stage = GuiStarter.getPrimaryStage();
-            Scene scene = new Scene(loader.load());
-
-            scene.getStylesheets().add(getClass().getResource("/CSS/game_init/style.css").toExternalForm());
-
-            stage.setMinHeight(400);
-            stage.setMinWidth(600);
-            stage.setResizable(true);
-            stage.setScene(scene);
-
-        } catch (IOException e) {
-            e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            ServerIPChoiceController.connectionUp();
         }
 
     }

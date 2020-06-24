@@ -268,4 +268,12 @@ public class GuiGraphicHandler extends GraphicHandler {
         Platform.runLater(() -> controller.customInit(message));
     }
 
+    public void connectionUp() {
+        Platform.runLater(ServerIPChoiceController::connectionUp);
+    }
+
+    public void connectionDenied() {
+        Platform.runLater(ServerIPChoiceController::connectionDenied);
+    }
+
 }

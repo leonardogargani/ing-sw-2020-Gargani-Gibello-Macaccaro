@@ -50,6 +50,7 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
             }
             getClientBG().setServerIP(serverIp);
             getClientBG().waitForChangeConnected();
+            if (!getClientBG().isConnected()) System.out.println("Server Unreachable");
         } while (!(getClientBG().isConnected()));
 
         System.out.println("\n\n" + Screens.WELCOME + "\n\n");
@@ -57,12 +58,13 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
         try {
             nickname = cliInputHandler.requestNickname();
         } catch (QuitPlayerException e) {
-            LeaveGameMessage leaveGameMessage = new LeaveGameMessage();
-            leaveGameMessage.setTypeDisconnectionHeader(LeaveGameMessage.TypeDisconnectionHeader.IRREVERSIBLE_DISCONNECTION);
-            getClientBG().sendMessage(leaveGameMessage);
+            System.out.println("We are sorry to see you leave!");
             getClientBG().handleDisconnection();
         }
-        getClientBG().sendMessage(new RegistrationMessage(nickname));
+
+        if (nickname != null) {
+            getClientBG().sendMessage(new RegistrationMessage(nickname));
+        }
     }
 
     /**
@@ -415,7 +417,8 @@ public class CliGraphicHandler extends GraphicHandler implements Runnable {
                 bottomMenu.show();
                 return;
             default:
-                System.out.println("An error occurred");
+                System.out.println("");
+                return;
         }
 
         bottomMenu.show();

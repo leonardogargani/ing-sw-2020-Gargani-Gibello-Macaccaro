@@ -1,5 +1,7 @@
 package it.polimi.ingsw.PSP43.client.network;
 
+import it.polimi.ingsw.PSP43.client.graphic.GraphicHandler;
+import it.polimi.ingsw.PSP43.client.graphic.gui.GuiGraphicHandler;
 import it.polimi.ingsw.PSP43.client.network.networkMessages.ClientMessage;
 import it.polimi.ingsw.PSP43.client.network.networkMessages.LeaveGameMessage;
 import it.polimi.ingsw.PSP43.client.network.networkMessages.PingMessage;
@@ -11,6 +13,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -55,10 +58,15 @@ public class ClientBG implements Runnable {
             try {
                 serverSocket = new Socket(this.serverIP, SERVER_PORT);
                 setConnected(true);
+                GraphicHandler graphicHandler = clientManager.getGraphicHandler();
+                if (graphicHandler instanceof GuiGraphicHandler)
+                    ((GuiGraphicHandler) graphicHandler).connectionUp();
             } catch (IOException e) {
-                System.out.println("Server Unreachable");
                 serverIP = null;
                 setConnected(false);
+                GraphicHandler graphicHandler = clientManager.getGraphicHandler();
+                if (graphicHandler instanceof GuiGraphicHandler)
+                    ((GuiGraphicHandler) graphicHandler).connectionDenied();
             }
         } while (!this.connected);
 
@@ -78,7 +86,7 @@ public class ClientBG implements Runnable {
                 // and the player will be informed of the problem. The application will end the execution.
                 handleDisconnection();
 
-                EndGameMessage messageServerDown = new EndGameMessage("", EndGameMessage.EndGameHeader.SERVER_CRASHED);
+                EndGameMessage messageServerDown = new EndGameMessage("", EndGameMessage.EndGameHeader.QUIT);
                 clientManager.pushMessageInBox(messageServerDown);
             } catch (ClassNotFoundException ignored) {
             }

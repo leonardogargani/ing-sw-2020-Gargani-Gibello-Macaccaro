@@ -73,8 +73,8 @@ public class ClientManager implements Runnable {
                 }
 
             } catch (QuitPlayerException e) {
-                // This block is only called if the player clicks on the "home button" in the GUI or if he writes
-                // "quit" in the cli. Here is given the possibility to re-join another game by not closing the socket.
+                // This block is only called if the player writes "quit" in the cli.
+                // Here is given the possibility to re-join another game by not closing the socket.
                 // Here a message of DISCONNECTION is sent to make the Server conscious of the disconnection and to
                 // inform all other players of the fact.
                 LeaveGameMessage leaveGameMessage = new LeaveGameMessage();
@@ -193,5 +193,9 @@ public class ClientManager implements Runnable {
 
         messageBox.remove(message);
         return message;
+    }
+
+    public GraphicHandler getGraphicHandler() {
+        return graphicHandler;
     }
 }
