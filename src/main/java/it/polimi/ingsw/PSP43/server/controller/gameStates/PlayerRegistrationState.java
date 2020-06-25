@@ -25,7 +25,6 @@ public class PlayerRegistrationState extends TurnState {
      * If the nickname chosen by the player is already used, it sends an error to the client
      * asking him to re-insert the username. In that case the player will be treated as a
      * new player connecting to the server.
-     *
      * @param message This is the message sent from the client.
      */
     public void executeState(RegistrationMessage message) {
@@ -50,7 +49,6 @@ public class PlayerRegistrationState extends TurnState {
 
     /**
      * This method asks to the first player of the game how many opponents does he want.
-     *
      * @param gameSession This is a reference to the main access to the game database.
      * @param message     This is the message sent from the client.
      */

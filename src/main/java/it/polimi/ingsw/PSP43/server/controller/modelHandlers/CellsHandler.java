@@ -134,6 +134,11 @@ public class CellsHandler {
 
     }
 
+    /**
+     * This method finds all the Coords neighbouring the workers of the player passed as parameter.
+     * @param player The player used to find the workers on which has to be identified the neighbouring coordinates.
+     * @return The correspondence of worker's coordinate and neighbouring coordinates.
+     */
     public HashMap<Coord, ArrayList<Coord>> findWorkersNeighbouringCoords(Player player) {
 
         Integer[] workerIds = player.getWorkersIdsArray();
@@ -215,6 +220,10 @@ public class CellsHandler {
         return clonedCellsRequired;
     }
 
+    /**
+     * This method finds the number of domes placed on the board.
+     * @return The number of domes placed on the board.
+     */
     public int findNumberOfDomes() {
         int numberDomes = 0;
 
@@ -227,10 +236,21 @@ public class CellsHandler {
         return numberDomes;
     }
 
+    /**
+     * This method finds if the position referenced on the board by the Coord passed as parameter is on perimeter or not.
+     * @param c The coordinate that has to be checked if it is on the perimeter or not.
+     * @return True if the position referenced on the board by the Coord passed as parameter is on perimeter, false otherwise.
+     */
     public boolean isPerimetral(Coord c) {
         return c.getY() == DIM -1 || c.getY() == 0 || c.getX() == DIM -1 || c.getX() == 0;
     }
 
+    /**
+     * This method finds if the opposite position (if it exists) to coordForced (referencing to coordForcer) is free.
+     * @param coordForcer The coordinate referencing to the opposite position has to be found.
+     * @param coordForced The coordinate that is the reference to find the opposite coordinate.
+     * @return True if the position opposite to coordForced (referencing to coordForcer) is free, false otherwise.
+     */
     public boolean isOppositeCoordFree(Coord coordForcer, Coord coordForced) {
         int xIncrement = coordForcer.getX() - coordForced.getX();
         int yIncrement = coordForcer.getY() - coordForced.getY();
@@ -248,6 +268,12 @@ public class CellsHandler {
         }
     }
 
+    /**
+     * This method finds the free opposite position (if it exists) to coordForced (referencing to coordForcer).
+     * @param coordForcer The coordinate referencing to the opposite position has to be found.
+     * @param coordForced The coordinate that is the reference to find the opposite coordinate.
+     * @return The free position opposite to coordForced (referencing to coordForced).
+     */
     public Coord findOppositeCoordFree(Coord coordForcer, Coord coordForced) {
         int xIncrement = coordForcer.getX() - coordForced.getX();
         int yIncrement = coordForcer.getY() - coordForced.getY();

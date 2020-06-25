@@ -7,7 +7,6 @@ import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.Worker;
 import java.util.*;
 
-
 /**
  * WorkersHandler has the tasks of keeping track of all the workers, adding new ones
  * and changing their position.
@@ -36,7 +35,6 @@ public class WorkersHandler {
      * @param workersIds array containing the ids of the workers to be removed
      */
     public void removeWorkers(Integer[] workersIds) {
-
         CellsHandler cellsHandler = gameSession.getCellsHandler();
 
         for (int i : workersIds) {
@@ -189,6 +187,11 @@ public class WorkersHandler {
         }
     }
 
+    /**
+     * This method finds if a worker is on a perimeter cell of the board.
+     * @param worker The worker of which is requested to konw if it is on a perimeter cell of the board.
+     * @return true if the worker passed as parameter is on a perimeter cell, false otherwise.
+     */
     public boolean isOnPerimetralCell(Worker worker) {
         Coord currentPosition = worker.getCurrentPosition();
 

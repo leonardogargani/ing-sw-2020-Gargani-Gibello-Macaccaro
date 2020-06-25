@@ -35,7 +35,6 @@ public abstract class AbstractGodCard implements Serializable {
 
     /**
      * Non-default constructor, it initializes the card with the name of the god and its description.
-     *
      * @param godName     name of the god whose power has been chosen by the player
      * @param description description of the ability of the god
      */
@@ -45,45 +44,34 @@ public abstract class AbstractGodCard implements Serializable {
         this.power = power;
     }
 
-    public void setGodName(String godName) {
-        this.godName = godName;
-    }
-
     /**
      * Method that returns the name of the god.
-     *
      * @return name of the god
      */
     public String getGodName() {
         return godName;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     /**
      * Method that returns the description of the power of the god.
-     *
      * @return description of the power of the god
      */
     public String getDescription() {
         return description;
     }
 
-    public void setPower(String power) {
-        this.power = power;
-    }
-
     /**
      * Method that returns the description of the power of the god.
-     *
      * @return description of the power of the god
      */
     public String getPower() {
         return power;
     }
 
+    /**
+     * This method is the basic to move a worker on the board.
+     * @param dataToMove The data used to change the model and obtained by the interaction with the client.
+     */
     public void move(DataToMove dataToMove) {
         GameSession gameSession = dataToMove.getGameSession();
         Coord newPosition = dataToMove.getNewPosition();
@@ -92,6 +80,11 @@ public abstract class AbstractGodCard implements Serializable {
         gameSession.getWorkersHandler().changePosition(workerToMove, newPosition);
     }
 
+    /**
+     *
+     * @param gameSession
+     * @return
+     */
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(GameSession gameSession) {
         CellsHandler cellsHandler = gameSession.getCellsHandler();
 
@@ -118,6 +111,10 @@ public abstract class AbstractGodCard implements Serializable {
         return neighbouringCoords;
     }
 
+    /**
+     *
+     * @param dataToBuild
+     */
     public void build(DataToBuild dataToBuild) {
         CellsHandler handler = dataToBuild.getGameSession().getCellsHandler();
         Cell newCell = handler.getCell(dataToBuild.getNewPosition());
@@ -128,6 +125,11 @@ public abstract class AbstractGodCard implements Serializable {
         handler.changeStateOfCell(newCell, dataToBuild.getNewPosition());
     }
 
+    /**
+     *
+     * @param gameSession
+     * @return
+     */
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildBlock(GameSession gameSession) {
         CellsHandler cellsHandler = gameSession.getCellsHandler();
 
@@ -147,6 +149,11 @@ public abstract class AbstractGodCard implements Serializable {
         return neighbouringCoords;
     }
 
+    /**
+     *
+     * @param gameSession
+     * @return
+     */
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildDome(GameSession gameSession) {
         CellsHandler cellsHandler = gameSession.getCellsHandler();
 
@@ -179,13 +186,22 @@ public abstract class AbstractGodCard implements Serializable {
 
     public ActionResponse askForBuild(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositionsBuildBlock, String message) throws GameEndedException { return null; }
 
+    /**
+     *
+     * @param gameSession
+     * @return
+     */
     public boolean checkConditionsToWin(GameSession gameSession) {
         return true;
     }
 
+    /**
+     * This method is used to print the information of the god.
+     */
     public void print() {
-        System.out.println("    Godname : " + godName);
+        System.out.println("    Godname : " + godName.toUpperCase());
         System.out.println("    Description : " + description);
         System.out.println("    Power : " + power);
+        System.out.println("\n");
     }
 }

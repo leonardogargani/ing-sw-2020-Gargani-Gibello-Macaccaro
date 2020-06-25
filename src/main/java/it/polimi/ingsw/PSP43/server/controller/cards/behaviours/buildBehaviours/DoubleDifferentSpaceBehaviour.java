@@ -84,6 +84,12 @@ public class DoubleDifferentSpaceBehaviour extends BasicBuildBehaviour {
         }
     }
 
+    /**
+     * This method is used to filter all the positions available to build the second time. The position that is
+     * filtered is the one in which the worker has built the first time.
+     * @param availablePositions The available positions in which the worker could build, excluded the ones that will be filtered.
+     * @param oldData The data used during the first build.
+     */
     protected void filterAllowedPositions(HashMap<Coord, ArrayList<Coord>> availablePositions, DataToBuild oldData) {
         Iterator<Map.Entry<Coord, ArrayList<Coord>>> iter = availablePositions.entrySet().iterator();
         Coord coordWorkerAllowedToBuild = oldData.getWorker().getCurrentPosition();

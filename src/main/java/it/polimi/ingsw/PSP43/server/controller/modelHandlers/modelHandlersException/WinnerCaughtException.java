@@ -1,10 +1,11 @@
 package it.polimi.ingsw.PSP43.server.controller.modelHandlers.modelHandlersException;
 
-
+/**
+ * This exception is thrown if a player wins the game.
+ */
 public class WinnerCaughtException extends Exception {
     private static final long serialVersionUID = 4120386884141385141L;
     private final String winner;
-
 
     /**
      * Non default constructor that initializes the exception with the name of the winner.
@@ -13,7 +14,6 @@ public class WinnerCaughtException extends Exception {
     public WinnerCaughtException(String winner) {
         this.winner = winner;
     }
-
 
     /**
      * Method that returns the name of the winner.

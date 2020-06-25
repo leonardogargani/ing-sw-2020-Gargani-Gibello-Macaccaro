@@ -66,6 +66,12 @@ public abstract class TurnState {
      */
     public void findNextState() {}
 
+    /**
+     * This method checks if a player has won the match.
+     * @param card The card that is used to check if the player has won the game.
+     * @param gameSession This is a reference to the main access to the game database.
+     * @return True if the player has won the game, false otherwise.
+     */
     public boolean checkForWinner(AbstractGodCard card, GameSession gameSession) {
         CardsHandler cardsHandler = gameSession.getCardsHandler();
         String nickWinner = null;

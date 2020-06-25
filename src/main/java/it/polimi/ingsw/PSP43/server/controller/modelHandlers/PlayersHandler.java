@@ -7,11 +7,10 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * This is a class intended to handle all the requests to store informations about players in game
+ * This is a class intended to handle all the requests to store information about players in game
  * (such as nickname) and the cards they own during the game;
  */
 public class PlayersHandler {
-
     private final ArrayList<Player> gamePlayers;
 
 
@@ -85,6 +84,11 @@ public class PlayersHandler {
         gamePlayers.removeIf(p -> p.getNickname().equals(nick));
     }
 
+    /**
+     * This method returns a list of nicknames of the players in the game, excluding the one passed as parameter.
+     * @param nickExcluded This is the nick to exclude from the list returned.
+     * @return A list containing all the nicknames of the players of the game (excluded the one passed as parameter).
+     */
     public List<String> getNickNames(String nickExcluded) {
         ArrayList<String> nicks = new ArrayList<>();
 

@@ -9,7 +9,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.*;
 
-
+/**
+ * This class is used to handle all the cards of the game in a deck and to keep a correspondence
+ * of the players' cards.
+ */
 public class CardsHandler {
 
     private List<AbstractGodCard> deckOfAbstractGodCards;
@@ -18,7 +21,6 @@ public class CardsHandler {
 
     /**
      * Non default constructor that initializes the attributes of the object.
-     *
      * @throws ParserConfigurationException exception thrown if
      * @throws SAXException                 exception thrown if
      * @throws IOException                  exception thrown if
@@ -32,7 +34,6 @@ public class CardsHandler {
 
     /**
      * Method that returns the deckOfAbstractGodCards attribute as unmodifiable.
-     *
      * @return unmodifiable deckOfAbstractGodCards attribute
      */
     public List<AbstractGodCard> getDeckOfAbstractGodCards() {
@@ -42,7 +43,6 @@ public class CardsHandler {
 
     /**
      * Method that returns the mapOwnersCard attribute as unmodifiable.
-     *
      * @return unmodifiable mapOwnersCard attribute
      */
     public Map<String, AbstractGodCard> getMapOwnersCard() {
@@ -52,7 +52,6 @@ public class CardsHandler {
 
     /**
      * Method that assigns a God card to the player who has chosen it.
-     *
      * @param nickOwner data stored about a player into the list of players
      * @param godName   data of the card chosen by a player during the game
      */
@@ -66,6 +65,11 @@ public class CardsHandler {
         mapOwnersCard.put(nickOwner, abstractGodCardToSet);
     }
 
+    /**
+     * This method finds the card owned by the player that has the nickname passed as parameter.
+     * @param nick The nick of the player used to find the card owned.
+     * @return The card owned by the player that has the nickname passed as parameter.
+     */
     public AbstractGodCard getPlayerCard(String nick) {
         for (String s : mapOwnersCard.keySet()) {
             if (s.equals(nick))
@@ -76,7 +80,6 @@ public class CardsHandler {
 
     /**
      * Method that removes a God card from a player.
-     *
      * @param nickOwner data stored about a player into the list of players
      */
     public void removeCardToPlayer(String nickOwner) {
@@ -89,8 +92,9 @@ public class CardsHandler {
 
 
     /**
-     * @param godNameAdding
-     * @param factory
+     * This method adds a decorator to all the cards owned by the players (excluding the card with the name passed as parameter).
+     * @param godNameAdding The name of the god that is adding the specified decorator.
+     * @param factory The factory of the decorator that is used to add it to the cards of the players.
      */
     public void addDecorator(String godNameAdding, DecoratorFactory factory) {
         AbstractGodCard cardOwned;
@@ -105,8 +109,10 @@ public class CardsHandler {
 
 
     /**
-     * @param godNameRemoving
-     * @param decorator
+     * This method removes from all the cards owned by players (the one with the name passed as parameter excluded) the decorator
+     * passed as parameter.
+     * @param godNameRemoving The name of the god that is removing from all the cards the specified decorator.
+     * @param decorator The name of the decorator that has to be removed from all the card owned during the game (the one with the name passed as parameter excluded).
      */
     public void removeDecorator(String godNameRemoving, String decorator) {
         AbstractGodCard card, newCard;
@@ -120,5 +126,4 @@ public class CardsHandler {
             }
         }
     }
-
 }

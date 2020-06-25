@@ -17,9 +17,18 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
+/**
+ * This class implements the power of Ares.
+ */
 public class RemoveBlockFromNeighbourBehaviour extends BasicBuildBehaviour {
     private static final long serialVersionUID = -3159821896946449486L;
 
+    /**
+     * This method handles the build according to the power of Ares. It allows the player, after the build, to
+     * remove a block from a neighbouring space to the unmoved worker (only block, not dome.)
+     * @param gameSession This is a reference to the main access to the game database.
+     * @throws GameEndedException if the player decides to leave the game during his turn.
+     */
     public void handleInitBuild(GameSession gameSession) throws GameEndedException {
         super.handleInitBuild(gameSession);
 
@@ -28,6 +37,14 @@ public class RemoveBlockFromNeighbourBehaviour extends BasicBuildBehaviour {
         if (availablePositionsToRemove.keySet().size() != 0) askBlockToRemove(gameSession, availablePositionsToRemove);
     }
 
+    /**
+     * This method handles the interaction with the player asking him if he wants to remove a block from the neighbouring
+     * positions to the unmoved worker.
+     * @param gameSession This is a reference to the main access to the game database.
+     * @param availablePositions These represents all the positions in which there is a block that can be removed
+     *                           by the unmoved player.
+     * @throws GameEndedException if the player decides to leave the game during his turn.
+     */
     public void askBlockToRemove(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositions) throws GameEndedException {
         CellsHandler cellsHandler = gameSession.getCellsHandler();
 
@@ -48,6 +65,13 @@ public class RemoveBlockFromNeighbourBehaviour extends BasicBuildBehaviour {
         }
     }
 
+    /**
+     * This method finds all the available positions in which there is a block (not dome) and that are neighbouring
+     * the unmoved worker of the current player (who owns Ares).
+     * @param gameSession This is a reference to the main access to the game database.
+     * @return  All the positions in which there is a block (not dome) and that are neighbouring
+     *          the unmoved worker of the current player (who owns Ares).
+     */
     public HashMap<Coord, ArrayList<Coord>> findPositionsToRemoveBlock(GameSession gameSession) {
         WorkersHandler workersHandler = gameSession.getWorkersHandler();
         CellsHandler cellsHandler = gameSession.getCellsHandler();

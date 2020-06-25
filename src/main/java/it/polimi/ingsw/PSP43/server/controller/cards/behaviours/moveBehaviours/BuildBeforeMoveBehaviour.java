@@ -33,7 +33,6 @@ public class BuildBeforeMoveBehaviour extends BasicMoveBehaviour {
      * This method handles the interaction with the client, asking him if does he want to
      * build a block before moving, if the moves does not imply for the worker to move up
      * to an upper level.
-     *
      * @param gameSession The necessary data to do the move made by the player.
      */
     public void handleInitMove(GameSession gameSession) throws GameEndedException, GameLostException {
@@ -46,16 +45,17 @@ public class BuildBeforeMoveBehaviour extends BasicMoveBehaviour {
         Worker workerMoved = workersHandler.getWorker(actionResponse.getWorkerPosition());
         Coord nextCoordChosen = actionResponse.getPosition();
         DataToMove dataToMove = new DataToMove(gameSession, currentPlayer, workerMoved, nextCoordChosen);
-        super.move(dataToMove);
+        workerMoved.setLatestMoved(true);
 
         buildBeforeMove(dataToMove);
+
+        super.move(dataToMove);
     }
 
     /**
      * This method is called if the player decides that he wants to build a block before moving
      * and it computes all the cells where it's possible to build, asks to the player the cell
      * where to build and calls the build method.
-     *
      * @param oldData The data used to recognise which worker is going to move (and so has the
      *                right to build).
      */
@@ -70,10 +70,10 @@ public class BuildBeforeMoveBehaviour extends BasicMoveBehaviour {
         ResponseMessage responseMessage;
         if (hashMapPositionsToBuildBlock.size() != 0 || hashMapPositionsToBuildDome.size() !=0) {
             CellsHandler cellsHandler = gameSession.getCellsHandler();
-            Cell current = cellsHandler.getCell(oldData.getNewPosition());
-            Cell previous = cellsHandler.getCell(oldData.getWorker().getPreviousPosition());
+            Cell current = cellsHandler.getCell(oldData.getWorker().getCurrentPosition());
+            Cell next = cellsHandler.getCell(oldData.getNewPosition());
 
-            if (current.getHeight() - previous.getHeight() == 0) {
+            if (current.getHeight() - next.getHeight() == 0) {
                 RequestMessage requestMessage = new RequestMessage("Do you want to build two times " +
                         "considering that your worker didn't rise to a higher level?");
                 responseMessage = gameSession.sendRequest(requestMessage, currentPlayer.getNickname(), ResponseMessage.class);
@@ -106,18 +106,37 @@ public class BuildBeforeMoveBehaviour extends BasicMoveBehaviour {
         }
     }
 
+    /**
+     * This method finds all the
+     * @param gameSession
+     * @param oldData
+     * @return
+     */
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildBlock(GameSession gameSession, DataToMove oldData) {
         HashMap<Coord, ArrayList<Coord>> availablePositionsBuildBlock = super.findAvailablePositionsToBuildBlock(gameSession);
 
         return filterPositions(availablePositionsBuildBlock, gameSession, oldData);
     }
 
+    /**
+     *
+     * @param gameSession
+     * @param oldData
+     * @return
+     */
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildDome(GameSession gameSession, DataToMove oldData) {
         HashMap<Coord, ArrayList<Coord>> availablePositionsBuildDome = super.findAvailablePositionsToBuildDome(gameSession);
 
         return filterPositions(availablePositionsBuildDome, gameSession, oldData);
     }
 
+    /**
+     *
+     * @param positionsToFilter
+     * @param gameSession
+     * @param oldData
+     * @return
+     */
     private HashMap<Coord, ArrayList<Coord>> filterPositions(HashMap<Coord, ArrayList<Coord>> positionsToFilter, GameSession gameSession, DataToMove oldData) {
         Worker workerAllowedToBuild = oldData.getWorker();
 
@@ -133,7 +152,7 @@ public class BuildBeforeMoveBehaviour extends BasicMoveBehaviour {
             ArrayList<Coord> availableNeighbouringPositions = gameSession.getCellsHandler().selectAllFreeCoords(neighbouringPositions);
             availableNeighbouringPositions.removeIf(currentCoord ->
                     (currentCoord.getY() == workerAllowedToBuild.getCurrentPosition().getY() && currentCoord.getX() == workerAllowedToBuild.getCurrentPosition().getX()) ||
-                    currentCoord.getY() == workerAllowedToBuild.getPreviousPosition().getY() && currentCoord.getX() == workerAllowedToBuild.getPreviousPosition().getX());
+                    currentCoord.getY() == oldData.getNewPosition().getY() && currentCoord.getX() == oldData.getNewPosition().getX());
 
             currentEntry.setValue(availableNeighbouringPositions);
 

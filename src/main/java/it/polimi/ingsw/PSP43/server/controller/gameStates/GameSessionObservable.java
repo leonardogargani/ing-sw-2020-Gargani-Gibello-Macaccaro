@@ -140,7 +140,6 @@ public class GameSessionObservable implements Runnable {
      * @param messageForTheWinner The message sent to the winner of the game.
      * @param nicksExcluded The winner player which has to receive messageForTheWinner.
      */
-    // TODO I can swith the arraylist in a single string
     public void sendEndingMessage(EndGameMessage messageToLosers, EndGameMessage messageForTheWinner, ArrayList<String> nicksExcluded) {
         for (String s : listenersHashMap.keySet()) {
             if (!nicksExcluded.contains(s)) {
