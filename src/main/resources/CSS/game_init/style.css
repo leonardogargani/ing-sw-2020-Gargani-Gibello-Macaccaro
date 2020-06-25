@@ -62,3 +62,19 @@
 .exit-image:pressed {
     -fx-effect: dropshadow(three-pass-box, blue, 50, 0, 0, 0);
 }
+
+
+.info-label {
+    -fx-font-family: "Comic Sans Ms";
+    -fx-font-style: italic;
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+    -fx-background-color: rgba(204, 153, 102, 0.8);
+    -fx-border-color: #996666;
+    -fx-border-radius: 20px 20px 20px 20px;
+    -fx-background-radius: 20px 20px 20px 20px;
+    -fx-padding: 5;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+
+}

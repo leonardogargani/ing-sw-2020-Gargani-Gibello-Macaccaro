@@ -42,6 +42,8 @@ public class CardChoiceController extends AbstractController {
         confirmImage.setId("confirm-image");
         exitImage.setPickOnBounds(false);
         exitImage.getStyleClass().add("exit-image");
+        leftLabel.getStyleClass().add("info-label");
+        bottomLabel.getStyleClass().add("info-label");
     }
 
 
