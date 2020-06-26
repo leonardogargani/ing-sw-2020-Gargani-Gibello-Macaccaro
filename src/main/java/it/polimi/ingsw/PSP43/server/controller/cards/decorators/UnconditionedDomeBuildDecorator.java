@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+/**
+ * This class is used to implement Atlas behaviour.
+ */
 public class UnconditionedDomeBuildDecorator extends PowerGodDecorator {
     private static final long serialVersionUID = 8289108530021462717L;
 
@@ -17,34 +20,11 @@ public class UnconditionedDomeBuildDecorator extends PowerGodDecorator {
         super(godComponent);
     }
 
-    // TODO it could be not necessary if I always call the findpositions on the most external abstractgodcard
-    /*public void initBuild(GameSession gameSession) throws GameEndedException {
-        Player currentPlayer = gameSession.getCurrentPlayer();
-
-        HashMap<Coord, ArrayList<Coord>> availablePositionsToBuildDome = this.findAvailablePositionsToBuildDome(gameSession);
-        HashMap<Coord, ArrayList<Coord>> availablePositionsToBuildBlock = this.findAvailablePositionsToBuildBlock(gameSession);
-
-        ResponseMessage responseMessage = new ResponseMessage(false);
-        if (availablePositionsToBuildDome.size() != 0) {
-            RequestMessage requestMessage = new RequestMessage("Do you want to build a dome? Otherwise you will build a block.");
-            responseMessage = gameSession.sendRequest(requestMessage, currentPlayer.getNickname(), ResponseMessage.class);
-        }
-
-        String message;
-        if (responseMessage.isResponse()) {
-            message = "Choose a position where to place a dome.";
-            ActionResponse actionResponse = askForBuild(gameSession, availablePositionsToBuildDome, message);
-            Worker workerToBuild = gameSession.getWorkersHandler().getWorker(actionResponse.getWorkerPosition());
-            build(new DataToBuild(gameSession, currentPlayer, workerToBuild, actionResponse.getPosition(), Boolean.TRUE));
-        }
-        else {
-            message = "Choose a position where to place a block.";
-            ActionResponse actionResponse = askForBuild(gameSession, availablePositionsToBuildBlock, message);
-            Worker workerToBuild = gameSession.getWorkersHandler().getWorker(actionResponse.getWorkerPosition());
-            build(new DataToBuild(gameSession, currentPlayer, workerToBuild, actionResponse.getPosition(), Boolean.FALSE));
-        }
-    }*/
-
+    /**
+     * This method is used to find all the available positions where to build a dome, that is, according to Atlas behaviour, all the neighbouring positions of the workers of the player.
+     * @param gameSession This is a reference to the main access to the game database.
+     * @return A map of all the coordinates where the workers can build a dome.
+     */
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildDome(GameSession gameSession) {
         CellsHandler cellsHandler = gameSession.getCellsHandler();
 
@@ -62,6 +42,12 @@ public class UnconditionedDomeBuildDecorator extends PowerGodDecorator {
         return availablePositions;
     }
 
+    /**
+     * This method is used to clean the card from possible decorators which could block some functionalities.
+     * It is called when the blocker begins a new turn.
+     * @param nameOfEffect The effect that the blocker has activated by doing a determined action.
+     * @return The card cleaned by the blocking decorator passed as parameter.
+     */
     public AbstractGodCard cleanFromEffects(String nameOfEffect) {
         AbstractGodCard component = super.getGodComponent().cleanFromEffects(nameOfEffect);
         Class<?> c = null;

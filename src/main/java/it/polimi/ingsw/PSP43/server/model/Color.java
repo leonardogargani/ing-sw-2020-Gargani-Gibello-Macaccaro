@@ -1,6 +1,8 @@
 package it.polimi.ingsw.PSP43.server.model;
 
-
+/**
+ * This class is used in CLI to represent colors of workers and board objects.
+ */
 public enum Color {
 
     ANSI_WHITE("\u001B[37m"),

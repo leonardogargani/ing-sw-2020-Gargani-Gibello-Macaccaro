@@ -2,7 +2,9 @@ package it.polimi.ingsw.PSP43.server.model;
 
 import it.polimi.ingsw.PSP43.server.controller.gameStates.GameSession;
 
-
+/**
+ * This class is used to contain all the useful information to move a worker.
+ */
 public class DataToMove {
 
     private final GameSession gameSession;

@@ -2,7 +2,9 @@ package it.polimi.ingsw.PSP43.server.model;
 
 import it.polimi.ingsw.PSP43.server.controller.gameStates.GameSession;
 
-
+/**
+ * This class is used to contain all the useful data to do a build of a block or a dome.
+ */
 public class DataToBuild extends DataToMove {
 
     private final Boolean buildDome;

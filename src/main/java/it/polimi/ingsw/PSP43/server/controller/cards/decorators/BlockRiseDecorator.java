@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+/**
+ * This class represents the decorator used to block the rise of the workers when Athena goes up of one level.
+ */
 public class BlockRiseDecorator extends PowerGodDecorator {
     private static final long serialVersionUID = -5029682300766417371L;
 
@@ -18,6 +21,11 @@ public class BlockRiseDecorator extends PowerGodDecorator {
         super(godComponent);
     }
 
+    /**
+     * This method is used to filter positions to move, removing the ones that imply a rise of one level.
+     * @param gameSession This is a reference to the main access to the game database.
+     * @return All the positions where a player can move his workers.
+     */
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToMove(GameSession gameSession) {
         CellsHandler cellsHandler = gameSession.getCellsHandler();
         HashMap<Coord, ArrayList<Coord>> availablePositionsToMove = super.findAvailablePositionsToMove(gameSession);
@@ -35,6 +43,11 @@ public class BlockRiseDecorator extends PowerGodDecorator {
         return availablePositionsToMove;
     }
 
+    /**
+     * This method eliminates the block from the card not wrapping up it into this blocker.
+     * @param nameOfEffect The effect that the blocker has activated by doing a determined action.
+     * @return The card cleaned from the blocker.
+     */
     public AbstractGodCard cleanFromEffects(String nameOfEffect) {
         return super.getGodComponent().cleanFromEffects(nameOfEffect);
     }

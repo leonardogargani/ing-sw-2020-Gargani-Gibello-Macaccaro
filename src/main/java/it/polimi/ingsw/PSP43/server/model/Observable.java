@@ -2,7 +2,9 @@ package it.polimi.ingsw.PSP43.server.model;
 
 import java.io.Serializable;
 
-
+/**
+ * This class represents an object that will be sent on the network to update the view of the client.
+ */
 public abstract class Observable implements Serializable {
 
     private static final long serialVersionUID = -6752357803627291761L;

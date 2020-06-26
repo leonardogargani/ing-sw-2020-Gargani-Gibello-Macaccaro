@@ -2,7 +2,9 @@ package it.polimi.ingsw.PSP43.server.model;
 
 import java.io.Serializable;
 
-
+/**
+ * This class is used to store a position on the board of the game.
+ */
 public class Coord implements Serializable {
 
     private static final long serialVersionUID = 82606752933927860L;

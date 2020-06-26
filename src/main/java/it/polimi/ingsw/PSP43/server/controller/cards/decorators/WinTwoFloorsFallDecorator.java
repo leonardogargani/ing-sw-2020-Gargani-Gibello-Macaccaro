@@ -21,6 +21,11 @@ public class WinTwoFloorsFallDecorator extends PowerGodDecorator {
         super(godComponent);
     }
 
+    /**
+     * This method is used to check if the player has won the game. An additional case is when is worker moves down two or more levels.
+     * @param gameSession This is a reference to the main access to the game database.
+     * @return True if the player has won, false otherwise.
+     */
     public boolean checkConditionsToWin(GameSession gameSession) {
         WorkersHandler workersHandler = gameSession.getWorkersHandler();
         PlayersHandler playersHandler = gameSession.getPlayersHandler();
@@ -53,6 +58,12 @@ public class WinTwoFloorsFallDecorator extends PowerGodDecorator {
         return super.checkConditionsToWin(gameSession);
     }
 
+    /**
+     * This method is used to clean the card from possible decorators which could block some functionalities.
+     * It is called when the blocker begins a new turn.
+     * @param nameOfEffect The effect that the blocker has activated by doing a determined action.
+     * @return The card cleaned by the blocking decorator passed as parameter.
+     */
     public AbstractGodCard cleanFromEffects(String nameOfEffect) {
         AbstractGodCard component = super.getGodComponent().cleanFromEffects(nameOfEffect);
         Class<?> c = null;

@@ -17,9 +17,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+/**
+ * This class is the basic one to handle moves of workers.
+ */
 public class BasicMoveBehaviour extends BasicGodCard implements MoveBehavior {
     private static final long serialVersionUID = -198685635604926007L;
 
+    /**
+     * This method asks to the client to move a worker.
+     * @param gameSession This is a reference to the main access to the game database.
+     * @return The response containing the choice of the player.
+     * @throws GameEndedException if the player decides to leave the game during his turn.
+     * @throws GameLostException if the player can't do any move.
+     */
     public ActionResponse askForMove(GameSession gameSession) throws GameEndedException, GameLostException {
         CardsHandler cardsHandler = gameSession.getCardsHandler();
         AbstractGodCard abstractGodCard = cardsHandler.getPlayerCard(gameSession.getCurrentPlayer().getNickname());
@@ -31,6 +41,13 @@ public class BasicMoveBehaviour extends BasicGodCard implements MoveBehavior {
         return askForMove(gameSession, availablePositions);
     }
 
+    /**
+     * This method asks to the player for a move, between some positions already selected.
+     * @param gameSession This is a reference to the main access to the game database.
+     * @param availablePositions The positions among which the player can choose where to move a worker.
+     * @return The response from the player about where to move a worker.
+     * @throws GameEndedException if the player decides to leave the game during his turn.
+     */
     public ActionResponse askForMove(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availablePositions) throws GameEndedException {
         ActionRequest message = new ActionRequest(  "Choose a position where to place your worker next.",
                                                             Collections.unmodifiableMap(new HashMap<>(availablePositions)));
@@ -42,6 +59,12 @@ public class BasicMoveBehaviour extends BasicGodCard implements MoveBehavior {
         return response;
     }
 
+    /**
+     * This method handles a basic move, where the player is asked where to move his worker.
+     * @param gameSession This is a reference to the main access to the game database.
+     * @throws GameEndedException if the player decides to leave the game during his turn.
+     * @throws GameLostException if the player can't do any move.
+     */
     public void handleInitMove(GameSession gameSession) throws GameEndedException, GameLostException {
         WorkersHandler workersHandler = gameSession.getWorkersHandler();
 

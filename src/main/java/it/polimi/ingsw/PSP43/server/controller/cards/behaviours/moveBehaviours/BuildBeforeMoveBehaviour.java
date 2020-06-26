@@ -107,10 +107,10 @@ public class BuildBeforeMoveBehaviour extends BasicMoveBehaviour {
     }
 
     /**
-     * This method finds all the
-     * @param gameSession
-     * @param oldData
-     * @return
+     * This method finds all the available positions where the player can build a block before moving his worker.
+     * @param gameSession This is a reference to the main access to the game database.
+     * @param oldData The data that will be used to change the model after the move done by the player.
+     * @return A map where the keys are the coordinates of the workers that can build a block and the values are all the positions where these workers can build.
      */
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildBlock(GameSession gameSession, DataToMove oldData) {
         HashMap<Coord, ArrayList<Coord>> availablePositionsBuildBlock = super.findAvailablePositionsToBuildBlock(gameSession);
@@ -119,10 +119,10 @@ public class BuildBeforeMoveBehaviour extends BasicMoveBehaviour {
     }
 
     /**
-     *
-     * @param gameSession
-     * @param oldData
-     * @return
+     * This method finds all the available positions where the player can build a dome before moving his worker.
+     * @param gameSession This is a reference to the main access to the game database.
+     * @param oldData The data that will be used to change the model after the move done by the player.
+     *      * @return A map where the keys are the coordinates of the workers that can build a dome and the values are all the positions where these workers can build.
      */
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildDome(GameSession gameSession, DataToMove oldData) {
         HashMap<Coord, ArrayList<Coord>> availablePositionsBuildDome = super.findAvailablePositionsToBuildDome(gameSession);
@@ -131,11 +131,11 @@ public class BuildBeforeMoveBehaviour extends BasicMoveBehaviour {
     }
 
     /**
-     *
-     * @param positionsToFilter
-     * @param gameSession
-     * @param oldData
-     * @return
+     * This method filters all the positions found to build a block or a dome if they corresponds to the one in which the worker is moving. It eliminates from the keys the worker that is going to be unmoved.
+     * @param positionsToFilter The positions found to build and that has to be filtered.
+     * @param gameSession This is a reference to the main access to the game database.
+     * @param oldData The data that will be used to change the model after the move done by the player.
+     * @return The map of coordinates where to build filtered.
      */
     private HashMap<Coord, ArrayList<Coord>> filterPositions(HashMap<Coord, ArrayList<Coord>> positionsToFilter, GameSession gameSession, DataToMove oldData) {
         Worker workerAllowedToBuild = oldData.getWorker();

@@ -13,11 +13,20 @@ import it.polimi.ingsw.PSP43.server.network.networkMessages.RequestMessage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
 
+/**
+ * This class is used to implement Charon's behaviour that permits to force
+ * an opponent worker to the space directly on the other side of the worker that is moving.
+ */
 public class ForceToOppSideBehaviour extends BasicMoveBehaviour {
     private static final long serialVersionUID = -8412302139395339178L;
 
+    /**
+     * This method handles the move when a player can force an opponent worker according to Charon rules.
+     * @param gameSession This is a reference to the main access to the game database.
+     * @throws GameEndedException if the player decides to leave the game during his turn.
+     * @throws GameLostException if the player can't do any move.
+     */
     public void handleInitMove(GameSession gameSession) throws GameEndedException, GameLostException {
         Player currentPlayer = gameSession.getCurrentPlayer();
 
@@ -36,6 +45,12 @@ public class ForceToOppSideBehaviour extends BasicMoveBehaviour {
         }
     }
 
+    /**
+     * This method ask to the player if he wants to use Charon's behaviour before moving a worker.
+     * @param gameSession This is a reference to the main access to the game database.
+     * @return The coordinates where the player decided to force the opponent's worker.
+     * @throws GameEndedException if the player decides to leave the game during his turn.
+     */
     public Coord askIfWantToForce(GameSession gameSession) throws GameEndedException {
         Player currentPlayer = gameSession.getCurrentPlayer();
         CellsHandler cellsHandler = gameSession.getCellsHandler();
@@ -56,6 +71,13 @@ public class ForceToOppSideBehaviour extends BasicMoveBehaviour {
         return null;
     }
 
+    /**
+     * This method select all the positions of the workers that can be forced.
+     * @param cellsHandler The handler of the data of the cells contained in the model.
+     * @param currentPlayer The current player of the turn.
+     * @return  A map where the keys are the coordinates of the workers that can force someone and the values are
+     *          the coordinates of the workers that can be forced.
+     */
     public HashMap<Coord, ArrayList<Coord>> selectPositionsWorkersToForce(CellsHandler cellsHandler, Player currentPlayer) {
         HashMap<Coord, ArrayList<Coord>> neighbouringCoordsSelected = cellsHandler.findWorkersNeighbouringCoords(currentPlayer);
         ArrayList<Coord> key = new ArrayList<>();
@@ -86,6 +108,13 @@ public class ForceToOppSideBehaviour extends BasicMoveBehaviour {
         return neighbouringCoordsSelected;
     }
 
+    /**
+     * This method interacts with the client asking him where he wants to force the opponent's worker.
+     * @param gameSession This is a reference to the main access to the game database.
+     * @param availableWorkersToForce These are all the workers that the player can use to force someone.
+     * @return The coordinates where the player has decided to force an opponent's worker.
+     * @throws GameEndedException if the player decides to leave the game during his turn.
+     */
     private Coord askWhereToForce(GameSession gameSession, HashMap<Coord, ArrayList<Coord>> availableWorkersToForce) throws GameEndedException {
         ActionRequest actionRequest = new ActionRequest("Choose a worker to force in another position.", availableWorkersToForce);
         ActionResponse actionResponse = gameSession.sendRequest(actionRequest, gameSession.getCurrentPlayer().getNickname(), ActionResponse.class);
