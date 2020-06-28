@@ -60,6 +60,7 @@ public class DoubleMoveBehaviour extends BasicMoveBehaviour {
      * the previous position.
      * @param gameSession This is a reference to the main access to the game database.
      * @param coordToExclude The coordinates excluded from the possible ones in which the workers can move.
+     * @param coordWorkerMoved The coordinates of the worker that is moving.
      * @return The HashMap that contains as a key value the coordinates of the current position of the worker and as values
      * all the coordinates in which the worker can move the second time.
      */

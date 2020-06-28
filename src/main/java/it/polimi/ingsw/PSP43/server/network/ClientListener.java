@@ -81,6 +81,7 @@ public class ClientListener implements Runnable {
      * @throws IOException            signals that an I/O exception of some sort has occurred.
      * @throws ClassNotFoundException occurs when you try to load a class at run time using Class .forName() or
      *                                loadClass() methods and mentioned classes are not found in the classpath.
+     * @return The message arrived from the Client.
      */
     public ClientMessage receive() throws IOException, ClassNotFoundException, InterruptedException {
         Object objectArrived;
@@ -154,6 +155,7 @@ public class ClientListener implements Runnable {
      * This method is used to push a message on the stack of the ClientListener when it arrives. In that way I notify
      * the thread that was waiting for a response from the client.
      * @param clientMessage The message arrived from the client.
+     * @throws InterruptedException
      */
     public synchronized void pushMessageOnStack(ClientMessage clientMessage) throws InterruptedException {
         stackMessages.add(clientMessage);
@@ -198,6 +200,8 @@ public class ClientListener implements Runnable {
      * 2)   The client was a player in a game that ended. In this case the client will be still available. For this reason
      * the socket won't be closed. If the client has been the first to disconnect, he will start the process of
      * disconnection through the RegisterClientListener.
+     * @param isFirstToDisconnect Boolean that is true if the player has been the first to disconnect, false otherwise.
+     * @param typeDisconnectionHeader It is the type of disconnection happened that made the player leave the game.
      */
     public synchronized void handleDisconnection(boolean isFirstToDisconnect, LeaveGameMessage.TypeDisconnectionHeader typeDisconnectionHeader) {
         try {

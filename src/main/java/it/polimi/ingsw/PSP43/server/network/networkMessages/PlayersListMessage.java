@@ -22,7 +22,7 @@ public class PlayersListMessage extends TextMessage {
     /**
      * Not default constructor for PlayersListMessage.
      * @param message is the string that will be shown to the recipient
-     * @param gameSession
+     * @param gameSession This is a reference to the main access to the game database.
      */
     public PlayersListMessage(String message, GameSession gameSession){
         super(message, TextMessage.PositionInScreen.LOW_CENTER);

@@ -59,6 +59,7 @@ public class WorkersHandler {
      * It invokes the constructor of the worker with the color chosen by its owner and with
      * an incremental id based on the number of already existing workers.
      * @param color color of the worker
+     * @return The integer representing the ID of the new worker.
      */
     public int addNewWorker(Color color) {
         int workerId = workers.size();

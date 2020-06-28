@@ -17,8 +17,8 @@ public class EndGameMessage extends TextMessage {
 
     /**
      * Not default constructor for EndGameMessage.
-     * @param message is the string that will be shown to the recipient
-     * @param endGameHeader
+     * @param message It is the string that will be shown to the recipient
+     * @param endGameHeader It is the header of the message.
      */
     public EndGameMessage(String message, EndGameHeader endGameHeader){
         super(message, TextMessage.PositionInScreen.LOW_CENTER);
@@ -37,8 +37,8 @@ public class EndGameMessage extends TextMessage {
 
 
     /**
-     *
-     * @return
+     * This method returns the header of the end game message.
+     * @return The header of the end game message.
      */
     public EndGameHeader getEndGameHeader() {
         return endGameHeader;

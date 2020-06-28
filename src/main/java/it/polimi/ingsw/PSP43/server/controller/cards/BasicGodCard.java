@@ -32,8 +32,11 @@ public class BasicGodCard extends AbstractGodCard {
 
     /**
      * Non-default constructor, it initializes the card with the name of the god and its description.
-     * @param godName name of the god whose power has been chosen by the player
-     * @param description description of the ability of the god
+     * @param godName name of the god whose power has been chosen by the player.
+     * @param description description of the ability of the god.
+     * @param power the power of the god.
+     * @param moveBehaviour the move behaviour of the god.
+     * @param buildBehaviour the build behaviour of the god.
      */
     public BasicGodCard(String godName, String description, String power, BasicMoveBehaviour moveBehaviour, BasicBuildBehaviour buildBehaviour) {
         super(godName, description, power);

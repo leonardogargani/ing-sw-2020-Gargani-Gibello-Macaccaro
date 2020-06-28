@@ -55,6 +55,7 @@ public class CellsHandler {
 
     /**
      * Method to get a cell from the coordinates supplied.
+     * @param c The coordinates of the cell to return.
      * @return the cell for which the caller was looking for
      */
     public Cell getCell(Coord c) {
@@ -115,6 +116,7 @@ public class CellsHandler {
 
     /**
      * This method finds all the neighbouring cells for the workers provided from the caller.
+     * @param player The player used to find the neighbouring positions.
      * @return an HashMap in which the key value are the coordinates of the workers supplied by the caller and the values are all the neighbouring
      * cells of that worker
      */

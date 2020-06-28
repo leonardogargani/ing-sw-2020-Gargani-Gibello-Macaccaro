@@ -23,6 +23,7 @@ public class LeaveGameMessage extends ClientMessage {
 
     /**
      * Not default constructor for LeaveGameMessage.
+     * @param typeDisconnectionHeader It is the type of disconnection (Client killed the program, the network went down ecc...).
      */
     public LeaveGameMessage(TypeDisconnectionHeader typeDisconnectionHeader) {
         this.typeDisconnectionHeader = typeDisconnectionHeader;

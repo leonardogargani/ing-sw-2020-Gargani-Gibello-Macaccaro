@@ -8,8 +8,8 @@ public class ChooseStarterMessage extends TextMessage {
 
     /**
      * Not default constructor for ChooseStarterMessage.
-     * @param message          is the string that will be shown to the recipient
-     * @param positionInScreen
+     * @param message          It is the string that will be shown to the recipient
+     * @param positionInScreen It is the position in which has to be rendered the message on screen.
      */
     public ChooseStarterMessage(List<String> list, String message, PositionInScreen positionInScreen) {
         super(message, positionInScreen);

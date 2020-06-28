@@ -122,7 +122,7 @@ public class BuildBeforeMoveBehaviour extends BasicMoveBehaviour {
      * This method finds all the available positions where the player can build a dome before moving his worker.
      * @param gameSession This is a reference to the main access to the game database.
      * @param oldData The data that will be used to change the model after the move done by the player.
-     *      * @return A map where the keys are the coordinates of the workers that can build a dome and the values are all the positions where these workers can build.
+     * @return A map where the keys are the coordinates of the workers that can build a dome and the values are all the positions where these workers can build.
      */
     public HashMap<Coord, ArrayList<Coord>> findAvailablePositionsToBuildDome(GameSession gameSession, DataToMove oldData) {
         HashMap<Coord, ArrayList<Coord>> availablePositionsBuildDome = super.findAvailablePositionsToBuildDome(gameSession);

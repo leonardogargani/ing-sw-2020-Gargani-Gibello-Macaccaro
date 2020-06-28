@@ -37,6 +37,7 @@ public abstract class AbstractGodCard implements Serializable {
      * Non-default constructor, it initializes the card with the name of the god and its description.
      * @param godName     name of the god whose power has been chosen by the player
      * @param description description of the ability of the god
+     * @param power the power of the god
      */
     public AbstractGodCard(String godName, String description, String power) {
         this.godName = godName;

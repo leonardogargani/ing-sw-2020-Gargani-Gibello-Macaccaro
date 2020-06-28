@@ -15,7 +15,8 @@ public class TextMessage extends ServerMessage {
 
     /**
      * Not default constructor for TextMessage.
-     * @param message is the string that will be shown to the recipient
+     * @param message It is the string that will be shown to the recipient
+     * @param positionInScreen The position in which has to be rendered the message.
      */
     public TextMessage(String message, PositionInScreen positionInScreen){
         this.positionInScreen = positionInScreen;

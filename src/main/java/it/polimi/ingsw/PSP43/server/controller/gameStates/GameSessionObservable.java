@@ -216,6 +216,7 @@ public class GameSessionObservable implements Runnable {
 
     /**
      * This method is used to send a request to the client and to wait for a response.
+     * @param <T> A sub-type of ClientMessage.
      * @param message The request message sent.
      * @param addressee The player who has to receive the message.
      * @param typeExpected The type of message that the caller is expecting.

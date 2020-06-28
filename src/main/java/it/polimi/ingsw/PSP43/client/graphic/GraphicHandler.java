@@ -52,6 +52,7 @@ public abstract class GraphicHandler {
      * This method updates the graphics of the client displaying the message of the players number
      * request, waiting and sending the response through the ClientBG object.
      * @param request message containing the request for the number of the players
+     * @throws QuitPlayerException if the player decides to leave the game.
      */
     public abstract void updateMenuChange(PlayersNumberRequest request) throws QuitPlayerException;
 
@@ -60,14 +61,16 @@ public abstract class GraphicHandler {
      * This method updates the graphics of the client displaying the message of the initial cards
      * request, waiting and sending the response through the ClientBG object.
      * @param request message containing the request for the cards chosen for this game
+     * @throws QuitPlayerException if the player decides to leave the game.
      */
     public abstract void updateMenuChange(InitialCardsRequest request) throws QuitPlayerException;
 
 
     /**
-     * This method updates the graphics of the client displaying the message of the single card
+     * This method updates the graphics of the client displaying the message of the single card.
      * request, waiting and sending the response through the ClientBG object.
-     * @param request message containing the request for the card chosen by a player
+     * @param request message containing the request for the card chosen by a player.
+     * @throws QuitPlayerException if the player decides to leave the game.
      */
     public abstract void updateMenuChange(CardRequest request) throws QuitPlayerException;
 
@@ -75,7 +78,8 @@ public abstract class GraphicHandler {
     /**
      * This method updates the graphics of the client displaying the message of the workers color
      * request, waiting and sending the response through the ClientBG object.
-     * @param request message containing the request for the color of player's workers
+     * @param request message containing the request for the color of player's workers.
+     * @throws QuitPlayerException if the player decides to leave the game.
      */
     public abstract void updateMenuChange(WorkersColorRequest request) throws QuitPlayerException;
 
@@ -83,7 +87,8 @@ public abstract class GraphicHandler {
     /**
      * This method updates the graphics of the client displaying the message of the action
      * request, waiting and sending the response through the ClientBG object.
-     * @param request message containing the request for the action a player wants to make
+     * @param request message containing the request for the action a player wants to make.
+     * @throws QuitPlayerException if the player decides to leave the game.
      */
     public abstract void updateMenuChange(ActionRequest request) throws QuitPlayerException;
 
@@ -91,7 +96,8 @@ public abstract class GraphicHandler {
     /**
      * This method updates the graphics of the client displaying the message of the generic request
      * that needs a boolean as a response, waiting and sending the response through the ClientBG object.
-     * @param request message containing the generic boolean request
+     * @param request message containing the generic boolean request.
+     * @throws QuitPlayerException if the player decides to leave the game.
      */
     public abstract void updateMenuChange(RequestMessage request) throws QuitPlayerException;
 
@@ -110,7 +116,8 @@ public abstract class GraphicHandler {
      * This method updates the graphics of the client displaying the message of the request
      * for a change of the nick, since the chosen one is already in use.
      * @param request message that notifies the client that the nick he has just chosen
-     *                is already taken
+     *                is already taken.
+     * @throws QuitPlayerException if the player decides to leave the game.
      */
     public abstract void updateMenuChange(ChangeNickRequest request) throws QuitPlayerException;
 

@@ -44,7 +44,8 @@ public class EndController extends AbstractController {
     }
 
     /**
-     * This method shows the end message arrived
+     * This method shows the end message arrived.
+     * @param message The message arrived from the server.
      */
     public void setEndMessage(EndGameMessage message) {
         if(message.getEndGameHeader() == EndGameMessage.EndGameHeader.WINNER) {

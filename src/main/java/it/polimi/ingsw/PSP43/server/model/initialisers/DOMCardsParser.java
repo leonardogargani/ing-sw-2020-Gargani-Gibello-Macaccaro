@@ -31,6 +31,9 @@ public class DOMCardsParser {
      * This method is called by the GameSession to initialise all the cards of the game which can be chosen
      * by a player.
      * @return a deck of cards used during the game.
+     * @throws ParserConfigurationException if there were problems in parsing the XML document.
+     * @throws IOException
+     * @throws org.xml.sax.SAXException
      */
     public static ArrayList<AbstractGodCard> buildDeck() throws ParserConfigurationException,
             IOException, org.xml.sax.SAXException {

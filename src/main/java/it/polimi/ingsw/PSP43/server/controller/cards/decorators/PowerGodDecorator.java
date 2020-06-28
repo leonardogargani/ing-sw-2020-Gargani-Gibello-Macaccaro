@@ -114,7 +114,7 @@ public abstract class PowerGodDecorator extends AbstractGodCard {
     /**
      * This method checks if the player that owns this card has won the game.
      * @param gameSession This is a reference to the main access to the game database.
-     * @return
+     * @return True if the player has won the game, false otherwise.
      */
     public boolean checkConditionsToWin(GameSession gameSession) {
         return godComponent.checkConditionsToWin(gameSession);

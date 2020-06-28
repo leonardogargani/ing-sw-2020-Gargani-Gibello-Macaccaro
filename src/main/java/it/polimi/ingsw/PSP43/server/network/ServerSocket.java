@@ -9,7 +9,7 @@ public class ServerSocket {
 
     /**
      * Main method of the server it listens for new players(client) who want to open connection with the server
-     * @param args
+     * @param args The arguments that could be passed through invocation in command line interface.
      */
     public static void main(String[] args)
     {

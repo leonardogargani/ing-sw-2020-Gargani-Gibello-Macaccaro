@@ -18,7 +18,8 @@ public class WorkersColorRequest extends ServerMessage {
 
     /**
      * Not default constructor for WorkersColorRequest message.
-     * @param colorsAvailable is a List of available colors
+     * @param colorsAvailable It is a List of available colors
+     * @param workersColorRequestHeader The header of the request of the message.
      */
     public WorkersColorRequest(List<Color> colorsAvailable, WorkersColorRequestHeader workersColorRequestHeader){
         this.colorsAvailable = colorsAvailable;

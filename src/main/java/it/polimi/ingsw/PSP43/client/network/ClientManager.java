@@ -96,7 +96,7 @@ public class ClientManager implements Runnable {
     /**
      * This method checks if there are messages in the messageBox and if there are some of these it calls the update
      * on the graphic handler.
-     *
+     * @throws InterruptedException
      * @throws QuitPlayerException if a player in the input writes quit to leave the game
      */
     public void handleEvent() throws QuitPlayerException, InterruptedException {
@@ -178,8 +178,8 @@ public class ClientManager implements Runnable {
 
     /**
      * Synchronized method to remove a message from the message box.
-     *
      * @return the removed message
+     * @throws InterruptedException
      */
     public synchronized ServerMessage popMessageFromBox() throws InterruptedException {
         while (messageBox.size() == 0) {
