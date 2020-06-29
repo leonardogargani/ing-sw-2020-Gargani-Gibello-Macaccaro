@@ -2,6 +2,7 @@ package it.polimi.ingsw.PSP43.server.controller.cards.behaviours.moveBehaviours;
 
 import it.polimi.ingsw.PSP43.client.network.networkMessages.ActionResponse;
 import it.polimi.ingsw.PSP43.client.network.networkMessages.ResponseMessage;
+import it.polimi.ingsw.PSP43.server.controller.cards.AbstractGodCard;
 import it.polimi.ingsw.PSP43.server.controller.gameStates.GameSession;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.model.DataToMove;
@@ -45,6 +46,7 @@ public class InfiniteMovesOnPerimeterBehaviour extends BasicMoveBehaviour{
         Player currentPlayer = gameSession.getCurrentPlayer();
         WorkersHandler workersHandler = gameSession.getWorkersHandler();
         Integer[] wIds = gameSession.getCurrentPlayer().getWorkersIdsArray();
+        AbstractGodCard card = gameSession.getCardsHandler().getPlayerCard(currentPlayer.getNickname());
 
         Worker workerMoved = null;
         Worker workerNotMoved = null;
@@ -60,13 +62,13 @@ public class InfiniteMovesOnPerimeterBehaviour extends BasicMoveBehaviour{
         assert workerNotMoved != null;
 
         if (workersHandler.isOnPerimetralCell(workerMoved)) {
-            RequestMessage requestMessage = new RequestMessage("Do you want to move" +
+            RequestMessage requestMessage = new RequestMessage("Do you want to move " +
                     "another time your worker?");
             ResponseMessage responseMessage = gameSession.sendRequest(requestMessage,
                     currentPlayer.getNickname(), ResponseMessage.class);
 
             if (responseMessage.isResponse()) {
-                HashMap<Coord, ArrayList<Coord>> availablePositions = findAvailablePositionsToMove(gameSession);
+                HashMap<Coord, ArrayList<Coord>> availablePositions = card.findAvailablePositionsToMove(gameSession);
                 availablePositions.remove(workerNotMoved.getCurrentPosition());
 
                 ActionRequest actionRequest = new ActionRequest("Choose a position where to " +

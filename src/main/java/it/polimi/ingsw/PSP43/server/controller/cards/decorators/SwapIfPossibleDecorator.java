@@ -32,7 +32,9 @@ public class SwapIfPossibleDecorator extends PowerGodDecorator {
      * @throws GameLostException if the player can't do any move.
      */
     public void initMove(GameSession gameSession) throws GameEndedException, GameLostException {
-        HashMap<Coord, ArrayList<Coord>> availablePositions = findAvailablePositionsToMove(gameSession);
+        String currentNickname = gameSession.getCurrentPlayer().getNickname();
+        AbstractGodCard card = gameSession.getCardsHandler().getPlayerCard(currentNickname);
+        HashMap<Coord, ArrayList<Coord>> availablePositions = card.findAvailablePositionsToMove(gameSession);
 
         if (availablePositions.size() == 0) throw new GameLostException();
 

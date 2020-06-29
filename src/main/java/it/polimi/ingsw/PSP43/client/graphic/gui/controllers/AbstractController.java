@@ -38,8 +38,6 @@ public abstract class AbstractController {
             Stage newStage = new Stage();
             GuiStarter.setPrimaryStage(newStage);
 
-            //newStage.setHeight(650);
-            //newStage.setWidth(650);
             newStage.setMinHeight(650);
             newStage.setMinWidth(650);
             newStage.setResizable(false);
