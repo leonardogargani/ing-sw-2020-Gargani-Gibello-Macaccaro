@@ -23,14 +23,16 @@ public class EndController extends AbstractController {
     /**
      * This method handles homeButton, it restarts the game
      */
-    public void onHomeButtonClicked() {
+    @FXML
+    private void onHomeButtonClicked() {
         super.handleExit();
     }
 
     /**
      * This method shows the explication of the home button when you move on it
      */
-    public void showHomeButtonLabel() {
+    @FXML
+    private void showHomeButtonLabel() {
         if(homeButton.isVisible())
             homeButtonLabel.setText("Go back home and start a new match!");
     }
@@ -38,7 +40,8 @@ public class EndController extends AbstractController {
     /**
      * This method hides the explication of the home button when you aren't on it
      */
-    public void hideHomeButtonLabel() {
+    @FXML
+    private void hideHomeButtonLabel() {
         if(homeButton.isVisible())
             homeButtonLabel.setText("");
     }

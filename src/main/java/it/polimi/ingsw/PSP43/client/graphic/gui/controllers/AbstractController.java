@@ -12,20 +12,40 @@ public abstract class AbstractController {
     private static ClientBG clientBG;
     private static String nick = null;
 
+    /**
+     * Static setter method for the clientBg.
+     * @param clientBG is the network handler for this player
+     */
     public static void setClientBG(ClientBG clientBG) {
         AbstractController.clientBG = clientBG;
     }
 
+    /**
+     * Static getter method for the clientBg.
+     * @return the clientBg of this player
+     */
     public static ClientBG getClientBG() { return clientBG; }
 
+
+    /**
+     * Static setter method for save the nickname of a player.
+     * @param nick is the String variable containing the nickname of this player
+     */
     public static void setNick(String nick) {
         AbstractController.nick = nick;
     }
 
+    /**
+     * Static getter method for the nickname.
+     * @return the nickname of the player
+     */
     public static String getNick() {
         return nick;
     }
 
+    /**
+     * Event catcher method called when during the match the player clicks the exit button.
+     */
     public void handleExit() {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/FXML/game_init/home.fxml"));

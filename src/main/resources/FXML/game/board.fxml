@@ -24,7 +24,7 @@
                      </image>
                   </ImageView>
                   <Region maxWidth="-Infinity" prefHeight="200.0" prefWidth="100.0" />
-                  <Label fx:id="topMenu" alignment="CENTER" prefHeight="100.0" prefWidth="450.0" text="Updating..." textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                  <Label fx:id="topMenu" alignment="CENTER" contentDisplay="CENTER" prefHeight="100.0" prefWidth="450.0" text="Updating..." textAlignment="CENTER" textFill="WHITE" wrapText="true">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -117,15 +117,24 @@
                   <HBox prefHeight="220.0" prefWidth="330.0">
                      <children>
                         <Label fx:id="player3Nick" alignment="CENTER" prefHeight="20.0" prefWidth="80.0" text="Updating" textAlignment="CENTER" textFill="WHITE" />
-                        <ImageView fx:id="player3Worker" fitHeight="220.0" fitWidth="125.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="player3Card" fitHeight="220.0" fitWidth="125.0" onMouseClicked="#onCardClicked" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="player3Worker" fitHeight="220.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin></ImageView>
+                        <ImageView fx:id="player3Card" fitHeight="220.0" fitWidth="120.0" onMouseClicked="#onCardClicked" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin></ImageView>
                      </children>
                   </HBox>
                   <HBox prefHeight="220.0" prefWidth="330.0">
                      <children>
                         <Label fx:id="player2Nick" alignment="CENTER" prefHeight="20.0" prefWidth="80.0" text="Updating" textAlignment="CENTER" textFill="WHITE" />
-                        <ImageView fx:id="player2Worker" fitHeight="220.0" fitWidth="125.0" pickOnBounds="true" preserveRatio="true" />
-                        <ImageView fx:id="player2Card" fitHeight="220.0" fitWidth="125.0" onMouseClicked="#onCardClicked" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="player2Worker" fitHeight="220.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin></ImageView>
+                        <ImageView fx:id="player2Card" fitHeight="220.0" fitWidth="120.0" onMouseClicked="#onCardClicked" pickOnBounds="true" preserveRatio="true" />
                      </children>
                   </HBox>
                </children>

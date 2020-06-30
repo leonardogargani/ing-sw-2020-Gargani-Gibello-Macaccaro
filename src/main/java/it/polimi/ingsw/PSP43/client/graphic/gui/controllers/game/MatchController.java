@@ -61,6 +61,7 @@ public class MatchController extends AbstractController {
 
     private static ClientBG clientBG;
     private static ActionRequest actionRequest;
+    private static RequestMessage requestMessage;
     private static BoardController boardController;
     private static PlayersController playersController;
     private static Label topLabel;
@@ -75,7 +76,8 @@ public class MatchController extends AbstractController {
     /**
      * Initialize method for this controller.
      */
-    public void initialize() {
+    @FXML
+    private void initialize() {
         actionRequest = null;
         numberOfActionRequestArrived = 0;
         counter = 0;
@@ -116,7 +118,7 @@ public class MatchController extends AbstractController {
      * @param event is a generic mouse event on a cell of the board
      */
     @FXML
-    public void onCellClicked(MouseEvent event) {
+    private void onCellClicked(MouseEvent event) {
         if (actionRequest != null) {
             Map<Coord, ArrayList<Coord>> hashMap = actionRequest.getCellsAvailable();
             ImageView img = (ImageView) event.getSource();
@@ -151,9 +153,10 @@ public class MatchController extends AbstractController {
                     bottomLabel.setText("This cell isn't available for your action!\nChoose another cell!");
                 }
             }
-        } else {
-            //String prev = bottomMenu.getText();
-            //bottomMenu.setText("Wait for your turn!\n" + prev);
+        } else if(requestMessage!=null){
+            bottomMenu.setText("You have to answer this question before moving:\n"+requestMessage.getMessage());
+        }
+        else{
             bottomMenu.setText("Wait for your turn!");
         }
     }
@@ -163,18 +166,20 @@ public class MatchController extends AbstractController {
      * @param event is a generic mouse event on one of that two images
      */
     @FXML
-    public void onDecisionTake(javafx.scene.input.MouseEvent event) {
+    private void onDecisionTake(javafx.scene.input.MouseEvent event) {
         if(!confirm.isDisable() && !delete.isDisable()){
             if (event.getSource() == confirm) {
                 clientBG.sendMessage(new ResponseMessage(true));
                 confirmButton.setDisable(true);
                 deleteButton.setDisable(true);
                 bottomLabel.setText("");
+                requestMessage = null;
             } else if (event.getSource() == delete) {
                 clientBG.sendMessage(new ResponseMessage(false));
                 confirmButton.setDisable(true);
                 deleteButton.setDisable(true);
                 bottomLabel.setText("");
+                requestMessage = null;
             } else {
                 String prev = bottomMenu.getText();
                 bottomMenu.setText("You can only chose V or X now\n" + prev);}
@@ -185,7 +190,7 @@ public class MatchController extends AbstractController {
      * Event method called when you click on the exit button, it sends a LeaveGameMessage and then sets the home scene.
      */
     @FXML
-    public void onExitClicked() {
+    private void onExitClicked() {
         clientBG.sendMessage(new LeaveGameMessage());
         super.handleExit();
     }
@@ -194,12 +199,13 @@ public class MatchController extends AbstractController {
      * Event method called when you click on an opponent player's god card.
      * @param event is the MouseEvent generated when you click on an opponent player's god card
      */
-    public void onCardClicked(MouseEvent event) {
+    @FXML
+    private void onCardClicked(MouseEvent event) {
         playersController.showGod((ImageView) event.getSource());
     }
 
-
-    public void onHelpClicked(){ playersController.showRules();}
+    @FXML
+    private void onHelpClicked(){ playersController.showRules();}
 
 
     /**
@@ -254,6 +260,8 @@ public class MatchController extends AbstractController {
      * @param message contains a String message to be shown
      */
     public static void askQuestion(RequestMessage message) {
+        requestMessage = message;
+        topLabel.setText("It's your turn");
         bottomLabel.setText(message.getMessage());
         confirmButton.setDisable(false);
         deleteButton.setDisable(false);

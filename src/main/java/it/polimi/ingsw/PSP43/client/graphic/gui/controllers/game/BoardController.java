@@ -173,7 +173,7 @@ public class BoardController {
      * @param source is the clicked cell
      * @return coordinates of the source
      */
-    public Coord findCell(ImageView source){
+    private Coord findCell(ImageView source){
         Coord chosenPosition = null;
         int i, j;
         for (i = 0; i < 5; i++)

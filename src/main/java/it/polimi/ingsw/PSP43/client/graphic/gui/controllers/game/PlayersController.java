@@ -1,8 +1,8 @@
 package it.polimi.ingsw.PSP43.client.graphic.gui.controllers.game;
 
 import it.polimi.ingsw.PSP43.client.graphic.gui.controllers.AbstractController;
-import it.polimi.ingsw.PSP43.server.model.Color;
 import it.polimi.ingsw.PSP43.server.controller.cards.AbstractGodCard;
+import it.polimi.ingsw.PSP43.server.model.Color;
 import it.polimi.ingsw.PSP43.server.model.Player;
 import it.polimi.ingsw.PSP43.server.network.networkMessages.PlayersListMessage;
 import javafx.fxml.FXMLLoader;
@@ -34,9 +34,10 @@ public class PlayersController {
 
     /**
      * Not default constructor for the PlayersController class.
+     *
      * @param labels is an array containing the references of all the board's labels
      * @param images is an array containing the references of ImageViews helpful to show players' information
-     * @param nick is a string content the nickname of the player
+     * @param nick   is a string content the nickname of the player
      */
     public PlayersController(Label[] labels, ImageView[] images, String nick) {
         //I can pass these parameters like a List of Label and a List of ImageView
@@ -58,6 +59,7 @@ public class PlayersController {
 
     /**
      * This method updates information shown
+     *
      * @param playersListMessage contains information to show
      */
     public void showUpdate(PlayersListMessage playersListMessage) {
@@ -84,11 +86,11 @@ public class PlayersController {
         player1Card.setImage(new Image(getClass().getResource("/images/cards/" + players.get(0).getGod().getGodName() + ".png").toExternalForm()));
         player1Worker.setImage(new Image(getClass().getResource("/images/workers/worker_" + players.get(0).getColorName() + "_1.png").toExternalForm()));
         player1CardDescription.setText(players.get(0).getGod().getDescription() + "\n\n" + players.get(0).getGod().getPower());
-
-        player2Nick.setText(players.get(1).getPlayer().getNickname());
-        player2Card.setImage(new Image(getClass().getResource("/images/cards/" + players.get(1).getGod().getGodName() + ".png").toExternalForm()));
-        player2Worker.setImage(new Image(getClass().getResource("/images/workers/worker_" + players.get(1).getColorName() + "_1.png").toExternalForm()));
-
+        if (players.size() >= 2) {
+            player2Nick.setText(players.get(1).getPlayer().getNickname());
+            player2Card.setImage(new Image(getClass().getResource("/images/cards/" + players.get(1).getGod().getGodName() + ".png").toExternalForm()));
+            player2Worker.setImage(new Image(getClass().getResource("/images/workers/worker_" + players.get(1).getColorName() + "_1.png").toExternalForm()));
+        }
         if (players.size() == 3) {
             player3Nick.setVisible(true);
             player3Nick.setText(players.get(2).getPlayer().getNickname());
@@ -100,6 +102,7 @@ public class PlayersController {
     /**
      * This method is called when the player clicks on an opponent's god card to show in another window the information
      * about the card
+     *
      * @param source is the god card selected
      */
     public void showGod(ImageView source) {
@@ -107,14 +110,14 @@ public class PlayersController {
         AnchorPane pane = new AnchorPane();
 
         if (source == player2Card) {
-            ImageView view = new ImageView(new Image(getClass().getResourceAsStream("/images/card_descriptions/"+players.get(1).getGod().getGodName()+"_description.png")));
+            ImageView view = new ImageView(new Image(getClass().getResourceAsStream("/images/card_descriptions/" + players.get(1).getGod().getGodName() + "_description.png")));
             pane.getChildren().add(view);
-        } else if(players.size() == 3 & source == player3Card){
-            ImageView view = new ImageView(new Image(getClass().getResourceAsStream("/images/card_descriptions/"+players.get(2).getGod().getGodName()+"_description.png")));
+        } else if (players.size() == 3 & source == player3Card) {
+            ImageView view = new ImageView(new Image(getClass().getResourceAsStream("/images/card_descriptions/" + players.get(2).getGod().getGodName() + "_description.png")));
             pane.getChildren().add(view);
         }
 
-        godStage.setScene(new Scene(pane,800,400));
+        godStage.setScene(new Scene(pane, 800, 400));
         godStage.setResizable(false);
         godStage.show();
         godStage.setAlwaysOnTop(true);
@@ -124,7 +127,7 @@ public class PlayersController {
     /**
      * This method is called when the player clicks on the helper icons, it shows in another window the rules of the game
      */
-    public void showRules(){
+    public void showRules() {
         Stage rules = new Stage();
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/FXML/game/rules.fxml"));
@@ -144,7 +147,7 @@ public class PlayersController {
      * This method is called during the match before showing of information arrived in a PlayersListMessage, it removes
      * old information
      */
-    public void clearImages() {
+    private void clearImages() {
         player2Nick.setText("");
         player2Card.setImage(null);
         player2Worker.setImage(null);
