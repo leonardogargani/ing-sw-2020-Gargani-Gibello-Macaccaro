@@ -1,7 +1,9 @@
 package it.polimi.ingsw.PSP43.client.graphic.gui.controllers;
 
 import it.polimi.ingsw.PSP43.client.graphic.gui.GuiStarter;
+import it.polimi.ingsw.PSP43.client.graphic.gui.controllers.game_end.EndController;
 import it.polimi.ingsw.PSP43.client.network.ClientBG;
+import it.polimi.ingsw.PSP43.server.network.networkMessages.EndGameMessage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -69,6 +71,45 @@ public abstract class AbstractController {
             newStage.show();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * This method is used to set a specific size to the stage.
+     * @param fxml The fxml to load.
+     * @param stylesheet The stylesheet to load.
+     * @param width The width of the window.
+     * @param height The height of the window.
+     * @param message The message used to fill optional fields in some cases.
+     */
+    public static void setSizeStage(String fxml, String stylesheet, int width, int height, EndGameMessage message) {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(AbstractController.class.getResource(fxml));
+
+        Stage stage;
+        try {
+            stage = GuiStarter.getPrimaryStage();
+            Scene scene = new Scene(loader.load());
+
+            Stage newStage = new Stage();
+            GuiStarter.setPrimaryStage(newStage);
+
+            newStage.setMinHeight(height);
+            newStage.setMinWidth(width);
+            newStage.setResizable(true);
+            newStage.centerOnScreen();
+
+            newStage.setScene(scene);
+            scene.getStylesheets().add(AbstractController.class.getResource(stylesheet).toExternalForm());
+            stage.close();
+            newStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (loader.getController() instanceof EndController && message!=null) {
+            EndController endController = loader.getController();
+            endController.setEndMessage(message);
         }
     }
 }

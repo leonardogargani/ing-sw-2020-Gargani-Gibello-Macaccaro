@@ -32,8 +32,8 @@ public class DOMCardsParser {
      * by a player.
      * @return a deck of cards used during the game.
      * @throws ParserConfigurationException if there were problems in parsing the XML document.
-     * @throws IOException
-     * @throws org.xml.sax.SAXException
+     * @throws IOException when an I/O exception of some sort has occurred.
+     * @throws org.xml.sax.SAXException when an error on parsing occurs.
      */
     public static ArrayList<AbstractGodCard> buildDeck() throws ParserConfigurationException,
             IOException, org.xml.sax.SAXException {

@@ -141,7 +141,8 @@ public class GuiGraphicHandler extends GraphicHandler {
             Platform.runLater(() -> workerColorChoiceController.handleChoiceOfWorkerColor(request));
         }
         else {
-            loadToPrimaryStage("/FXML/game/board.fxml", "/CSS/game/game.css");
+            WorkerColorChoiceController workerColorChoiceController = loader.getController();
+            Platform.runLater(workerColorChoiceController::handleTransitToBoard);
         }
     }
 
@@ -174,10 +175,7 @@ public class GuiGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(EndGameMessage message) {
-        loadToPrimaryStage("/FXML/game_end/end.fxml", "/CSS/game_end/end.css");
-        //fix with static and runLater
-        EndController controller = loader.getController();
-        Platform.runLater(() -> controller.setEndMessage(message));
+        Platform.runLater(() -> AbstractController.setSizeStage("/FXML/game_end/end.fxml", "/CSS/game_end/end.css",1000, 650, message));
     }
 
 

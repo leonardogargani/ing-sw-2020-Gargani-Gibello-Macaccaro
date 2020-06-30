@@ -9,9 +9,9 @@ import java.io.IOException;
 public class CardsHandlerForTesting extends CardsHandler {
     /**
      * Non default constructor that initializes the attributes of the object
-     * @throws ParserConfigurationException
-     * @throws SAXException
-     * @throws IOException
+     * @throws ParserConfigurationException when an error on parsing occurs.
+     * @throws SAXException when an error on parsing occurs.
+     * @throws IOException when an I/O exception of some sort has occurred.
      */
     public CardsHandlerForTesting() throws ParserConfigurationException, SAXException, IOException { super(); }
 

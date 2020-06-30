@@ -81,6 +81,7 @@ public class ClientListener implements Runnable {
      * @throws IOException            signals that an I/O exception of some sort has occurred.
      * @throws ClassNotFoundException occurs when you try to load a class at run time using Class .forName() or
      *                                loadClass() methods and mentioned classes are not found in the classpath.
+     * @throws InterruptedException when the thread that is running is stopped.
      * @return The message arrived from the Client.
      */
     public ClientMessage receive() throws IOException, ClassNotFoundException, InterruptedException {
@@ -155,7 +156,7 @@ public class ClientListener implements Runnable {
      * This method is used to push a message on the stack of the ClientListener when it arrives. In that way I notify
      * the thread that was waiting for a response from the client.
      * @param clientMessage The message arrived from the client.
-     * @throws InterruptedException
+     * @throws InterruptedException when the thread that is running is stopped.
      */
     public synchronized void pushMessageOnStack(ClientMessage clientMessage) throws InterruptedException {
         stackMessages.add(clientMessage);

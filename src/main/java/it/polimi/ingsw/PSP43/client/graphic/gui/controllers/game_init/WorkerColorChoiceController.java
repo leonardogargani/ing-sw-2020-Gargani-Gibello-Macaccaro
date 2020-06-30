@@ -1,5 +1,6 @@
 package it.polimi.ingsw.PSP43.client.graphic.gui.controllers.game_init;
 
+import it.polimi.ingsw.PSP43.client.graphic.gui.GuiStarter;
 import it.polimi.ingsw.PSP43.client.graphic.gui.controllers.AbstractController;
 import it.polimi.ingsw.PSP43.server.model.Color;
 import it.polimi.ingsw.PSP43.client.graphic.Screens;
@@ -55,6 +56,10 @@ public class WorkerColorChoiceController extends AbstractController {
         exitButton.getStyleClass().add("exit-button");
     }
 
+    /**
+     * This method handles the arrival of a worker color request by setting up the window of the color choice.
+     * @param workersColorRequest The request containing the colors of the workers available for choice.
+     */
     public void handleChoiceOfWorkerColor(WorkersColorRequest workersColorRequest) {
         messageLabel.setText(Screens.WORKERS_COLOR_REQUEST.toString());
         messageLabel.setAlignment(Pos.CENTER);
@@ -68,6 +73,7 @@ public class WorkerColorChoiceController extends AbstractController {
      * This method displays the next color of the worker, that is saved in the private field of the
      * controller.
      */
+    @FXML
     private void displayWorker() {
         switch (actualColorDisplayed) {
             case ANSI_GREEN:
@@ -128,19 +134,26 @@ public class WorkerColorChoiceController extends AbstractController {
     /**
      * Method that handles a mouse event performed on the image to confirm that the current color
      * will be the one chosen by the player for this game session.
-     *
-     * @param event mouse event performed on the image
      */
     @FXML
-    private void handleConfirmImage(MouseEvent event) {
+    private void handleConfirmImage() {
         WorkersColorResponse response = new WorkersColorResponse(actualColorDisplayed);
         AbstractController.getClientBG().sendMessage(response);
+        handleTransitToBoard();
 
+    }
+
+    /**
+     * This method is used to transit to the board, setting minimum width and size for a comfortable user experience.
+     */
+    public void handleTransitToBoard() {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/FXML/game/board.fxml"));
         try {
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Stage stage = GuiStarter.getPrimaryStage();
             Scene scene = new Scene(loader.load());
+            stage.setMinHeight(700.0);
+            stage.setMinWidth(1200.0);
 
             scene.getStylesheets().add(getClass().getResource("/CSS/game/game.css").toExternalForm());
             stage.setScene(scene);
@@ -151,8 +164,11 @@ public class WorkerColorChoiceController extends AbstractController {
         }
     }
 
+    /**
+     * This method handles the click done by the player on the exit button of the window.
+     */
     @FXML
-    private void handleExitClick(MouseEvent event) {
+    private void handleExitClick() {
         getClientBG().sendMessage(new LeaveGameMessage());
         super.handleExit();
     }

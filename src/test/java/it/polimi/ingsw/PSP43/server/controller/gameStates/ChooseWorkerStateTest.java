@@ -1,8 +1,10 @@
 package it.polimi.ingsw.PSP43.server.controller.gameStates;
 
+import it.polimi.ingsw.PSP43.server.controller.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.model.Color;
 import it.polimi.ingsw.PSP43.client.network.networkMessages.ActionResponse;
 import it.polimi.ingsw.PSP43.client.network.networkMessages.WorkersColorResponse;
+import it.polimi.ingsw.PSP43.server.model.Worker;
 import it.polimi.ingsw.PSP43.server.model.initialisers.GameInitialiser;
 import it.polimi.ingsw.PSP43.server.model.Coord;
 import it.polimi.ingsw.PSP43.server.controller.modelHandlers.PlayersHandler;
@@ -17,6 +19,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -94,6 +97,10 @@ public class ChooseWorkerStateTest {
         Mockito.doNothing().when(spyState).findNextState();
 
         executeStateTest();
+
+        WorkersHandler workersHandler = spyGame.getWorkersHandler();
+        List<Worker> workerList = workersHandler.getWorkers();
+        assertEquals(6, workerList.size());
     }
 
     @Test
@@ -108,6 +115,10 @@ public class ChooseWorkerStateTest {
         Mockito.doNothing().when(spyState).findNextState();
 
         executeStateTest();
+
+        WorkersHandler workersHandler = spyGame.getWorkersHandler();
+        List<Worker> workerList = workersHandler.getWorkers();
+        assertEquals(4, workerList.size());
     }
 
     @Test
