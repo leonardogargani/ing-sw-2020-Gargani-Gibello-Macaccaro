@@ -49,7 +49,9 @@ public class PlayersController {
         player1CardDescription.setTextAlignment(TextAlignment.LEFT);
         this.player1Card = images[0];
         this.player2Card = images[1];
+        player2Card.setDisable(true);
         this.player3Card = images[2];
+        player3Card.setDisable(true);
         this.player1Worker = images[3];
         this.player2Worker = images[4];
         this.player3Worker = images[5];
@@ -89,12 +91,14 @@ public class PlayersController {
         if (players.size() >= 2) {
             player2Nick.setText(players.get(1).getPlayer().getNickname());
             player2Card.setImage(new Image(getClass().getResource("/images/cards/" + players.get(1).getGod().getGodName() + ".png").toExternalForm()));
+            player2Card.setDisable(false);
             player2Worker.setImage(new Image(getClass().getResource("/images/workers/worker_" + players.get(1).getColorName() + "_1.png").toExternalForm()));
         }
         if (players.size() == 3) {
             player3Nick.setVisible(true);
             player3Nick.setText(players.get(2).getPlayer().getNickname());
             player3Card.setImage(new Image(getClass().getResource("/images/cards/" + players.get(2).getGod().getGodName() + ".png").toExternalForm()));
+            player3Card.setDisable(false);
             player3Worker.setImage(new Image(getClass().getResource("/images/workers/worker_" + players.get(2).getColorName() + "_1.png").toExternalForm()));
         }
     }
@@ -150,9 +154,11 @@ public class PlayersController {
     private void clearImages() {
         player2Nick.setText("");
         player2Card.setImage(null);
+        player2Card.setDisable(true);
         player2Worker.setImage(null);
         player3Nick.setText("");
         player3Card.setImage(null);
+        player3Card.setDisable(true);
         player3Worker.setImage(null);
     }
 
