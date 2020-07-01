@@ -1,0 +1,131 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: WaitController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.client.graphic.gui.controllers.game_init</a> ]
+</div>
+
+<h1>Coverage Summary for Class: WaitController (it.polimi.ingsw.PSP43.client.graphic.gui.controllers.game_init)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">WaitController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 7)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.client.graphic.gui.controllers.game_init;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.graphic.gui.controllers.AbstractController;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.networkMessages.LeaveGameMessage;
+<i>5</i>&nbsp;import javafx.fxml.FXML;
+<i>6</i>&nbsp;import javafx.scene.control.Label;
+<i>7</i>&nbsp;import javafx.scene.image.ImageView;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;
+<b class="nc"><i>10</i>&nbsp;public class WaitController extends AbstractController {</b>
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;    @FXML private Label labelToDisplay;
+<i>13</i>&nbsp;    @FXML private ImageView exitImage;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;    /**
+<i>17</i>&nbsp;     * Method called as soon as the controlled fxml file gets loaded, here used to set
+<i>18</i>&nbsp;     * a generic waiting message to the label.
+<i>19</i>&nbsp;     */
+<i>20</i>&nbsp;    @FXML
+<i>21</i>&nbsp;    private void initialize() {
+<i>22</i>&nbsp;        // this is the default text, used if not overwritten with the setLabelText() method
+<b class="nc"><i>23</i>&nbsp;        labelToDisplay.setText(&quot;Wait...&quot;);</b>
+<b class="nc"><i>24</i>&nbsp;        exitImage.setPickOnBounds(false);</b>
+<b class="nc"><i>25</i>&nbsp;        exitImage.getStyleClass().add(&quot;exit-image&quot;);</b>
+<i>26</i>&nbsp;    }
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    /**
+<i>30</i>&nbsp;     * Method that sets the content of the main label at the top of the window to display
+<i>31</i>&nbsp;     * some information about the cause of the waiting.
+<i>32</i>&nbsp;     * @param textToDisplay text to be displayed inside the label at the top of the window
+<i>33</i>&nbsp;     */
+<i>34</i>&nbsp;    public void setLabelText(String textToDisplay) {
+<b class="nc"><i>35</i>&nbsp;        labelToDisplay.setText(textToDisplay);</b>
+<i>36</i>&nbsp;    }
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    /**
+<i>40</i>&nbsp;     * Method that handles an event performed on the image to exit and return back to the home screen.
+<i>41</i>&nbsp;     */
+<i>42</i>&nbsp;    @FXML
+<i>43</i>&nbsp;    private void handleExitImage() {
+<b class="nc"><i>44</i>&nbsp;        getClientBG().sendMessage(new LeaveGameMessage());</b>
+<b class="nc"><i>45</i>&nbsp;        super.handleExit();</b>
+<i>46</i>&nbsp;    }
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 21:45</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,168 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: InfiniteMovesOnPerimeterBehaviour</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.controller.cards.behaviours.moveBehaviours</a> ]
+</div>
+
+<h1>Coverage Summary for Class: InfiniteMovesOnPerimeterBehaviour (it.polimi.ingsw.PSP43.server.controller.cards.behaviours.moveBehaviours)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">InfiniteMovesOnPerimeterBehaviour</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (29/ 29)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.controller.cards.behaviours.moveBehaviours;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.networkMessages.ActionResponse;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.networkMessages.ResponseMessage;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.cards.AbstractGodCard;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.gameStates.GameSession;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.DataToMove;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Player;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Worker;
+<i>11</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.WorkersHandler;
+<i>12</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.modelHandlersException.GameEndedException;
+<i>13</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.modelHandlersException.GameLostException;
+<i>14</i>&nbsp;import it.polimi.ingsw.PSP43.server.network.networkMessages.ActionRequest;
+<i>15</i>&nbsp;import it.polimi.ingsw.PSP43.server.network.networkMessages.RequestMessage;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;import java.util.ArrayList;
+<i>18</i>&nbsp;import java.util.HashMap;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;/**
+<i>21</i>&nbsp; * This class implements Triton&#39;s behaviour that permits to move workers infinite times when
+<i>22</i>&nbsp; * the worker moves on a perimeter position.
+<i>23</i>&nbsp; */
+<b class="fc"><i>24</i>&nbsp;public class InfiniteMovesOnPerimeterBehaviour extends BasicMoveBehaviour{</b>
+<i>25</i>&nbsp;    private static final long serialVersionUID = 1879532628217866328L;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    /**
+<i>28</i>&nbsp;     * This method handles moves of workers allowing the player to move infinite times his worker
+<i>29</i>&nbsp;     * when he moves it on a perimeter location.
+<i>30</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>31</i>&nbsp;     * @throws GameEndedException if the player decides to leave the game during his turn.
+<i>32</i>&nbsp;     * @throws GameLostException if the player can&#39;t do any move.
+<i>33</i>&nbsp;     */
+<i>34</i>&nbsp;    public void handleInitMove(GameSession gameSession) throws GameEndedException, GameLostException {
+<b class="fc"><i>35</i>&nbsp;        super.handleInitMove(gameSession);</b>
+<b class="fc"><i>36</i>&nbsp;        infiniteMoves(gameSession);</b>
+<b class="fc"><i>37</i>&nbsp;    }</b>
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    /**
+<i>40</i>&nbsp;     * This method handles the &quot;infinite&quot; cycle of request to the player, asking him if he wants to move
+<i>41</i>&nbsp;     * another time after he moved once.
+<i>42</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>43</i>&nbsp;     * @throws GameEndedException if the player decides to leave the game during his turn.
+<i>44</i>&nbsp;     */
+<i>45</i>&nbsp;    private void infiniteMoves(GameSession gameSession) throws GameEndedException {
+<b class="fc"><i>46</i>&nbsp;        Player currentPlayer = gameSession.getCurrentPlayer();</b>
+<b class="fc"><i>47</i>&nbsp;        WorkersHandler workersHandler = gameSession.getWorkersHandler();</b>
+<b class="fc"><i>48</i>&nbsp;        Integer[] wIds = gameSession.getCurrentPlayer().getWorkersIdsArray();</b>
+<b class="fc"><i>49</i>&nbsp;        AbstractGodCard card = gameSession.getCardsHandler().getPlayerCard(currentPlayer.getNickname());</b>
+<i>50</i>&nbsp;
+<b class="fc"><i>51</i>&nbsp;        Worker workerMoved = null;</b>
+<b class="fc"><i>52</i>&nbsp;        Worker workerNotMoved = null;</b>
+<i>53</i>&nbsp;
+<b class="fc"><i>54</i>&nbsp;        for (Integer i : wIds) {</b>
+<b class="fc"><i>55</i>&nbsp;            Worker worker = workersHandler.getWorker(i);</b>
+<i>56</i>&nbsp;
+<b class="fc"><i>57</i>&nbsp;            if (worker.isLatestMoved()) workerMoved = worker;</b>
+<b class="fc"><i>58</i>&nbsp;            else workerNotMoved = worker;</b>
+<i>59</i>&nbsp;        }
+<i>60</i>&nbsp;
+<b class="fc"><i>61</i>&nbsp;        assert workerMoved != null;</b>
+<b class="fc"><i>62</i>&nbsp;        assert workerNotMoved != null;</b>
+<i>63</i>&nbsp;
+<b class="fc"><i>64</i>&nbsp;        if (workersHandler.isOnPerimetralCell(workerMoved)) {</b>
+<b class="fc"><i>65</i>&nbsp;            RequestMessage requestMessage = new RequestMessage(&quot;Do you want to move &quot; +</b>
+<i>66</i>&nbsp;                    &quot;another time your worker?&quot;);
+<b class="fc"><i>67</i>&nbsp;            ResponseMessage responseMessage = gameSession.sendRequest(requestMessage,</b>
+<b class="fc"><i>68</i>&nbsp;                    currentPlayer.getNickname(), ResponseMessage.class);</b>
+<i>69</i>&nbsp;
+<b class="fc"><i>70</i>&nbsp;            if (responseMessage.isResponse()) {</b>
+<b class="fc"><i>71</i>&nbsp;                HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositions = card.findAvailablePositionsToMove(gameSession);</b>
+<b class="fc"><i>72</i>&nbsp;                availablePositions.remove(workerNotMoved.getCurrentPosition());</b>
+<i>73</i>&nbsp;
+<b class="fc"><i>74</i>&nbsp;                ActionRequest actionRequest = new ActionRequest(&quot;Choose a position where to &quot; +</b>
+<i>75</i>&nbsp;                        &quot;move your worker.&quot;, availablePositions);
+<b class="fc"><i>76</i>&nbsp;                ActionResponse actionResponse = gameSession.sendRequest(actionRequest,</b>
+<b class="fc"><i>77</i>&nbsp;                        currentPlayer.getNickname(), ActionResponse.class);</b>
+<i>78</i>&nbsp;
+<b class="fc"><i>79</i>&nbsp;                move(new DataToMove(gameSession, currentPlayer, workerMoved, actionResponse.getPosition()));</b>
+<i>80</i>&nbsp;
+<b class="fc"><i>81</i>&nbsp;                infiniteMoves(gameSession);</b>
+<i>82</i>&nbsp;            }
+<i>83</i>&nbsp;        }
+<b class="fc"><i>84</i>&nbsp;    }</b>
+<i>85</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 21:45</div>
+</div>
+</body>
+</html>

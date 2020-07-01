@@ -1,6 +1,8 @@
 package it.polimi.ingsw.PSP43.server.controller.gameStates;
 
+import it.polimi.ingsw.PSP43.client.network.networkMessages.ClientMessage;
 import it.polimi.ingsw.PSP43.client.network.networkMessages.LeaveGameMessage;
+import it.polimi.ingsw.PSP43.server.controller.modelHandlers.modelHandlersException.GameEndedException;
 import it.polimi.ingsw.PSP43.server.model.BoardObserver;
 import it.polimi.ingsw.PSP43.server.network.ClientListener;
 import it.polimi.ingsw.PSP43.server.network.RegisterClientListener;
@@ -11,6 +13,7 @@ import it.polimi.ingsw.PSP43.server.controller.modelHandlers.CellsHandler;
 import it.polimi.ingsw.PSP43.server.controller.modelHandlers.WorkersHandler;
 import it.polimi.ingsw.PSP43.server.network.networkMessages.EndGameMessage;
 import it.polimi.ingsw.PSP43.server.network.networkMessages.PlayersListMessage;
+import it.polimi.ingsw.PSP43.server.network.networkMessages.ServerMessage;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -248,5 +251,70 @@ public class GameSession extends GameSessionObservable {
     public void sendEndingMessage(EndGameMessage messageToLosers, EndGameMessage messageForTheWinner, ArrayList<String> nicksExcluded) {
         super.sendEndingMessage(messageToLosers, messageForTheWinner, nicksExcluded);
         this.active = Boolean.FALSE;
+    }
+
+    /**
+     * This method is called to send to the client a generic message, which doesn't pretend an answer.
+     * @param genericMessage The message to be sent.
+     * @param addressee The client to which the message has to be sent.
+     */
+    public void sendMessage(ServerMessage genericMessage, String addressee) {
+        if (!active) return;
+        super.sendMessage(genericMessage, addressee);
+    }
+
+    /**
+     * This method is called to send to the client the message to tell him that the game is ended (for
+     * different reasons, always saved into its String field).
+     * @param endGameMessage The message to be sent.
+     * @param addressee The client to which the message has to be sent.
+     */
+    public void sendMessage(EndGameMessage endGameMessage, String addressee) {
+        if (!active) return;
+        super.sendMessage(endGameMessage, addressee);
+    }
+
+    /**
+     * This method sends to all the players a generic message.
+     * @param message The message to be sent.
+     */
+    public void sendBroadCast(ServerMessage message) {
+        if (!active) return;
+        super.sendBroadCast(message);
+    }
+
+    /**
+     * This method sends to all the players the message, excluded the ones in the list passed as parameter.
+     * @param message The message to be sent.
+     * @param nickExcluded The player's nickname excluded from receiving the message.
+     */
+    public void sendBroadCast(ServerMessage message, String nickExcluded) {
+        if (!active) return;
+        super.sendBroadCast(message, nickExcluded);
+    }
+
+    /**
+     * This method sends the EndGameMessage to all the players, telling them the end of the game.
+     * All the players in the list passed as parameter are excluded.
+     * @param endGameMessage The message to be sent.
+     * @param nicksExcluded The list of players excluded from receiving the message.
+     */
+    public void sendBroadCast(EndGameMessage endGameMessage, ArrayList<String> nicksExcluded) {
+        if (!active) return;
+        super.sendBroadCast(endGameMessage, nicksExcluded);
+    }
+
+    /**
+     * This method is used to send a request to the client and to wait for a response.
+     * @param <T> A sub-type of ClientMessage.
+     * @param message The request message sent.
+     * @param addressee The player who has to receive the message.
+     * @param typeExpected The type of message that the caller is expecting.
+     * @return a response from the client.
+     * @throws GameEndedException if the client has disconnected while he was asked by this method.
+     */
+    public <T extends ClientMessage> T sendRequest(ServerMessage message, String addressee, Class<T> typeExpected) throws GameEndedException {
+        if (!active) throw new GameEndedException();
+        return super.sendRequest(message, addressee, typeExpected);
     }
 }

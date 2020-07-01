@@ -1,0 +1,149 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DataToMove</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.model</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DataToMove (it.polimi.ingsw.PSP43.server.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DataToMove</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (4/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90%
+  </span>
+  <span class="absValue">
+    (9/ 10)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.model;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.gameStates.GameSession;
+<i>4</i>&nbsp;
+<i>5</i>&nbsp;/**
+<i>6</i>&nbsp; * This class is used to contain all the useful information to move a worker.
+<i>7</i>&nbsp; */
+<i>8</i>&nbsp;public class DataToMove {
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;    private final GameSession gameSession;
+<i>11</i>&nbsp;    private final Player player;
+<i>12</i>&nbsp;    private final Worker worker;
+<i>13</i>&nbsp;    private final Coord newPosition;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;    /**
+<i>17</i>&nbsp;     * Noj default constructor that sets all the attributes of the object.
+<i>18</i>&nbsp;     * @param gameSession GameSession attribute
+<i>19</i>&nbsp;     * @param player Player attribute
+<i>20</i>&nbsp;     * @param worker Worker attribute
+<i>21</i>&nbsp;     * @param newPosition Coord attribute
+<i>22</i>&nbsp;     */
+<b class="fc"><i>23</i>&nbsp;    public DataToMove(GameSession gameSession, Player player, Worker worker, Coord newPosition) {</b>
+<b class="fc"><i>24</i>&nbsp;        this.gameSession = gameSession;</b>
+<b class="fc"><i>25</i>&nbsp;        this.player = player;</b>
+<b class="fc"><i>26</i>&nbsp;        this.worker = worker;</b>
+<b class="fc"><i>27</i>&nbsp;        this.newPosition = newPosition;</b>
+<b class="fc"><i>28</i>&nbsp;    }</b>
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    /**
+<i>32</i>&nbsp;     * Method that returns the gameSession attribute.
+<i>33</i>&nbsp;     * @return gameSession attribute
+<i>34</i>&nbsp;     */
+<i>35</i>&nbsp;    public GameSession getGameSession() {
+<b class="fc"><i>36</i>&nbsp;        return gameSession;</b>
+<i>37</i>&nbsp;    }
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;    /**
+<i>41</i>&nbsp;     * Method that returns the player attribute.
+<i>42</i>&nbsp;     * @return player attribute
+<i>43</i>&nbsp;     */
+<i>44</i>&nbsp;    public Player getPlayer() {
+<b class="nc"><i>45</i>&nbsp;        return player;</b>
+<i>46</i>&nbsp;    }
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    /**
+<i>50</i>&nbsp;     * Method that returns the worker attribute.
+<i>51</i>&nbsp;     * @return worker attribute
+<i>52</i>&nbsp;     */
+<i>53</i>&nbsp;    public Worker getWorker() {
+<b class="fc"><i>54</i>&nbsp;        return worker;</b>
+<i>55</i>&nbsp;    }
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;    /**
+<i>59</i>&nbsp;     * Method that returns the newPosition attribute.
+<i>60</i>&nbsp;     * @return newPosition attribute
+<i>61</i>&nbsp;     */
+<i>62</i>&nbsp;    public Coord getNewPosition() {
+<b class="fc"><i>63</i>&nbsp;        return newPosition;</b>
+<i>64</i>&nbsp;    }
+<i>65</i>&nbsp;
+<i>66</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 21:45</div>
+</div>
+</body>
+</html>

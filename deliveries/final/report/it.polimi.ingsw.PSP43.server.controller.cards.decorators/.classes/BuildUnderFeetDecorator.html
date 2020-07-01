@@ -1,0 +1,118 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BuildUnderFeetDecorator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.controller.cards.decorators</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BuildUnderFeetDecorator (it.polimi.ingsw.PSP43.server.controller.cards.decorators)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BuildUnderFeetDecorator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/ 8)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.controller.cards.decorators;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.gameStates.GameSession;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.cards.AbstractGodCard;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;import java.util.ArrayList;
+<i>8</i>&nbsp;import java.util.HashMap;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;/**
+<i>11</i>&nbsp; * This class represent a decorator that gives to a card Zeus&#39;s behaviour.
+<i>12</i>&nbsp; */
+<i>13</i>&nbsp;public class BuildUnderFeetDecorator extends PowerGodDecorator {
+<i>14</i>&nbsp;    private static final long serialVersionUID = 3848762574012185257L;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;    public BuildUnderFeetDecorator(AbstractGodCard godComponent) {
+<b class="fc"><i>17</i>&nbsp;        super(godComponent);</b>
+<b class="fc"><i>18</i>&nbsp;    }</b>
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    /**
+<i>21</i>&nbsp;     * This method is used to find all the available positions where a player can build a block, also on the current position of a worker owned.
+<i>22</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>23</i>&nbsp;     * @return The map of the available positions where a player can build a block.
+<i>24</i>&nbsp;     */
+<i>25</i>&nbsp;    public HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; findAvailablePositionsToBuildBlock(GameSession gameSession) {
+<b class="fc"><i>26</i>&nbsp;        HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositionsToBuild = super.findAvailablePositionsToBuildBlock(gameSession);</b>
+<i>27</i>&nbsp;
+<b class="fc"><i>28</i>&nbsp;        for (Coord c : availablePositionsToBuild.keySet()) {</b>
+<b class="fc"><i>29</i>&nbsp;            ArrayList&lt;Coord&gt; actualPositions = availablePositionsToBuild.get(c);</b>
+<b class="fc"><i>30</i>&nbsp;            actualPositions.add(c.clone());</b>
+<b class="fc"><i>31</i>&nbsp;        }</b>
+<i>32</i>&nbsp;
+<b class="fc"><i>33</i>&nbsp;        return availablePositionsToBuild;</b>
+<i>34</i>&nbsp;    }
+<i>35</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 21:45</div>
+</div>
+</body>
+</html>

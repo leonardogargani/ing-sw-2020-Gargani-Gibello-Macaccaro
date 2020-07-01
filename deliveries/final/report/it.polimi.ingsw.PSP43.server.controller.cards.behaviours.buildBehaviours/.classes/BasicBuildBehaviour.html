@@ -1,0 +1,193 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BasicBuildBehaviour</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.controller.cards.behaviours.buildBehaviours</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BasicBuildBehaviour (it.polimi.ingsw.PSP43.server.controller.cards.behaviours.buildBehaviours)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BasicBuildBehaviour</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (35/ 35)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.controller.cards.behaviours.buildBehaviours;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.networkMessages.ActionResponse;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.networkMessages.ResponseMessage;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.DataToBuild;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.gameStates.GameSession;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Player;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Worker;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.cards.AbstractGodCard;
+<i>11</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.cards.BasicGodCard;
+<i>12</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.CardsHandler;
+<i>13</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.WorkersHandler;
+<i>14</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.modelHandlersException.GameEndedException;
+<i>15</i>&nbsp;import it.polimi.ingsw.PSP43.server.network.networkMessages.ActionRequest;
+<i>16</i>&nbsp;import it.polimi.ingsw.PSP43.server.network.networkMessages.RequestMessage;
+<i>17</i>&nbsp;import it.polimi.ingsw.PSP43.server.network.networkMessages.TextMessage;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.util.ArrayList;
+<i>20</i>&nbsp;import java.util.Collections;
+<i>21</i>&nbsp;import java.util.HashMap;
+<i>22</i>&nbsp;
+<i>23</i>&nbsp;/**
+<i>24</i>&nbsp; * This is a basic build behaviour. Having this as build behaviour means that the card
+<i>25</i>&nbsp; * will be able only to build blocks and domes according to the basic rules of a worker.
+<i>26</i>&nbsp; */
+<b class="fc"><i>27</i>&nbsp;public class BasicBuildBehaviour extends BasicGodCard implements BuildBehaviour {</b>
+<i>28</i>&nbsp;    private static final long serialVersionUID = 4158958110907103295L;
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    /**
+<i>31</i>&nbsp;     * This method is called for a generic ask to build. So it will be possible for the player to build either a dome or a block (according to rules).
+<i>32</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>33</i>&nbsp;     * @return The data representing the choice where to build of the player. They are used by the controller to change the model.
+<i>34</i>&nbsp;     * @throws GameEndedException   if the player that was asked to build something exits the game. This is treated as an exception because it should be a
+<i>35</i>&nbsp;     *                              not-expected behaviour from the player.
+<i>36</i>&nbsp;     */
+<i>37</i>&nbsp;    public DataToBuild genericAskForBuild(GameSession gameSession) throws GameEndedException {
+<b class="fc"><i>38</i>&nbsp;        Player currentPlayer = gameSession.getCurrentPlayer();</b>
+<b class="fc"><i>39</i>&nbsp;        WorkersHandler workersHandler = gameSession.getWorkersHandler();</b>
+<b class="fc"><i>40</i>&nbsp;        CardsHandler cardsHandler = gameSession.getCardsHandler();</b>
+<b class="fc"><i>41</i>&nbsp;        AbstractGodCard abstractGodCard = cardsHandler.getPlayerCard(currentPlayer.getNickname());</b>
+<i>42</i>&nbsp;
+<b class="fc"><i>43</i>&nbsp;        HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositionsBuildBlock = abstractGodCard.findAvailablePositionsToBuildBlock(gameSession);</b>
+<b class="fc"><i>44</i>&nbsp;        HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositionsBuildDome = abstractGodCard.findAvailablePositionsToBuildDome(gameSession);</b>
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;
+<b class="fc"><i>48</i>&nbsp;        ResponseMessage response = new ResponseMessage(false);</b>
+<b class="fc"><i>49</i>&nbsp;        if (availablePositionsBuildDome.size() != 0) {</b>
+<b class="fc"><i>50</i>&nbsp;            RequestMessage request = new RequestMessage(&quot;Do you want to build a dome? Otherwise you will &quot; +</b>
+<i>51</i>&nbsp;                    &quot;select a cell where to build a block.&quot;);
+<b class="fc"><i>52</i>&nbsp;            response = gameSession.sendRequest(request, currentPlayer.getNickname(), ResponseMessage.class);</b>
+<i>53</i>&nbsp;        }
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;        ActionResponse actionResponse;
+<i>56</i>&nbsp;        Worker workerToBuild;
+<b class="fc"><i>57</i>&nbsp;        if (response.isResponse()) {</b>
+<b class="fc"><i>58</i>&nbsp;            String message = &quot;Choose a position where to build your dome.&quot;;</b>
+<b class="fc"><i>59</i>&nbsp;            actionResponse = askForBuild(gameSession, availablePositionsBuildDome, message);</b>
+<b class="fc"><i>60</i>&nbsp;            workerToBuild = workersHandler.getWorker(actionResponse.getWorkerPosition());</b>
+<b class="fc"><i>61</i>&nbsp;            return new DataToBuild(gameSession, currentPlayer, workerToBuild, actionResponse.getPosition(), Boolean.TRUE);</b>
+<i>62</i>&nbsp;        } else {
+<b class="fc"><i>63</i>&nbsp;            if (availablePositionsBuildBlock.size() != 0) {</b>
+<b class="fc"><i>64</i>&nbsp;                String message = &quot;Choose a position where to build your block.&quot;;</b>
+<b class="fc"><i>65</i>&nbsp;                actionResponse = askForBuild(gameSession, availablePositionsBuildBlock, message);</b>
+<b class="fc"><i>66</i>&nbsp;                workerToBuild = workersHandler.getWorker(actionResponse.getWorkerPosition());</b>
+<b class="fc"><i>67</i>&nbsp;                return new DataToBuild(gameSession, currentPlayer, workerToBuild, actionResponse.getPosition(), Boolean.FALSE);</b>
+<i>68</i>&nbsp;            }
+<i>69</i>&nbsp;            else {
+<b class="fc"><i>70</i>&nbsp;                TextMessage textMessage = new TextMessage(&quot;We are sorry, but you can&#39;t build a block anywhere.&quot;, TextMessage.PositionInScreen.LOW_CENTER);</b>
+<b class="fc"><i>71</i>&nbsp;                gameSession.sendMessage(textMessage, currentPlayer.getNickname());</b>
+<b class="fc"><i>72</i>&nbsp;                return null;</b>
+<i>73</i>&nbsp;            }
+<i>74</i>&nbsp;        }
+<i>75</i>&nbsp;    }
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;    /**
+<i>78</i>&nbsp;     * This method asks to the player where he wants to build, choosing within the cells passed as parameter of the method.
+<i>79</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>80</i>&nbsp;     * @param availablePositionsBuildBlock The positions where the workers can build.
+<i>81</i>&nbsp;     * @param message The message sent to the client and used to ask him where he wants to build.
+<i>82</i>&nbsp;     * @return The response arrived from the client with the position where to build.
+<i>83</i>&nbsp;     * @throws GameEndedException if the player decides to leave the game during his turn.
+<i>84</i>&nbsp;     */
+<i>85</i>&nbsp;    public ActionResponse askForBuild(GameSession gameSession, HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositionsBuildBlock, String message) throws GameEndedException {
+<b class="fc"><i>86</i>&nbsp;        Player currentPlayer = gameSession.getCurrentPlayer();</b>
+<i>87</i>&nbsp;
+<b class="fc"><i>88</i>&nbsp;        ActionRequest actionRequest = new ActionRequest(message, Collections.unmodifiableMap(new HashMap&lt;&gt;(availablePositionsBuildBlock)));</b>
+<i>89</i>&nbsp;
+<b class="fc"><i>90</i>&nbsp;        return gameSession.sendRequest(actionRequest, currentPlayer.getNickname(), ActionResponse.class);</b>
+<i>91</i>&nbsp;    }
+<i>92</i>&nbsp;
+<i>93</i>&nbsp;    /**
+<i>94</i>&nbsp;     * This method is used for a basic build behaviour, that is the one without use of god cards.
+<i>95</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>96</i>&nbsp;     * @throws GameEndedException if the player decides to leave the game during his turn.
+<i>97</i>&nbsp;     */
+<i>98</i>&nbsp;    public void handleInitBuild(GameSession gameSession) throws GameEndedException {
+<b class="fc"><i>99</i>&nbsp;        DataToBuild dataToBuild = genericAskForBuild(gameSession);</b>
+<b class="fc"><i>100</i>&nbsp;        if (dataToBuild == null) return;</b>
+<i>101</i>&nbsp;
+<b class="fc"><i>102</i>&nbsp;        Coord nextPositionChosen = dataToBuild.getNewPosition();</b>
+<b class="fc"><i>103</i>&nbsp;        Worker workerMoved = dataToBuild.getWorker();</b>
+<i>104</i>&nbsp;
+<b class="fc"><i>105</i>&nbsp;        if (dataToBuild.getBuildDome())</b>
+<b class="fc"><i>106</i>&nbsp;            build(new DataToBuild(gameSession, gameSession.getCurrentPlayer(), workerMoved, nextPositionChosen, Boolean.TRUE));</b>
+<i>107</i>&nbsp;        else
+<b class="fc"><i>108</i>&nbsp;            build(new DataToBuild(gameSession, gameSession.getCurrentPlayer(), workerMoved, nextPositionChosen, Boolean.FALSE));</b>
+<b class="fc"><i>109</i>&nbsp;    }</b>
+<i>110</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 21:45</div>
+</div>
+</body>
+</html>

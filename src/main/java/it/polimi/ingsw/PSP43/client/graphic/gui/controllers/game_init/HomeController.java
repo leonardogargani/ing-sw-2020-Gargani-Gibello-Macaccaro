@@ -51,6 +51,10 @@ public class HomeController extends AbstractController {
             }
         }
         else {
+            Stage stage = GuiStarter.getPrimaryStage();
+            stage.setMinHeight(450);
+            stage.setMinWidth(600);
+            stage.setResizable(true);
             ServerIPChoiceController.connectionUp();
         }
 

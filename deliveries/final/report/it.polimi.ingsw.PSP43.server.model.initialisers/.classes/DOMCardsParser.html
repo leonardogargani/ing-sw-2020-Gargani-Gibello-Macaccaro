@@ -1,0 +1,236 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DOMCardsParser</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.model.initialisers</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DOMCardsParser (it.polimi.ingsw.PSP43.server.model.initialisers)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DOMCardsParser</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (5/ 6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95.3%
+  </span>
+  <span class="absValue">
+    (61/ 64)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.model.initialisers;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.cards.AbstractGodCard;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.cards.BasicGodCard;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.cards.behaviours.buildBehaviours.BasicBuildBehaviour;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.cards.behaviours.buildBehaviours.DoubleDifferentSpaceBehaviour;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.cards.behaviours.buildBehaviours.DoubleSameSpaceBehaviour;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.cards.behaviours.buildBehaviours.RemoveBlockFromNeighbourBehaviour;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.cards.behaviours.moveBehaviours.*;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.cards.decorators.*;
+<i>11</i>&nbsp;import org.w3c.dom.Document;
+<i>12</i>&nbsp;import org.w3c.dom.Element;
+<i>13</i>&nbsp;import org.w3c.dom.Node;
+<i>14</i>&nbsp;import org.w3c.dom.NodeList;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;import javax.xml.parsers.DocumentBuilder;
+<i>17</i>&nbsp;import javax.xml.parsers.DocumentBuilderFactory;
+<i>18</i>&nbsp;import javax.xml.parsers.ParserConfigurationException;
+<i>19</i>&nbsp;import java.io.BufferedInputStream;
+<i>20</i>&nbsp;import java.io.IOException;
+<i>21</i>&nbsp;import java.io.InputStream;
+<i>22</i>&nbsp;import java.util.ArrayList;
+<i>23</i>&nbsp;import java.util.Objects;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;/**
+<i>26</i>&nbsp; * This class is used to parse the XML configuration file and to initialise the deck of cards of the game.
+<i>27</i>&nbsp; */
+<b class="nc"><i>28</i>&nbsp;public class DOMCardsParser {</b>
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    /**
+<i>31</i>&nbsp;     * This method is called by the GameSession to initialise all the cards of the game which can be chosen
+<i>32</i>&nbsp;     * by a player.
+<i>33</i>&nbsp;     * @return a deck of cards used during the game.
+<i>34</i>&nbsp;     * @throws ParserConfigurationException if there were problems in parsing the XML document.
+<i>35</i>&nbsp;     * @throws IOException when an I/O exception of some sort has occurred.
+<i>36</i>&nbsp;     * @throws org.xml.sax.SAXException when an error on parsing occurs.
+<i>37</i>&nbsp;     */
+<i>38</i>&nbsp;    public static ArrayList&lt;AbstractGodCard&gt; buildDeck() throws ParserConfigurationException,
+<i>39</i>&nbsp;            IOException, org.xml.sax.SAXException {
+<b class="fc"><i>40</i>&nbsp;        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();</b>
+<b class="fc"><i>41</i>&nbsp;        DocumentBuilder builder = factory.newDocumentBuilder();</b>
+<i>42</i>&nbsp;
+<b class="fc"><i>43</i>&nbsp;        InputStream inputStream = new BufferedInputStream(Objects.requireNonNull(</b>
+<b class="fc"><i>44</i>&nbsp;                DOMCardsParser.class.getClassLoader().getResourceAsStream(&quot;configurationFiles/xmlFiles/deckOfAbstractGodCards.xml&quot;)));</b>
+<i>45</i>&nbsp;
+<b class="fc"><i>46</i>&nbsp;        Document document = builder.parse(inputStream);</b>
+<b class="fc"><i>47</i>&nbsp;        Element deck = document.getDocumentElement();</b>
+<b class="fc"><i>48</i>&nbsp;        NodeList cards = deck.getChildNodes();</b>
+<b class="fc"><i>49</i>&nbsp;        return buildCompleteDeck(cards);</b>
+<i>50</i>&nbsp;    }
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;    private static ArrayList&lt;AbstractGodCard&gt; buildCompleteDeck(NodeList list) {
+<b class="fc"><i>53</i>&nbsp;        ArrayList&lt;AbstractGodCard&gt; deck = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>54</i>&nbsp;        for (int i = 0; i&lt;list.getLength(); i++) {</b>
+<b class="fc"><i>55</i>&nbsp;            if (list.item(i).getNodeType() == Node.ELEMENT_NODE) {</b>
+<b class="fc"><i>56</i>&nbsp;                AbstractGodCard card = buildComponent((Element) list.item(i));</b>
+<b class="fc"><i>57</i>&nbsp;                deck.add(card);</b>
+<i>58</i>&nbsp;            }
+<i>59</i>&nbsp;        }
+<b class="fc"><i>60</i>&nbsp;        return deck;</b>
+<i>61</i>&nbsp;    }
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    private static AbstractGodCard buildComponent(Element element) {
+<b class="fc"><i>64</i>&nbsp;        String nodeName = element.getNodeName().substring(0,1).toUpperCase() + element.getNodeName().substring(1);</b>
+<b class="fc"><i>65</i>&nbsp;        if (nodeName.equals(&quot;BasicGodCard&quot;) &amp;&amp; element.getNodeType() == Node.ELEMENT_NODE) {</b>
+<b class="fc"><i>66</i>&nbsp;            String godName = element.getElementsByTagName(&quot;godName&quot;).item(0).getTextContent();</b>
+<b class="fc"><i>67</i>&nbsp;            String godDescription = element.getElementsByTagName(&quot;godDescription&quot;).item(0).getTextContent();</b>
+<b class="fc"><i>68</i>&nbsp;            String godPower = element.getElementsByTagName(&quot;godPower&quot;).item(0).getTextContent();</b>
+<i>69</i>&nbsp;
+<b class="fc"><i>70</i>&nbsp;            BasicMoveBehaviour moveBehavior = null;</b>
+<b class="fc"><i>71</i>&nbsp;            BasicBuildBehaviour buildBehaviour = null;</b>
+<b class="fc"><i>72</i>&nbsp;            NodeList nodeListMoveBehaviour = element.getElementsByTagName(&quot;moveBehaviour&quot;);</b>
+<b class="fc"><i>73</i>&nbsp;            NodeList nodeListBuildBlockBehaviour = element.getElementsByTagName(&quot;buildBehaviour&quot;);</b>
+<i>74</i>&nbsp;
+<b class="fc"><i>75</i>&nbsp;            for (int i=0; i&lt;nodeListMoveBehaviour.getLength(); i++) {</b>
+<b class="fc"><i>76</i>&nbsp;                if (nodeListMoveBehaviour.item(i).getNodeType() == Node.ELEMENT_NODE) {</b>
+<b class="fc"><i>77</i>&nbsp;                    NodeList effectiveNodeListMoveBehaviour = nodeListMoveBehaviour.item(i).getChildNodes();</b>
+<b class="fc"><i>78</i>&nbsp;                    for (int j=0; j&lt;effectiveNodeListMoveBehaviour.getLength(); j++) {</b>
+<b class="fc"><i>79</i>&nbsp;                        if (effectiveNodeListMoveBehaviour.item(j).getNodeType() == Node.ELEMENT_NODE)</b>
+<b class="fc"><i>80</i>&nbsp;                            moveBehavior = buildMoveBehaviour(((Element) effectiveNodeListMoveBehaviour.item(j)).getTagName());</b>
+<i>81</i>&nbsp;                    }
+<i>82</i>&nbsp;                }
+<i>83</i>&nbsp;            }
+<b class="fc"><i>84</i>&nbsp;            for (int i=0; i&lt;nodeListBuildBlockBehaviour.getLength(); i++) {</b>
+<b class="fc"><i>85</i>&nbsp;                if (nodeListBuildBlockBehaviour.item(i).getNodeType() == Node.ELEMENT_NODE) {</b>
+<b class="fc"><i>86</i>&nbsp;                    NodeList effectiveNodeListBuildBlockBehaviour = nodeListBuildBlockBehaviour.item(i).getChildNodes();</b>
+<b class="fc"><i>87</i>&nbsp;                    for (int j=0; j&lt;effectiveNodeListBuildBlockBehaviour.getLength(); j++) {</b>
+<b class="fc"><i>88</i>&nbsp;                        if (effectiveNodeListBuildBlockBehaviour.item(j).getNodeType() == Node.ELEMENT_NODE)</b>
+<b class="fc"><i>89</i>&nbsp;                            buildBehaviour = buildBuildBlockBehaviour(((Element) effectiveNodeListBuildBlockBehaviour.item(j)).getTagName());</b>
+<i>90</i>&nbsp;                    }
+<i>91</i>&nbsp;                }
+<i>92</i>&nbsp;            }
+<i>93</i>&nbsp;
+<b class="fc"><i>94</i>&nbsp;            return new BasicGodCard(godName, godDescription, godPower, moveBehavior, buildBehaviour);</b>
+<i>95</i>&nbsp;        } else {
+<b class="fc"><i>96</i>&nbsp;            AbstractGodCard component = null;</b>
+<b class="fc"><i>97</i>&nbsp;            for (int i = 0; i&lt;element.getChildNodes().getLength(); i++) {</b>
+<b class="fc"><i>98</i>&nbsp;                if (element.getChildNodes().item(i).getNodeType() == Node.ELEMENT_NODE)</b>
+<b class="fc"><i>99</i>&nbsp;                    component = buildComponent((Element) element.getChildNodes().item(i));</b>
+<i>100</i>&nbsp;                }
+<b class="fc"><i>101</i>&nbsp;            switch (nodeName) {</b>
+<i>102</i>&nbsp;                case &quot;SwapIfPossibleDecorator&quot;:
+<b class="fc"><i>103</i>&nbsp;                    return new SwapIfPossibleDecorator(component);</b>
+<i>104</i>&nbsp;                case &quot;SwapMoveDecorator&quot;:
+<b class="fc"><i>105</i>&nbsp;                    return new SwapMoveDecorator(component);</b>
+<i>106</i>&nbsp;                case &quot;UnconditionedBuildDomeDecorator&quot;:
+<b class="fc"><i>107</i>&nbsp;                    return new UnconditionedDomeBuildDecorator(component);</b>
+<i>108</i>&nbsp;                case &quot;WinFiveDomeDecorator&quot;:
+<b class="fc"><i>109</i>&nbsp;                    return new WinFiveDomeDecorator(component);</b>
+<i>110</i>&nbsp;                case &quot;BuildUnderFeetDecorator&quot;:
+<b class="fc"><i>111</i>&nbsp;                    return new BuildUnderFeetDecorator(component);</b>
+<i>112</i>&nbsp;                default:
+<b class="fc"><i>113</i>&nbsp;                    return new WinTwoFloorsFallDecorator(component);</b>
+<i>114</i>&nbsp;            }
+<i>115</i>&nbsp;        }
+<i>116</i>&nbsp;    }
+<i>117</i>&nbsp;
+<i>118</i>&nbsp;    private static BasicMoveBehaviour buildMoveBehaviour(String nameMoveBehaviour) {
+<b class="fc"><i>119</i>&nbsp;        String moveBehavior = nameMoveBehaviour.substring(0,1).toUpperCase() + nameMoveBehaviour.substring(1);</b>
+<b class="fc"><i>120</i>&nbsp;        switch (moveBehavior) {</b>
+<i>121</i>&nbsp;            case &quot;BasicMoveBehaviour&quot;:
+<b class="fc"><i>122</i>&nbsp;                return new BasicMoveBehaviour();</b>
+<i>123</i>&nbsp;            case &quot;BlockOpponentRiseBehaviour&quot;:
+<b class="fc"><i>124</i>&nbsp;                return new BlockOpponentRiseBehaviour();</b>
+<i>125</i>&nbsp;            case &quot;BuildBeforeMoveBehaviour&quot;:
+<b class="fc"><i>126</i>&nbsp;                return new BuildBeforeMoveBehaviour();</b>
+<i>127</i>&nbsp;            case &quot;DoubleMoveBehaviour&quot;:
+<b class="fc"><i>128</i>&nbsp;                return new DoubleMoveBehaviour();</b>
+<i>129</i>&nbsp;            case &quot;ForceToOppSideBehaviour&quot;:
+<b class="fc"><i>130</i>&nbsp;                return new ForceToOppSideBehaviour();</b>
+<i>131</i>&nbsp;            case &quot;InfiniteMovesOnPerimeterBehaviour&quot;:
+<b class="fc"><i>132</i>&nbsp;                return new InfiniteMovesOnPerimeterBehaviour();</b>
+<i>133</i>&nbsp;            default:
+<b class="nc"><i>134</i>&nbsp;                return null;</b>
+<i>135</i>&nbsp;        }
+<i>136</i>&nbsp;    }
+<i>137</i>&nbsp;
+<i>138</i>&nbsp;    private static BasicBuildBehaviour buildBuildBlockBehaviour(String nameBlockBehaviour) {
+<b class="fc"><i>139</i>&nbsp;        String buildBlockBehaviour = nameBlockBehaviour.substring(0,1).toUpperCase() + nameBlockBehaviour.substring(1);</b>
+<b class="fc"><i>140</i>&nbsp;        switch (buildBlockBehaviour) {</b>
+<i>141</i>&nbsp;            case &quot;BasicBuildBehaviour&quot;:
+<b class="fc"><i>142</i>&nbsp;                return new BasicBuildBehaviour();</b>
+<i>143</i>&nbsp;            case &quot;DoubleSameSpaceBehaviour&quot;:
+<b class="fc"><i>144</i>&nbsp;                return new DoubleSameSpaceBehaviour();</b>
+<i>145</i>&nbsp;            case &quot;DoubleDifferentSpaceBehaviour&quot;:
+<b class="fc"><i>146</i>&nbsp;                return new DoubleDifferentSpaceBehaviour();</b>
+<i>147</i>&nbsp;            case &quot;RemoveBlockFromNeighbourBehaviour&quot;:
+<b class="fc"><i>148</i>&nbsp;                return new RemoveBlockFromNeighbourBehaviour();</b>
+<i>149</i>&nbsp;            default:
+<b class="nc"><i>150</i>&nbsp;                return null;</b>
+<i>151</i>&nbsp;        }
+<i>152</i>&nbsp;    }
+<i>153</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 21:45</div>
+</div>
+</body>
+</html>

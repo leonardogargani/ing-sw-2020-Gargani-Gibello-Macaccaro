@@ -1,0 +1,389 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ClientListener</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.network</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ClientListener (it.polimi.ingsw.PSP43.server.network)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ClientListener</td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (4/ 12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    22.6%
+  </span>
+  <span class="absValue">
+    (21/ 93)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ClientListener$MockitoMock$1862802491</td>
+  </tr>
+  <tr>
+    <td class="name">ClientListener$MockitoMock$1862802491$auxiliary$8pip3USu</td>
+  </tr>
+  <tr>
+    <td class="name">ClientListener$MockitoMock$1862802491$auxiliary$dEMixyPd</td>
+  </tr>
+  <tr>
+    <td class="name">ClientListener$MockitoMock$1862802491$auxiliary$g1bhhmNI</td>
+  </tr>
+  <tr>
+    <td class="name">ClientListener$MockitoMock$1862802491$auxiliary$JJAr2joI</td>
+  </tr>
+  <tr>
+    <td class="name">ClientListener$MockitoMock$1862802491$auxiliary$jKctwKHD</td>
+  </tr>
+  <tr>
+    <td class="name">ClientListener$MockitoMock$1862802491$auxiliary$L6p7Z43h</td>
+  </tr>
+  <tr>
+    <td class="name">ClientListener$MockitoMock$1862802491$auxiliary$l9LfnE8o</td>
+  </tr>
+  <tr>
+    <td class="name">ClientListener$MockitoMock$1862802491$auxiliary$MkkA6pID</td>
+  </tr>
+  <tr>
+    <td class="name">ClientListener$MockitoMock$1862802491$auxiliary$NuGA18P7</td>
+  </tr>
+  <tr>
+    <td class="name">ClientListener$MockitoMock$1862802491$auxiliary$SxV8veJM</td>
+  </tr>
+  <tr>
+    <td class="name">ClientListener$MockitoMock$1862802491$auxiliary$xIJFFWtb</td>
+  </tr>
+  <tr>
+    <td class="name">ClientListener$MockitoMock$1862802491$auxiliary$xu9pZPs4</td>
+  </tr>
+  <tr>
+    <td class="name">ClientListener$MockitoMock$1862802491$auxiliary$YX4z8h5L</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (4/ 12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    22.6%
+  </span>
+  <span class="absValue">
+    (21/ 93)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.network;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.networkMessages.ClientMessage;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.networkMessages.LeaveGameMessage;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.networkMessages.PingMessage;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.networkMessages.RegistrationMessage;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.network.networkMessages.EndGameMessage;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;import java.io.IOException;
+<i>10</i>&nbsp;import java.io.ObjectInputStream;
+<i>11</i>&nbsp;import java.io.ObjectOutputStream;
+<i>12</i>&nbsp;import java.net.Socket;
+<i>13</i>&nbsp;import java.util.ArrayList;
+<i>14</i>&nbsp;import java.util.Iterator;
+<i>15</i>&nbsp;import java.util.concurrent.TimeUnit;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;/**
+<i>18</i>&nbsp; * ClientListener is the server network handler
+<i>19</i>&nbsp; */
+<i>20</i>&nbsp;public class ClientListener implements Runnable {
+<b class="fc"><i>21</i>&nbsp;    private Integer idGame = -1;</b>
+<i>22</i>&nbsp;    private final Socket clientSocket;
+<i>23</i>&nbsp;    private final Object lockOut;
+<i>24</i>&nbsp;    private final ArrayList&lt;ClientMessage&gt; stackMessages;
+<b class="fc"><i>25</i>&nbsp;    private boolean disconnected = false;</b>
+<i>26</i>&nbsp;    ObjectInputStream input;
+<i>27</i>&nbsp;    ObjectOutputStream output;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    /**
+<i>30</i>&nbsp;     * Not-default constructor for the ClientListener class.
+<i>31</i>&nbsp;     * @param clientSocket is the socket that is opened between a client and this ClientListener
+<i>32</i>&nbsp;     */
+<b class="fc"><i>33</i>&nbsp;    public ClientListener(Socket clientSocket) {</b>
+<b class="fc"><i>34</i>&nbsp;        this.clientSocket = clientSocket;</b>
+<b class="fc"><i>35</i>&nbsp;        this.lockOut = new Object();</b>
+<b class="fc"><i>36</i>&nbsp;        this.stackMessages = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>37</i>&nbsp;    }</b>
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    /**
+<i>40</i>&nbsp;     * Override of the run method, here the ClientListener creates and starts the connection detector to keep the
+<i>41</i>&nbsp;     * connection active and after that it listens for messages form the client for all the match
+<i>42</i>&nbsp;     */
+<i>43</i>&nbsp;    @Override
+<i>44</i>&nbsp;    public void run() {
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;        try {
+<b class="nc"><i>47</i>&nbsp;            ConnectionDetector connectionDetector = new ConnectionDetector(clientSocket, this);</b>
+<b class="nc"><i>48</i>&nbsp;            Thread connectionThread = new Thread(connectionDetector);</b>
+<b class="nc"><i>49</i>&nbsp;            connectionThread.start();</b>
+<b class="nc"><i>50</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>51</i>&nbsp;            System.out.println(&quot;Problems starting connection detector&quot;);</b>
+<b class="nc"><i>52</i>&nbsp;        }</b>
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;        ClientMessage message;
+<i>55</i>&nbsp;
+<b class="nc"><i>56</i>&nbsp;        while (!disconnected) {</b>
+<i>57</i>&nbsp;            try {
+<b class="nc"><i>58</i>&nbsp;                message = receive();</b>
+<b class="nc"><i>59</i>&nbsp;                if (message != null) {</b>
+<b class="nc"><i>60</i>&nbsp;                    handleMessage(message);</b>
+<i>61</i>&nbsp;                }
+<b class="nc"><i>62</i>&nbsp;            } catch (IOException e) {</b>
+<i>63</i>&nbsp;                /* This block is called only if the player has &quot;killed&quot; the program and so the socket has been closed.
+<i>64</i>&nbsp;                This means that the client won&#39;t be available anymore. For this reason the ClientListener is stopped and
+<i>65</i>&nbsp;                the socket closed.
+<i>66</i>&nbsp;                * */
+<b class="nc"><i>67</i>&nbsp;                handleDisconnection(true, LeaveGameMessage.TypeDisconnectionHeader.IRREVERSIBLE_DISCONNECTION);</b>
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;                try {
+<b class="nc"><i>70</i>&nbsp;                    TimeUnit.SECONDS.sleep(3);</b>
+<b class="nc"><i>71</i>&nbsp;                } catch (InterruptedException interruptedException) {</b>
+<b class="nc"><i>72</i>&nbsp;                    interruptedException.printStackTrace();</b>
+<b class="nc"><i>73</i>&nbsp;                }</b>
+<b class="nc"><i>74</i>&nbsp;            } catch (InterruptedException | ClassNotFoundException ignored) {}</b>
+<i>75</i>&nbsp;        }
+<b class="nc"><i>76</i>&nbsp;    }</b>
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;    /**
+<i>79</i>&nbsp;     * Method that receives messages and if it is not a PingMessage, the receive method handles the message and returns
+<i>80</i>&nbsp;     * it or puts it in the stackMessages ArrayList.
+<i>81</i>&nbsp;     * @throws IOException            signals that an I/O exception of some sort has occurred.
+<i>82</i>&nbsp;     * @throws ClassNotFoundException occurs when you try to load a class at run time using Class .forName() or
+<i>83</i>&nbsp;     *                                loadClass() methods and mentioned classes are not found in the classpath.
+<i>84</i>&nbsp;     * @throws InterruptedException when the thread that is running is stopped.
+<i>85</i>&nbsp;     * @return The message arrived from the Client.
+<i>86</i>&nbsp;     */
+<i>87</i>&nbsp;    public ClientMessage receive() throws IOException, ClassNotFoundException, InterruptedException {
+<i>88</i>&nbsp;        Object objectArrived;
+<i>89</i>&nbsp;
+<b class="nc"><i>90</i>&nbsp;        input = new ObjectInputStream(clientSocket.getInputStream());</b>
+<b class="nc"><i>91</i>&nbsp;        objectArrived = input.readObject();</b>
+<i>92</i>&nbsp;
+<b class="nc"><i>93</i>&nbsp;        if (objectArrived instanceof RegistrationMessage) {</b>
+<i>94</i>&nbsp;            /* This is made to flush possible messages from the previous game ended (e.g. the LeaveGameMessage
+<i>95</i>&nbsp;            inserted in the stack to give to the GameSession the knowledge that the game has ended if it was expecting
+<i>96</i>&nbsp;            an answer from the player linked to that CLientListener.
+<i>97</i>&nbsp;             * */
+<b class="nc"><i>98</i>&nbsp;            flushStack();</b>
+<b class="nc"><i>99</i>&nbsp;            return (ClientMessage) objectArrived;</b>
+<b class="nc"><i>100</i>&nbsp;        } else if (objectArrived instanceof LeaveGameMessage) {</b>
+<i>101</i>&nbsp;            /* If this message arrives it means that the player has decided to quit the game, but he has not disconnected.
+<i>102</i>&nbsp;            For this reason the socket is not closed but the GameSession is informed (in this way the game is stopped).
+<i>103</i>&nbsp;            * */
+<b class="nc"><i>104</i>&nbsp;            handleDisconnection(true, ((LeaveGameMessage) objectArrived).getTypeDisconnectionHeader());</b>
+<b class="nc"><i>105</i>&nbsp;            return null;</b>
+<b class="nc"><i>106</i>&nbsp;        } else if (!(objectArrived instanceof PingMessage)) {</b>
+<b class="nc"><i>107</i>&nbsp;            pushMessageOnStack((ClientMessage) objectArrived);</b>
+<b class="nc"><i>108</i>&nbsp;            return null;</b>
+<b class="nc"><i>109</i>&nbsp;        } else return null;</b>
+<i>110</i>&nbsp;    }
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;    /**
+<i>113</i>&nbsp;     * Method used to send messages to the client.
+<i>114</i>&nbsp;     * @param message The message that will be sent.
+<i>115</i>&nbsp;     */
+<i>116</i>&nbsp;    public void sendMessage(Object message) {
+<i>117</i>&nbsp;        try {
+<b class="fc"><i>118</i>&nbsp;            synchronized (lockOut) {</b>
+<b class="fc"><i>119</i>&nbsp;                output = new ObjectOutputStream(clientSocket.getOutputStream());</b>
+<b class="nc"><i>120</i>&nbsp;                output.writeObject(message);</b>
+<b class="nc"><i>121</i>&nbsp;            }</b>
+<b class="nc"><i>122</i>&nbsp;        } catch (IOException ignored) {}</b>
+<b class="fc"><i>123</i>&nbsp;    }</b>
+<i>124</i>&nbsp;
+<i>125</i>&nbsp;    /**
+<i>126</i>&nbsp;     * Method used to send EndGameMessages. After the  delivery it calls the handleDisconnection method.
+<i>127</i>&nbsp;     * @param message is the EndGameMessage that will be sent
+<i>128</i>&nbsp;     */
+<i>129</i>&nbsp;    public void sendMessage(EndGameMessage message) {
+<i>130</i>&nbsp;        try {
+<b class="fc"><i>131</i>&nbsp;            synchronized (lockOut) {</b>
+<b class="fc"><i>132</i>&nbsp;                output = new ObjectOutputStream(clientSocket.getOutputStream());</b>
+<b class="nc"><i>133</i>&nbsp;                output.writeObject(message);</b>
+<b class="nc"><i>134</i>&nbsp;            }</b>
+<b class="nc"><i>135</i>&nbsp;        } catch (IOException ignored) {}</b>
+<i>136</i>&nbsp;
+<i>137</i>&nbsp;        //   The handleDisconnection() is called in this case only because it could be possible that the
+<i>138</i>&nbsp;        //   GameSession was expecting an answer from the Client linked to this ClientListener.
+<b class="fc"><i>139</i>&nbsp;        handleDisconnection(false, LeaveGameMessage.TypeDisconnectionHeader.GAME_DISCONNECTION);</b>
+<b class="fc"><i>140</i>&nbsp;    }</b>
+<i>141</i>&nbsp;
+<i>142</i>&nbsp;    /**
+<i>143</i>&nbsp;     * This method checks the kind of message and then if it is a RegistrationMessage it creates and starts a
+<i>144</i>&nbsp;     * RegisterClientListener, that is a thread for the registration in a match.
+<i>145</i>&nbsp;     * @param message The message that is received from the &quot;receive&quot; method.
+<i>146</i>&nbsp;     */
+<i>147</i>&nbsp;    public void handleMessage(ClientMessage message) {
+<b class="nc"><i>148</i>&nbsp;        if (message instanceof RegistrationMessage) {</b>
+<b class="nc"><i>149</i>&nbsp;            RegisterClientListener register = new RegisterClientListener(this, (RegistrationMessage) message);</b>
+<b class="nc"><i>150</i>&nbsp;            Thread newRegisterThread = new Thread(register);</b>
+<b class="nc"><i>151</i>&nbsp;            newRegisterThread.start();</b>
+<i>152</i>&nbsp;        }
+<b class="nc"><i>153</i>&nbsp;    }</b>
+<i>154</i>&nbsp;
+<i>155</i>&nbsp;    /**
+<i>156</i>&nbsp;     * This method is used to push a message on the stack of the ClientListener when it arrives. In that way I notify
+<i>157</i>&nbsp;     * the thread that was waiting for a response from the client.
+<i>158</i>&nbsp;     * @param clientMessage The message arrived from the client.
+<i>159</i>&nbsp;     * @throws InterruptedException when the thread that is running is stopped.
+<i>160</i>&nbsp;     */
+<i>161</i>&nbsp;    public synchronized void pushMessageOnStack(ClientMessage clientMessage) throws InterruptedException {
+<b class="nc"><i>162</i>&nbsp;        stackMessages.add(clientMessage);</b>
+<b class="nc"><i>163</i>&nbsp;        notifyAll();</b>
+<b class="nc"><i>164</i>&nbsp;        wait();</b>
+<b class="nc"><i>165</i>&nbsp;    }</b>
+<i>166</i>&nbsp;
+<i>167</i>&nbsp;    /**
+<i>168</i>&nbsp;     * Getter method for a single message in the stackMessages ArrayList.
+<i>169</i>&nbsp;     * @return the first message in the stackMessages
+<i>170</i>&nbsp;     */
+<i>171</i>&nbsp;    public synchronized ClientMessage popMessageFromStack() {
+<b class="nc"><i>172</i>&nbsp;        while (stackMessages.size() == 0) {</b>
+<i>173</i>&nbsp;            try {
+<b class="nc"><i>174</i>&nbsp;                wait();</b>
+<b class="nc"><i>175</i>&nbsp;            } catch (InterruptedException e) {</b>
+<b class="nc"><i>176</i>&nbsp;                e.printStackTrace();</b>
+<b class="nc"><i>177</i>&nbsp;            }</b>
+<i>178</i>&nbsp;        }
+<i>179</i>&nbsp;
+<b class="nc"><i>180</i>&nbsp;        ClientMessage messageArrived = stackMessages.get(0);</b>
+<b class="nc"><i>181</i>&nbsp;        stackMessages.remove(messageArrived);</b>
+<b class="nc"><i>182</i>&nbsp;        notifyAll();</b>
+<i>183</i>&nbsp;
+<b class="nc"><i>184</i>&nbsp;        return messageArrived;</b>
+<i>185</i>&nbsp;    }
+<i>186</i>&nbsp;
+<i>187</i>&nbsp;    /**
+<i>188</i>&nbsp;     * This method is used to flush all the messages from the stack when it is necessary.
+<i>189</i>&nbsp;     */
+<i>190</i>&nbsp;    public void flushStack() {
+<b class="nc"><i>191</i>&nbsp;        for (Iterator&lt;ClientMessage&gt; clientMessageIterator = stackMessages.iterator(); clientMessageIterator.hasNext(); ) {</b>
+<b class="nc"><i>192</i>&nbsp;            clientMessageIterator.next();</b>
+<b class="nc"><i>193</i>&nbsp;            clientMessageIterator.remove();</b>
+<i>194</i>&nbsp;        }
+<b class="nc"><i>195</i>&nbsp;    }</b>
+<i>196</i>&nbsp;
+<i>197</i>&nbsp;    /**
+<i>198</i>&nbsp;     * This method is used to handle a disconnection in different ways, regarding different scenarios.
+<i>199</i>&nbsp;     * 1)   The client has &quot;killed&quot; the program. So he won&#39;t be available anymore. In this case the method will
+<i>200</i>&nbsp;     * close the socket, put a LeaveGameMessage in the stack and start the process of disconnection through RegisterClientListener;
+<i>201</i>&nbsp;     * 2)   The client was a player in a game that ended. In this case the client will be still available. For this reason
+<i>202</i>&nbsp;     * the socket won&#39;t be closed. If the client has been the first to disconnect, he will start the process of
+<i>203</i>&nbsp;     * disconnection through the RegisterClientListener.
+<i>204</i>&nbsp;     * @param isFirstToDisconnect Boolean that is true if the player has been the first to disconnect, false otherwise.
+<i>205</i>&nbsp;     * @param typeDisconnectionHeader It is the type of disconnection happened that made the player leave the game.
+<i>206</i>&nbsp;     */
+<i>207</i>&nbsp;    public synchronized void handleDisconnection(boolean isFirstToDisconnect, LeaveGameMessage.TypeDisconnectionHeader typeDisconnectionHeader) {
+<i>208</i>&nbsp;        try {
+<b class="fc"><i>209</i>&nbsp;            if (!this.disconnected) {</b>
+<b class="fc"><i>210</i>&nbsp;                if (typeDisconnectionHeader == LeaveGameMessage.TypeDisconnectionHeader.IRREVERSIBLE_DISCONNECTION) {</b>
+<b class="nc"><i>211</i>&nbsp;                    this.disconnected = true;</b>
+<i>212</i>&nbsp;
+<b class="nc"><i>213</i>&nbsp;                    clientSocket.close();</b>
+<b class="nc"><i>214</i>&nbsp;                    if (input != null)</b>
+<b class="nc"><i>215</i>&nbsp;                        input.close();</b>
+<b class="nc"><i>216</i>&nbsp;                    if (output != null)</b>
+<b class="nc"><i>217</i>&nbsp;                        output.close();</b>
+<i>218</i>&nbsp;                }
+<i>219</i>&nbsp;
+<i>220</i>&nbsp;                // This adds a message of type LeaveGameMessage in the stack to inform the GameSession
+<i>221</i>&nbsp;                // of the disconnection of the client, if it was expecting a response from him.
+<i>222</i>&nbsp;                // (In other cases this wil be a &quot;useless&quot; statement).
+<b class="fc"><i>223</i>&nbsp;                stackMessages.add(new LeaveGameMessage());</b>
+<i>224</i>&nbsp;
+<i>225</i>&nbsp;                // I do not execute the following code if the method was called due to the disconnection of another
+<i>226</i>&nbsp;                // player. In this case I have not to worry about notify a disconnection to the GameSession.
+<b class="fc"><i>227</i>&nbsp;                if (isFirstToDisconnect) {</b>
+<b class="nc"><i>228</i>&nbsp;                    if (this.idGame != -1) {</b>
+<b class="nc"><i>229</i>&nbsp;                        RegisterClientListener notifier = new RegisterClientListener(this, null);</b>
+<b class="nc"><i>230</i>&nbsp;                        notifier.notifyDisconnection(this.idGame);</b>
+<i>231</i>&nbsp;                    }
+<i>232</i>&nbsp;                }
+<i>233</i>&nbsp;
+<b class="fc"><i>234</i>&nbsp;                notifyAll();</b>
+<i>235</i>&nbsp;            }
+<b class="nc"><i>236</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>237</i>&nbsp;            e.printStackTrace();</b>
+<b class="fc"><i>238</i>&nbsp;        }</b>
+<b class="fc"><i>239</i>&nbsp;    }</b>
+<i>240</i>&nbsp;
+<i>241</i>&nbsp;    /**
+<i>242</i>&nbsp;     * Setter method for the integer variable idGame, that will be the reference of the game for the ClientListener.
+<i>243</i>&nbsp;     * @param idGame is the identifier of the match.
+<i>244</i>&nbsp;     */
+<i>245</i>&nbsp;    public void setIdGame(Integer idGame) {
+<b class="nc"><i>246</i>&nbsp;        this.idGame = idGame;</b>
+<b class="nc"><i>247</i>&nbsp;    }</b>
+<i>248</i>&nbsp;
+<i>249</i>&nbsp;    /**
+<i>250</i>&nbsp;     * Getter method for the boolean variable disconnected. When this variable becomes true this thread and the
+<i>251</i>&nbsp;     * ConnectionDetector thread are stopped.
+<i>252</i>&nbsp;     * @return The value of the boolean disconnected. It is true if the connection from the client was lost, true otherwise.
+<i>253</i>&nbsp;     */
+<i>254</i>&nbsp;    public boolean isDisconnected() {
+<b class="nc"><i>255</i>&nbsp;        return disconnected;</b>
+<i>256</i>&nbsp;    }
+<i>257</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 21:45</div>
+</div>
+</body>
+</html>

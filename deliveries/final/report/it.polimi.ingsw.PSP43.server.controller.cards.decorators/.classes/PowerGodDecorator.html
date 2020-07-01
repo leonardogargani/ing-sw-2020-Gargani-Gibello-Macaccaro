@@ -1,0 +1,272 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: PowerGodDecorator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.controller.cards.decorators</a> ]
+</div>
+
+<h1>Coverage Summary for Class: PowerGodDecorator (it.polimi.ingsw.PSP43.server.controller.cards.decorators)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PowerGodDecorator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    63.2%
+  </span>
+  <span class="absValue">
+    (12/ 19)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    65.4%
+  </span>
+  <span class="absValue">
+    (17/ 26)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.controller.cards.decorators;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.networkMessages.ActionResponse;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.DataToBuild;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.DataToMove;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.gameStates.GameSession;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.cards.AbstractGodCard;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.modelHandlersException.GameEndedException;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.modelHandlersException.GameLostException;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;import java.util.ArrayList;
+<i>13</i>&nbsp;import java.util.HashMap;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;/**
+<i>16</i>&nbsp; * This decoration is made to add dinamically features to the cards, in order to give powers to the players&#39; Gods and
+<i>17</i>&nbsp; * to limit their possibilities because of the opponents&#39; Gods
+<i>18</i>&nbsp; */
+<i>19</i>&nbsp;public abstract class PowerGodDecorator extends AbstractGodCard {
+<i>20</i>&nbsp;    private static final long serialVersionUID = -1361536654497716050L;
+<i>21</i>&nbsp;    private final AbstractGodCard godComponent;
+<i>22</i>&nbsp;
+<b class="fc"><i>23</i>&nbsp;    public PowerGodDecorator(AbstractGodCard godComponent) {</b>
+<b class="fc"><i>24</i>&nbsp;        this.godComponent = godComponent;</b>
+<b class="fc"><i>25</i>&nbsp;    }</b>
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    /**
+<i>28</i>&nbsp;     * This method is used to get the component stored into the current instance of the card.
+<i>29</i>&nbsp;     * @return The component stored into the current instance of the card.
+<i>30</i>&nbsp;     */
+<i>31</i>&nbsp;    public AbstractGodCard getGodComponent() {
+<b class="fc"><i>32</i>&nbsp;        return godComponent;</b>
+<i>33</i>&nbsp;    }
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    /**
+<i>36</i>&nbsp;     * This method changes the model calling methods on model handlers and performing a move of a worker.
+<i>37</i>&nbsp;     * @param dataToMove The data used to change the model and obtained by the interaction with the client.
+<i>38</i>&nbsp;     */
+<i>39</i>&nbsp;    public void move(DataToMove dataToMove) {
+<b class="fc"><i>40</i>&nbsp;        godComponent.move(dataToMove);</b>
+<b class="fc"><i>41</i>&nbsp;    }</b>
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    /**
+<i>44</i>&nbsp;     * This method finds all the available positions where a player can move his workers.
+<i>45</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>46</i>&nbsp;     * @return All the available positions where a player can move his workers.
+<i>47</i>&nbsp;     */
+<i>48</i>&nbsp;    public HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; findAvailablePositionsToMove(GameSession gameSession) {
+<b class="fc"><i>49</i>&nbsp;        return godComponent.findAvailablePositionsToMove(gameSession);</b>
+<i>50</i>&nbsp;    }
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;    /**
+<i>53</i>&nbsp;     * This method finds all the available positions where a player can build a block.
+<i>54</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>55</i>&nbsp;     * @return All the available positions where a player can build a block.
+<i>56</i>&nbsp;     */
+<i>57</i>&nbsp;    public HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; findAvailablePositionsToBuildBlock(GameSession gameSession) {
+<b class="fc"><i>58</i>&nbsp;        return godComponent.findAvailablePositionsToBuildBlock(gameSession);</b>
+<i>59</i>&nbsp;    }
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    /**
+<i>62</i>&nbsp;     * This method returns the name of the god.
+<i>63</i>&nbsp;     * @return The name of the god.
+<i>64</i>&nbsp;     */
+<i>65</i>&nbsp;    public String getGodName() {
+<b class="fc"><i>66</i>&nbsp;        return godComponent.getGodName();</b>
+<i>67</i>&nbsp;    }
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;    /**
+<i>70</i>&nbsp;     * This method returns the description of the god.
+<i>71</i>&nbsp;     * @return The decription of the god.
+<i>72</i>&nbsp;     */
+<i>73</i>&nbsp;    public String getDescription() {
+<b class="fc"><i>74</i>&nbsp;        return godComponent.getDescription();</b>
+<i>75</i>&nbsp;    }
+<i>76</i>&nbsp;
+<i>77</i>&nbsp;    /**
+<i>78</i>&nbsp;     * This method returns the string that represents the power of the god.
+<i>79</i>&nbsp;     * @return The string that represents the power of the god.
+<i>80</i>&nbsp;     */
+<i>81</i>&nbsp;    public String getPower() {
+<b class="fc"><i>82</i>&nbsp;        return godComponent.getPower();</b>
+<i>83</i>&nbsp;    }
+<i>84</i>&nbsp;
+<i>85</i>&nbsp;    /**
+<i>86</i>&nbsp;     * This method handles the move during the turn, according to the card powers.
+<i>87</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>88</i>&nbsp;     * @throws GameEndedException if the player decides to leave the game during his turn.
+<i>89</i>&nbsp;     * @throws GameLostException if the player can&#39;t do any move.
+<i>90</i>&nbsp;     */
+<i>91</i>&nbsp;    public void initMove(GameSession gameSession) throws GameEndedException, GameLostException {
+<b class="fc"><i>92</i>&nbsp;        godComponent.initMove(gameSession);</b>
+<b class="fc"><i>93</i>&nbsp;    }</b>
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;    /**
+<i>96</i>&nbsp;     * This method handles the build of a block or a dome.
+<i>97</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>98</i>&nbsp;     * @throws GameEndedException if the player decides to leave the game during his turn.
+<i>99</i>&nbsp;     */
+<i>100</i>&nbsp;    public void initBuild(GameSession gameSession) throws GameEndedException {
+<b class="fc"><i>101</i>&nbsp;        godComponent.initBuild(gameSession);</b>
+<b class="fc"><i>102</i>&nbsp;    }</b>
+<i>103</i>&nbsp;
+<i>104</i>&nbsp;    /**
+<i>105</i>&nbsp;     * This method performs a build of a block or a dome calling methods on model handlers that change the model.
+<i>106</i>&nbsp;     * @param dataToBuild The data used to update the model.
+<i>107</i>&nbsp;     */
+<i>108</i>&nbsp;    public void build(DataToBuild dataToBuild) {
+<b class="nc"><i>109</i>&nbsp;        godComponent.build(dataToBuild);</b>
+<b class="nc"><i>110</i>&nbsp;    }</b>
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;    /**
+<i>113</i>&nbsp;     * This method finds all the available positions where a player can build a dome.
+<i>114</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>115</i>&nbsp;     * @return All the available positions where a player can build a dome.
+<i>116</i>&nbsp;     */
+<i>117</i>&nbsp;    public HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; findAvailablePositionsToBuildDome(GameSession gameSession) {
+<b class="nc"><i>118</i>&nbsp;        return godComponent.findAvailablePositionsToBuildDome(gameSession);</b>
+<i>119</i>&nbsp;    }
+<i>120</i>&nbsp;
+<i>121</i>&nbsp;    /**
+<i>122</i>&nbsp;     * This method is used to ask to the player where he wants to move his worker.
+<i>123</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>124</i>&nbsp;     * @param availablePositions The already selected positions where a player can move his worker.
+<i>125</i>&nbsp;     * @return The response arrived from the client.
+<i>126</i>&nbsp;     * @throws GameEndedException if the player decides to leave the game during his turn.
+<i>127</i>&nbsp;     */
+<i>128</i>&nbsp;    public ActionResponse askForMove(GameSession gameSession, HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositions) throws GameEndedException {
+<b class="fc"><i>129</i>&nbsp;        return godComponent.askForMove(gameSession, availablePositions);</b>
+<i>130</i>&nbsp;    }
+<i>131</i>&nbsp;
+<i>132</i>&nbsp;    /**
+<i>133</i>&nbsp;     * This method asks to the player where he wants to build.
+<i>134</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>135</i>&nbsp;     * @return The data used to perform the build changing the model.
+<i>136</i>&nbsp;     * @throws GameEndedException if the player decides to leave the game during his turn.
+<i>137</i>&nbsp;     */
+<i>138</i>&nbsp;    public DataToBuild genericAskForBuild(GameSession gameSession) throws GameEndedException {
+<b class="nc"><i>139</i>&nbsp;        return godComponent.genericAskForBuild(gameSession);</b>
+<i>140</i>&nbsp;    }
+<i>141</i>&nbsp;
+<i>142</i>&nbsp;    /**
+<i>143</i>&nbsp;     * This method asks to the client to move a worker.
+<i>144</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>145</i>&nbsp;     * @return The response containing the choice of the player.
+<i>146</i>&nbsp;     * @throws GameEndedException if the player decides to leave the game during his turn.
+<i>147</i>&nbsp;     * @throws GameLostException if the player can&#39;t do any move.
+<i>148</i>&nbsp;     */
+<i>149</i>&nbsp;    public ActionResponse askForMove(GameSession gameSession) throws GameEndedException, GameLostException {
+<b class="nc"><i>150</i>&nbsp;        return godComponent.askForMove(gameSession);</b>
+<i>151</i>&nbsp;    }
+<i>152</i>&nbsp;
+<i>153</i>&nbsp;    /**
+<i>154</i>&nbsp;     * This method is used to ask to the player where he wants to build with his worker.
+<i>155</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>156</i>&nbsp;     * @param availablePositionsBuildBlock The already selected positions where a player can build with his worker.
+<i>157</i>&nbsp;     * @return The response arrived from the client.
+<i>158</i>&nbsp;     * @throws GameEndedException if the player decides to leave the game during his turn.
+<i>159</i>&nbsp;     */
+<i>160</i>&nbsp;    public ActionResponse askForBuild(GameSession gameSession, HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositionsBuildBlock, String message) throws GameEndedException {
+<b class="nc"><i>161</i>&nbsp;        return godComponent.askForBuild(gameSession, availablePositionsBuildBlock, message);</b>
+<i>162</i>&nbsp;    }
+<i>163</i>&nbsp;
+<i>164</i>&nbsp;    /**
+<i>165</i>&nbsp;     * This method checks if the player that owns this card has won the game.
+<i>166</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>167</i>&nbsp;     * @return True if the player has won the game, false otherwise.
+<i>168</i>&nbsp;     */
+<i>169</i>&nbsp;    public boolean checkConditionsToWin(GameSession gameSession) {
+<b class="fc"><i>170</i>&nbsp;        return godComponent.checkConditionsToWin(gameSession);</b>
+<i>171</i>&nbsp;    }
+<i>172</i>&nbsp;
+<i>173</i>&nbsp;    /**
+<i>174</i>&nbsp;     * This method is used to clean the card from possible decorators which could block some functionalities.
+<i>175</i>&nbsp;     * It is called when the blocker begins a new turn.
+<i>176</i>&nbsp;     * @param nameOfEffect The effect that the blocker has activated by doing a determined action.
+<i>177</i>&nbsp;     * @return The card cleaned by the blocking decorator passed as parameter.
+<i>178</i>&nbsp;     */
+<i>179</i>&nbsp;    public AbstractGodCard cleanFromEffects(String nameOfEffect) {
+<b class="nc"><i>180</i>&nbsp;        return godComponent.cleanFromEffects(nameOfEffect);</b>
+<i>181</i>&nbsp;    }
+<i>182</i>&nbsp;
+<i>183</i>&nbsp;    /**
+<i>184</i>&nbsp;     * This method prints all the data of the card.
+<i>185</i>&nbsp;     */
+<i>186</i>&nbsp;    public void print() {
+<b class="nc"><i>187</i>&nbsp;        godComponent.print();</b>
+<b class="nc"><i>188</i>&nbsp;    }</b>
+<i>189</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 21:45</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,163 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: PlayersListMessage</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.network.networkMessages</a> ]
+</div>
+
+<h1>Coverage Summary for Class: PlayersListMessage (it.polimi.ingsw.PSP43.server.network.networkMessages)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PlayersListMessage</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25%
+  </span>
+  <span class="absValue">
+    (1/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    85%
+  </span>
+  <span class="absValue">
+    (17/ 20)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.network.networkMessages;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Color;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.gameStates.GameSession;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Player;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Worker;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.cards.AbstractGodCard;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.CardsHandler;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.PlayersHandler;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;import java.util.HashMap;
+<i>12</i>&nbsp;import java.util.Map;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;public class PlayersListMessage extends TextMessage {
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    private static final long serialVersionUID = 5488819383659184710L;
+<i>18</i>&nbsp;    private final Map&lt;Player, AbstractGodCard&gt; players;
+<i>19</i>&nbsp;    private final Map&lt;Player, Color&gt; color;
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    /**
+<i>23</i>&nbsp;     * Not default constructor for PlayersListMessage.
+<i>24</i>&nbsp;     * @param message is the string that will be shown to the recipient
+<i>25</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>26</i>&nbsp;     */
+<i>27</i>&nbsp;    public PlayersListMessage(String message, GameSession gameSession){
+<b class="fc"><i>28</i>&nbsp;        super(message, TextMessage.PositionInScreen.LOW_CENTER);</b>
+<i>29</i>&nbsp;
+<b class="fc"><i>30</i>&nbsp;        PlayersHandler playersHandler = gameSession.getPlayersHandler();</b>
+<b class="fc"><i>31</i>&nbsp;        CardsHandler cardsHandler = gameSession.getCardsHandler();</b>
+<b class="fc"><i>32</i>&nbsp;        HashMap&lt;Player, AbstractGodCard&gt; playerCardMap = new HashMap&lt;&gt;();</b>
+<i>33</i>&nbsp;
+<b class="fc"><i>34</i>&nbsp;        for (int i = 0; i &lt; playersHandler.getNumOfPlayers(); i++) {</b>
+<b class="fc"><i>35</i>&nbsp;            Player actualPlayer = playersHandler.getPlayer(i);</b>
+<b class="fc"><i>36</i>&nbsp;            AbstractGodCard actualCard = cardsHandler.getPlayerCard(actualPlayer.getNickname());</b>
+<b class="fc"><i>37</i>&nbsp;            playerCardMap.put(actualPlayer, actualCard);</b>
+<i>38</i>&nbsp;        }
+<i>39</i>&nbsp;
+<b class="fc"><i>40</i>&nbsp;        HashMap&lt;Player, Color&gt; playerColorMap = new HashMap&lt;&gt;();</b>
+<b class="fc"><i>41</i>&nbsp;        for (int i = 0; i &lt; playersHandler.getNumOfPlayers(); i++) {</b>
+<b class="fc"><i>42</i>&nbsp;            Player actualPlayer = playersHandler.getPlayer(i);</b>
+<b class="fc"><i>43</i>&nbsp;            Integer[] ids = actualPlayer.getWorkersIdsArray();</b>
+<b class="fc"><i>44</i>&nbsp;            Worker actualWorker = gameSession.getWorkersHandler().getWorker(ids[0]);</b>
+<b class="fc"><i>45</i>&nbsp;            playerColorMap.put(actualPlayer, actualWorker.getColor());</b>
+<i>46</i>&nbsp;        }
+<i>47</i>&nbsp;
+<b class="fc"><i>48</i>&nbsp;        this.players = playerCardMap;</b>
+<b class="fc"><i>49</i>&nbsp;        this.color = playerColorMap;</b>
+<b class="fc"><i>50</i>&nbsp;    }</b>
+<i>51</i>&nbsp;
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;    /**
+<i>54</i>&nbsp;     * Getter method for the string message.
+<i>55</i>&nbsp;     * @return message
+<i>56</i>&nbsp;     */
+<i>57</i>&nbsp;    @Override
+<i>58</i>&nbsp;    public String getMessage() {
+<b class="nc"><i>59</i>&nbsp;        return super.getMessage();</b>
+<i>60</i>&nbsp;    }
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;
+<i>63</i>&nbsp;    /**
+<i>64</i>&nbsp;     * Getter method for the Map players.
+<i>65</i>&nbsp;     * @return players
+<i>66</i>&nbsp;     */
+<i>67</i>&nbsp;    public Map&lt;Player, AbstractGodCard&gt; getPlayers() {
+<b class="nc"><i>68</i>&nbsp;        return players;</b>
+<i>69</i>&nbsp;    }
+<i>70</i>&nbsp;
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;    /**
+<i>73</i>&nbsp;     * Getter method for the Map color.
+<i>74</i>&nbsp;     * @return color
+<i>75</i>&nbsp;     */
+<i>76</i>&nbsp;    public Map&lt;Player, Color&gt; getColor() {
+<b class="nc"><i>77</i>&nbsp;        return color;</b>
+<i>78</i>&nbsp;    }
+<i>79</i>&nbsp;
+<i>80</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 21:45</div>
+</div>
+</body>
+</html>

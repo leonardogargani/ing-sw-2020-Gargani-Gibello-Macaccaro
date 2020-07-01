@@ -1,0 +1,215 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ForceToOppSideBehaviour</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.controller.cards.behaviours.moveBehaviours</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ForceToOppSideBehaviour (it.polimi.ingsw.PSP43.server.controller.cards.behaviours.moveBehaviours)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ForceToOppSideBehaviour</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    98%
+  </span>
+  <span class="absValue">
+    (48/ 49)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.controller.cards.behaviours.moveBehaviours;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.networkMessages.ActionResponse;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.networkMessages.ResponseMessage;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.gameStates.GameSession;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.*;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.CellsHandler;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.modelHandlersException.GameEndedException;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.modelHandlersException.GameLostException;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP43.server.network.networkMessages.ActionRequest;
+<i>11</i>&nbsp;import it.polimi.ingsw.PSP43.server.network.networkMessages.RequestMessage;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;import java.util.ArrayList;
+<i>14</i>&nbsp;import java.util.HashMap;
+<i>15</i>&nbsp;import java.util.Iterator;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;/**
+<i>18</i>&nbsp; * This class is used to implement Charon&#39;s behaviour that permits to force
+<i>19</i>&nbsp; * an opponent worker to the space directly on the other side of the worker that is moving.
+<i>20</i>&nbsp; */
+<b class="fc"><i>21</i>&nbsp;public class ForceToOppSideBehaviour extends BasicMoveBehaviour {</b>
+<i>22</i>&nbsp;    private static final long serialVersionUID = -8412302139395339178L;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    /**
+<i>25</i>&nbsp;     * This method handles the move when a player can force an opponent worker according to Charon rules.
+<i>26</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>27</i>&nbsp;     * @throws GameEndedException if the player decides to leave the game during his turn.
+<i>28</i>&nbsp;     * @throws GameLostException if the player can&#39;t do any move.
+<i>29</i>&nbsp;     */
+<i>30</i>&nbsp;    public void handleInitMove(GameSession gameSession) throws GameEndedException, GameLostException {
+<b class="fc"><i>31</i>&nbsp;        Player currentPlayer = gameSession.getCurrentPlayer();</b>
+<i>32</i>&nbsp;
+<b class="fc"><i>33</i>&nbsp;        Coord coordForcingWorker = askIfWantToForce(gameSession);</b>
+<i>34</i>&nbsp;
+<b class="fc"><i>35</i>&nbsp;        if (coordForcingWorker == null) super.handleInitMove(gameSession);</b>
+<i>36</i>&nbsp;        else {
+<b class="fc"><i>37</i>&nbsp;            Worker forcingWorker = gameSession.getWorkersHandler().getWorker(coordForcingWorker);</b>
+<b class="fc"><i>38</i>&nbsp;            HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositionsToMove = findAvailablePositionsToMove(gameSession);</b>
+<b class="fc"><i>39</i>&nbsp;            availablePositionsToMove.keySet().removeIf(keyCoord -&gt; !(keyCoord.equals(coordForcingWorker)));</b>
+<i>40</i>&nbsp;
+<b class="fc"><i>41</i>&nbsp;            ActionResponse actionResponse = askForMove(gameSession, availablePositionsToMove);</b>
+<b class="fc"><i>42</i>&nbsp;            Coord coordChosenToMove = actionResponse.getPosition();</b>
+<i>43</i>&nbsp;
+<b class="fc"><i>44</i>&nbsp;            move(new DataToMove(gameSession, currentPlayer, forcingWorker, coordChosenToMove));</b>
+<i>45</i>&nbsp;        }
+<b class="fc"><i>46</i>&nbsp;    }</b>
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    /**
+<i>49</i>&nbsp;     * This method ask to the player if he wants to use Charon&#39;s behaviour before moving a worker.
+<i>50</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>51</i>&nbsp;     * @return The coordinates where the player decided to force the opponent&#39;s worker.
+<i>52</i>&nbsp;     * @throws GameEndedException if the player decides to leave the game during his turn.
+<i>53</i>&nbsp;     */
+<i>54</i>&nbsp;    public Coord askIfWantToForce(GameSession gameSession) throws GameEndedException {
+<b class="fc"><i>55</i>&nbsp;        Player currentPlayer = gameSession.getCurrentPlayer();</b>
+<b class="fc"><i>56</i>&nbsp;        CellsHandler cellsHandler = gameSession.getCellsHandler();</b>
+<i>57</i>&nbsp;
+<b class="fc"><i>58</i>&nbsp;        HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; neighbouringCoordsSelected = selectPositionsWorkersToForce(cellsHandler, currentPlayer);</b>
+<b class="fc"><i>59</i>&nbsp;        if (neighbouringCoordsSelected.size() != 0) {</b>
+<b class="fc"><i>60</i>&nbsp;            RequestMessage actionRequest = new RequestMessage(&quot;Do you want to force an opponent &quot; +</b>
+<i>61</i>&nbsp;                    &quot;to the space directly on the other side of your Worker? (Remember you will &quot; +
+<i>62</i>&nbsp;                    &quot;have to use that Worker during your move and build of this turn).&quot;);
+<b class="fc"><i>63</i>&nbsp;            ResponseMessage actionResponse = gameSession.sendRequest(actionRequest,</b>
+<b class="fc"><i>64</i>&nbsp;                    currentPlayer.getNickname(), ResponseMessage.class);</b>
+<i>65</i>&nbsp;
+<b class="fc"><i>66</i>&nbsp;            if (actionResponse.isResponse())</b>
+<b class="fc"><i>67</i>&nbsp;                return askWhereToForce(gameSession, neighbouringCoordsSelected);</b>
+<b class="nc"><i>68</i>&nbsp;            else return null;</b>
+<i>69</i>&nbsp;        }
+<i>70</i>&nbsp;
+<b class="fc"><i>71</i>&nbsp;        return null;</b>
+<i>72</i>&nbsp;    }
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;    /**
+<i>75</i>&nbsp;     * This method select all the positions of the workers that can be forced.
+<i>76</i>&nbsp;     * @param cellsHandler The handler of the data of the cells contained in the model.
+<i>77</i>&nbsp;     * @param currentPlayer The current player of the turn.
+<i>78</i>&nbsp;     * @return  A map where the keys are the coordinates of the workers that can force someone and the values are
+<i>79</i>&nbsp;     *          the coordinates of the workers that can be forced.
+<i>80</i>&nbsp;     */
+<i>81</i>&nbsp;    public HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; selectPositionsWorkersToForce(CellsHandler cellsHandler, Player currentPlayer) {
+<b class="fc"><i>82</i>&nbsp;        HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; neighbouringCoordsSelected = cellsHandler.findWorkersNeighbouringCoords(currentPlayer);</b>
+<b class="fc"><i>83</i>&nbsp;        ArrayList&lt;Coord&gt; key = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>84</i>&nbsp;        for (Coord c : neighbouringCoordsSelected.keySet()) {</b>
+<b class="fc"><i>85</i>&nbsp;            key.add(c.clone());</b>
+<b class="fc"><i>86</i>&nbsp;        }</b>
+<i>87</i>&nbsp;
+<b class="fc"><i>88</i>&nbsp;        for (Iterator&lt;Coord&gt; coordKeyIterator = neighbouringCoordsSelected.keySet().iterator(); coordKeyIterator.hasNext(); ) {</b>
+<b class="fc"><i>89</i>&nbsp;            Coord coordForcer = coordKeyIterator.next();</b>
+<b class="fc"><i>90</i>&nbsp;            ArrayList&lt;Coord&gt; actualKeyValues = neighbouringCoordsSelected.get(coordForcer);</b>
+<i>91</i>&nbsp;
+<b class="fc"><i>92</i>&nbsp;            for (Iterator&lt;Coord&gt; coordIterator = actualKeyValues.iterator(); coordIterator.hasNext(); ) {</b>
+<b class="fc"><i>93</i>&nbsp;                Coord coordForced = coordIterator.next();</b>
+<b class="fc"><i>94</i>&nbsp;                Cell cell = cellsHandler.getCell(coordForced);</b>
+<i>95</i>&nbsp;
+<b class="fc"><i>96</i>&nbsp;                if (!(cell.getOccupiedByWorker())) {</b>
+<b class="fc"><i>97</i>&nbsp;                    coordIterator.remove();</b>
+<i>98</i>&nbsp;                }
+<i>99</i>&nbsp;                else {
+<b class="fc"><i>100</i>&nbsp;                    if (!(cellsHandler.isOppositeCoordFree(coordForcer, coordForced)) || key.contains(coordForced)) {</b>
+<b class="fc"><i>101</i>&nbsp;                        coordIterator.remove();</b>
+<i>102</i>&nbsp;                    }
+<i>103</i>&nbsp;                }
+<b class="fc"><i>104</i>&nbsp;            }</b>
+<i>105</i>&nbsp;
+<b class="fc"><i>106</i>&nbsp;            if (actualKeyValues.size() == 0) coordKeyIterator.remove();</b>
+<b class="fc"><i>107</i>&nbsp;        }</b>
+<b class="fc"><i>108</i>&nbsp;        return neighbouringCoordsSelected;</b>
+<i>109</i>&nbsp;    }
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;    /**
+<i>112</i>&nbsp;     * This method interacts with the client asking him where he wants to force the opponent&#39;s worker.
+<i>113</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>114</i>&nbsp;     * @param availableWorkersToForce These are all the workers that the player can use to force someone.
+<i>115</i>&nbsp;     * @return The coordinates where the player has decided to force an opponent&#39;s worker.
+<i>116</i>&nbsp;     * @throws GameEndedException if the player decides to leave the game during his turn.
+<i>117</i>&nbsp;     */
+<i>118</i>&nbsp;    private Coord askWhereToForce(GameSession gameSession, HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availableWorkersToForce) throws GameEndedException {
+<b class="fc"><i>119</i>&nbsp;        ActionRequest actionRequest = new ActionRequest(&quot;Choose a worker to force in another position.&quot;, availableWorkersToForce);</b>
+<b class="fc"><i>120</i>&nbsp;        ActionResponse actionResponse = gameSession.sendRequest(actionRequest, gameSession.getCurrentPlayer().getNickname(), ActionResponse.class);</b>
+<i>121</i>&nbsp;
+<b class="fc"><i>122</i>&nbsp;        Coord coordWorkerForcer = actionResponse.getWorkerPosition();</b>
+<b class="fc"><i>123</i>&nbsp;        Coord coordWorkerForced = actionResponse.getPosition();</b>
+<i>124</i>&nbsp;
+<b class="fc"><i>125</i>&nbsp;        Coord coordToForce = gameSession.getCellsHandler().findOppositeCoordFree(coordWorkerForcer, coordWorkerForced);</b>
+<i>126</i>&nbsp;
+<b class="fc"><i>127</i>&nbsp;        Worker workerForced = gameSession.getWorkersHandler().getWorker(coordWorkerForced);</b>
+<b class="fc"><i>128</i>&nbsp;        gameSession.getWorkersHandler().changePosition(workerForced, coordToForce);</b>
+<i>129</i>&nbsp;
+<b class="fc"><i>130</i>&nbsp;        return coordWorkerForcer;</b>
+<i>131</i>&nbsp;    }
+<i>132</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 21:45</div>
+</div>
+</body>
+</html>

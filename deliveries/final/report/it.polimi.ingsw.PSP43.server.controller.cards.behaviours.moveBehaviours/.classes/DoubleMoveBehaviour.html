@@ -1,0 +1,181 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: DoubleMoveBehaviour</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.controller.cards.behaviours.moveBehaviours</a> ]
+</div>
+
+<h1>Coverage Summary for Class: DoubleMoveBehaviour (it.polimi.ingsw.PSP43.server.controller.cards.behaviours.moveBehaviours)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">DoubleMoveBehaviour</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (32/ 32)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.controller.cards.behaviours.moveBehaviours;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.networkMessages.ActionResponse;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.networkMessages.ResponseMessage;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.DataToMove;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.gameStates.GameSession;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Player;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Worker;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.cards.AbstractGodCard;
+<i>11</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.CardsHandler;
+<i>12</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.WorkersHandler;
+<i>13</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.modelHandlersException.GameEndedException;
+<i>14</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.modelHandlersException.GameLostException;
+<i>15</i>&nbsp;import it.polimi.ingsw.PSP43.server.network.networkMessages.RequestMessage;
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;import java.util.ArrayList;
+<i>18</i>&nbsp;import java.util.HashMap;
+<i>19</i>&nbsp;import java.util.Iterator;
+<i>20</i>&nbsp;import java.util.Map;
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;/**
+<i>23</i>&nbsp; * This class is made to give run-time the possibility to a card
+<i>24</i>&nbsp; * to move twice a worker, but not back to its initial position.
+<i>25</i>&nbsp; */
+<b class="fc"><i>26</i>&nbsp;public class DoubleMoveBehaviour extends BasicMoveBehaviour {</b>
+<i>27</i>&nbsp;    private static final long serialVersionUID = -6730459810903042771L;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    /**
+<i>30</i>&nbsp;     * This method handles the move of the player&#39;s worker and gives him to move it twice, but not back to the previous position.
+<i>31</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>32</i>&nbsp;     */
+<i>33</i>&nbsp;    public void handleInitMove(GameSession gameSession) throws GameEndedException, GameLostException {
+<b class="fc"><i>34</i>&nbsp;        Player currentPlayer = gameSession.getCurrentPlayer();</b>
+<b class="fc"><i>35</i>&nbsp;        WorkersHandler workersHandler = gameSession.getWorkersHandler();</b>
+<i>36</i>&nbsp;
+<b class="fc"><i>37</i>&nbsp;        ActionResponse response = askForMove(gameSession);</b>
+<i>38</i>&nbsp;
+<b class="fc"><i>39</i>&nbsp;        Coord nextPositionChosen = response.getPosition();</b>
+<b class="fc"><i>40</i>&nbsp;        Worker workerMoved = workersHandler.getWorker(response.getWorkerPosition());</b>
+<i>41</i>&nbsp;
+<b class="fc"><i>42</i>&nbsp;        this.move(new DataToMove(gameSession, gameSession.getCurrentPlayer(), workerMoved, nextPositionChosen));</b>
+<i>43</i>&nbsp;
+<b class="fc"><i>44</i>&nbsp;        RequestMessage requestMessage = new RequestMessage(&quot;Do you want to move another time?&quot;);</b>
+<b class="fc"><i>45</i>&nbsp;        ResponseMessage responseMessage = gameSession.sendRequest(requestMessage, currentPlayer.getNickname(), ResponseMessage.class);</b>
+<i>46</i>&nbsp;
+<b class="fc"><i>47</i>&nbsp;        if (responseMessage.isResponse()) {</b>
+<b class="fc"><i>48</i>&nbsp;            HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositionsNextMove =</b>
+<b class="fc"><i>49</i>&nbsp;                    findAvailablePositionsToMove(gameSession, workerMoved.getPreviousPosition(), workerMoved.getCurrentPosition());</b>
+<i>50</i>&nbsp;
+<b class="fc"><i>51</i>&nbsp;            response = askForMove(gameSession, availablePositionsNextMove);</b>
+<i>52</i>&nbsp;
+<b class="fc"><i>53</i>&nbsp;            nextPositionChosen = response.getPosition();</b>
+<b class="fc"><i>54</i>&nbsp;            this.move(new DataToMove(gameSession, gameSession.getCurrentPlayer(), workerMoved, nextPositionChosen));</b>
+<i>55</i>&nbsp;        }
+<b class="fc"><i>56</i>&nbsp;    }</b>
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;    /**
+<i>59</i>&nbsp;     * This method finds all the positions in which the workers passed as parameter can move for the second time, excluding
+<i>60</i>&nbsp;     * the previous position.
+<i>61</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>62</i>&nbsp;     * @param coordToExclude The coordinates excluded from the possible ones in which the workers can move.
+<i>63</i>&nbsp;     * @param coordWorkerMoved The coordinates of the worker that is moving.
+<i>64</i>&nbsp;     * @return The HashMap that contains as a key value the coordinates of the current position of the worker and as values
+<i>65</i>&nbsp;     * all the coordinates in which the worker can move the second time.
+<i>66</i>&nbsp;     */
+<i>67</i>&nbsp;    public HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; findAvailablePositionsToMove(GameSession gameSession, Coord coordToExclude, Coord coordWorkerMoved) {
+<b class="fc"><i>68</i>&nbsp;        CardsHandler cardsHandler = gameSession.getCardsHandler();</b>
+<b class="fc"><i>69</i>&nbsp;        AbstractGodCard abstractGodCard = cardsHandler.getPlayerCard(gameSession.getCurrentPlayer().getNickname());</b>
+<i>70</i>&nbsp;
+<b class="fc"><i>71</i>&nbsp;        HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositions =  abstractGodCard.findAvailablePositionsToMove(gameSession);</b>
+<b class="fc"><i>72</i>&nbsp;        for (Coord c : availablePositions.keySet()) {</b>
+<b class="fc"><i>73</i>&nbsp;            availablePositions.get(c).removeIf(c1</b>
+<b class="fc"><i>74</i>&nbsp;                    -&gt; c1.getY() == coordToExclude.getY() &amp;&amp; c1.getX() == coordToExclude.getX());</b>
+<b class="fc"><i>75</i>&nbsp;        }</b>
+<i>76</i>&nbsp;
+<b class="fc"><i>77</i>&nbsp;        excludeCoordWorkerNotMoved(availablePositions, coordWorkerMoved);</b>
+<i>78</i>&nbsp;
+<b class="fc"><i>79</i>&nbsp;        return availablePositions;</b>
+<i>80</i>&nbsp;    }
+<i>81</i>&nbsp;
+<i>82</i>&nbsp;    /**
+<i>83</i>&nbsp;     * This method is created to support the method findAvailablePositionsToMove(...) of this class to find all the
+<i>84</i>&nbsp;     * available positions in which the player can move twice, eliminating the positions related to
+<i>85</i>&nbsp;     * the unmoved worker.
+<i>86</i>&nbsp;     * @param availablePositions The available positions finded in a basic way by findAvailablePositionsToMove(...).
+<i>87</i>&nbsp;     * @param coordNotEliminate The coord of the worker that can move in this turn (because it has just been moved).
+<i>88</i>&nbsp;     */
+<i>89</i>&nbsp;    private void excludeCoordWorkerNotMoved(HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositions, Coord coordNotEliminate) {
+<b class="fc"><i>90</i>&nbsp;        for (Iterator&lt;Map.Entry&lt;Coord, ArrayList&lt;Coord&gt;&gt;&gt; entryIterator = availablePositions.entrySet().iterator(); entryIterator.hasNext(); ) {</b>
+<b class="fc"><i>91</i>&nbsp;            Map.Entry&lt;Coord, ArrayList&lt;Coord&gt;&gt; currentEntry = entryIterator.next();</b>
+<b class="fc"><i>92</i>&nbsp;            Coord actualWorkerPosition = currentEntry.getKey();</b>
+<i>93</i>&nbsp;
+<b class="fc"><i>94</i>&nbsp;            if (!(actualWorkerPosition.equals(coordNotEliminate)))</b>
+<b class="fc"><i>95</i>&nbsp;                entryIterator.remove();</b>
+<b class="fc"><i>96</i>&nbsp;        }</b>
+<b class="fc"><i>97</i>&nbsp;    }</b>
+<i>98</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 21:45</div>
+</div>
+</body>
+</html>

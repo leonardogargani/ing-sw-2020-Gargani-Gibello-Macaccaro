@@ -1,0 +1,66 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: MoveBehavior</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.controller.cards.behaviours.moveBehaviours</a> ]
+</div>
+
+<h1>Coverage Summary for Class: MoveBehavior (it.polimi.ingsw.PSP43.server.controller.cards.behaviours.moveBehaviours)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">MoveBehavior</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.controller.cards.behaviours.moveBehaviours;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.gameStates.GameSession;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.modelHandlersException.GameEndedException;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.modelHandlersException.GameLostException;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.modelHandlersException.WinnerCaughtException;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;/**
+<i>9</i>&nbsp; * This is the interface used to implements different behaviours of move, according to the different cards.
+<i>10</i>&nbsp; */
+<i>11</i>&nbsp;public interface MoveBehavior {
+<i>12</i>&nbsp;    /**
+<i>13</i>&nbsp;     * This method is used to handle the move during a turn.
+<i>14</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>15</i>&nbsp;     * @throws GameEndedException if the player decides to leave the game during his turn.
+<i>16</i>&nbsp;     * @throws GameLostException if the player can&#39;t do any move.
+<i>17</i>&nbsp;     */
+<i>18</i>&nbsp;    void handleInitMove(GameSession gameSession) throws GameEndedException, GameLostException;
+<i>19</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 21:45</div>
+</div>
+</body>
+</html>

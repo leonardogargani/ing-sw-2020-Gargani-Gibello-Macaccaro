@@ -1,0 +1,133 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CliBottomMenu</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.client.graphic.cli</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CliBottomMenu (it.polimi.ingsw.PSP43.client.graphic.cli)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CliBottomMenu</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60%
+  </span>
+  <span class="absValue">
+    (3/ 5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    55.6%
+  </span>
+  <span class="absValue">
+    (5/ 9)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.client.graphic.cli;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Color;
+<i>5</i>&nbsp;
+<b class="fc"><i>6</i>&nbsp;public class CliBottomMenu {</b>
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;    private String content;
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;    /**
+<i>12</i>&nbsp;     * Method that prints the content attribute to the cli.
+<i>13</i>&nbsp;     */
+<i>14</i>&nbsp;    public void show() {
+<b class="fc"><i>15</i>&nbsp;        System.out.println(content);</b>
+<b class="fc"><i>16</i>&nbsp;    }</b>
+<i>17</i>&nbsp;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;    /**
+<i>20</i>&nbsp;     * Method that sets the content of the menu which will be displayed at the bottom of the screen.
+<i>21</i>&nbsp;     * @param content simple statement to display
+<i>22</i>&nbsp;     */
+<i>23</i>&nbsp;    public void setContent(String content) {
+<b class="fc"><i>24</i>&nbsp;        this.content = content;</b>
+<b class="fc"><i>25</i>&nbsp;    }</b>
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    /**
+<i>29</i>&nbsp;     * Method that clears the content of this menu.
+<i>30</i>&nbsp;     */
+<i>31</i>&nbsp;    public void clear() {
+<b class="nc"><i>32</i>&nbsp;        this.setContent(&quot;&quot;);</b>
+<b class="nc"><i>33</i>&nbsp;    }</b>
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;    /**
+<i>37</i>&nbsp;     * Method that, given the nickname of a player, sets the content of the menu
+<i>38</i>&nbsp;     * to a nicely formatted &quot;*nickname* won the game&quot;.
+<i>39</i>&nbsp;     * @param nick nickname of the player playing his own turn at the moment
+<i>40</i>&nbsp;     */
+<i>41</i>&nbsp;    public void setContentWithNick(String nick) {
+<b class="nc"><i>42</i>&nbsp;        this.content =</b>
+<i>43</i>&nbsp;                Color.ANSI_RED +
+<i>44</i>&nbsp;                &quot;          -------------------------------------          \n&quot; +
+<i>45</i>&nbsp;                &quot;                    &quot; + nick + &quot; won the game            \n&quot; +
+<i>46</i>&nbsp;                &quot;          -------------------------------------          \n&quot; +
+<i>47</i>&nbsp;                Color.RESET;
+<b class="nc"><i>48</i>&nbsp;    }</b>
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 21:45</div>
+</div>
+</body>
+</html>

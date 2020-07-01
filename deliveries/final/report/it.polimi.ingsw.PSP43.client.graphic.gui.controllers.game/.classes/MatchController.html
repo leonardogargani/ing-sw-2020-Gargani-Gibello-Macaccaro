@@ -1,0 +1,352 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: MatchController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.client.graphic.gui.controllers.game</a> ]
+</div>
+
+<h1>Coverage Summary for Class: MatchController (it.polimi.ingsw.PSP43.client.graphic.gui.controllers.game)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MatchController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 99)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.client.graphic.gui.controllers.game;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.graphic.gui.controllers.AbstractController;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.ClientBG;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.networkMessages.ActionResponse;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.networkMessages.LeaveGameMessage;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.networkMessages.ResponseMessage;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.network.networkMessages.*;
+<i>10</i>&nbsp;import javafx.fxml.FXML;
+<i>11</i>&nbsp;import javafx.scene.control.Label;
+<i>12</i>&nbsp;import javafx.scene.image.ImageView;
+<i>13</i>&nbsp;import javafx.scene.input.MouseEvent;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;import java.util.ArrayList;
+<i>16</i>&nbsp;import java.util.Map;
+<i>17</i>&nbsp;
+<b class="nc"><i>18</i>&nbsp;public class MatchController extends AbstractController {</b>
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    @FXML private Label topMenu;
+<i>21</i>&nbsp;    @FXML private Label bottomMenu;
+<i>22</i>&nbsp;    @FXML private Label player1Nick;
+<i>23</i>&nbsp;    @FXML private Label player2Nick;
+<i>24</i>&nbsp;    @FXML private Label player3Nick;
+<i>25</i>&nbsp;    @FXML private Label player1CardDescription;
+<i>26</i>&nbsp;    @FXML private ImageView player1Card;
+<i>27</i>&nbsp;    @FXML private ImageView player2Card;
+<i>28</i>&nbsp;    @FXML private ImageView player3Card;
+<i>29</i>&nbsp;    @FXML private ImageView player1Worker;
+<i>30</i>&nbsp;    @FXML private ImageView player2Worker;
+<i>31</i>&nbsp;    @FXML private ImageView player3Worker;
+<i>32</i>&nbsp;    @FXML private ImageView confirm;
+<i>33</i>&nbsp;    @FXML private ImageView delete;
+<i>34</i>&nbsp;    @FXML private ImageView exitButton;
+<i>35</i>&nbsp;    @FXML private ImageView helperButton;
+<i>36</i>&nbsp;    @FXML private ImageView c00;
+<i>37</i>&nbsp;    @FXML private ImageView c10;
+<i>38</i>&nbsp;    @FXML private ImageView c20;
+<i>39</i>&nbsp;    @FXML private ImageView c30;
+<i>40</i>&nbsp;    @FXML private ImageView c40;
+<i>41</i>&nbsp;    @FXML private ImageView c01;
+<i>42</i>&nbsp;    @FXML private ImageView c11;
+<i>43</i>&nbsp;    @FXML private ImageView c21;
+<i>44</i>&nbsp;    @FXML private ImageView c31;
+<i>45</i>&nbsp;    @FXML private ImageView c41;
+<i>46</i>&nbsp;    @FXML private ImageView c02;
+<i>47</i>&nbsp;    @FXML private ImageView c12;
+<i>48</i>&nbsp;    @FXML private ImageView c22;
+<i>49</i>&nbsp;    @FXML private ImageView c32;
+<i>50</i>&nbsp;    @FXML private ImageView c42;
+<i>51</i>&nbsp;    @FXML private ImageView c03;
+<i>52</i>&nbsp;    @FXML private ImageView c13;
+<i>53</i>&nbsp;    @FXML private ImageView c23;
+<i>54</i>&nbsp;    @FXML private ImageView c33;
+<i>55</i>&nbsp;    @FXML private ImageView c43;
+<i>56</i>&nbsp;    @FXML private ImageView c04;
+<i>57</i>&nbsp;    @FXML private ImageView c14;
+<i>58</i>&nbsp;    @FXML private ImageView c24;
+<i>59</i>&nbsp;    @FXML private ImageView c34;
+<i>60</i>&nbsp;    @FXML private ImageView c44;
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    private static ClientBG clientBG;
+<i>63</i>&nbsp;    private static ActionRequest actionRequest;
+<i>64</i>&nbsp;    private static RequestMessage requestMessage;
+<i>65</i>&nbsp;    private static BoardController boardController;
+<i>66</i>&nbsp;    private static PlayersController playersController;
+<i>67</i>&nbsp;    private static Label topLabel;
+<i>68</i>&nbsp;    private static Label bottomLabel;
+<i>69</i>&nbsp;    //Initialization moved in initialize method
+<i>70</i>&nbsp;    private static int counter;
+<i>71</i>&nbsp;    private static int numberOfActionRequestArrived;
+<i>72</i>&nbsp;    private Coord startPosition;
+<i>73</i>&nbsp;    private static ImageView confirmButton;
+<i>74</i>&nbsp;    private static ImageView deleteButton;
+<i>75</i>&nbsp;
+<i>76</i>&nbsp;    /**
+<i>77</i>&nbsp;     * Initialize method for this controller.
+<i>78</i>&nbsp;     */
+<i>79</i>&nbsp;    @FXML
+<i>80</i>&nbsp;    private void initialize() {
+<b class="nc"><i>81</i>&nbsp;        actionRequest = null;</b>
+<b class="nc"><i>82</i>&nbsp;        numberOfActionRequestArrived = 0;</b>
+<b class="nc"><i>83</i>&nbsp;        counter = 0;</b>
+<b class="nc"><i>84</i>&nbsp;        ImageView[][] board = new ImageView[5][5];</b>
+<b class="nc"><i>85</i>&nbsp;        board[0] = new ImageView[]{c00, c01, c02, c03, c04};</b>
+<b class="nc"><i>86</i>&nbsp;        board[1] = new ImageView[]{c10, c11, c12, c13, c14};</b>
+<b class="nc"><i>87</i>&nbsp;        board[2] = new ImageView[]{c20, c21, c22, c23, c24};</b>
+<b class="nc"><i>88</i>&nbsp;        board[3] = new ImageView[]{c30, c31, c32, c33, c34};</b>
+<b class="nc"><i>89</i>&nbsp;        board[4] = new ImageView[]{c40, c41, c42, c43, c44};</b>
+<b class="nc"><i>90</i>&nbsp;        boardController = new BoardController(board);</b>
+<b class="nc"><i>91</i>&nbsp;        Label[] labels = new Label[]{player1Nick, player2Nick, player3Nick, player1CardDescription};</b>
+<b class="nc"><i>92</i>&nbsp;        ImageView[] images = new ImageView[]{player1Card, player2Card, player3Card, player1Worker, player2Worker, player3Worker};</b>
+<b class="nc"><i>93</i>&nbsp;        playersController = new PlayersController(labels, images, getNick());</b>
+<b class="nc"><i>94</i>&nbsp;        exitButton.setId(&quot;decision-button&quot;);</b>
+<b class="nc"><i>95</i>&nbsp;        helperButton.setId(&quot;decision-button&quot;);</b>
+<b class="nc"><i>96</i>&nbsp;        confirm.setId(&quot;decision-button&quot;);</b>
+<b class="nc"><i>97</i>&nbsp;        delete.setId(&quot;decision-button&quot;);</b>
+<b class="nc"><i>98</i>&nbsp;        player2Card.setId(&quot;decision-button&quot;);</b>
+<b class="nc"><i>99</i>&nbsp;        player3Card.setId(&quot;decision-button&quot;);</b>
+<b class="nc"><i>100</i>&nbsp;        clientBG = AbstractController.getClientBG();</b>
+<b class="nc"><i>101</i>&nbsp;        topMenu.setId(&quot;top-label&quot;);</b>
+<b class="nc"><i>102</i>&nbsp;        bottomMenu.setId(&quot;bottom-label&quot;);</b>
+<b class="nc"><i>103</i>&nbsp;        player1Nick.setId(&quot;player1-label&quot;);</b>
+<b class="nc"><i>104</i>&nbsp;        player2Nick.setId(&quot;player2-label&quot;);</b>
+<b class="nc"><i>105</i>&nbsp;        player3Nick.setId(&quot;player3-label&quot;);</b>
+<b class="nc"><i>106</i>&nbsp;        player1CardDescription.setId(&quot;player1CardDescription-label&quot;);</b>
+<b class="nc"><i>107</i>&nbsp;        confirmButton = confirm;</b>
+<b class="nc"><i>108</i>&nbsp;        confirm.setDisable(true);</b>
+<b class="nc"><i>109</i>&nbsp;        deleteButton = delete;</b>
+<b class="nc"><i>110</i>&nbsp;        delete.setDisable(true);</b>
+<b class="nc"><i>111</i>&nbsp;        topLabel = topMenu;</b>
+<b class="nc"><i>112</i>&nbsp;        bottomLabel = bottomMenu;</b>
+<i>113</i>&nbsp;    }
+<i>114</i>&nbsp;
+<i>115</i>&nbsp;
+<i>116</i>&nbsp;    /**
+<i>117</i>&nbsp;     * Mouse event catcher for board cells.
+<i>118</i>&nbsp;     * @param event is a generic mouse event on a cell of the board
+<i>119</i>&nbsp;     */
+<i>120</i>&nbsp;    @FXML
+<i>121</i>&nbsp;    private void onCellClicked(MouseEvent event) {
+<b class="nc"><i>122</i>&nbsp;        if (actionRequest != null) {</b>
+<b class="nc"><i>123</i>&nbsp;            Map&lt;Coord, ArrayList&lt;Coord&gt;&gt; hashMap = actionRequest.getCellsAvailable();</b>
+<b class="nc"><i>124</i>&nbsp;            ImageView img = (ImageView) event.getSource();</b>
+<b class="nc"><i>125</i>&nbsp;            if (numberOfActionRequestArrived &lt;= 1) {</b>
+<b class="nc"><i>126</i>&nbsp;                ActionResponse response = boardController.checkAvailability(hashMap, img);</b>
+<b class="nc"><i>127</i>&nbsp;                if (response != null) {</b>
+<b class="nc"><i>128</i>&nbsp;                    clientBG.sendMessage(response);</b>
+<b class="nc"><i>129</i>&nbsp;                    bottomLabel.setText(&quot;&quot;);</b>
+<b class="nc"><i>130</i>&nbsp;                    numberOfActionRequestArrived++;</b>
+<b class="nc"><i>131</i>&nbsp;                    actionRequest=null;</b>
+<b class="nc"><i>132</i>&nbsp;                } else bottomLabel.setText(&quot;You can&#39;t go there!\nChose another position to place your worker&quot;);</b>
+<b class="nc"><i>133</i>&nbsp;            } else if (counter == 0) {</b>
+<b class="nc"><i>134</i>&nbsp;                startPosition = boardController.checkWorkerChosen(hashMap, img);</b>
+<b class="nc"><i>135</i>&nbsp;                if (startPosition != null) {</b>
+<b class="nc"><i>136</i>&nbsp;                    boardController.removeUnderlineWorkers(hashMap);</b>
+<b class="nc"><i>137</i>&nbsp;                    bottomLabel.setText(actionRequest.getMessage());</b>
+<b class="nc"><i>138</i>&nbsp;                    counter++;</b>
+<b class="nc"><i>139</i>&nbsp;                    boardController.underlineMoves(hashMap, startPosition);</b>
+<i>140</i>&nbsp;                } else {
+<b class="nc"><i>141</i>&nbsp;                    bottomLabel.setText(&quot;You haven&#39;t a worker in the selected cell!\nSelect one of your workers!&quot;);</b>
+<i>142</i>&nbsp;                }
+<i>143</i>&nbsp;            } else {
+<b class="nc"><i>144</i>&nbsp;                Coord response = boardController.checkAction(hashMap, img, startPosition);</b>
+<b class="nc"><i>145</i>&nbsp;                if (response != null) {</b>
+<b class="nc"><i>146</i>&nbsp;                    clientBG.sendMessage(new ActionResponse(startPosition, response));</b>
+<b class="nc"><i>147</i>&nbsp;                    counter = 0;</b>
+<b class="nc"><i>148</i>&nbsp;                    boardController.removeUnderlineMoves(hashMap, startPosition);</b>
+<b class="nc"><i>149</i>&nbsp;                    actionRequest = null;</b>
+<b class="nc"><i>150</i>&nbsp;                    numberOfActionRequestArrived++;</b>
+<b class="nc"><i>151</i>&nbsp;                    bottomLabel.setText(&quot;&quot;);</b>
+<i>152</i>&nbsp;                } else {
+<b class="nc"><i>153</i>&nbsp;                    bottomLabel.setText(&quot;This cell isn&#39;t available for your action!\nChoose another cell!&quot;);</b>
+<i>154</i>&nbsp;                }
+<i>155</i>&nbsp;            }
+<b class="nc"><i>156</i>&nbsp;        } else if(requestMessage!=null){</b>
+<b class="nc"><i>157</i>&nbsp;            bottomMenu.setText(&quot;You have to answer this question before moving:\n&quot;+requestMessage.getMessage());</b>
+<i>158</i>&nbsp;        }
+<i>159</i>&nbsp;        else{
+<b class="nc"><i>160</i>&nbsp;            bottomMenu.setText(&quot;Wait for your turn!&quot;);</b>
+<i>161</i>&nbsp;        }
+<i>162</i>&nbsp;    }
+<i>163</i>&nbsp;
+<i>164</i>&nbsp;    /**
+<i>165</i>&nbsp;     * Mouse event catcher for decisions take by confirm and delete button.
+<i>166</i>&nbsp;     * @param event is a generic mouse event on one of that two images
+<i>167</i>&nbsp;     */
+<i>168</i>&nbsp;    @FXML
+<i>169</i>&nbsp;    private void onDecisionTake(javafx.scene.input.MouseEvent event) {
+<b class="nc"><i>170</i>&nbsp;        if(!confirm.isDisable() &amp;&amp; !delete.isDisable()){</b>
+<b class="nc"><i>171</i>&nbsp;            if (event.getSource() == confirm) {</b>
+<b class="nc"><i>172</i>&nbsp;                clientBG.sendMessage(new ResponseMessage(true));</b>
+<b class="nc"><i>173</i>&nbsp;                confirmButton.setDisable(true);</b>
+<b class="nc"><i>174</i>&nbsp;                deleteButton.setDisable(true);</b>
+<b class="nc"><i>175</i>&nbsp;                bottomLabel.setText(&quot;&quot;);</b>
+<b class="nc"><i>176</i>&nbsp;                requestMessage = null;</b>
+<b class="nc"><i>177</i>&nbsp;            } else if (event.getSource() == delete) {</b>
+<b class="nc"><i>178</i>&nbsp;                clientBG.sendMessage(new ResponseMessage(false));</b>
+<b class="nc"><i>179</i>&nbsp;                confirmButton.setDisable(true);</b>
+<b class="nc"><i>180</i>&nbsp;                deleteButton.setDisable(true);</b>
+<b class="nc"><i>181</i>&nbsp;                bottomLabel.setText(&quot;&quot;);</b>
+<b class="nc"><i>182</i>&nbsp;                requestMessage = null;</b>
+<i>183</i>&nbsp;            } else {
+<b class="nc"><i>184</i>&nbsp;                String prev = bottomMenu.getText();</b>
+<b class="nc"><i>185</i>&nbsp;                bottomMenu.setText(&quot;You can only chose V or X now\n&quot; + prev);}</b>
+<i>186</i>&nbsp;        }
+<i>187</i>&nbsp;    }
+<i>188</i>&nbsp;
+<i>189</i>&nbsp;    /**
+<i>190</i>&nbsp;     * Event method called when you click on the exit button, it sends a LeaveGameMessage and then sets the home scene.
+<i>191</i>&nbsp;     */
+<i>192</i>&nbsp;    @FXML
+<i>193</i>&nbsp;    private void onExitClicked() {
+<b class="nc"><i>194</i>&nbsp;        clientBG.sendMessage(new LeaveGameMessage());</b>
+<b class="nc"><i>195</i>&nbsp;        super.handleExit();</b>
+<i>196</i>&nbsp;    }
+<i>197</i>&nbsp;
+<i>198</i>&nbsp;    /**
+<i>199</i>&nbsp;     * Event method called when you click on an opponent player&#39;s god card.
+<i>200</i>&nbsp;     * @param event is the MouseEvent generated when you click on an opponent player&#39;s god card
+<i>201</i>&nbsp;     */
+<i>202</i>&nbsp;    @FXML
+<i>203</i>&nbsp;    private void onCardClicked(MouseEvent event) {
+<b class="nc"><i>204</i>&nbsp;        playersController.showGod((ImageView) event.getSource());</b>
+<i>205</i>&nbsp;    }
+<i>206</i>&nbsp;
+<i>207</i>&nbsp;    @FXML
+<b class="nc"><i>208</i>&nbsp;    private void onHelpClicked(){ playersController.showRules();}</b>
+<i>209</i>&nbsp;
+<i>210</i>&nbsp;
+<i>211</i>&nbsp;    /**
+<i>212</i>&nbsp;     * This method when an ActionRequest arrives, puts it in the local variable request.
+<i>213</i>&nbsp;     * After that it sets the text of the label and it underlines the workers that you can use.
+<i>214</i>&nbsp;     * @param request is the ActionRequest message that contains cells that are available for the move or the build
+<i>215</i>&nbsp;     */
+<i>216</i>&nbsp;    public static void setActionRequest(ActionRequest request) {
+<b class="nc"><i>217</i>&nbsp;        actionRequest = request;</b>
+<b class="nc"><i>218</i>&nbsp;        topLabel.setText(&quot;It&#39;s your turn&quot;);</b>
+<b class="nc"><i>219</i>&nbsp;        if (numberOfActionRequestArrived &lt;= 1) {</b>
+<b class="nc"><i>220</i>&nbsp;            bottomLabel.setText(&quot;Place your worker &quot; + numberOfActionRequestArrived);</b>
+<i>221</i>&nbsp;        } else {
+<b class="nc"><i>222</i>&nbsp;            bottomLabel.setText(&quot;Choose the worker you want for the action&quot;);</b>
+<b class="nc"><i>223</i>&nbsp;            boardController.underlineWorkers(request.getCellsAvailable());</b>
+<i>224</i>&nbsp;        }
+<i>225</i>&nbsp;    }
+<i>226</i>&nbsp;
+<i>227</i>&nbsp;
+<i>228</i>&nbsp;    /**
+<i>229</i>&nbsp;     * This method, when a playerListMessage arrives calls the showUpdate method on the playersController
+<i>230</i>&nbsp;     * to show players information updates.
+<i>231</i>&nbsp;     * @param playersListMessage contains players information that are nickname, card and color for each one
+<i>232</i>&nbsp;     */
+<i>233</i>&nbsp;    public static void updateScene(PlayersListMessage playersListMessage) {
+<b class="nc"><i>234</i>&nbsp;        playersController.showUpdate(playersListMessage);</b>
+<i>235</i>&nbsp;    }
+<i>236</i>&nbsp;
+<i>237</i>&nbsp;
+<i>238</i>&nbsp;    /**
+<i>239</i>&nbsp;     * This method, when a CellMessage arrives, calls the updateCell method on the board controller to update the cell.
+<i>240</i>&nbsp;     * @param message contains the cell to be updated
+<i>241</i>&nbsp;     */
+<i>242</i>&nbsp;    public static void updateBoard(CellMessage message) {
+<b class="nc"><i>243</i>&nbsp;        boardController.updateCell(message);</b>
+<i>244</i>&nbsp;    }
+<i>245</i>&nbsp;
+<i>246</i>&nbsp;
+<i>247</i>&nbsp;    /**
+<i>248</i>&nbsp;     * This method, when a TextMessage arrives, shows its content on the top label.
+<i>249</i>&nbsp;     * @param textMessage contains a String message to be shown
+<i>250</i>&nbsp;     */
+<i>251</i>&nbsp;    public static void showInTopMenu(TextMessage textMessage) {
+<b class="nc"><i>252</i>&nbsp;        if (textMessage.getPositionInScreen() == TextMessage.PositionInScreen.LOW_CENTER)</b>
+<b class="nc"><i>253</i>&nbsp;            topLabel.setText(textMessage.getMessage());</b>
+<b class="nc"><i>254</i>&nbsp;        else topLabel.setText(&quot;It&#39;s &quot; + textMessage.getMessage() + &quot;&#39;s turn&quot;);</b>
+<i>255</i>&nbsp;    }
+<i>256</i>&nbsp;
+<i>257</i>&nbsp;
+<i>258</i>&nbsp;    /**
+<i>259</i>&nbsp;     * This method, when a RequestMessage arrives , shows its content on the bottom label.
+<i>260</i>&nbsp;     * @param message contains a String message to be shown
+<i>261</i>&nbsp;     */
+<i>262</i>&nbsp;    public static void askQuestion(RequestMessage message) {
+<b class="nc"><i>263</i>&nbsp;        requestMessage = message;</b>
+<b class="nc"><i>264</i>&nbsp;        topLabel.setText(&quot;It&#39;s your turn&quot;);</b>
+<b class="nc"><i>265</i>&nbsp;        bottomLabel.setText(message.getMessage());</b>
+<b class="nc"><i>266</i>&nbsp;        confirmButton.setDisable(false);</b>
+<b class="nc"><i>267</i>&nbsp;        deleteButton.setDisable(false);</b>
+<i>268</i>&nbsp;    }
+<i>269</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 21:45</div>
+</div>
+</body>
+</html>

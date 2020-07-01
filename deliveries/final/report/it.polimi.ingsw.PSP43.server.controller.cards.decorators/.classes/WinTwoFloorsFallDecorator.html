@@ -1,0 +1,162 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: WinTwoFloorsFallDecorator</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.controller.cards.decorators</a> ]
+</div>
+
+<h1>Coverage Summary for Class: WinTwoFloorsFallDecorator (it.polimi.ingsw.PSP43.server.controller.cards.decorators)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">WinTwoFloorsFallDecorator</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    97%
+  </span>
+  <span class="absValue">
+    (32/ 33)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.controller.cards.decorators;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.gameStates.GameSession;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Player;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Worker;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.cards.AbstractGodCard;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.CellsHandler;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.PlayersHandler;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.WorkersHandler;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;import java.util.Map;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;/**
+<i>15</i>&nbsp; * This decorator is used to give to the player the opportunity to win if his worker moves down two or more levels in a move
+<i>16</i>&nbsp; */
+<b class="fc"><i>17</i>&nbsp;public class WinTwoFloorsFallDecorator extends PowerGodDecorator {</b>
+<i>18</i>&nbsp;    private static final long serialVersionUID = -9171126719022096338L;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    public WinTwoFloorsFallDecorator(AbstractGodCard godComponent) {
+<b class="fc"><i>21</i>&nbsp;        super(godComponent);</b>
+<b class="fc"><i>22</i>&nbsp;    }</b>
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;    /**
+<i>25</i>&nbsp;     * This method is used to check if the player has won the game. An additional case is when is worker moves down two or more levels.
+<i>26</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>27</i>&nbsp;     * @return True if the player has won, false otherwise.
+<i>28</i>&nbsp;     */
+<i>29</i>&nbsp;    public boolean checkConditionsToWin(GameSession gameSession) {
+<b class="fc"><i>30</i>&nbsp;        WorkersHandler workersHandler = gameSession.getWorkersHandler();</b>
+<b class="fc"><i>31</i>&nbsp;        PlayersHandler playersHandler = gameSession.getPlayersHandler();</b>
+<i>32</i>&nbsp;
+<b class="fc"><i>33</i>&nbsp;        String godName = super.getGodName();</b>
+<b class="fc"><i>34</i>&nbsp;        Map&lt;String, AbstractGodCard&gt; mapPlayerCard = gameSession.getCardsHandler().getMapOwnersCard();</b>
+<b class="fc"><i>35</i>&nbsp;        Player currentPlayer = null;</b>
+<i>36</i>&nbsp;
+<b class="fc"><i>37</i>&nbsp;        for (String s : mapPlayerCard.keySet()) {</b>
+<b class="fc"><i>38</i>&nbsp;            AbstractGodCard abstractGodCard = mapPlayerCard.get(s);</b>
+<b class="fc"><i>39</i>&nbsp;            if (abstractGodCard.getGodName().equals(godName)) {</b>
+<b class="fc"><i>40</i>&nbsp;                currentPlayer = playersHandler.getPlayer(s);</b>
+<i>41</i>&nbsp;            }
+<b class="fc"><i>42</i>&nbsp;        }</b>
+<i>43</i>&nbsp;
+<b class="fc"><i>44</i>&nbsp;        assert currentPlayer != null;</b>
+<b class="fc"><i>45</i>&nbsp;        Integer[] wIds = currentPlayer.getWorkersIdsArray();</b>
+<b class="fc"><i>46</i>&nbsp;        for (Integer i : wIds) {</b>
+<b class="fc"><i>47</i>&nbsp;            Worker worker = workersHandler.getWorker(i);</b>
+<b class="fc"><i>48</i>&nbsp;            if (worker.isLatestMoved()) {</b>
+<b class="fc"><i>49</i>&nbsp;                CellsHandler cellsHandler = gameSession.getCellsHandler();</b>
+<b class="fc"><i>50</i>&nbsp;                Coord oldPosition = worker.getPreviousPosition();</b>
+<b class="fc"><i>51</i>&nbsp;                int heightOldPosition = cellsHandler.getCell(oldPosition).getHeight();</b>
+<b class="fc"><i>52</i>&nbsp;                int heightNewPosition = cellsHandler.getCell(worker.getCurrentPosition()).getHeight();</b>
+<b class="fc"><i>53</i>&nbsp;                if (heightOldPosition - heightNewPosition &gt;= 2) {</b>
+<b class="fc"><i>54</i>&nbsp;                    return true;</b>
+<i>55</i>&nbsp;                }
+<i>56</i>&nbsp;            }
+<i>57</i>&nbsp;        }
+<b class="fc"><i>58</i>&nbsp;        return super.checkConditionsToWin(gameSession);</b>
+<i>59</i>&nbsp;    }
+<i>60</i>&nbsp;
+<i>61</i>&nbsp;    /**
+<i>62</i>&nbsp;     * This method is used to clean the card from possible decorators which could block some functionalities.
+<i>63</i>&nbsp;     * It is called when the blocker begins a new turn.
+<i>64</i>&nbsp;     * @param nameOfEffect The effect that the blocker has activated by doing a determined action.
+<i>65</i>&nbsp;     * @return The card cleaned by the blocking decorator passed as parameter.
+<i>66</i>&nbsp;     */
+<i>67</i>&nbsp;    public AbstractGodCard cleanFromEffects(String nameOfEffect) {
+<b class="fc"><i>68</i>&nbsp;        AbstractGodCard component = super.getGodComponent().cleanFromEffects(nameOfEffect);</b>
+<b class="fc"><i>69</i>&nbsp;        Class&lt;?&gt; c = null;</b>
+<i>70</i>&nbsp;        try {
+<b class="fc"><i>71</i>&nbsp;            c = Class.forName(nameOfEffect);</b>
+<b class="fc"><i>72</i>&nbsp;        } catch (ClassNotFoundException e) { e.printStackTrace(); }</b>
+<i>73</i>&nbsp;
+<b class="fc"><i>74</i>&nbsp;        assert c != null;</b>
+<b class="fc"><i>75</i>&nbsp;        if (!c.isInstance(this))</b>
+<b class="fc"><i>76</i>&nbsp;            return new WinTwoFloorsFallDecorator(component);</b>
+<b class="nc"><i>77</i>&nbsp;        else return component;</b>
+<i>78</i>&nbsp;    }
+<i>79</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 21:45</div>
+</div>
+</body>
+</html>

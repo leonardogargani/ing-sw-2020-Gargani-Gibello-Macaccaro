@@ -1,0 +1,309 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ClientBG</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.client.network</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ClientBG (it.polimi.ingsw.PSP43.client.network)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ClientBG</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 78)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.client.network;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.graphic.GraphicHandler;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.graphic.gui.GuiGraphicHandler;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.networkMessages.ClientMessage;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.networkMessages.LeaveGameMessage;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.networkMessages.PingMessage;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.networkMessages.RegistrationMessage;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.network.networkMessages.EndGameMessage;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP43.server.network.networkMessages.ServerMessage;
+<i>11</i>&nbsp;
+<i>12</i>&nbsp;import java.io.IOException;
+<i>13</i>&nbsp;import java.io.ObjectInputStream;
+<i>14</i>&nbsp;import java.io.ObjectOutputStream;
+<i>15</i>&nbsp;import java.net.Socket;
+<i>16</i>&nbsp;import java.net.SocketTimeoutException;
+<i>17</i>&nbsp;import java.util.concurrent.TimeUnit;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;/**
+<i>20</i>&nbsp; * ClientBG(client background) is the client network handler
+<i>21</i>&nbsp; */
+<i>22</i>&nbsp;public class ClientBG implements Runnable {
+<i>23</i>&nbsp;    private Socket serverSocket;
+<i>24</i>&nbsp;    private final ClientManager clientManager;
+<i>25</i>&nbsp;    private static final int SERVER_PORT = 50000;
+<b class="nc"><i>26</i>&nbsp;    private String serverIP = null;</b>
+<i>27</i>&nbsp;    private Object messageArrived;
+<b class="nc"><i>28</i>&nbsp;    private boolean connected = false;</b>
+<i>29</i>&nbsp;    private ObjectInputStream input;
+<i>30</i>&nbsp;    private ObjectOutputStream output;
+<i>31</i>&nbsp;
+<i>32</i>&nbsp;    /**
+<i>33</i>&nbsp;     * Not default constructor for the client background.
+<i>34</i>&nbsp;     *
+<i>35</i>&nbsp;     * @param clientManager This is the reference to the client manager thread
+<i>36</i>&nbsp;     */
+<b class="nc"><i>37</i>&nbsp;    public ClientBG(ClientManager clientManager) {</b>
+<b class="nc"><i>38</i>&nbsp;        this.clientManager = clientManager;</b>
+<b class="nc"><i>39</i>&nbsp;        this.messageArrived = new Object();</b>
+<i>40</i>&nbsp;    }
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    /**
+<i>43</i>&nbsp;     * Override of run method. Here the connection with the server starts (after the player has given the
+<i>44</i>&nbsp;     * IP address that he wants to reach). After that clientBG starts the ping connection in ConnectionDetector
+<i>45</i>&nbsp;     * thread. Finally it exchanges messages from and to the server.
+<i>46</i>&nbsp;     */
+<i>47</i>&nbsp;    @Override
+<i>48</i>&nbsp;    public void run() {
+<i>49</i>&nbsp;        do {
+<b class="nc"><i>50</i>&nbsp;            while (this.serverIP == null) {</b>
+<i>51</i>&nbsp;                try {
+<b class="nc"><i>52</i>&nbsp;                    TimeUnit.MILLISECONDS.sleep(500);</b>
+<b class="nc"><i>53</i>&nbsp;                } catch (InterruptedException e) {</b>
+<b class="nc"><i>54</i>&nbsp;                    e.printStackTrace();</b>
+<b class="nc"><i>55</i>&nbsp;                }</b>
+<i>56</i>&nbsp;            }
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;            try {
+<b class="nc"><i>59</i>&nbsp;                serverSocket = new Socket(this.serverIP, SERVER_PORT);</b>
+<b class="nc"><i>60</i>&nbsp;                setConnected(true);</b>
+<b class="nc"><i>61</i>&nbsp;                GraphicHandler graphicHandler = clientManager.getGraphicHandler();</b>
+<b class="nc"><i>62</i>&nbsp;                if (graphicHandler instanceof GuiGraphicHandler)</b>
+<b class="nc"><i>63</i>&nbsp;                    ((GuiGraphicHandler) graphicHandler).connectionUp();</b>
+<b class="nc"><i>64</i>&nbsp;            } catch (IOException e) {</b>
+<b class="nc"><i>65</i>&nbsp;                serverIP = null;</b>
+<b class="nc"><i>66</i>&nbsp;                setConnected(false);</b>
+<b class="nc"><i>67</i>&nbsp;                GraphicHandler graphicHandler = clientManager.getGraphicHandler();</b>
+<b class="nc"><i>68</i>&nbsp;                if (graphicHandler instanceof GuiGraphicHandler)</b>
+<b class="nc"><i>69</i>&nbsp;                    ((GuiGraphicHandler) graphicHandler).connectionDenied();</b>
+<b class="nc"><i>70</i>&nbsp;            }</b>
+<b class="nc"><i>71</i>&nbsp;        } while (!this.connected);</b>
+<i>72</i>&nbsp;
+<i>73</i>&nbsp;        try {
+<b class="nc"><i>74</i>&nbsp;            ConnectionDetector connectionDetector = new ConnectionDetector(this.serverSocket, this);</b>
+<b class="nc"><i>75</i>&nbsp;            Thread connectionThread = new Thread(connectionDetector);</b>
+<b class="nc"><i>76</i>&nbsp;            connectionThread.start();</b>
+<b class="nc"><i>77</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>78</i>&nbsp;            System.out.println(&quot;Problems starting connection detector&quot;);</b>
+<b class="nc"><i>79</i>&nbsp;        }</b>
+<i>80</i>&nbsp;
+<b class="nc"><i>81</i>&nbsp;        while (connected) {</b>
+<i>82</i>&nbsp;            try {
+<b class="nc"><i>83</i>&nbsp;                receive();</b>
+<b class="nc"><i>84</i>&nbsp;            } catch (IOException e) {</b>
+<i>85</i>&nbsp;                // If this exception is thrown the Server in not reachable anymore. For this reason the socket will be closed
+<i>86</i>&nbsp;                // and the player will be informed of the problem. The application will end the execution.
+<b class="nc"><i>87</i>&nbsp;                handleDisconnection();</b>
+<i>88</i>&nbsp;
+<b class="nc"><i>89</i>&nbsp;                EndGameMessage messageServerDown = new EndGameMessage(&quot;&quot;, EndGameMessage.EndGameHeader.QUIT);</b>
+<b class="nc"><i>90</i>&nbsp;                clientManager.pushMessageInBox(messageServerDown);</b>
+<b class="nc"><i>91</i>&nbsp;            } catch (ClassNotFoundException ignored) {</b>
+<b class="nc"><i>92</i>&nbsp;            }</b>
+<i>93</i>&nbsp;        }
+<i>94</i>&nbsp;    }
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;    /**
+<i>97</i>&nbsp;     * Setter method for serverIP String.
+<i>98</i>&nbsp;     *
+<i>99</i>&nbsp;     * @param serverIP It is the address of the server
+<i>100</i>&nbsp;     */
+<i>101</i>&nbsp;    public void setServerIP(String serverIP) {
+<b class="nc"><i>102</i>&nbsp;        this.serverIP = serverIP;</b>
+<i>103</i>&nbsp;    }
+<i>104</i>&nbsp;
+<i>105</i>&nbsp;    /**
+<i>106</i>&nbsp;     * This method will be active for the entire duration of the game and when a message arrives (if it&#39;s not a ping)
+<i>107</i>&nbsp;     * the receive cast it to a ServerMessage and then puts the message in the messageBox, that is an ArrayList of
+<i>108</i>&nbsp;     * message placed in the ClientManager class.
+<i>109</i>&nbsp;     *
+<i>110</i>&nbsp;     * @throws IOException            signals that an I/O exception of some sort has occurred
+<i>111</i>&nbsp;     * @throws ClassNotFoundException occurs when you try to load a class at run time using Class .forName() or
+<i>112</i>&nbsp;     *                                loadClass() methods and mentioned classes are not found in the classpath
+<i>113</i>&nbsp;     */
+<i>114</i>&nbsp;    public void receive() throws IOException, ClassNotFoundException {
+<b class="nc"><i>115</i>&nbsp;        input = new ObjectInputStream(serverSocket.getInputStream());</b>
+<i>116</i>&nbsp;
+<b class="nc"><i>117</i>&nbsp;        messageArrived = input.readObject();</b>
+<i>118</i>&nbsp;
+<b class="nc"><i>119</i>&nbsp;        if (messageArrived instanceof EndGameMessage) {</b>
+<i>120</i>&nbsp;            /* In this case a message of end is arrived for 3 possible reasons :
+<i>121</i>&nbsp;                    - the player won the game;
+<i>122</i>&nbsp;                    - the player lose the game;
+<i>123</i>&nbsp;                    - another player of the game left;
+<i>124</i>&nbsp;               In all the three circumstances, the player won&#39;t be disconnected from the server. The application
+<i>125</i>&nbsp;               will continue to run and will ask if he wants to quit the game or if he wants to join another game.
+<i>126</i>&nbsp;            */
+<i>127</i>&nbsp;
+<b class="nc"><i>128</i>&nbsp;            clientManager.pushMessageInBox((ServerMessage) messageArrived);</b>
+<i>129</i>&nbsp;
+<b class="nc"><i>130</i>&nbsp;        } else if (!(messageArrived instanceof PingMessage))</b>
+<b class="nc"><i>131</i>&nbsp;            clientManager.pushMessageInBox((ServerMessage) messageArrived);</b>
+<i>132</i>&nbsp;    }
+<i>133</i>&nbsp;
+<i>134</i>&nbsp;    /**
+<i>135</i>&nbsp;     * Method used to send messages to the server.
+<i>136</i>&nbsp;     *
+<i>137</i>&nbsp;     * @param message The message that will be sent to the server
+<i>138</i>&nbsp;     */
+<i>139</i>&nbsp;    public void sendMessage(ClientMessage message) {
+<i>140</i>&nbsp;        try {
+<b class="nc"><i>141</i>&nbsp;            if (!(clientManager.containsEndGameMessage()) || message instanceof PingMessage) {</b>
+<b class="nc"><i>142</i>&nbsp;                output = new ObjectOutputStream(serverSocket.getOutputStream());</b>
+<b class="nc"><i>143</i>&nbsp;                output.writeObject(message);</b>
+<i>144</i>&nbsp;            }
+<b class="nc"><i>145</i>&nbsp;        } catch (IOException ignored) {</b>
+<b class="nc"><i>146</i>&nbsp;        }</b>
+<i>147</i>&nbsp;    }
+<i>148</i>&nbsp;
+<i>149</i>&nbsp;    /**
+<i>150</i>&nbsp;     * Method used to send a message of registration to the server.
+<i>151</i>&nbsp;     *
+<i>152</i>&nbsp;     * @param message The message that will be sent to the server
+<i>153</i>&nbsp;     */
+<i>154</i>&nbsp;    public void sendMessage(RegistrationMessage message) {
+<i>155</i>&nbsp;        try {
+<b class="nc"><i>156</i>&nbsp;            clientManager.flushStack();</b>
+<b class="nc"><i>157</i>&nbsp;            output = new ObjectOutputStream(serverSocket.getOutputStream());</b>
+<b class="nc"><i>158</i>&nbsp;            output.writeObject(message);</b>
+<b class="nc"><i>159</i>&nbsp;        } catch (IOException ignored) {</b>
+<b class="nc"><i>160</i>&nbsp;        }</b>
+<i>161</i>&nbsp;    }
+<i>162</i>&nbsp;
+<i>163</i>&nbsp;    /**
+<i>164</i>&nbsp;     * Method used to send only LeaveGameMessages. After sending, it calls the handleDisconnection method.
+<i>165</i>&nbsp;     *
+<i>166</i>&nbsp;     * @param message The message that will be sent to the server
+<i>167</i>&nbsp;     */
+<i>168</i>&nbsp;    public void sendMessage(LeaveGameMessage message) {
+<i>169</i>&nbsp;        try {
+<b class="nc"><i>170</i>&nbsp;            if (!(clientManager.containsEndGameMessage())) {</b>
+<b class="nc"><i>171</i>&nbsp;                output = new ObjectOutputStream(serverSocket.getOutputStream());</b>
+<b class="nc"><i>172</i>&nbsp;                output.writeObject(message);</b>
+<i>173</i>&nbsp;            }
+<b class="nc"><i>174</i>&nbsp;        } catch (IOException ignored) {</b>
+<b class="nc"><i>175</i>&nbsp;        }</b>
+<i>176</i>&nbsp;    }
+<i>177</i>&nbsp;
+<i>178</i>&nbsp;
+<i>179</i>&nbsp;    /**
+<i>180</i>&nbsp;     * Getter method for the boolean variable disconnected, that controls the exit from the while in the run method
+<i>181</i>&nbsp;     * to get down the connection to the server.
+<i>182</i>&nbsp;     *
+<i>183</i>&nbsp;     * @return the value of the boolean variable disconnected
+<i>184</i>&nbsp;     */
+<i>185</i>&nbsp;    public boolean isConnected() {
+<b class="nc"><i>186</i>&nbsp;        return connected;</b>
+<i>187</i>&nbsp;    }
+<i>188</i>&nbsp;
+<i>189</i>&nbsp;    public synchronized void waitForChangeConnected() {
+<i>190</i>&nbsp;        try {
+<b class="nc"><i>191</i>&nbsp;            wait();</b>
+<b class="nc"><i>192</i>&nbsp;        } catch (InterruptedException e) {</b>
+<b class="nc"><i>193</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>194</i>&nbsp;        }</b>
+<i>195</i>&nbsp;    }
+<i>196</i>&nbsp;
+<i>197</i>&nbsp;    /**
+<i>198</i>&nbsp;     * Setter method for the boolean variable connected.
+<i>199</i>&nbsp;     * @param connected is true if the connection to the server is established
+<i>200</i>&nbsp;     */
+<i>201</i>&nbsp;    public synchronized void setConnected(boolean connected) {
+<b class="nc"><i>202</i>&nbsp;        this.connected = connected;</b>
+<b class="nc"><i>203</i>&nbsp;        notifyAll();</b>
+<i>204</i>&nbsp;    }
+<i>205</i>&nbsp;
+<i>206</i>&nbsp;    /**
+<i>207</i>&nbsp;     * This method handles the end of the connection of the client to the server.
+<i>208</i>&nbsp;     */
+<i>209</i>&nbsp;    public void handleDisconnection() {
+<b class="nc"><i>210</i>&nbsp;        if (connected) {</b>
+<b class="nc"><i>211</i>&nbsp;            clientManager.flushStack();</b>
+<b class="nc"><i>212</i>&nbsp;            connected = false;</b>
+<b class="nc"><i>213</i>&nbsp;            clientManager.setActive(false);</b>
+<i>214</i>&nbsp;
+<i>215</i>&nbsp;            try {
+<b class="nc"><i>216</i>&nbsp;                if (input != null)</b>
+<b class="nc"><i>217</i>&nbsp;                    input.close();</b>
+<b class="nc"><i>218</i>&nbsp;                if (output != null)</b>
+<b class="nc"><i>219</i>&nbsp;                    output.close();</b>
+<b class="nc"><i>220</i>&nbsp;                serverSocket.close();</b>
+<b class="nc"><i>221</i>&nbsp;            } catch (IOException e) {</b>
+<b class="nc"><i>222</i>&nbsp;                e.printStackTrace();</b>
+<b class="nc"><i>223</i>&nbsp;            }</b>
+<i>224</i>&nbsp;        }
+<i>225</i>&nbsp;    }
+<i>226</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 21:45</div>
+</div>
+</body>
+</html>

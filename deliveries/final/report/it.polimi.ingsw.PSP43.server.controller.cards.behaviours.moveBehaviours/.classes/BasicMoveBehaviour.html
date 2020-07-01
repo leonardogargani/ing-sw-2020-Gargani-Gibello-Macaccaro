@@ -1,0 +1,161 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: BasicMoveBehaviour</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.controller.cards.behaviours.moveBehaviours</a> ]
+</div>
+
+<h1>Coverage Summary for Class: BasicMoveBehaviour (it.polimi.ingsw.PSP43.server.controller.cards.behaviours.moveBehaviours)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BasicMoveBehaviour</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (17/ 17)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.controller.cards.behaviours.moveBehaviours;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.networkMessages.ActionResponse;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.DataToMove;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.gameStates.GameSession;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Coord;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Worker;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.cards.AbstractGodCard;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.cards.BasicGodCard;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.CardsHandler;
+<i>11</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.WorkersHandler;
+<i>12</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.modelHandlersException.GameEndedException;
+<i>13</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.modelHandlersException.GameLostException;
+<i>14</i>&nbsp;import it.polimi.ingsw.PSP43.server.network.networkMessages.ActionRequest;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;import java.util.ArrayList;
+<i>17</i>&nbsp;import java.util.Collections;
+<i>18</i>&nbsp;import java.util.HashMap;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;/**
+<i>21</i>&nbsp; * This class is the basic one to handle moves of workers.
+<i>22</i>&nbsp; */
+<b class="fc"><i>23</i>&nbsp;public class BasicMoveBehaviour extends BasicGodCard implements MoveBehavior {</b>
+<i>24</i>&nbsp;    private static final long serialVersionUID = -198685635604926007L;
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    /**
+<i>27</i>&nbsp;     * This method asks to the client to move a worker.
+<i>28</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>29</i>&nbsp;     * @return The response containing the choice of the player.
+<i>30</i>&nbsp;     * @throws GameEndedException if the player decides to leave the game during his turn.
+<i>31</i>&nbsp;     * @throws GameLostException if the player can&#39;t do any move.
+<i>32</i>&nbsp;     */
+<i>33</i>&nbsp;    public ActionResponse askForMove(GameSession gameSession) throws GameEndedException, GameLostException {
+<b class="fc"><i>34</i>&nbsp;        CardsHandler cardsHandler = gameSession.getCardsHandler();</b>
+<b class="fc"><i>35</i>&nbsp;        AbstractGodCard abstractGodCard = cardsHandler.getPlayerCard(gameSession.getCurrentPlayer().getNickname());</b>
+<i>36</i>&nbsp;
+<b class="fc"><i>37</i>&nbsp;        HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositions = abstractGodCard.findAvailablePositionsToMove(gameSession);</b>
+<i>38</i>&nbsp;
+<b class="fc"><i>39</i>&nbsp;        if (availablePositions.size() == 0) throw new GameLostException();</b>
+<i>40</i>&nbsp;
+<b class="fc"><i>41</i>&nbsp;        return askForMove(gameSession, availablePositions);</b>
+<i>42</i>&nbsp;    }
+<i>43</i>&nbsp;
+<i>44</i>&nbsp;    /**
+<i>45</i>&nbsp;     * This method asks to the player for a move, between some positions already selected.
+<i>46</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>47</i>&nbsp;     * @param availablePositions The positions among which the player can choose where to move a worker.
+<i>48</i>&nbsp;     * @return The response from the player about where to move a worker.
+<i>49</i>&nbsp;     * @throws GameEndedException if the player decides to leave the game during his turn.
+<i>50</i>&nbsp;     */
+<i>51</i>&nbsp;    public ActionResponse askForMove(GameSession gameSession, HashMap&lt;Coord, ArrayList&lt;Coord&gt;&gt; availablePositions) throws GameEndedException {
+<b class="fc"><i>52</i>&nbsp;        ActionRequest message = new ActionRequest(  &quot;Choose a position where to place your worker next.&quot;,</b>
+<b class="fc"><i>53</i>&nbsp;                                                            Collections.unmodifiableMap(new HashMap&lt;&gt;(availablePositions)));</b>
+<i>54</i>&nbsp;        ActionResponse response;
+<i>55</i>&nbsp;        do {
+<b class="fc"><i>56</i>&nbsp;            response = gameSession.sendRequest(message, gameSession.getCurrentPlayer().getNickname(), ActionResponse.class);</b>
+<b class="fc"><i>57</i>&nbsp;        } while (response == null);</b>
+<i>58</i>&nbsp;
+<b class="fc"><i>59</i>&nbsp;        return response;</b>
+<i>60</i>&nbsp;    }
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;    /**
+<i>63</i>&nbsp;     * This method handles a basic move, where the player is asked where to move his worker.
+<i>64</i>&nbsp;     * @param gameSession This is a reference to the main access to the game database.
+<i>65</i>&nbsp;     * @throws GameEndedException if the player decides to leave the game during his turn.
+<i>66</i>&nbsp;     * @throws GameLostException if the player can&#39;t do any move.
+<i>67</i>&nbsp;     */
+<i>68</i>&nbsp;    public void handleInitMove(GameSession gameSession) throws GameEndedException, GameLostException {
+<b class="fc"><i>69</i>&nbsp;        WorkersHandler workersHandler = gameSession.getWorkersHandler();</b>
+<i>70</i>&nbsp;
+<b class="fc"><i>71</i>&nbsp;        ActionResponse response = askForMove(gameSession);</b>
+<i>72</i>&nbsp;
+<b class="fc"><i>73</i>&nbsp;        Coord nextPositionChosen = response.getPosition();</b>
+<b class="fc"><i>74</i>&nbsp;        Worker workerMoved = workersHandler.getWorker(response.getWorkerPosition());</b>
+<i>75</i>&nbsp;
+<b class="fc"><i>76</i>&nbsp;        move(new DataToMove(gameSession, gameSession.getCurrentPlayer(), workerMoved, nextPositionChosen));</b>
+<b class="fc"><i>77</i>&nbsp;    }</b>
+<i>78</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 21:45</div>
+</div>
+</body>
+</html>

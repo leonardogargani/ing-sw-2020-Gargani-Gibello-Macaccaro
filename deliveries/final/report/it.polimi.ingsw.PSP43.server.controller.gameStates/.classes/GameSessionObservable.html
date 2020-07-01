@@ -1,0 +1,324 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: GameSessionObservable</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">it.polimi.ingsw.PSP43.server.controller.gameStates</a> ]
+</div>
+
+<h1>Coverage Summary for Class: GameSessionObservable (it.polimi.ingsw.PSP43.server.controller.gameStates)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GameSessionObservable</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    94.1%
+  </span>
+  <span class="absValue">
+    (16/ 17)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    97.6%
+  </span>
+  <span class="absValue">
+    (80/ 82)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package it.polimi.ingsw.PSP43.server.controller.gameStates;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.networkMessages.ClientMessage;
+<i>4</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.networkMessages.LeaveGameMessage;
+<i>5</i>&nbsp;import it.polimi.ingsw.PSP43.client.network.networkMessages.RegistrationMessage;
+<i>6</i>&nbsp;import it.polimi.ingsw.PSP43.server.network.ClientListener;
+<i>7</i>&nbsp;import it.polimi.ingsw.PSP43.server.network.RegisterClientListener;
+<i>8</i>&nbsp;import it.polimi.ingsw.PSP43.server.network.Sender;
+<i>9</i>&nbsp;import it.polimi.ingsw.PSP43.server.model.Player;
+<i>10</i>&nbsp;import it.polimi.ingsw.PSP43.server.controller.modelHandlers.modelHandlersException.GameEndedException;
+<i>11</i>&nbsp;import it.polimi.ingsw.PSP43.server.network.networkMessages.ChangeNickRequest;
+<i>12</i>&nbsp;import it.polimi.ingsw.PSP43.server.network.networkMessages.EndGameMessage;
+<i>13</i>&nbsp;import it.polimi.ingsw.PSP43.server.network.networkMessages.PlayersListMessage;
+<i>14</i>&nbsp;import it.polimi.ingsw.PSP43.server.network.networkMessages.ServerMessage;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;import java.util.ArrayList;
+<i>17</i>&nbsp;import java.util.HashMap;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;/**
+<i>20</i>&nbsp; * This abstract class (extended by GameSession) is the main access for all the players who want to join a game.
+<i>21</i>&nbsp; */
+<i>22</i>&nbsp;public class GameSessionObservable implements Runnable {
+<i>23</i>&nbsp;    private final int idGame;
+<i>24</i>&nbsp;    protected int maxNumPlayers;
+<i>25</i>&nbsp;    private int numOfPlayers;
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    private TurnState currentState;
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;    private final HashMap&lt;String, ClientListener&gt; listenersHashMap;
+<i>30</i>&nbsp;
+<b class="fc"><i>31</i>&nbsp;    public GameSessionObservable(int idGame) {</b>
+<b class="fc"><i>32</i>&nbsp;        this.idGame = idGame;</b>
+<b class="fc"><i>33</i>&nbsp;        this.listenersHashMap = new HashMap&lt;&gt;();</b>
+<b class="fc"><i>34</i>&nbsp;        numOfPlayers = 0;</b>
+<b class="fc"><i>35</i>&nbsp;        maxNumPlayers = 1;</b>
+<b class="fc"><i>36</i>&nbsp;    }</b>
+<i>37</i>&nbsp;
+<b class="nc"><i>38</i>&nbsp;    public void run() {}</b>
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;    /**
+<i>41</i>&nbsp;     * This method returns the id of the game.
+<i>42</i>&nbsp;     * @return the id of the game.
+<i>43</i>&nbsp;     */
+<i>44</i>&nbsp;    public int getIdGame(){
+<b class="fc"><i>45</i>&nbsp;        return idGame;</b>
+<i>46</i>&nbsp;    }
+<i>47</i>&nbsp;
+<i>48</i>&nbsp;    /**
+<i>49</i>&nbsp;     * This method returns the maximum number of players allowed to enroll to the game.
+<i>50</i>&nbsp;     * @return the maximum number of players allowed to enroll to the game.
+<i>51</i>&nbsp;     */
+<i>52</i>&nbsp;    public int getMaxNumPlayers() {
+<b class="fc"><i>53</i>&nbsp;        return maxNumPlayers;</b>
+<i>54</i>&nbsp;    }
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;    /**
+<i>57</i>&nbsp;     * This method returns the effective number of players enrolled to the game.
+<i>58</i>&nbsp;     * @return the effective number of players enrolled to the game.
+<i>59</i>&nbsp;     */
+<i>60</i>&nbsp;    public int getNumOfPlayers() {
+<b class="fc"><i>61</i>&nbsp;        return numOfPlayers;</b>
+<i>62</i>&nbsp;    }
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;    /**
+<i>65</i>&nbsp;     * This method sets the effective state in which the game is.
+<i>66</i>&nbsp;     * @param currentState the effective state in which the game is.
+<i>67</i>&nbsp;     */
+<i>68</i>&nbsp;    public void setCurrentState(TurnState currentState) {
+<b class="fc"><i>69</i>&nbsp;        this.currentState = currentState;</b>
+<b class="fc"><i>70</i>&nbsp;    }</b>
+<i>71</i>&nbsp;
+<i>72</i>&nbsp;    /**
+<i>73</i>&nbsp;     * This method returns a map where the key is the name of a player and the value is the related ClientListener.
+<i>74</i>&nbsp;     * @return a map where the key is the name of a player and the value is the related ClientListener.
+<i>75</i>&nbsp;     */
+<b class="fc"><i>76</i>&nbsp;    public HashMap&lt;String, ClientListener&gt; getListenersHashMap() { return listenersHashMap; }</b>
+<i>77</i>&nbsp;
+<i>78</i>&nbsp;    /**
+<i>79</i>&nbsp;     * This method is called by every player who wants to join the game. In particular it is called by a ClientListener,
+<i>80</i>&nbsp;     * when it finds that the number of max. players is still by default &quot;1&quot; or if the max. number of players is greater
+<i>81</i>&nbsp;     * than the number of players enrolled to the game.
+<i>82</i>&nbsp;     * @param message The message of registration arrived from the net and caught by the ClientListener.
+<i>83</i>&nbsp;     * @param player The ClientListener which called this method.
+<i>84</i>&nbsp;     * @return the id of the game.
+<i>85</i>&nbsp;     */
+<i>86</i>&nbsp;    public synchronized int registerToTheGame(RegistrationMessage message, ClientListener player) {
+<b class="fc"><i>87</i>&nbsp;        if (numOfPlayers &lt; maxNumPlayers) {</b>
+<b class="fc"><i>88</i>&nbsp;            for (String s : listenersHashMap.keySet()) {</b>
+<b class="fc"><i>89</i>&nbsp;                if (s.equals(message.getNick())) {</b>
+<b class="fc"><i>90</i>&nbsp;                    ChangeNickRequest notifyChangeNick = new ChangeNickRequest(message.getNick());</b>
+<b class="fc"><i>91</i>&nbsp;                    player.sendMessage(notifyChangeNick);</b>
+<b class="fc"><i>92</i>&nbsp;                    return -2;</b>
+<i>93</i>&nbsp;                }
+<b class="fc"><i>94</i>&nbsp;            }</b>
+<b class="fc"><i>95</i>&nbsp;            listenersHashMap.put(message.getNick(), player);</b>
+<b class="fc"><i>96</i>&nbsp;            numOfPlayers = listenersHashMap.size();</b>
+<b class="fc"><i>97</i>&nbsp;            currentState.executeState(message);</b>
+<b class="fc"><i>98</i>&nbsp;            return idGame;</b>
+<i>99</i>&nbsp;        }
+<b class="fc"><i>100</i>&nbsp;        return -1;</b>
+<i>101</i>&nbsp;    }
+<i>102</i>&nbsp;
+<i>103</i>&nbsp;    /**
+<i>104</i>&nbsp;     * This method is called at any time of the game by a player and causes the end of the game by sending to all
+<i>105</i>&nbsp;     * the players a EndGameMessage.
+<i>106</i>&nbsp;     * @param message The message which contains the reason of the end of the game (here because of connection
+<i>107</i>&nbsp;     *                problems or exit of a player)
+<i>108</i>&nbsp;     * @param player The ClientListener which called the method and so the one to which the method hasn&#39;t to send
+<i>109</i>&nbsp;     *               the EndGameMessage.
+<i>110</i>&nbsp;     */
+<i>111</i>&nbsp;    public synchronized void unregisterFromGame(LeaveGameMessage message, ClientListener player) {
+<b class="fc"><i>112</i>&nbsp;        EndGameMessage endGameMessage = new EndGameMessage(null, EndGameMessage.EndGameHeader.PLAYER_DISCONNECTED);</b>
+<b class="fc"><i>113</i>&nbsp;        String nicknameLeft = null;</b>
+<b class="fc"><i>114</i>&nbsp;        for (String s : listenersHashMap.keySet()) {</b>
+<b class="fc"><i>115</i>&nbsp;            if (listenersHashMap.get(s).equals(player)) nicknameLeft = s;</b>
+<b class="fc"><i>116</i>&nbsp;        }</b>
+<b class="fc"><i>117</i>&nbsp;        ArrayList&lt;String&gt; listExcluded = new ArrayList&lt;&gt;();</b>
+<b class="fc"><i>118</i>&nbsp;        listExcluded.add(nicknameLeft);</b>
+<b class="fc"><i>119</i>&nbsp;        sendBroadCast(endGameMessage, listExcluded);</b>
+<b class="fc"><i>120</i>&nbsp;    }</b>
+<i>121</i>&nbsp;
+<i>122</i>&nbsp;    /**
+<i>123</i>&nbsp;     * This method is called when a player looses the game. It sends him a EndGameMessage and eliminates his ClientListener
+<i>124</i>&nbsp;     * from the HashMap in which it was saved.
+<i>125</i>&nbsp;     * @param playerEliminated The data of the player who lost the game.
+<i>126</i>&nbsp;     * @param messageToOthers The message to be sent to all other players to updated their list of players of the game.
+<i>127</i>&nbsp;     */
+<i>128</i>&nbsp;    public void eliminatePlayer(Player playerEliminated, PlayersListMessage messageToOthers) {
+<b class="fc"><i>129</i>&nbsp;        EndGameMessage message = new EndGameMessage(null, EndGameMessage.EndGameHeader.LOSER);</b>
+<b class="fc"><i>130</i>&nbsp;        sendMessage(message, playerEliminated.getNickname());</b>
+<b class="fc"><i>131</i>&nbsp;        listenersHashMap.remove(playerEliminated.getNickname());</b>
+<b class="fc"><i>132</i>&nbsp;        numOfPlayers = listenersHashMap.size();</b>
+<i>133</i>&nbsp;
+<b class="fc"><i>134</i>&nbsp;        sendBroadCast(messageToOthers);</b>
+<b class="fc"><i>135</i>&nbsp;    }</b>
+<i>136</i>&nbsp;
+<i>137</i>&nbsp;    /**
+<i>138</i>&nbsp;     * This method is used when tha game finishes because one of the players wins.
+<i>139</i>&nbsp;     * @param messageToLosers The message sent to all the losers of the game, containing the name of the winner.
+<i>140</i>&nbsp;     * @param messageForTheWinner The message sent to the winner of the game.
+<i>141</i>&nbsp;     * @param nicksExcluded The winner player which has to receive messageForTheWinner.
+<i>142</i>&nbsp;     */
+<i>143</i>&nbsp;    public void sendEndingMessage(EndGameMessage messageToLosers, EndGameMessage messageForTheWinner, ArrayList&lt;String&gt; nicksExcluded) {
+<b class="fc"><i>144</i>&nbsp;        for (String s : listenersHashMap.keySet()) {</b>
+<b class="fc"><i>145</i>&nbsp;            if (!nicksExcluded.contains(s)) {</b>
+<b class="fc"><i>146</i>&nbsp;                listenersHashMap.get(s).sendMessage(messageToLosers);</b>
+<i>147</i>&nbsp;            }
+<b class="fc"><i>148</i>&nbsp;        }</b>
+<i>149</i>&nbsp;
+<b class="fc"><i>150</i>&nbsp;        ClientListener listernerLoser = listenersHashMap.get(nicksExcluded.get(0));</b>
+<b class="fc"><i>151</i>&nbsp;        if (listernerLoser != null)</b>
+<b class="fc"><i>152</i>&nbsp;            listenersHashMap.get(nicksExcluded.get(0)).sendMessage(messageForTheWinner);</b>
+<b class="fc"><i>153</i>&nbsp;        RegisterClientListener ending = new RegisterClientListener();</b>
+<b class="fc"><i>154</i>&nbsp;        ending.removeGameSession(this.idGame);</b>
+<b class="fc"><i>155</i>&nbsp;    }</b>
+<i>156</i>&nbsp;
+<i>157</i>&nbsp;    /**
+<i>158</i>&nbsp;     * This method is called to send to the client a generic message, which doesn&#39;t pretend an answer.
+<i>159</i>&nbsp;     * @param genericMessage The message to be sent.
+<i>160</i>&nbsp;     * @param addressee The client to which the message has to be sent.
+<i>161</i>&nbsp;     */
+<i>162</i>&nbsp;    public void sendMessage(ServerMessage genericMessage, String addressee) {
+<b class="fc"><i>163</i>&nbsp;        for (String s : getListenersHashMap().keySet()) {</b>
+<b class="fc"><i>164</i>&nbsp;            if (addressee.equals(s))</b>
+<b class="fc"><i>165</i>&nbsp;                getListenersHashMap().get(s).sendMessage(genericMessage);</b>
+<b class="fc"><i>166</i>&nbsp;        }</b>
+<b class="fc"><i>167</i>&nbsp;    }</b>
+<i>168</i>&nbsp;
+<i>169</i>&nbsp;    /**
+<i>170</i>&nbsp;     * This method is called to send to the client the message to tell him that the game is ended (for
+<i>171</i>&nbsp;     * different reasons, always saved into its String field).
+<i>172</i>&nbsp;     * @param endGameMessage The message to be sent.
+<i>173</i>&nbsp;     * @param addressee The client to which the message has to be sent.
+<i>174</i>&nbsp;     */
+<i>175</i>&nbsp;    public void sendMessage(EndGameMessage endGameMessage, String addressee) {
+<b class="fc"><i>176</i>&nbsp;        for (String s : getListenersHashMap().keySet()) {</b>
+<b class="fc"><i>177</i>&nbsp;            if (addressee.equals(s))</b>
+<b class="fc"><i>178</i>&nbsp;                getListenersHashMap().get(s).sendMessage(endGameMessage);</b>
+<b class="fc"><i>179</i>&nbsp;        }</b>
+<b class="fc"><i>180</i>&nbsp;    }</b>
+<i>181</i>&nbsp;
+<i>182</i>&nbsp;    /**
+<i>183</i>&nbsp;     * This method sends to all the players a generic message.
+<i>184</i>&nbsp;     * @param message The message to be sent.
+<i>185</i>&nbsp;     */
+<i>186</i>&nbsp;    public void sendBroadCast(ServerMessage message) {
+<b class="fc"><i>187</i>&nbsp;        for (String s : getListenersHashMap().keySet()) {</b>
+<b class="fc"><i>188</i>&nbsp;            getListenersHashMap().get(s).sendMessage(message);</b>
+<b class="fc"><i>189</i>&nbsp;        }</b>
+<b class="fc"><i>190</i>&nbsp;    }</b>
+<i>191</i>&nbsp;
+<i>192</i>&nbsp;    /**
+<i>193</i>&nbsp;     * This method sends to all the players the message, excluded the ones in the list passed as parameter.
+<i>194</i>&nbsp;     * @param message The message to be sent.
+<i>195</i>&nbsp;     * @param nickExcluded The player&#39;s nickname excluded from receiving the message.
+<i>196</i>&nbsp;     */
+<i>197</i>&nbsp;    public void sendBroadCast(ServerMessage message, String nickExcluded) {
+<b class="fc"><i>198</i>&nbsp;        for (String s : getListenersHashMap().keySet()) {</b>
+<b class="fc"><i>199</i>&nbsp;            if (!nickExcluded.equals(s))</b>
+<b class="fc"><i>200</i>&nbsp;                getListenersHashMap().get(s).sendMessage(message);</b>
+<b class="fc"><i>201</i>&nbsp;        }</b>
+<b class="fc"><i>202</i>&nbsp;    }</b>
+<i>203</i>&nbsp;
+<i>204</i>&nbsp;    /**
+<i>205</i>&nbsp;     * This method sends the EndGameMessage to all the players, telling them the end of the game.
+<i>206</i>&nbsp;     * All the players in the list passed as parameter are excluded.
+<i>207</i>&nbsp;     * @param endGameMessage The message to be sent.
+<i>208</i>&nbsp;     * @param nicksExcluded The list of players excluded from receiving the message.
+<i>209</i>&nbsp;     */
+<i>210</i>&nbsp;    public void sendBroadCast(EndGameMessage endGameMessage, ArrayList&lt;String&gt; nicksExcluded) {
+<b class="fc"><i>211</i>&nbsp;        for (String s : getListenersHashMap().keySet()) {</b>
+<b class="fc"><i>212</i>&nbsp;            if (!nicksExcluded.contains(s))</b>
+<b class="fc"><i>213</i>&nbsp;                getListenersHashMap().get(s).sendMessage(endGameMessage);</b>
+<b class="fc"><i>214</i>&nbsp;        }</b>
+<b class="fc"><i>215</i>&nbsp;    }</b>
+<i>216</i>&nbsp;
+<i>217</i>&nbsp;    /**
+<i>218</i>&nbsp;     * This method is used to send a request to the client and to wait for a response.
+<i>219</i>&nbsp;     * @param &lt;T&gt; A sub-type of ClientMessage.
+<i>220</i>&nbsp;     * @param message The request message sent.
+<i>221</i>&nbsp;     * @param addressee The player who has to receive the message.
+<i>222</i>&nbsp;     * @param typeExpected The type of message that the caller is expecting.
+<i>223</i>&nbsp;     * @return a response from the client.
+<i>224</i>&nbsp;     * @throws GameEndedException if the client has disconnected while he was asked by this method.
+<i>225</i>&nbsp;     */
+<i>226</i>&nbsp;    public&lt;T extends ClientMessage&gt; T sendRequest(ServerMessage message, String addressee, Class&lt;T&gt; typeExpected) throws GameEndedException {
+<b class="fc"><i>227</i>&nbsp;        ClientListener listenerAddressee = listenersHashMap.get(addressee);</b>
+<i>228</i>&nbsp;
+<b class="fc"><i>229</i>&nbsp;        Sender newSender = new Sender(listenerAddressee, message);</b>
+<i>230</i>&nbsp;
+<i>231</i>&nbsp;        while (true) {
+<b class="fc"><i>232</i>&nbsp;            ClientMessage messageArrived = newSender.call();</b>
+<b class="fc"><i>233</i>&nbsp;            if (typeExpected.isInstance(messageArrived)) {</b>
+<b class="fc"><i>234</i>&nbsp;                return typeExpected.cast(messageArrived);</b>
+<i>235</i>&nbsp;            }
+<b class="fc"><i>236</i>&nbsp;            else if (messageArrived instanceof LeaveGameMessage) {</b>
+<b class="fc"><i>237</i>&nbsp;                throw new GameEndedException();</b>
+<i>238</i>&nbsp;            }
+<b class="nc"><i>239</i>&nbsp;        }</b>
+<i>240</i>&nbsp;    }
+<i>241</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-07-01 21:45</div>
+</div>
+</body>
+</html>
