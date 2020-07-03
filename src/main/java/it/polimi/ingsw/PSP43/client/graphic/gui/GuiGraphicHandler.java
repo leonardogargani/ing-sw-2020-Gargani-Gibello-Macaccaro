@@ -138,8 +138,15 @@ public class GuiGraphicHandler extends GraphicHandler {
             Platform.runLater(() -> workerColorChoiceController.handleChoiceOfWorkerColor(request));
         }
         else {
-            WorkerColorChoiceController workerColorChoiceController = loader.getController();
-            Platform.runLater(workerColorChoiceController::handleTransitToBoard);
+            loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/FXML/workers.fxml"));
+            try {
+                loader.load();
+                WorkerColorChoiceController workerColorChoiceController = loader.getController();
+                Platform.runLater(workerColorChoiceController::handleTransitToBoard);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -148,17 +148,25 @@ public class WorkerColorChoiceController extends AbstractController {
      */
     public void handleTransitToBoard() {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/FXML/game/board.fxml"));
+        loader.setLocation(AbstractController.class.getResource("/FXML/game/board.fxml"));
+        Stage stage;
         try {
-            Stage stage = GuiStarter.getPrimaryStage();
+            stage = GuiStarter.getPrimaryStage();
             Scene scene = new Scene(loader.load());
-            stage.setMinHeight(700.0);
-            stage.setMinWidth(1200.0);
 
-            scene.getStylesheets().add(getClass().getResource("/CSS/game/game.css").toExternalForm());
-            stage.setScene(scene);
+            Stage newStage = new Stage();
+            GuiStarter.setPrimaryStage(newStage);
 
+            newStage.setMinHeight(700.0);
+            newStage.setMinWidth(1200.0);
+            newStage.setResizable(true);
             stage.centerOnScreen();
+
+            newStage.setScene(scene);
+            scene.getStylesheets().add(AbstractController.class.getResource("/CSS/game/game.css").toExternalForm());
+
+            stage.close();
+            newStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }

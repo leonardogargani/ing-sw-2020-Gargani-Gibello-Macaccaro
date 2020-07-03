@@ -40,7 +40,6 @@ public class AbstractGodCardTest {
         Coord initialCoord = workerToMove.getCurrentPosition();
         Coord coordToMove = new Coord(3,3);
 
-        // TODO : is the player necessary in DAO DataToMove?
         abstractGodCard.move(new DataToMove(spyGame, null, workerToMove, coordToMove));
 
         assertTrue(spyGame.getCellsHandler().getCell(coordToMove).getOccupiedByWorker());
@@ -90,7 +89,6 @@ public class AbstractGodCardTest {
         Cell cellBeforeBuild = spyGame.getCellsHandler().getCell(coordWhereToBuild);
         int previousHeight = cellBeforeBuild.getHeight();
 
-        // TODO : are worker and player really necessary in DataToBuild?
         abstractGodCard.build(new DataToBuild(spyGame, null, null, coordWhereToBuild, Boolean.FALSE));
 
         assertEquals(spyGame.getCellsHandler().getCell(coordWhereToBuild).getHeight(), previousHeight + 1);
