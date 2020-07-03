@@ -38,6 +38,8 @@ public class StarterChoiceController extends AbstractController {
         confirmButton.getStyleClass().add("confirm-button");
         exitImage.setPickOnBounds(false);
         exitImage.getStyleClass().add("exit-image");
+        player1Button.getStyleClass().add("choice-button");
+        player2Button.getStyleClass().add("choice-button");
     }
 
 
