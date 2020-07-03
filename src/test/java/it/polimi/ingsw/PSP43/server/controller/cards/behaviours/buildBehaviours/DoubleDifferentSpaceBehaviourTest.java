@@ -72,12 +72,12 @@ public class DoubleDifferentSpaceBehaviourTest {
         assertEquals(2, spyGame.getCellsHandler().getCell(firstBuild).getHeight());
 
         doReturn(new ActionResponse(workerToBuildTwice.getCurrentPosition(), firstBuild),
-                new ResponseMessage(true), new ResponseMessage(true),
-                new ActionResponse(workerToBuildTwice.getCurrentPosition(), firstBuild)).when(spyGame).sendRequest(any(), any(), any());
+                new ResponseMessage(true),
+                new ActionResponse(workerToBuildTwice.getCurrentPosition(), secondBuild)).when(spyGame).sendRequest(any(), any(), any());
 
         abstractGodCard.initBuild(spyGame);
-        assertEquals(4, spyGame.getCellsHandler().getCell(firstBuild).getHeight());
-        assertTrue(spyGame.getCellsHandler().getCell(firstBuild).getOccupiedByDome());
+        assertEquals(3, spyGame.getCellsHandler().getCell(firstBuild).getHeight());
+        assertEquals(3, spyGame.getCellsHandler().getCell(secondBuild).getHeight());
     }
 
     @Test

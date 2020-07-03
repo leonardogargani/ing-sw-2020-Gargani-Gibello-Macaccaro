@@ -58,10 +58,10 @@
 </td>
 <td class="coverageStat">
   <span class="percent">
-    97,7%
+    86.7%
   </span>
   <span class="absValue">
-    (43/ 44)
+    (39/ 45)
   </span>
 </td>
 </tr>
@@ -139,16 +139,16 @@
 <i>65</i>&nbsp;
 <b class="fc"><i>66</i>&nbsp;        ResponseMessage responseMessage = new ResponseMessage(false);</b>
 <b class="fc"><i>67</i>&nbsp;        if (availablePositionsToBuildDome.size() != 0) {</b>
-<b class="fc"><i>68</i>&nbsp;            RequestMessage requestMessage = new RequestMessage(&quot;Do you want to build a dome? Otherwise you will build a block.&quot;);</b>
-<b class="fc"><i>69</i>&nbsp;            responseMessage = game.sendRequest(requestMessage, currentPlayer.getNickname(), ResponseMessage.class);</b>
+<b class="nc"><i>68</i>&nbsp;            RequestMessage requestMessage = new RequestMessage(&quot;Do you want to build a dome? Otherwise you will build a block.&quot;);</b>
+<b class="nc"><i>69</i>&nbsp;            responseMessage = game.sendRequest(requestMessage, currentPlayer.getNickname(), ResponseMessage.class);</b>
 <i>70</i>&nbsp;        }
 <i>71</i>&nbsp;
 <i>72</i>&nbsp;        ActionResponse actionResponse;
 <i>73</i>&nbsp;        String message;
 <b class="fc"><i>74</i>&nbsp;        if (responseMessage.isResponse()) {</b>
-<b class="fc"><i>75</i>&nbsp;            message = &quot;Choose where to build a dome.&quot;;</b>
-<b class="fc"><i>76</i>&nbsp;            actionResponse = askForBuild(game, availablePositionsToBuildBlock, message);</b>
-<b class="fc"><i>77</i>&nbsp;            build(new DataToBuild(game, currentPlayer, oldDataToBuild.getWorker(), actionResponse.getPosition(), Boolean.TRUE));</b>
+<b class="nc"><i>75</i>&nbsp;            message = &quot;Choose where to build a dome.&quot;;</b>
+<b class="nc"><i>76</i>&nbsp;            actionResponse = askForBuild(game, availablePositionsToBuildDome, message);</b>
+<b class="nc"><i>77</i>&nbsp;            build(new DataToBuild(game, currentPlayer, oldDataToBuild.getWorker(), actionResponse.getPosition(), Boolean.TRUE));</b>
 <i>78</i>&nbsp;        } else {
 <b class="fc"><i>79</i>&nbsp;            if (availablePositionsToBuildBlock.size() != 0) {</b>
 <b class="fc"><i>80</i>&nbsp;                message = &quot;Choose where to build a block.&quot;;</b>
@@ -179,16 +179,17 @@
 <b class="fc"><i>105</i>&nbsp;            Coord oldCoordBuilt = oldData.getNewPosition();</b>
 <i>106</i>&nbsp;
 <b class="fc"><i>107</i>&nbsp;            coordsWhereToBuild.removeIf(actualCoord -&gt; actualCoord.getY() == oldCoordBuilt.getY() &amp;&amp; actualCoord.getX() == oldCoordBuilt.getX());</b>
-<b class="fc"><i>108</i>&nbsp;        }</b>
-<i>109</i>&nbsp;
-<b class="fc"><i>110</i>&nbsp;    }</b>
-<i>111</i>&nbsp;}
+<b class="fc"><i>108</i>&nbsp;            if (coordsWhereToBuild.size() == 0) iter.remove();</b>
+<b class="fc"><i>109</i>&nbsp;        }</b>
+<i>110</i>&nbsp;
+<b class="fc"><i>111</i>&nbsp;    }</b>
+<i>112</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2020-07-03 20:49</div>
+    <div style="float:right;">generated on 2020-07-03 23:20</div>
 </div>
 </body>
 </html>

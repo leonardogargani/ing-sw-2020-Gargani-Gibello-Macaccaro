@@ -73,7 +73,7 @@ public class DoubleDifferentSpaceBehaviour extends BasicBuildBehaviour {
         String message;
         if (responseMessage.isResponse()) {
             message = "Choose where to build a dome.";
-            actionResponse = askForBuild(game, availablePositionsToBuildBlock, message);
+            actionResponse = askForBuild(game, availablePositionsToBuildDome, message);
             build(new DataToBuild(game, currentPlayer, oldDataToBuild.getWorker(), actionResponse.getPosition(), Boolean.TRUE));
         } else {
             if (availablePositionsToBuildBlock.size() != 0) {
@@ -105,6 +105,7 @@ public class DoubleDifferentSpaceBehaviour extends BasicBuildBehaviour {
             Coord oldCoordBuilt = oldData.getNewPosition();
 
             coordsWhereToBuild.removeIf(actualCoord -> actualCoord.getY() == oldCoordBuilt.getY() && actualCoord.getX() == oldCoordBuilt.getX());
+            if (coordsWhereToBuild.size() == 0) iter.remove();
         }
 
     }
