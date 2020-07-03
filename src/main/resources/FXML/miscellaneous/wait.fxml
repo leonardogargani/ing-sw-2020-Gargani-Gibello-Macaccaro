@@ -14,13 +14,13 @@
          <children>
             <ImageView fx:id="exitImage" fitHeight="76.0" fitWidth="70.0" onMouseClicked="#handleExitImage" pickOnBounds="true" preserveRatio="true">
                <VBox.margin>
-                  <Insets right="-850.0" top="-220.0" />
+                  <Insets right="-850.0" top="-100.0" />
                </VBox.margin>
                <image>
                   <Image url="@../../images/icons/buttons/exit.png" />
                </image>
             </ImageView>
-               <Label fx:id="labelToDisplay" alignment="CENTER" contentDisplay="CENTER" prefHeight="121.0" prefWidth="733.0" textAlignment="CENTER" wrapText="true">
+               <Label fx:id="labelToDisplay" alignment="CENTER" contentDisplay="CENTER" prefHeight="217.0" prefWidth="733.0" textAlignment="CENTER" wrapText="true">
                <font>
                   <Font size="30.0" />
                </font>

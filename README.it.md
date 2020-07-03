@@ -1,11 +1,8 @@
-# Prova Finale di Ingegneria del Software
+# Prova Finale di Ingegneria del Software 2019/2020
 
 <img src="https://cf.geekdo-images.com/imagepagezoom/img/pWzdo3Bkfko9ruepJTjchCa4Z0A=/fit-in/1200x900/filters:no_upscale()/pic3283110.png" alt="santorini_board_game" width="500"/>
 <br>
 <br>
-<br>
-
-
 
 Read this in: [English](https://github.com/leonardogargani/ing-sw-2020-Gargani-Gibello-Macaccaro/blob/master/README.md), [Italian](https://github.com/leonardogargani/ing-sw-2020-Gargani-Gibello-Macaccaro/blob/master/README.it.md).
 
@@ -40,7 +37,7 @@ Utilizzando i profiles di Maven abbiano generato due jar distinti: uno per clien
 #### Client
 
 Per quanto riguarda il client, è possibile avviarlo sia in modalità CLI che GUI:
-- modalità GUI: basta semplicemente fare doppio click sull'icona del jar;
+- modalità GUI: basta semplicemente fare doppio click sull'icona del jar o digitare nel terminale `java -jar Client.jar` nella cartella in cui esso è contenuto;
 - modalità CLI: è necessario digitare nel terminale `java -jar Client.jar -cli` nella cartella in cui è contenuto il jar.
 
 

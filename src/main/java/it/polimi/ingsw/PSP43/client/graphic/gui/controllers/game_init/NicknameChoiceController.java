@@ -27,6 +27,8 @@ public class NicknameChoiceController extends AbstractController {
         exitImage.setPickOnBounds(false);
         exitImage.getStyleClass().add("exit-image");
 
+        nicknameField.getStyleClass().add("textField");
+
         nicknameField.setOnKeyPressed(ke -> {
             if (ke.getCode().equals(KeyCode.ENTER)) {
                 handleConfirmButton();

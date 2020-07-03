@@ -41,9 +41,6 @@ public class GuiGraphicHandler extends GraphicHandler {
 
             AbstractController.setClientBG(clientBG);
 
-
-            //TODO add settings for BoardController
-
         });
 
     }

@@ -1,6 +1,8 @@
-.root {
-
+/* change the font to the entire screen */
+* {
+    -fx-font-family: "Comic Sans Ms";
 }
+
 
 /* id selector */
 #play-image:hover {

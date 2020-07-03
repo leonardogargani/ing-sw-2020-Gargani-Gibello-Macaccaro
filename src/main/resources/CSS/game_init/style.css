@@ -1,3 +1,18 @@
+/* change the font to the entire screen */
+* {
+    -fx-font-family: "Comic Sans Ms";
+}
+
+.textField {
+    -fx-font-size: 15pt
+}
+
+
+.number-button {
+    -fx-font-size: 15pt
+}
+
+
 /* selector for the root container (Pane) */
 .root {
     -fx-background-image: url("../../images/others/santorini_cover_transparent.png") no-repeat center center fixed;
@@ -14,12 +29,14 @@
     -fx-border-radius: 15;
     /* vertical and horizontal padding */
     -fx-padding: 5 10;
+    -fx-font-size: 12pt;
 }
 
 
 .confirm-button:hover {
     -fx-background-color: #d7f3ff;
     -fx-effect: dropshadow(three-pass-box, black, 10, 0, 0, 0);
+    -fx-font-size: 12pt;
 }
 
 
@@ -65,7 +82,6 @@
 
 
 .info-label {
-    -fx-font-family: "Comic Sans Ms";
     -fx-font-style: italic;
     -fx-font-weight: bold;
     -fx-text-fill: black;

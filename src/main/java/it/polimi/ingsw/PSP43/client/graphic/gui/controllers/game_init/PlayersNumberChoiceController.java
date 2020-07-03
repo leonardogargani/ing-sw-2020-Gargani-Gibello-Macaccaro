@@ -35,6 +35,8 @@ public class PlayersNumberChoiceController extends AbstractController {
         confirmButton.getStyleClass().add("confirm-button");
         exitImage.setPickOnBounds(false);
         exitImage.getStyleClass().add("exit-image");
+        twoPlayersButton.getStyleClass().add("number-button");
+        threePlayersButton.getStyleClass().add("number-button");
     }
 
 

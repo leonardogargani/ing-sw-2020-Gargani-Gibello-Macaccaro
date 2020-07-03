@@ -32,6 +32,8 @@ public class ServerIPChoiceController extends AbstractController {
         staticButtonLabel = buttonPressedLabel;
         staticConfirmButton = confirmButton;
 
+        serverIPField.getStyleClass().add("textField");
+
         serverIPField.setOnKeyPressed(ke -> {
             if (ke.getCode().equals(KeyCode.ENTER)) {
                 handleConfirmButton();
@@ -56,24 +58,6 @@ public class ServerIPChoiceController extends AbstractController {
 
         String serverIP = serverIPField.getText();
         getClientBG().setServerIP(serverIP);
-
-        /*FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/FXML/game_init/nicknameChoice.fxml"));
-
-        try {
-
-            Stage stage = GuiStarter.getPrimaryStage();
-            Scene scene = new Scene(loader.load());
-
-            NicknameChoiceController controller = loader.getController();
-            controller.customInit();
-
-            scene.getStylesheets().add(getClass().getResource("/CSS/game_init/style.css").toExternalForm());
-            stage.setScene(scene);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
 
     }
 
