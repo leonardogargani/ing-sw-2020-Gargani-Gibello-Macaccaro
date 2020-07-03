@@ -61,7 +61,7 @@
     0%
   </span>
   <span class="absValue">
-    (0/ 34)
+    (0/ 36)
   </span>
 </td>
 </tr>
@@ -112,100 +112,102 @@
 <b class="nc"><i>38</i>&nbsp;        confirmButton.getStyleClass().add(&quot;confirm-button&quot;);</b>
 <b class="nc"><i>39</i>&nbsp;        exitImage.setPickOnBounds(false);</b>
 <b class="nc"><i>40</i>&nbsp;        exitImage.getStyleClass().add(&quot;exit-image&quot;);</b>
-<i>41</i>&nbsp;    }
-<i>42</i>&nbsp;
-<i>43</i>&nbsp;
-<i>44</i>&nbsp;    /**
-<i>45</i>&nbsp;     * Method that, given a message from the server requesting the choice of the player who will be the first
-<i>46</i>&nbsp;     * in the game, displays the names of the two players it is possible to choose between.
-<i>47</i>&nbsp;     * @param request request message sent by the server
-<i>48</i>&nbsp;     */
-<i>49</i>&nbsp;    public void customInit(ChooseStarterMessage request) {
-<b class="nc"><i>50</i>&nbsp;        setPlayersList(request.getPlayersList());</b>
-<b class="nc"><i>51</i>&nbsp;        player1Button.setText(playersList.get(0));</b>
-<b class="nc"><i>52</i>&nbsp;        player2Button.setText(playersList.get(1));</b>
-<i>53</i>&nbsp;    }
-<i>54</i>&nbsp;
-<i>55</i>&nbsp;
-<i>56</i>&nbsp;    /**
-<i>57</i>&nbsp;     * Method that sets the attribute of the controller containing the list of all the opponents that
-<i>58</i>&nbsp;     * it is possible to choose between as the first player in the game.
-<i>59</i>&nbsp;     * @param playersList list of all the names of the opponents
-<i>60</i>&nbsp;     */
-<i>61</i>&nbsp;    private void setPlayersList(List&lt;String&gt; playersList) {
-<b class="nc"><i>62</i>&nbsp;        this.playersList = playersList;</b>
-<i>63</i>&nbsp;    }
-<i>64</i>&nbsp;
-<i>65</i>&nbsp;
-<i>66</i>&nbsp;    /**
-<i>67</i>&nbsp;     * Method that handles an event performed on the button to confirm the number of players.
-<i>68</i>&nbsp;     */
-<i>69</i>&nbsp;    @FXML
-<i>70</i>&nbsp;    private void handleConfirmButton() {
-<i>71</i>&nbsp;
-<b class="nc"><i>72</i>&nbsp;        confirmButton.setDisable(true);</b>
+<b class="nc"><i>41</i>&nbsp;        player1Button.getStyleClass().add(&quot;choice-button&quot;);</b>
+<b class="nc"><i>42</i>&nbsp;        player2Button.getStyleClass().add(&quot;choice-button&quot;);</b>
+<i>43</i>&nbsp;    }
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    /**
+<i>47</i>&nbsp;     * Method that, given a message from the server requesting the choice of the player who will be the first
+<i>48</i>&nbsp;     * in the game, displays the names of the two players it is possible to choose between.
+<i>49</i>&nbsp;     * @param request request message sent by the server
+<i>50</i>&nbsp;     */
+<i>51</i>&nbsp;    public void customInit(ChooseStarterMessage request) {
+<b class="nc"><i>52</i>&nbsp;        setPlayersList(request.getPlayersList());</b>
+<b class="nc"><i>53</i>&nbsp;        player1Button.setText(playersList.get(0));</b>
+<b class="nc"><i>54</i>&nbsp;        player2Button.setText(playersList.get(1));</b>
+<i>55</i>&nbsp;    }
+<i>56</i>&nbsp;
+<i>57</i>&nbsp;
+<i>58</i>&nbsp;    /**
+<i>59</i>&nbsp;     * Method that sets the attribute of the controller containing the list of all the opponents that
+<i>60</i>&nbsp;     * it is possible to choose between as the first player in the game.
+<i>61</i>&nbsp;     * @param playersList list of all the names of the opponents
+<i>62</i>&nbsp;     */
+<i>63</i>&nbsp;    private void setPlayersList(List&lt;String&gt; playersList) {
+<b class="nc"><i>64</i>&nbsp;        this.playersList = playersList;</b>
+<i>65</i>&nbsp;    }
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;
+<i>68</i>&nbsp;    /**
+<i>69</i>&nbsp;     * Method that handles an event performed on the button to confirm the number of players.
+<i>70</i>&nbsp;     */
+<i>71</i>&nbsp;    @FXML
+<i>72</i>&nbsp;    private void handleConfirmButton() {
 <i>73</i>&nbsp;
-<i>74</i>&nbsp;        String chosenPlayerName;
+<b class="nc"><i>74</i>&nbsp;        confirmButton.setDisable(true);</b>
 <i>75</i>&nbsp;
-<b class="nc"><i>76</i>&nbsp;        if (toggleGroup.getSelectedToggle() == null) {</b>
-<b class="nc"><i>77</i>&nbsp;            buttonPressedLabel.setText(&quot;You must choose a player!&quot;);</b>
-<b class="nc"><i>78</i>&nbsp;            confirmButton.setDisable(false);</b>
-<i>79</i>&nbsp;            return;
-<i>80</i>&nbsp;        }
-<i>81</i>&nbsp;
-<b class="nc"><i>82</i>&nbsp;        RadioButton selectedButton = (RadioButton) toggleGroup.getSelectedToggle();</b>
+<i>76</i>&nbsp;        String chosenPlayerName;
+<i>77</i>&nbsp;
+<b class="nc"><i>78</i>&nbsp;        if (toggleGroup.getSelectedToggle() == null) {</b>
+<b class="nc"><i>79</i>&nbsp;            buttonPressedLabel.setText(&quot;You must choose a player!&quot;);</b>
+<b class="nc"><i>80</i>&nbsp;            confirmButton.setDisable(false);</b>
+<i>81</i>&nbsp;            return;
+<i>82</i>&nbsp;        }
 <i>83</i>&nbsp;
-<b class="nc"><i>84</i>&nbsp;        if (player1Button.equals(selectedButton)) {</b>
-<b class="nc"><i>85</i>&nbsp;            chosenPlayerName = player1Button.getText();</b>
-<i>86</i>&nbsp;        } else {
-<b class="nc"><i>87</i>&nbsp;            chosenPlayerName = player2Button.getText();</b>
-<i>88</i>&nbsp;        }
-<i>89</i>&nbsp;
-<b class="nc"><i>90</i>&nbsp;        StarterResponse response = new StarterResponse(chosenPlayerName);</b>
-<b class="nc"><i>91</i>&nbsp;        getClientBG().sendMessage(response);</b>
-<i>92</i>&nbsp;
-<i>93</i>&nbsp;        // display a waiting screen while other players are connecting
-<b class="nc"><i>94</i>&nbsp;        FXMLLoader loader = new FXMLLoader();</b>
-<b class="nc"><i>95</i>&nbsp;        loader.setLocation(getClass().getResource(&quot;/FXML/miscellaneous/wait.fxml&quot;));</b>
-<i>96</i>&nbsp;        try {
-<b class="nc"><i>97</i>&nbsp;            Stage stage = GuiStarter.getPrimaryStage();</b>
-<b class="nc"><i>98</i>&nbsp;            Scene scene = new Scene(loader.load());</b>
-<i>99</i>&nbsp;
-<b class="nc"><i>100</i>&nbsp;            WaitController controller = loader.getController();</b>
-<b class="nc"><i>101</i>&nbsp;            controller.setLabelText(&quot;&quot;);</b>
-<i>102</i>&nbsp;
-<b class="nc"><i>103</i>&nbsp;            scene.getStylesheets().add(getClass().getResource(&quot;/CSS/game_init/style.css&quot;).toExternalForm());</b>
-<b class="nc"><i>104</i>&nbsp;            stage.setScene(scene);</b>
-<i>105</i>&nbsp;
-<i>106</i>&nbsp;            // set minimum sizes of the stage (can be either before and after loader.load())
-<b class="nc"><i>107</i>&nbsp;            stage.setMinHeight(700);</b>
-<b class="nc"><i>108</i>&nbsp;            stage.setMinWidth(1000);</b>
-<i>109</i>&nbsp;
-<i>110</i>&nbsp;            // set the stage to the center of the screen (must be after loader.load())
-<b class="nc"><i>111</i>&nbsp;            stage.centerOnScreen();</b>
-<b class="nc"><i>112</i>&nbsp;        } catch (IOException e) {</b>
-<b class="nc"><i>113</i>&nbsp;            e.printStackTrace();</b>
-<b class="nc"><i>114</i>&nbsp;        }</b>
-<i>115</i>&nbsp;    }
-<i>116</i>&nbsp;
-<i>117</i>&nbsp;
-<i>118</i>&nbsp;    /**
-<i>119</i>&nbsp;     * Method that handles an event performed on the image to exit and return back to the home screen.
-<i>120</i>&nbsp;     */
-<i>121</i>&nbsp;    @FXML
-<i>122</i>&nbsp;    private void handleExitImage() {
-<b class="nc"><i>123</i>&nbsp;        getClientBG().sendMessage(new LeaveGameMessage());</b>
-<b class="nc"><i>124</i>&nbsp;        super.handleExit();</b>
-<i>125</i>&nbsp;    }
-<i>126</i>&nbsp;
-<i>127</i>&nbsp;
-<i>128</i>&nbsp;}
+<b class="nc"><i>84</i>&nbsp;        RadioButton selectedButton = (RadioButton) toggleGroup.getSelectedToggle();</b>
+<i>85</i>&nbsp;
+<b class="nc"><i>86</i>&nbsp;        if (player1Button.equals(selectedButton)) {</b>
+<b class="nc"><i>87</i>&nbsp;            chosenPlayerName = player1Button.getText();</b>
+<i>88</i>&nbsp;        } else {
+<b class="nc"><i>89</i>&nbsp;            chosenPlayerName = player2Button.getText();</b>
+<i>90</i>&nbsp;        }
+<i>91</i>&nbsp;
+<b class="nc"><i>92</i>&nbsp;        StarterResponse response = new StarterResponse(chosenPlayerName);</b>
+<b class="nc"><i>93</i>&nbsp;        getClientBG().sendMessage(response);</b>
+<i>94</i>&nbsp;
+<i>95</i>&nbsp;        // display a waiting screen while other players are connecting
+<b class="nc"><i>96</i>&nbsp;        FXMLLoader loader = new FXMLLoader();</b>
+<b class="nc"><i>97</i>&nbsp;        loader.setLocation(getClass().getResource(&quot;/FXML/miscellaneous/wait.fxml&quot;));</b>
+<i>98</i>&nbsp;        try {
+<b class="nc"><i>99</i>&nbsp;            Stage stage = GuiStarter.getPrimaryStage();</b>
+<b class="nc"><i>100</i>&nbsp;            Scene scene = new Scene(loader.load());</b>
+<i>101</i>&nbsp;
+<b class="nc"><i>102</i>&nbsp;            WaitController controller = loader.getController();</b>
+<b class="nc"><i>103</i>&nbsp;            controller.setLabelText(&quot;&quot;);</b>
+<i>104</i>&nbsp;
+<b class="nc"><i>105</i>&nbsp;            scene.getStylesheets().add(getClass().getResource(&quot;/CSS/game_init/style.css&quot;).toExternalForm());</b>
+<b class="nc"><i>106</i>&nbsp;            stage.setScene(scene);</b>
+<i>107</i>&nbsp;
+<i>108</i>&nbsp;            // set minimum sizes of the stage (can be either before and after loader.load())
+<b class="nc"><i>109</i>&nbsp;            stage.setMinHeight(700);</b>
+<b class="nc"><i>110</i>&nbsp;            stage.setMinWidth(1000);</b>
+<i>111</i>&nbsp;
+<i>112</i>&nbsp;            // set the stage to the center of the screen (must be after loader.load())
+<b class="nc"><i>113</i>&nbsp;            stage.centerOnScreen();</b>
+<b class="nc"><i>114</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>115</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>116</i>&nbsp;        }</b>
+<i>117</i>&nbsp;    }
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;
+<i>120</i>&nbsp;    /**
+<i>121</i>&nbsp;     * Method that handles an event performed on the image to exit and return back to the home screen.
+<i>122</i>&nbsp;     */
+<i>123</i>&nbsp;    @FXML
+<i>124</i>&nbsp;    private void handleExitImage() {
+<b class="nc"><i>125</i>&nbsp;        getClientBG().sendMessage(new LeaveGameMessage());</b>
+<b class="nc"><i>126</i>&nbsp;        super.handleExit();</b>
+<i>127</i>&nbsp;    }
+<i>128</i>&nbsp;
+<i>129</i>&nbsp;
+<i>130</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2020-07-01 21:45</div>
+    <div style="float:right;">generated on 2020-07-03 20:49</div>
 </div>
 </body>
 </html>

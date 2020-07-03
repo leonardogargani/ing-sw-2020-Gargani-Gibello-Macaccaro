@@ -181,7 +181,7 @@
 <b class="nc"><i>107</i>&nbsp;            e.printStackTrace();</b>
 <b class="nc"><i>108</i>&nbsp;        }</b>
 <i>109</i>&nbsp;
-<b class="nc"><i>110</i>&nbsp;        if (loader.getController() instanceof EndController &amp;&amp; message!=null) {</b>
+<b class="nc"><i>110</i>&nbsp;        if (message!=null &amp;&amp; loader.getController() instanceof EndController) {</b>
 <b class="nc"><i>111</i>&nbsp;            EndController endController = loader.getController();</b>
 <b class="nc"><i>112</i>&nbsp;            endController.setEndMessage(message);</b>
 <i>113</i>&nbsp;        }
@@ -192,7 +192,7 @@
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2020-07-01 21:45</div>
+    <div style="float:right;">generated on 2020-07-03 20:49</div>
 </div>
 </body>
 </html>

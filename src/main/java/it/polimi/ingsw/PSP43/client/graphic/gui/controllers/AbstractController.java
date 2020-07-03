@@ -107,7 +107,7 @@ public abstract class AbstractController {
             e.printStackTrace();
         }
 
-        if (loader.getController() instanceof EndController && message!=null) {
+        if (message!=null && loader.getController() instanceof EndController) {
             EndController endController = loader.getController();
             endController.setEndMessage(message);
         }

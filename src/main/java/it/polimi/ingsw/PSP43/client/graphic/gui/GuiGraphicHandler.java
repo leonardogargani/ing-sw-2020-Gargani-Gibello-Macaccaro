@@ -106,6 +106,12 @@ public class GuiGraphicHandler extends GraphicHandler {
     public void updateMenuChange(InitialCardsRequest request) {
         loadToPrimaryStage("/FXML/game_init/cardsChoice.fxml", "/CSS/game_init/style.css");
         // the controller is now the one associated to cardsChoice.fxml (since it has just been loaded)
+        Stage stage = GuiStarter.getPrimaryStage();
+        Platform.runLater(() -> {
+            stage.setMinHeight(700);
+            stage.setMinWidth(1000);
+            stage.centerOnScreen();
+        });
         CardsChoiceController controller = loader.getController();
         controller.setCardsList(request.getCards());
         Platform.runLater(() -> controller.customInit(request));
@@ -120,6 +126,12 @@ public class GuiGraphicHandler extends GraphicHandler {
     @Override
     public void updateMenuChange(CardRequest request) {
         loadToPrimaryStage("/FXML/game_init/cardChoice.fxml", "/CSS/game_init/style.css");
+        Stage stage = GuiStarter.getPrimaryStage();
+        Platform.runLater(() -> {
+            stage.setMinHeight(700);
+            stage.setMinWidth(1000);
+            stage.centerOnScreen();
+        });
         CardChoiceController controller = loader.getController();
         Platform.runLater(() -> controller.customInit(request));
     }
@@ -134,6 +146,12 @@ public class GuiGraphicHandler extends GraphicHandler {
     public void updateMenuChange(WorkersColorRequest request) {
         if (request.getWorkersColorRequestHeader() == WorkersColorRequest.WorkersColorRequestHeader.CHOICE){
             loadToPrimaryStage("/FXML/workers.fxml", "/CSS/workers.css");
+            Stage stage = GuiStarter.getPrimaryStage();
+            Platform.runLater(() -> {
+                stage.setMinHeight(700);
+                stage.setMinWidth(1000);
+                stage.centerOnScreen();
+            });
             WorkerColorChoiceController workerColorChoiceController = loader.getController();
             Platform.runLater(() -> workerColorChoiceController.handleChoiceOfWorkerColor(request));
         }
@@ -179,7 +197,7 @@ public class GuiGraphicHandler extends GraphicHandler {
      */
     @Override
     public void updateMenuChange(EndGameMessage message) {
-        Platform.runLater(() -> AbstractController.setSizeStage("/FXML/game_end/end.fxml", "/CSS/game_end/end.css",1000, 650, message));
+        Platform.runLater(() -> AbstractController.setSizeStage("/FXML/game_end/end.fxml", "/CSS/game_end/end.css",1000, 700, message));
     }
 
 
